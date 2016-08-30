@@ -172,7 +172,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -182,7 +182,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
-            Categories
+            Kategorien
           </a>
         </li>
       
@@ -225,6 +225,194 @@
             
               
                 
+                <a class="post-title-link" href="/2014/05/01/2014-05-01-spring-framework-core-source-code-analysis-a-spring-the-overall-structure-and-the-overall-ioc-container-design-introduction/" itemprop="url">
+                  Spring Framework的核心源码解读（一）-Spring整体结构以及IoC容器设计整体介绍
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-05-01T15:19:00+08:00" content="2014-05-01">
+              2014-05-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/application/" itemprop="url" rel="index">
+                    <span itemprop="name">application</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/application/IoC/" itemprop="url" rel="index">
+                    <span itemprop="name">IoC</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/application/IoC/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/application/IoC/源码分析/beanfactory/" itemprop="url" rel="index">
+                    <span itemprop="name">beanfactory</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#前言<br>这么久没写博客？我干嘛去了呢？最主要还是项目比较忙，没有大段的时间来看书、研究、写成博文。仅有的时间也只能翻阅下书籍或者技术文章，而自己又不想天天写些心灵鸡汤类的东西。那么就只好罢工这么久了咯。终于遇到五一有空了，安静下来看看书，写写博文。最近一段时间都是Spring 源码相关的，该系列文章内容大多为《Spring技术内幕》这本书的笔记，这本书很不错，推荐阅读。也会发一段Thoughtwork的那个代码招聘的FizzBuzzWhizz相关的内容。<br>敬请期待！</p>
+<p>#1 概述</p>
+<p>##1.1 Spring的整体架构<br>Spring 总共有十几个组件，其中核心组件只有三个：Core、Context 和 Beans。AOP、Web等都属于核心上层的特性功能。本文将对Spring核心内容的设计进行分析。<br><img src="http://i1.tietuku.com/154191d85dc03b0c.jpg" alt=""></p>
+<p>#2 IoC容器的实现</p>
+<p>##2.1 控制反转（IOC）<br>实际应用的程序基本上都是由多个类彼此合作来实现业务逻辑，这使得每个对象都需要与其合作的对象的引用。但是这样的控制就导致了程序的耦合度非常大，不易于复用，更不易于做单元测试。<br>Martin Flowler 提出了“那些方面的控制被反转了？”这个问题。他得出的结论是：依赖对象的获得被反转了。基于这个结论，他为控制反转创造了一个更好的名字：依赖注入。<br>依赖倒置也是设计模式六大原则之一。在Spring中IoC容器就是这个模式的载体，它可以通过容器对对象进行管理，在对象生成或初始化时直接将数据注入到需要其依赖的对象中。这也是Spring的核心。</p>
+<p>##2.2 BeanFactory和ApplicationContext的区别<br>Spring中容器要分两类，一类是实现BeanFactory接口的简单容器系列，这类容器只实现了容器的最基本功能；另一个是ApplicationContext应用上下文，也就是我们最常用的，项目中的配置文件大多数都是ApplicationContext-xxx.xml，它作为容器的高级形态而存在。<br>用生活中的容器水杯举例，BeanFactory就定义了可以作为水桶的基本功能（装水）。从下图可以看出，Spring容器的基本功能就是获取bean、判断bean是否存在、是否为单例、是否为原型、类型是否匹配、获取bean的类型、获取bean的别名。因此BeanFactory就是Spring的基本接口。<br> <img src="http://i1.tietuku.com/75daf2c913bddbdd.jpg" alt=""><br>那么BeanFactory是杯子，那么BeanDefinition就是水。BeanDefinition是用来管理基于Spring的应用中的各种对象以及它们之间的相互依赖关系，就Spring中Bean的主要数据结构，是设计出来水的抽象。如下代码。<br><figure class="highlight java"><figcaption><span>DefaultListableBeanFactory.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/** Map of bean definition objects, keyed by bean name */</span></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, BeanDefinitionbeanDefinitionMap = <span class="keyword">new</span> ConcurrentHashMap&lt;String, BeanDefinition&gt;();</div><div class="line"></div><div class="line">	<span class="comment">/** List of bean definition names, in registration order */</span></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> List&lt;StringbeanDefinitionNames = <span class="keyword">new</span> ArrayList&lt;String&gt;();</div></pre></td></tr></table></figure></p>
+<p>而ApplicationContext则提供了很多特殊的特性，从下图ApplicationContext接口的继承关系可以看出，它除了容器所需的基本特性外，还有其他许多附加特性，比如国际化的消息访问、资源访问、事件传播、载入多个上下文等。<br> <img src="http://i1.tietuku.com/84eaba13257e4c38.jpg" alt=""></p>
+<p>##2.3 IoC容器的接口设计<br>下图描述了IoC容器中的主要接口设计（图片拍自Spring技术内幕一书）。<br> <img src="http://i1.tietuku.com/8f45e01439fe6212.jpg" alt=""></p>
+<p>###2.3.1 BeanFactory-HierarchicalBeanFactory-ConfigurableBeanFactory<br>在这条设计路径中，HierarchicalBeanFactory增加了getParentBeanFactory()的功能，是BeanFactory具备了双亲IoC容器的管理功能，在ConfigurableBeanFactory中主要定义了一些对BeanFactory的配置功能，比如通过setParentBeanFactory()设置双亲IoC容器，通过addBeanPostProcessor()定义了Bean后置处理器等。</p>
+<p>###2.3.2 ApplicationContext路线<br>该设计路线以ApplicationContext应用上下文接口为核心的接口设计，这里涉及的主要接口设计有，从BeanFactory到ListableBeanFactory，再到ApplicationContext，再到我们常用的WebApplicationContext或者ConfigurableApplicationContext接口。<br>在这个接口体系中，ListableBeanFactory和HierarchicalBeanFactory两个接口，连接BeanFactory接口定义和ApplicationConext应用上下文的接口定义。在ListableBeanFactory接口中，细化了许多BeanFactory的接口功能，比如定义了getBeanDefinitionNames()接口方法；对于HierarchicalBeanFactory接口，我们在前文中已经提到过；对于ApplicationContext接口，它通过继承MessageSource、ResourceLoader、ApplicationEventPublisher接口，在BeanFactory简单IoC容器的基础上添加了许多对高级容器的特性的支持，这些特性我们之前也都提到过了。<br>总体来说 ApplicationContext 必须要完成以下几件事：</p>
+<ul>
+<li>标识一个应用环境</li>
+<li>利用 BeanFactory 创建 Bean 对象</li>
+<li>保存对象关系表</li>
+<li>能够捕获各种事件</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/03/28/2014-03-28-java-parse-xml-export-word/" itemprop="url">
                   Java解析Xml导出Word
                 </a>
@@ -238,7 +426,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-03-28T10:42:00+08:00" content="2014-03-28">
               2014-03-28
             </time>
@@ -250,7 +438,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -260,7 +448,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -272,7 +460,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -284,7 +472,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -296,7 +484,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -410,7 +598,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-03-24T14:29:00+08:00" content="2014-03-24">
               2014-03-24
             </time>
@@ -422,7 +610,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/人性/" itemprop="url" rel="index">
@@ -432,7 +620,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -444,7 +632,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -456,7 +644,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -468,7 +656,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -571,7 +759,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-03-13T00:02:00+08:00" content="2014-03-13">
               2014-03-13
             </time>
@@ -583,7 +771,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Linux/" itemprop="url" rel="index">
@@ -593,7 +781,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -605,7 +793,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -617,7 +805,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -728,7 +916,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-03-12T13:18:00+08:00" content="2014-03-12">
               2014-03-12
             </time>
@@ -740,7 +928,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Linux/" itemprop="url" rel="index">
@@ -750,7 +938,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -762,7 +950,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -774,7 +962,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -882,7 +1070,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-03-11T14:42:00+08:00" content="2014-03-11">
               2014-03-11
             </time>
@@ -894,7 +1082,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/项目管理/" itemprop="url" rel="index">
@@ -904,7 +1092,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1020,7 +1208,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-03-11T13:44:00+08:00" content="2014-03-11">
               2014-03-11
             </time>
@@ -1032,7 +1220,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/载记/" itemprop="url" rel="index">
@@ -1042,7 +1230,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1149,7 +1337,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-03-10T14:43:00+08:00" content="2014-03-10">
               2014-03-10
             </time>
@@ -1161,7 +1349,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Linux/" itemprop="url" rel="index">
@@ -1171,7 +1359,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1183,7 +1371,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1289,7 +1477,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-03-10T12:46:00+08:00" content="2014-03-10">
               2014-03-10
             </time>
@@ -1301,7 +1489,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Linux/" itemprop="url" rel="index">
@@ -1311,7 +1499,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1323,7 +1511,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1432,7 +1620,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-03-10T12:40:00+08:00" content="2014-03-10">
               2014-03-10
             </time>
@@ -1444,7 +1632,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Linux/" itemprop="url" rel="index">
@@ -1454,7 +1642,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1466,7 +1654,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1511,131 +1699,6 @@
 <h2 id="bash-sh-执行"><a href="#bash-sh-执行" class="headerlink" title="bash\sh 执行"></a>bash\sh 执行</h2><p>该方法执行可以不需要权限</p>
 <h2 id="Source"><a href="#Source" class="headerlink" title="Source/."></a>Source/.</h2><p>用sourcce 或者一个.的方式执行，可以让脚本在当前shell内执行，不会新创建一个子shell，这样当前shell就能调用脚本中的变量和函数。<br>注意，exec与source不同，exec会结束掉当前的shell，创建一个新的进程，pid会与当前的shell一致。</p>
 <h2 id="直接进入路径，输入脚本名运行（错误）"><a href="#直接进入路径，输入脚本名运行（错误）" class="headerlink" title="直接进入路径，输入脚本名运行（错误）"></a>直接进入路径，输入脚本名运行（错误）</h2><p>这样会无法执行，除非脚本在PATH下。比如node命令被我添加到了path中，那么就会执行。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/02/15/2014-02-15-linux-is-not-a-window-just-a-dirty-shutdown/" itemprop="url">
-                  Linux不是window，关机须谨慎
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-02-15T10:47:00+08:00" content="2014-02-15">
-              2014-02-15
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>最近饱受感冒和咳嗽的折磨，结果今天又被我的centos折磨了一番。估计是昨天异常关机导致扇区受损，还好没伤害到根目录，还能恢复，不过得长记性了，千万别像操作window那样随意。今天也就把linux关机前要注意的写一写。</p>
-<p>#1 为什么要正确的关机<br>Linux系统不像window系统那样是单用户、假多任务的情况。在linux中，由于每个程序都是在后台执行的，因此在你看不到的背后，其实可能有很多人同时在你的主机上工作。<br>还有个问题就是，若不能正常关机，后台的程序来不及将数据写回到文件中，有些服务的文件就会有问题，就可能造成文件系统的损坏。</p>
-<p>#2 关机要注意什么</p>
-<p>##2.1 观察系统的使用状态<br>首先可以用who命令查查谁在线，可以发出who命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ who</div><div class="line">David    tty1         2014-01-06 21:28 (:0)</div><div class="line">David    pts/1        2014-01-06 21:46 (:0.0)</div><div class="line">David    pts/12       2014-02-15 14:53 (:0.0)</div></pre></td></tr></table></figure></p>
-<p>然后要看看网络的联机状态<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ netstat -a</div><div class="line">Active Internet connections (servers and established)</div><div class="line">Proto Recv-Q Send-Q Local Address               Foreign Address             State      </div><div class="line">tcp        0      0 *:sunrpc                    *:*                         LISTEN      </div><div class="line">tcp        0      0 *:28017                     *:*                         LISTEN      </div><div class="line">//省略1万字</div></pre></td></tr></table></figure></p>
-<p>最后在看看后台的进程状态ps –aux。</p>
-<p>##2.2 将数据写入磁盘<br>Linux系统为了加快数据的读取速度，默认情况下某些数据将不会直接写入磁盘，而是先暂存在内存中。但是万一异常关机，这些数据将不能写入磁盘机，造成数据更新不正常，因此，关机前最好执行几次sync命令来写入磁盘。当然shutdown/reboot/halt命令都会调用sync，但是最好也还是要执行几次。</p>
-<p>##2.3 使用正确的关机命令<br>关机（Shutdown）、重启（reboot\halt\poweroff）。</p>
-<p>###2.3.1 Shutdown<br>这是最常用的关机命令，该命令会通知系统内的各个进程，并且通知系统中运行级别内的一些服务来关闭。该命令只能有root用户来操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ shutdown -k now &apos;abcd&apos;</div><div class="line">shutdown: Need to be root</div></pre></td></tr></table></figure></p>
-<p>可以用man shutdown命令，这个命令当然不是用来“找男人”的，而是用来查看帮助文档的。下面稍微对比较有用的信息翻译了下。<br>命令的格式为：shutdown [OPTION]…  TIME [MESSAGE]<br>-r     将系统服务停了后就重新启动.<br>-h     将系统服务停了后就立即关机.<br>-H     将系统服务停了后就立即挂起.<br>-P     将系统服务停了后就立即切断电源.<br>-c     取消关机，该命令不需要指定时间，第一个参数就是通知信息。<br>-k     只是发送关机提示信息，并不真的关机.<br>例子：<br>Shutdown –h now 立即关机<br>Shutdown –h 20:25 不解释干嘛的<br>Shutdown –h +10 系统字啊管10分钟后自动关机<br>Shutdown –r now “我要重启了” 立即重启，并发送通知。</p>
-<p>###2.3.2 Reboot<br>该命令基本和Shutdown –r now效果一样。最好这样执行sync;sync;sync;reboot;</p>
-<p>#3 扇区错乱问题修复<br>该问题就是因为异常关机导致，如果根目录没有损坏，那么再提示press root pass word or ctrl+D，这时输入root的口令登入系统进行单人单机的维护，输入fsck /dev/hda7(/dev/hda7为坏的磁盘块，按实际输入)。最后再询问clear?的时候输入Y就好了。修复完毕后reboot。<br>如果根目录坏了，那就麻烦了。
- </p>
 
           
         
@@ -1709,8 +1772,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">91</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-count">92</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
@@ -1718,11 +1781,18 @@
             <div class="site-state-item site-state-categories">
               <a href="/categories">
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">categories</span>
+                <span class="site-state-item-name">Kategorien</span>
               </a>
             </div>
           
 
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
           
 
         </nav>
@@ -1764,7 +1834,7 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

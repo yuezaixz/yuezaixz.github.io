@@ -1,0 +1,569 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="安卓 蓝牙 BLE," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="#安卓蓝牙模块踩坑集合
+##对特定的设备进行搜索API BluetoothAdapter.LeScanCallback) ```是安卓系统特地提供出来对特定的设备进行搜索的，官方API说明 12``` If you want to scan for only specific types of peripherals, you can instead call startLeScan(UUID[]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓蓝牙模块踩坑集合">
+<meta property="og:url" content="http://yoursite.com/2016/08/30/安卓蓝牙模块踩坑集合/index.html">
+<meta property="og:site_name" content="大胃吴的闲话唠嗑">
+<meta property="og:description" content="#安卓蓝牙模块踩坑集合
+##对特定的设备进行搜索API BluetoothAdapter.LeScanCallback) ```是安卓系统特地提供出来对特定的设备进行搜索的，官方API说明 12``` If you want to scan for only specific types of peripherals, you can instead call startLeScan(UUID[]">
+<meta property="og:updated_time" content="2016-08-30T06:33:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓蓝牙模块踩坑集合">
+<meta name="twitter:description" content="#安卓蓝牙模块踩坑集合
+##对特定的设备进行搜索API BluetoothAdapter.LeScanCallback) ```是安卓系统特地提供出来对特定的设备进行搜索的，官方API说明 12``` If you want to scan for only specific types of peripherals, you can instead call startLeScan(UUID[]">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/08/30/安卓蓝牙模块踩坑集合/"/>
+
+  <title> 安卓蓝牙模块踩坑集合 | 大胃吴的闲话唠嗑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大胃吴的闲话唠嗑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">扯扯技术，唠唠闲话</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Kategorien
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                安卓蓝牙模块踩坑集合
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-08-30T14:31:40+08:00" content="2016-08-30">
+              2016-08-30
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>#安卓蓝牙模块踩坑集合</p>
+<p>##对特定的设备进行搜索<br>API <figure class="highlight plain"><figcaption><span>BluetoothAdapter.LeScanCallback) ```是安卓系统特地提供出来对特定的设备进行搜索的，官方API说明 </span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">``` If you want to scan for only specific types of peripherals, you can instead call startLeScan(UUID[], BluetoothAdapter.LeScanCallback), providing an array of UUID objects that specify the GATT services your app supports.</div></pre></td></tr></table></figure></p>
+<p>故事听起来都是美好的，实际上，人生很艰难</p>
+<ul>
+<li>先是这个API设计的很有问题，他 <code>UUID[]</code>是并集而不是合集，就是说，我只能搜一个设备同时兼备两个UUID，而不是这两个UUID的设备都进行搜索，这点iOS API设计就合理很多了。</li>
+<li>然后是，这个API在安卓4.3 4.4压根不支持，这就是最坑爹的人，折腾了半天，最后不支持！</li>
+</ul>
+<p>##搜索的回调<br>这点倒不算坑，就是要注意的地方<code>BluetoothAdapter.LeScanCallback.onLeScan()</code> 为搜索结果的回调，该方法尽可能尽快把负责的过滤、判断抛到其他线程去做，尽快将回调调用返回了。</p>
+<p>##同时只能对一个设备进行连接<br><code>BluetoothDevice.connectGatt()</code>方法要控制好，不能同时对多个设备进行连接，这点也就不能像iOS那样，进行预连接的根源坑。</p>
+<p>如果连接失败了（例如出错，或者连接超时失败），要马上调用 BluetoothGatt.disconnect() 来释放建立连接请求，然后处理下一个设备连接请求，否则就等133出现！</p>
+<p>##对于属性的操作，同时只能有一个<br>不管是<code>writeCharacteristic()</code>写数据，还是设置notify，都是异步的，同时只能有一个，否则可能串线，或者丢失。所以，一定要在上一个写成功的回调后才能进行下一个操作，就这样，还有可能会出现该问题，所以在一些有可能要同时操作的地方，我是等收到了数据才进行下一个操作。比如连接上Podoon鞋垫后要进行时间校正、读版本号、读批次号、读协议栈，就是在前一个notify数据后，才执行下一个，另外特地做了一个Timer循环的去检查。</p>
+<p>##搜索、连接、断开连接最好放在主线程<br>这点看文档看到的，具体有没有效果不清楚，SDK是创建一个 <code>new Handler(context.getMainLooper());</code> ，把消息发送到这个 Handler 中。</p>
+<p>##连接过程很耗电，尽量时间短<br>对BLE设备连接，连接过程要尽量短，如果连接不上，不要盲目进行重连，否这你的电池会很快被消耗掉</p>
+<p>##作为中心设备，最多只能同时连6（不是非常确定，但是是有限的）个BLE设备<br>超过了就很可能会连接失败。如果连接后资源未被释放，也会记做连接的设备进行计算。</p>
+<p>##资源未被释放导致133问题<br>连接蓝牙设备后，在断开时候尽可能对其进行close操作，否则就有可能因为资源未释放干净又连接同一个设备出现133的错误</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/安卓-蓝牙-BLE/" rel="tag">#安卓 蓝牙 BLE</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/07/2016-06-07-dockercong-0dao-1de-bi-ji/" rel="next" title="Docker从0到1的笔记">
+                <i class="fa fa-chevron-left"></i> Docker从0到1的笔记
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="David Woo" />
+          <p class="site-author-name" itemprop="name">David Woo</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">92</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">Kategorien</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Woo</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

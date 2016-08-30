@@ -172,7 +172,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -182,7 +182,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
-            Categories
+            Kategorien
           </a>
         </li>
       
@@ -225,6 +225,114 @@
             
               
                 
+                <a class="post-title-link" href="/2015/03/07/2015-03-07-beginning-ios-pit-over-those-years-d/" itemprop="url">
+                  初学IOS那些年踩过的坑(五)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-03-07T06:33:00+08:00" content="2015-03-07">
+              2015-03-07
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#集成友盟后报错<br>LOG：<br>15-02-12 09:26:47.206 Runmove[2532:13249] NSScanner: nil string argument<br>2015-02-12 09:26:47.206 Runmove[2532:13249] Umeng: Read binary image info failed!</p>
+<p>其实不是友盟问题，是自己程序中有了个错误，只是打开了友盟的调试开关，所以报了友盟错误。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//    [MobClick setLogEnabled:YES];</span></div></pre></td></tr></table></figure></p>
+<p>注释该行代码后可以正常报告出程序中的异常</p>
+<p>#tableview下方空白处的seprator line去除<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.tableView.tableFooterView = [<span class="built_in">UIView</span> new];</div></pre></td></tr></table></figure></p>
+<p>#navigationbar的左滑返回<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    <span class="keyword">self</span>.navigationItem.leftBarButtonItem = [[<span class="built_in">UIBarButtonItem</span> alloc]</div><div class="line">                                         initWithImage:img</div><div class="line">                                         style:<span class="built_in">UIBarButtonItemStylePlain</span></div><div class="line">                                         target:<span class="keyword">self</span></div><div class="line">                                         action:<span class="keyword">@selector</span>(onBack:)];</div><div class="line"><span class="keyword">self</span>.navigationController.interactivePopGestureRecognizer.delegate = (<span class="keyword">id</span>)<span class="keyword">self</span>;</div></pre></td></tr></table></figure></p>
+<p>#使用nib做界面，但是layoutAttribute有些又需要根据适配来适配，nib+手写混写好烦恼啊，感觉睡不着觉了<br>其实错了，混写其实很简单的，可以像拉button一样的拉你的约束.nslayoutattribute也是可以拉线的，这样一切都太平了</p>
+<p>#画面不流畅可能是因为一些透明视图影响了fps，可以去掉这些透明视图<br>方法：Product-&gt;Profile-&gt;Core Animation-&gt;右下第二个选项卡中勾上Color Blended Layers<br>然后看到红色的就都是透明的视图，不需要透明效果的可以去掉透明</p>
+<p>#UITableView拉倒底部最后行只显示一半问题<br>原因：计算UITableView高度的时候按整个屏幕来计算了，NavigationBar的高度被忽略。所以就少算了NavigationBar高度。</p>
+<p>#UILongPressGestureRecognizer会触发两次，分别是开始和结束<br>所以如果只想触发一次，就需要加个判断了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)longPress:(<span class="built_in">UILongPressGestureRecognizer</span> *)sender</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (sender.state == <span class="built_in">UIGestureRecognizerStateBegan</span>) &#123;</div><div class="line">        [<span class="keyword">self</span> yourMethod];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#简单实现下拉到底刷新数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView</div><div class="line">&#123;</div><div class="line">    if([_photos count] &gt;= LOAD_COUNT_DEFAULT*(_loadPage+1) &amp;&amp; scrollView.contentOffset.y + (scrollView.frame.size.height) &gt; scrollView.contentSize.height*0.8)&#123;</div><div class="line">        [[RunService sharedInstance] loadPhotosWithPage:(_loadPage+1) count:LOAD_COUNT_DEFAULT complete:^(NSArray *photos) &#123;</div><div class="line">            _loadPage++;</div><div class="line">            [_photos addObjectsFromArray:photos];</div><div class="line">            [self loadPhoto];</div><div class="line">        &#125;                                         fail:^(NSString *msg) &#123;</div><div class="line">            </div><div class="line">        &#125;];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#数据持久化到NSUserDefaults<br>需要数据持久化的对象必须实现NSCoding<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">"NSObject+NSCoding.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ServerPhoto</span> : <span class="title">NSObject</span> &lt;<span class="title">NSCoding</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>实现文件中还要重写2个方法<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)encodeWithCoder:(<span class="built_in">NSCoder</span> *)coder &#123;</div><div class="line">    [<span class="keyword">self</span> autoEncodeWithCoder:coder];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">id</span>)initWithCoder:(<span class="built_in">NSCoder</span> *)coder &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span> = [<span class="keyword">super</span> init]) &#123;</div><div class="line">        [<span class="keyword">self</span> autoDecode:coder];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>持久化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSUserDefaults</span> *udf = [<span class="built_in">NSUserDefaults</span> standardUserDefaults];</div><div class="line"><span class="built_in">NSData</span> *photosData = [<span class="built_in">NSKeyedArchiver</span> archivedDataWithRootObject:_photos];</div><div class="line">[udf setObject:photosData forKey:_dataCacheName];</div><div class="line">[udf synchronize];</div></pre></td></tr></table></figure></p>
+<p>反持久化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSUserDefaults</span> *udf = [<span class="built_in">NSUserDefaults</span> standardUserDefaults];</div><div class="line"><span class="built_in">NSData</span> *data = [udf objectForKey:_dataCacheName];</div><div class="line"><span class="built_in">NSMutableArray</span> *photoData = [<span class="built_in">NSKeyedUnarchiver</span> unarchiveObjectWithData:data];</div><div class="line"><span class="keyword">if</span> (photoData &amp;&amp; photoData.count &gt; <span class="number">0</span>) &#123;</div><div class="line">    _photos = photoData;</div><div class="line">    [_photoTableView reloadData];</div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span> &#123;</div><div class="line">    [SVProgressHUD showWithStatus:<span class="string">@"加载数据中"</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>10、SDWebImage<br>options用SDWebImageHighPriority，优先级高的话，会及时写入到磁盘<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[leftImageView sd_setImageWithURL:[<span class="built_in">NSURL</span> URLWithString:leftPhotoUrl] placeholderImage:[<span class="built_in">UIImage</span> new] options:SDWebImageHighPriority];</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/02/28/2015-02-28-ios-common-library/" itemprop="url">
                   IOS常用库
                 </a>
@@ -238,7 +346,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-02-28T02:51:00+08:00" content="2015-02-28">
               2015-02-28
             </time>
@@ -332,7 +440,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-02-28T02:47:00+08:00" content="2015-02-28">
               2015-02-28
             </time>
@@ -432,7 +540,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-02-05T05:05:00+08:00" content="2015-02-05">
               2015-02-05
             </time>
@@ -444,7 +552,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/蛋疼/" itemprop="url" rel="index">
@@ -454,7 +562,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -466,7 +574,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -576,7 +684,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-02-05T04:55:00+08:00" content="2015-02-05">
               2015-02-05
             </time>
@@ -693,7 +801,7 @@ isInitScale = YES;
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-02-01T10:02:00+08:00" content="2015-02-01">
               2015-02-01
             </time>
@@ -790,7 +898,7 @@ isInitScale = YES;
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-01-30T02:36:00+08:00" content="2015-01-30">
               2015-01-30
             </time>
@@ -888,7 +996,7 @@ isInitScale = YES;
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-01-28T08:28:00+08:00" content="2015-01-28">
               2015-01-28
             </time>
@@ -1052,7 +1160,7 @@ isInitScale = YES;
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-01-08T02:47:00+08:00" content="2015-01-08">
               2015-01-08
             </time>
@@ -1064,7 +1172,7 @@ isInitScale = YES;
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/iOS/" itemprop="url" rel="index">
@@ -1074,7 +1182,7 @@ isInitScale = YES;
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1181,7 +1289,7 @@ isInitScale = YES;
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-01-06T06:19:00+08:00" content="2015-01-06">
               2015-01-06
             </time>
@@ -1193,7 +1301,7 @@ isInitScale = YES;
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/总结/" itemprop="url" rel="index">
@@ -1203,7 +1311,7 @@ isInitScale = YES;
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1279,151 +1387,6 @@ isInitScale = YES;
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/12/22/2014-12-22-obj-c-deficiency/" itemprop="url">
-                  OBJ-C的不足
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-12-22T05:03:00+08:00" content="2014-12-22">
-              2014-12-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/总结/" itemprop="url" rel="index">
-                    <span itemprop="name">总结</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/总结/obj-c/" itemprop="url" rel="index">
-                    <span itemprop="name">obj-c</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/总结/obj-c/不足/" itemprop="url" rel="index">
-                    <span itemprop="name">不足</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#概述<br>用Obj-c编程一周了，很 <strong>不（昨天打错了，忘了写不）</strong> 负责任的总结一下自己对于Obj-c不足的看法。</p>
-<p>#吐槽</p>
-<ul>
-<li>无GC，程序员的一大部分精力在内存管理上。但是有了ARC，这一劣势反而变成了优势，编译时自动加上retain和release，运行时函数变量栈的自动释放，让应用丝毫不减速情况下又让程序员的精力在业务逻辑上；</li>
-<li>无命名空间问题，和javascript一样的问题，所以最好都给类加上前缀来规避这问题；</li>
-<li>无法多继承问题，和Java一样的问题，java主要通过接口和组合来规避。而Obj-c也差不多，通过类别和协议，在加上组合来规避该问题。程序中比较多的例子就是代理模式，比如ViewController还会是很多View的delegate，他实现了各种委托的协议来实现委托。除了上面说的这几个还有就是id这个类型（鸭子类型），通过该类型来完成多态；</li>
-<li>语义不怎么够简洁，这只能依靠XCODE的强大功能来弥补了。</li>
-</ul>
-<p>#总结<br>总之，每种编程语言都会有许多不足，如Java就非常不足，设计模式就是一种比较通用的实践方式来解决这些不足，套用设计模式后让程序员的经历不被这些不足束缚，可以痛快的变成，just for fun , no fun no zuo !</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1469,8 +1432,8 @@ isInitScale = YES;
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">91</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-count">92</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
@@ -1478,11 +1441,18 @@ isInitScale = YES;
             <div class="site-state-item site-state-categories">
               <a href="/categories">
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">categories</span>
+                <span class="site-state-item-name">Kategorien</span>
               </a>
             </div>
           
 
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
           
 
         </nav>
@@ -1524,7 +1494,7 @@ isInitScale = YES;
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

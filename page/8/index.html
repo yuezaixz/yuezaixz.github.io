@@ -172,7 +172,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -182,7 +182,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
-            Categories
+            Kategorien
           </a>
         </li>
       
@@ -225,6 +225,131 @@
             
               
                 
+                <a class="post-title-link" href="/2014/02/15/2014-02-15-linux-is-not-a-window-just-a-dirty-shutdown/" itemprop="url">
+                  Linux不是window，关机须谨慎
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-02-15T10:47:00+08:00" content="2014-02-15">
+              2014-02-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近饱受感冒和咳嗽的折磨，结果今天又被我的centos折磨了一番。估计是昨天异常关机导致扇区受损，还好没伤害到根目录，还能恢复，不过得长记性了，千万别像操作window那样随意。今天也就把linux关机前要注意的写一写。</p>
+<p>#1 为什么要正确的关机<br>Linux系统不像window系统那样是单用户、假多任务的情况。在linux中，由于每个程序都是在后台执行的，因此在你看不到的背后，其实可能有很多人同时在你的主机上工作。<br>还有个问题就是，若不能正常关机，后台的程序来不及将数据写回到文件中，有些服务的文件就会有问题，就可能造成文件系统的损坏。</p>
+<p>#2 关机要注意什么</p>
+<p>##2.1 观察系统的使用状态<br>首先可以用who命令查查谁在线，可以发出who命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ who</div><div class="line">David    tty1         2014-01-06 21:28 (:0)</div><div class="line">David    pts/1        2014-01-06 21:46 (:0.0)</div><div class="line">David    pts/12       2014-02-15 14:53 (:0.0)</div></pre></td></tr></table></figure></p>
+<p>然后要看看网络的联机状态<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ netstat -a</div><div class="line">Active Internet connections (servers and established)</div><div class="line">Proto Recv-Q Send-Q Local Address               Foreign Address             State      </div><div class="line">tcp        0      0 *:sunrpc                    *:*                         LISTEN      </div><div class="line">tcp        0      0 *:28017                     *:*                         LISTEN      </div><div class="line">//省略1万字</div></pre></td></tr></table></figure></p>
+<p>最后在看看后台的进程状态ps –aux。</p>
+<p>##2.2 将数据写入磁盘<br>Linux系统为了加快数据的读取速度，默认情况下某些数据将不会直接写入磁盘，而是先暂存在内存中。但是万一异常关机，这些数据将不能写入磁盘机，造成数据更新不正常，因此，关机前最好执行几次sync命令来写入磁盘。当然shutdown/reboot/halt命令都会调用sync，但是最好也还是要执行几次。</p>
+<p>##2.3 使用正确的关机命令<br>关机（Shutdown）、重启（reboot\halt\poweroff）。</p>
+<p>###2.3.1 Shutdown<br>这是最常用的关机命令，该命令会通知系统内的各个进程，并且通知系统中运行级别内的一些服务来关闭。该命令只能有root用户来操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ shutdown -k now &apos;abcd&apos;</div><div class="line">shutdown: Need to be root</div></pre></td></tr></table></figure></p>
+<p>可以用man shutdown命令，这个命令当然不是用来“找男人”的，而是用来查看帮助文档的。下面稍微对比较有用的信息翻译了下。<br>命令的格式为：shutdown [OPTION]…  TIME [MESSAGE]<br>-r     将系统服务停了后就重新启动.<br>-h     将系统服务停了后就立即关机.<br>-H     将系统服务停了后就立即挂起.<br>-P     将系统服务停了后就立即切断电源.<br>-c     取消关机，该命令不需要指定时间，第一个参数就是通知信息。<br>-k     只是发送关机提示信息，并不真的关机.<br>例子：<br>Shutdown –h now 立即关机<br>Shutdown –h 20:25 不解释干嘛的<br>Shutdown –h +10 系统字啊管10分钟后自动关机<br>Shutdown –r now “我要重启了” 立即重启，并发送通知。</p>
+<p>###2.3.2 Reboot<br>该命令基本和Shutdown –r now效果一样。最好这样执行sync;sync;sync;reboot;</p>
+<p>#3 扇区错乱问题修复<br>该问题就是因为异常关机导致，如果根目录没有损坏，那么再提示press root pass word or ctrl+D，这时输入root的口令登入系统进行单人单机的维护，输入fsck /dev/hda7(/dev/hda7为坏的磁盘块，按实际输入)。最后再询问clear?的时候输入Y就好了。修复完毕后reboot。<br>如果根目录坏了，那就麻烦了。
+ </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/02/11/2014-02-11-problem-in-the-agile-transformation/" itemprop="url">
                   敏捷转型中的问题-WH
                 </a>
@@ -238,7 +363,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-02-11T13:56:00+08:00" content="2014-02-11">
               2014-02-11
             </time>
@@ -250,7 +375,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/scrum/" itemprop="url" rel="index">
@@ -260,7 +385,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -380,7 +505,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-02-10T13:33:00+08:00" content="2014-02-10">
               2014-02-10
             </time>
@@ -392,7 +517,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/日记/" itemprop="url" rel="index">
@@ -402,7 +527,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -414,7 +539,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -426,7 +551,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -438,7 +563,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -549,7 +674,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-02-04T05:51:00+08:00" content="2014-02-04">
               2014-02-04
             </time>
@@ -561,7 +686,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -571,7 +696,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -583,7 +708,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -595,7 +720,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -707,7 +832,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-02-03T13:11:00+08:00" content="2014-02-03">
               2014-02-03
             </time>
@@ -719,7 +844,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -729,7 +854,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -741,7 +866,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -753,7 +878,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -765,7 +890,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -889,7 +1014,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-30T03:41:00+08:00" content="2014-01-30">
               2014-01-30
             </time>
@@ -901,7 +1026,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/个人随笔/" itemprop="url" rel="index">
@@ -911,7 +1036,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -923,7 +1048,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1026,7 +1151,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-29T07:10:00+08:00" content="2014-01-29">
               2014-01-29
             </time>
@@ -1038,7 +1163,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -1048,7 +1173,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1060,7 +1185,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1072,7 +1197,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1084,7 +1209,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1096,7 +1221,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1108,7 +1233,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1220,7 +1345,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-29T03:53:00+08:00" content="2014-01-29">
               2014-01-29
             </time>
@@ -1232,7 +1357,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -1242,7 +1367,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1254,7 +1379,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1266,7 +1391,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1278,7 +1403,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1290,7 +1415,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1413,7 +1538,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-26T04:18:00+08:00" content="2014-01-26">
               2014-01-26
             </time>
@@ -1425,7 +1550,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -1435,7 +1560,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1447,7 +1572,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1459,7 +1584,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1471,7 +1596,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1483,7 +1608,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1627,7 +1752,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-23T13:05:00+08:00" content="2014-01-23">
               2014-01-23
             </time>
@@ -1639,7 +1764,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/个人随笔/" itemprop="url" rel="index">
@@ -1649,7 +1774,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1738,107 +1863,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/01/22/2014-01-22-web-age-of-venture-nodejs-util-module-a/" itemprop="url">
-                  互联网时代如何创业----Node.js的Util模块（一）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-01-22T13:18:00+08:00" content="2014-01-22">
-              2014-01-22
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>最近打车应用的斗争已经从群雄逐鹿，到现在快的和滴滴打车双雄争霸的市场格局了。但是，两家创业公司的斗争实际并没有那么简单，他们背后是“财付通VS支付宝”，“微信VS来往”，“理财通VS余额包”，最幕后的黑手就是“腾讯VS阿里巴巴”。<br>本文不想过多篇幅来写两家巨头是如何烧钱大战的，不过他们把补贴做到了一种极端上，靠着疯狂砸广告、大力补贴司机、变态似的补贴用户等行为，可以说把整个市场都占据了。打车软件作为最容易被市场接受的LBS服务之一，是巨头们测试其O2O能力和渗透率的绝佳工具，也为未来更多O2O业务提供接口，所以才这么的疯狂。<br>因此，对于两家初创公司，都靠着背后的干爹烧着钱，让别的创业公司基本上没活路，但是别忘了黄花梨做的椅子终究是要让人坐在屁股底下的。也预示着大多数创业公司的最终结果——被收购。<br>那么，在巨头们垄断式的市场里，如何脱颖而出呢？以下的内容基本上是读KK（凯文凯利）的文章的个人理解，理解有误的话请见谅。<br>KK说了，最具有破坏力的竞争来自于边缘而非中心。边缘是不被看好的市场。赢利低、不稳定、未经验证、市场狭小、风险系数极高。小公司不得不进入这样的市场。<br>就像上篇博文中提到的，蒸汽船开始时候故障多、昂贵等等原因都一度是他成为了摆设，但是经过几十年的改造，他把原来的造船行业全部打败了。60年代底特律的第一代汽车被一个叫本田的日本人用自动化的汽车打败了。IBM作为电脑公司也被微软这样做软件的公司不断蚕食，而微软如今又不得不面对一个做搜索引擎的公司（谷歌）的竞争。这些边缘公司却可以逐步打败那些老家伙，都是因为他们没有从正面进行较量，而是从老家伙们没有涉足的边缘进行发展（因为老家伙们需要完善现有产品，强化现有优势）。<br>作为一个赛车游戏的忠实粉丝，我深刻的知道想要超车必须从弯道，所有追赶都是没用的（除非你用外挂，你的车比别人快的多，也就是你有干爹的意思）。微创新这会，就是大公司用来扼杀小公司的手段，一定不是小公司用来颠覆大公司的武器。<br>360是从瑞星看不上眼的免费杀毒市场起家的，苹果是从IBM看不上眼的PC机起家的，微软也是从IBM看不上眼的操作系统起家，谷歌是从微软看不上眼的网络服务起家。但是现在的大公司都聪明了，像打车市场一出现点苗头，就被他们盯上了，所以，在这个时代想要从巨头们的眼皮底下做出点雷声大雨点更大的事情，就是一个字，难！<br>03年有几家闷声做大事的互联网公司是有起色，不过那真的就是巨头们不愿意涉及的边缘行业。谁能扎到下一个缝隙，爬到巨头们的头上呢？2014，让我们拭目以待。<br>————————–分割线—————————</p>
-<h1 id="常用工具Util"><a href="#常用工具Util" class="headerlink" title="常用工具Util"></a>常用工具Util</h1><p>util 是一个 Node.js 核心模块，提供常用函数的集合，用于弥补核心 JavaScript 的功能过于精简的不足。Util模块的函数比较多，今天先说两个。</p>
-<h2 id="1-util-inherits"><a href="#1-util-inherits" class="headerlink" title="1 util.inherits"></a>1 util.inherits</h2><p>util.inherits(constructor, superConstructor)是一个实现对象间原型继承的原型复制函数。JavaScript 的面向对象特性是基于原型的，与常见的基于类的不同。不像Java中的对面对象特性是基于类的，可以用extends来实现继承，Javascript中需要通过原型复制来实现。这个问题可能要牵扯到javascript的原型概念，下次专门写一篇博文介绍javascript的原型。<br>先简单的打个比方，类就相当于一个模具，通过模具产生对象。而原型就好比达芬奇的蒙娜丽莎，其他艺术家通过高超的技艺复杂成一个一个对象。<br>看下面继承的例子：<br><figure class="highlight javascript"><figcaption><span>testInherits.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);  </div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Base</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">this</span>.name = <span class="string">'base'</span>;</div><div class="line"><span class="keyword">this</span>.base = <span class="number">1991</span>;</div><div class="line"><span class="keyword">this</span>.sayHello = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Hello '</span> + <span class="keyword">this</span>.name);</div><div class="line">&#125;;</div><div class="line">&#125;</div><div class="line">Base.prototype.showName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Sub</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">this</span>.name = <span class="string">'sub'</span>;</div><div class="line">&#125;</div><div class="line">util.inherits(Sub, Base);</div><div class="line"><span class="keyword">var</span> objBase = <span class="keyword">new</span> Base();</div><div class="line">objBase.showName();</div><div class="line">objBase.sayHello();</div><div class="line"><span class="built_in">console</span>.log(objBase);</div><div class="line"><span class="keyword">var</span> objSub = <span class="keyword">new</span> Sub();</div><div class="line">objSub.showName();</div><div class="line"><span class="comment">//objSub.sayHello();</span></div><div class="line"><span class="built_in">console</span>.log(objSub);</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[David@localhost javascriptStudy]$ node testInherits.js </div><div class="line">base</div><div class="line">Hello base</div><div class="line">&#123; name: &apos;base&apos;, base: 1991, sayHello: [Function] &#125;</div><div class="line">sub</div><div class="line">&#123; name: &apos;sub&apos; &#125;</div></pre></td></tr></table></figure>
-<p>Javascript的对象分三种：原型对象、构造对象、实例对象。<br>objSub是实例对象，如果//objSub.sayHello();不注释则会报错，因为只能继承Base原型的属性，不能继承Base构造对象的属性。<br>具体关于原型，还是请看之后写的关于原型的博文吧，想简单的解释实在太绕了。</p>
-<h2 id="2-util-inspect"><a href="#2-util-inspect" class="headerlink" title="2 util.inspect"></a>2 util.inspect</h2><p>util.inspect(object,[showHidden],[depth],[colors])是一个将任意对象转换为字符串的方法，通常用于调试和错误输出。它至少接受一个参数 object，即要转换的对象。<br>showHidden 是一个可选参数，如果值为 true，将会输出更多隐藏信息。<br>depth 表示最大递归的层数，如果对象很复杂，你可以指定层数以控制输出信息的多少。如果不指定depth，默认会递归2层，指定为 null 表示将不限递归层数完整遍历对象。<br>如果color 值为 true，输出格式将会以 ANSI 颜色编码，通常用于在终端显示更漂亮的效果。<br>从下面例子可以看出，就算有toString方法，也不会直接调用他来转换对象。<br><figure class="highlight javascript"><figcaption><span>testInspect.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">this</span>.name = <span class="string">'byvoid'</span>;</div><div class="line"><span class="keyword">this</span>.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">return</span> <span class="keyword">this</span>.name;</div><div class="line">&#125;;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> Person();</div><div class="line"><span class="built_in">console</span>.log(util.inspect(obj));</div><div class="line"><span class="built_in">console</span>.log(util.inspect(obj, <span class="literal">true</span>));</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[David@localhost javascriptStudy]$ node testInspect.js </div><div class="line">&#123; name: &apos;byvoid&apos;, toString: [Function] &#125;</div><div class="line">&#123; toString: </div><div class="line">   &#123; [Function]</div><div class="line">     [caller]: null,</div><div class="line">     [arguments]: null,</div><div class="line">     [length]: 0,</div><div class="line">     [prototype]: &#123; [constructor]: [Circular] &#125;,</div><div class="line">     [name]: &apos;&apos; &#125;,</div><div class="line">  name: &apos;byvoid&apos; &#125;</div></pre></td></tr></table></figure>
-<h2 id="3-其他"><a href="#3-其他" class="headerlink" title="3 其他"></a>3 其他</h2><p>util还提供了util.isArray()、util.isRegExp()、util.isDate()、util.isError() 四个类型测试工具，以及 util.format()、util.debug() 等工具。有兴趣的读者可以访问 <a href="http://javascript.org/api/util.html" target="_blank" rel="external">API</a>了解详细内容。有空我也会把util这个工具继续写下去。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1884,8 +1908,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">91</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-count">92</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
@@ -1893,11 +1917,18 @@
             <div class="site-state-item site-state-categories">
               <a href="/categories">
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">categories</span>
+                <span class="site-state-item-name">Kategorien</span>
               </a>
             </div>
           
 
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
           
 
         </nav>
@@ -1939,7 +1970,7 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

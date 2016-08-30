@@ -172,7 +172,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -182,7 +182,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
-            Categories
+            Kategorien
           </a>
         </li>
       
@@ -225,6 +225,114 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/30/安卓蓝牙模块踩坑集合/" itemprop="url">
+                  安卓蓝牙模块踩坑集合
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-08-30T14:31:40+08:00" content="2016-08-30">
+              2016-08-30
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#安卓蓝牙模块踩坑集合</p>
+<p>##对特定的设备进行搜索<br>API <figure class="highlight plain"><figcaption><span>BluetoothAdapter.LeScanCallback) ```是安卓系统特地提供出来对特定的设备进行搜索的，官方API说明 </span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">``` If you want to scan for only specific types of peripherals, you can instead call startLeScan(UUID[], BluetoothAdapter.LeScanCallback), providing an array of UUID objects that specify the GATT services your app supports.</div></pre></td></tr></table></figure></p>
+<p>故事听起来都是美好的，实际上，人生很艰难</p>
+<ul>
+<li>先是这个API设计的很有问题，他 <code>UUID[]</code>是并集而不是合集，就是说，我只能搜一个设备同时兼备两个UUID，而不是这两个UUID的设备都进行搜索，这点iOS API设计就合理很多了。</li>
+<li>然后是，这个API在安卓4.3 4.4压根不支持，这就是最坑爹的人，折腾了半天，最后不支持！</li>
+</ul>
+<p>##搜索的回调<br>这点倒不算坑，就是要注意的地方<code>BluetoothAdapter.LeScanCallback.onLeScan()</code> 为搜索结果的回调，该方法尽可能尽快把负责的过滤、判断抛到其他线程去做，尽快将回调调用返回了。</p>
+<p>##同时只能对一个设备进行连接<br><code>BluetoothDevice.connectGatt()</code>方法要控制好，不能同时对多个设备进行连接，这点也就不能像iOS那样，进行预连接的根源坑。</p>
+<p>如果连接失败了（例如出错，或者连接超时失败），要马上调用 BluetoothGatt.disconnect() 来释放建立连接请求，然后处理下一个设备连接请求，否则就等133出现！</p>
+<p>##对于属性的操作，同时只能有一个<br>不管是<code>writeCharacteristic()</code>写数据，还是设置notify，都是异步的，同时只能有一个，否则可能串线，或者丢失。所以，一定要在上一个写成功的回调后才能进行下一个操作，就这样，还有可能会出现该问题，所以在一些有可能要同时操作的地方，我是等收到了数据才进行下一个操作。比如连接上Podoon鞋垫后要进行时间校正、读版本号、读批次号、读协议栈，就是在前一个notify数据后，才执行下一个，另外特地做了一个Timer循环的去检查。</p>
+<p>##搜索、连接、断开连接最好放在主线程<br>这点看文档看到的，具体有没有效果不清楚，SDK是创建一个 <code>new Handler(context.getMainLooper());</code> ，把消息发送到这个 Handler 中。</p>
+<p>##连接过程很耗电，尽量时间短<br>对BLE设备连接，连接过程要尽量短，如果连接不上，不要盲目进行重连，否这你的电池会很快被消耗掉</p>
+<p>##作为中心设备，最多只能同时连6（不是非常确定，但是是有限的）个BLE设备<br>超过了就很可能会连接失败。如果连接后资源未被释放，也会记做连接的设备进行计算。</p>
+<p>##资源未被释放导致133问题<br>连接蓝牙设备后，在断开时候尽可能对其进行close操作，否则就有可能因为资源未释放干净又连接同一个设备出现133的错误</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/06/07/2016-06-07-dockercong-0dao-1de-bi-ji/" itemprop="url">
                   Docker从0到1的笔记
                 </a>
@@ -238,7 +346,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-06-07T14:25:06+08:00" content="2016-06-07">
               2016-06-07
             </time>
@@ -420,7 +528,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-07-13T16:01:53+08:00" content="2015-07-13">
               2015-07-13
             </time>
@@ -517,7 +625,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-06-29T11:25:10+08:00" content="2015-06-29">
               2015-06-29
             </time>
@@ -619,7 +727,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-05-13T11:30:45+08:00" content="2015-05-13">
               2015-05-13
             </time>
@@ -731,7 +839,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-05-13T11:25:59+08:00" content="2015-05-13">
               2015-05-13
             </time>
@@ -835,7 +943,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-05-07T22:11:52+08:00" content="2015-05-07">
               2015-05-07
             </time>
@@ -936,7 +1044,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-05-07T14:21:16+08:00" content="2015-05-07">
               2015-05-07
             </time>
@@ -1037,7 +1145,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-05-06T15:56:08+08:00" content="2015-05-06">
               2015-05-06
             </time>
@@ -1150,7 +1258,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-04-20T08:54:00+08:00" content="2015-04-20">
               2015-04-20
             </time>
@@ -1192,114 +1300,6 @@
 <p>4、ViewController中，当一个界面只有一个scrollView时候，scrollView会自动偏移一个状态栏的高度<br>在ViewController的ViewDidLoad中加入下面代码可解决该问题。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.automaticallyAdjustsScrollViewInsets = <span class="literal">NO</span>;</div></pre></td></tr></table></figure></p>
 <p>5、IOS中做类似GIF的动画<br>其实只要为每一帧切一张图，然后用如下代码就Ok了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *images = @[[<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step1"</span>], [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step2"</span>], [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step3"</span>]];</div><div class="line"><span class="built_in">UIImage</span> *animateImage = [<span class="built_in">UIImage</span> animatedImageWithImages:images duration:<span class="number">1.2</span>];</div><div class="line"><span class="built_in">UIImageView</span> *imageView = [[<span class="built_in">UIImageView</span> alloc] initWithImage:animateImage];</div><div class="line"><span class="comment">// 默认是0 0代表无限循环</span></div><div class="line">imageView.animationRepeatCount = <span class="number">0</span>;</div><div class="line">[imageView startAnimating];</div></pre></td></tr></table></figure></p>
 <p>6、主界面使用scrollView后，nib文件有警告<br>has ambigous scrollable content height<br>原因：scrollView需要确定的contentSize，而subViews并没有足够的约束可以确定contentSize<br>解决：在scrollView中套一层view，设置如下图<br><img src="http://chuantu.biz/t2/3/1429520432x1822611348.jpg" alt=""></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/03/07/2015-03-07-beginning-ios-pit-over-those-years-d/" itemprop="url">
-                  初学IOS那些年踩过的坑(五)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2015-03-07T06:33:00+08:00" content="2015-03-07">
-              2015-03-07
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#集成友盟后报错<br>LOG：<br>15-02-12 09:26:47.206 Runmove[2532:13249] NSScanner: nil string argument<br>2015-02-12 09:26:47.206 Runmove[2532:13249] Umeng: Read binary image info failed!</p>
-<p>其实不是友盟问题，是自己程序中有了个错误，只是打开了友盟的调试开关，所以报了友盟错误。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//    [MobClick setLogEnabled:YES];</span></div></pre></td></tr></table></figure></p>
-<p>注释该行代码后可以正常报告出程序中的异常</p>
-<p>#tableview下方空白处的seprator line去除<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.tableView.tableFooterView = [<span class="built_in">UIView</span> new];</div></pre></td></tr></table></figure></p>
-<p>#navigationbar的左滑返回<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    <span class="keyword">self</span>.navigationItem.leftBarButtonItem = [[<span class="built_in">UIBarButtonItem</span> alloc]</div><div class="line">                                         initWithImage:img</div><div class="line">                                         style:<span class="built_in">UIBarButtonItemStylePlain</span></div><div class="line">                                         target:<span class="keyword">self</span></div><div class="line">                                         action:<span class="keyword">@selector</span>(onBack:)];</div><div class="line"><span class="keyword">self</span>.navigationController.interactivePopGestureRecognizer.delegate = (<span class="keyword">id</span>)<span class="keyword">self</span>;</div></pre></td></tr></table></figure></p>
-<p>#使用nib做界面，但是layoutAttribute有些又需要根据适配来适配，nib+手写混写好烦恼啊，感觉睡不着觉了<br>其实错了，混写其实很简单的，可以像拉button一样的拉你的约束.nslayoutattribute也是可以拉线的，这样一切都太平了</p>
-<p>#画面不流畅可能是因为一些透明视图影响了fps，可以去掉这些透明视图<br>方法：Product-&gt;Profile-&gt;Core Animation-&gt;右下第二个选项卡中勾上Color Blended Layers<br>然后看到红色的就都是透明的视图，不需要透明效果的可以去掉透明</p>
-<p>#UITableView拉倒底部最后行只显示一半问题<br>原因：计算UITableView高度的时候按整个屏幕来计算了，NavigationBar的高度被忽略。所以就少算了NavigationBar高度。</p>
-<p>#UILongPressGestureRecognizer会触发两次，分别是开始和结束<br>所以如果只想触发一次，就需要加个判断了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)longPress:(<span class="built_in">UILongPressGestureRecognizer</span> *)sender</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (sender.state == <span class="built_in">UIGestureRecognizerStateBegan</span>) &#123;</div><div class="line">        [<span class="keyword">self</span> yourMethod];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>#简单实现下拉到底刷新数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView</div><div class="line">&#123;</div><div class="line">    if([_photos count] &gt;= LOAD_COUNT_DEFAULT*(_loadPage+1) &amp;&amp; scrollView.contentOffset.y + (scrollView.frame.size.height) &gt; scrollView.contentSize.height*0.8)&#123;</div><div class="line">        [[RunService sharedInstance] loadPhotosWithPage:(_loadPage+1) count:LOAD_COUNT_DEFAULT complete:^(NSArray *photos) &#123;</div><div class="line">            _loadPage++;</div><div class="line">            [_photos addObjectsFromArray:photos];</div><div class="line">            [self loadPhoto];</div><div class="line">        &#125;                                         fail:^(NSString *msg) &#123;</div><div class="line">            </div><div class="line">        &#125;];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>#数据持久化到NSUserDefaults<br>需要数据持久化的对象必须实现NSCoding<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">"NSObject+NSCoding.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ServerPhoto</span> : <span class="title">NSObject</span> &lt;<span class="title">NSCoding</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>实现文件中还要重写2个方法<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)encodeWithCoder:(<span class="built_in">NSCoder</span> *)coder &#123;</div><div class="line">    [<span class="keyword">self</span> autoEncodeWithCoder:coder];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">id</span>)initWithCoder:(<span class="built_in">NSCoder</span> *)coder &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span> = [<span class="keyword">super</span> init]) &#123;</div><div class="line">        [<span class="keyword">self</span> autoDecode:coder];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>持久化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSUserDefaults</span> *udf = [<span class="built_in">NSUserDefaults</span> standardUserDefaults];</div><div class="line"><span class="built_in">NSData</span> *photosData = [<span class="built_in">NSKeyedArchiver</span> archivedDataWithRootObject:_photos];</div><div class="line">[udf setObject:photosData forKey:_dataCacheName];</div><div class="line">[udf synchronize];</div></pre></td></tr></table></figure></p>
-<p>反持久化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSUserDefaults</span> *udf = [<span class="built_in">NSUserDefaults</span> standardUserDefaults];</div><div class="line"><span class="built_in">NSData</span> *data = [udf objectForKey:_dataCacheName];</div><div class="line"><span class="built_in">NSMutableArray</span> *photoData = [<span class="built_in">NSKeyedUnarchiver</span> unarchiveObjectWithData:data];</div><div class="line"><span class="keyword">if</span> (photoData &amp;&amp; photoData.count &gt; <span class="number">0</span>) &#123;</div><div class="line">    _photos = photoData;</div><div class="line">    [_photoTableView reloadData];</div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span> &#123;</div><div class="line">    [SVProgressHUD showWithStatus:<span class="string">@"加载数据中"</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>10、SDWebImage<br>options用SDWebImageHighPriority，优先级高的话，会及时写入到磁盘<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[leftImageView sd_setImageWithURL:[<span class="built_in">NSURL</span> URLWithString:leftPhotoUrl] placeholderImage:[<span class="built_in">UIImage</span> new] options:SDWebImageHighPriority];</div></pre></td></tr></table></figure></p>
 
           
         
@@ -1373,8 +1373,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">91</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-count">92</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
@@ -1382,11 +1382,18 @@
             <div class="site-state-item site-state-categories">
               <a href="/categories">
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">categories</span>
+                <span class="site-state-item-name">Kategorien</span>
               </a>
             </div>
           
 
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
           
 
         </nav>
@@ -1428,7 +1435,7 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
