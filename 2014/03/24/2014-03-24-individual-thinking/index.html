@@ -1,15 +1,94 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
+<!doctype html>
+
+
+
   
-  <title>“下个人”思维 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="应该也有一周没写博文了，Deadline和坑爹的队友就像两座大山，压的我快窒息了。还好周末来了，加班一天，带着我家小妞出去瞎晃一天半，心情是好多了。唯一有点美中不足的就是，不管是忠仑公园，还是十里蓝山，总是有很多游客践踏花草，掰着花朵、躺在花朵上拍照，还有刻字到此一游的。《代码整洁之道》这本书里面我最喜欢一句话，就是请保证你离开的时候，比你进来的时候更加干净。我觉得这思想可以延伸的很广，也就是我想">
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="应该也有一周没写博文了，Deadline和坑爹的队友就像两座大山，压的我快窒息了。还好周末来了，加班一天，带着我家小妞出去瞎晃一天半，心情是好多了。唯一有点美中不足的就是，不管是忠仑公园，还是十里蓝山，总是有很多游客践踏花草，掰着花朵、躺在花朵上拍照，还有刻字到此一游的。《代码整洁之道》这本书里面我最喜欢一句话，就是请保证你离开的时候，比你进来的时候更加干净。我觉得这思想可以延伸的很广，也就是我想">
 <meta property="og:type" content="article">
 <meta property="og:title" content="“下个人”思维">
 <meta property="og:url" content="http://yoursite.com/2014/03/24/2014-03-24-individual-thinking/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="大胃吴的闲话唠嗑">
 <meta property="og:description" content="应该也有一周没写博文了，Deadline和坑爹的队友就像两座大山，压的我快窒息了。还好周末来了，加班一天，带着我家小妞出去瞎晃一天半，心情是好多了。唯一有点美中不足的就是，不管是忠仑公园，还是十里蓝山，总是有很多游客践踏花草，掰着花朵、躺在花朵上拍照，还有刻字到此一游的。《代码整洁之道》这本书里面我最喜欢一句话，就是请保证你离开的时候，比你进来的时候更加干净。我觉得这思想可以延伸的很广，也就是我想">
 <meta property="og:image" content="http://case.ntu.edu.tw/hs/wordpress/wp-content/uploads/2011/08/76%E7%BE%A4%E9%AB%94%E5%8B%95%E7%89%A9%E7%9A%84%E5%88%A9%E4%BB%96%E8%A1%8C%E7%82%BA.jpg">
 <meta property="og:updated_time" content="2015-05-04T06:05:28.000Z">
@@ -17,205 +96,527 @@
 <meta name="twitter:title" content="“下个人”思维">
 <meta name="twitter:description" content="应该也有一周没写博文了，Deadline和坑爹的队友就像两座大山，压的我快窒息了。还好周末来了，加班一天，带着我家小妞出去瞎晃一天半，心情是好多了。唯一有点美中不足的就是，不管是忠仑公园，还是十里蓝山，总是有很多游客践踏花草，掰着花朵、躺在花朵上拍照，还有刻字到此一游的。《代码整洁之道》这本书里面我最喜欢一句话，就是请保证你离开的时候，比你进来的时候更加干净。我觉得这思想可以延伸的很广，也就是我想">
 <meta name="twitter:image" content="http://case.ntu.edu.tw/hs/wordpress/wp-content/uploads/2011/08/76%E7%BE%A4%E9%AB%94%E5%8B%95%E7%89%A9%E7%9A%84%E5%88%A9%E4%BB%96%E8%A1%8C%E7%82%BA.jpg">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
 
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2014/03/24/2014-03-24-individual-thinking/"/>
+
+  <title> “下个人”思维 | 大胃吴的闲话唠嗑 </title>
 </head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大胃吴的闲话唠嗑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
       
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
         
-          <a class="main-nav-link" href="/">Home</a>
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
         
-          <a class="main-nav-link" href="/archives">Archives</a>
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
         
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-2014-03-24-individual-thinking" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/03/24/2014-03-24-individual-thinking/" class="article-date">
-  <time datetime="2014-03-24T06:29:00.000Z" itemprop="datePublished">2014-03-24</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/人性/">人性</a>►<a class="article-category-link" href="/categories/人性/总结/">总结</a>►<a class="article-category-link" href="/categories/人性/总结/利他/">利他</a>►<a class="article-category-link" href="/categories/人性/总结/利他/下个人思维/">下个人思维</a>►<a class="article-category-link" href="/categories/人性/总结/利他/下个人思维/高大上/">高大上</a>
-  </div>
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      “下个人”思维
-    </h1>
+      
+    </ul>
   
 
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                “下个人”思维
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-03-24T14:29:00+08:00" content="2014-03-24">
+              2014-03-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/人性/" itemprop="url" rel="index">
+                    <span itemprop="name">人性</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/人性/总结/" itemprop="url" rel="index">
+                    <span itemprop="name">总结</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/人性/总结/利他/" itemprop="url" rel="index">
+                    <span itemprop="name">利他</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/人性/总结/利他/下个人思维/" itemprop="url" rel="index">
+                    <span itemprop="name">下个人思维</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/人性/总结/利他/下个人思维/高大上/" itemprop="url" rel="index">
+                    <span itemprop="name">高大上</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
       
         <p>应该也有一周没写博文了，Deadline和坑爹的队友就像两座大山，压的我快窒息了。还好周末来了，加班一天，带着我家小妞出去瞎晃一天半，心情是好多了。唯一有点美中不足的就是，不管是忠仑公园，还是十里蓝山，总是有很多游客践踏花草，掰着花朵、躺在花朵上拍照，还有刻字到此一游的。<br>《代码整洁之道》这本书里面我最喜欢一句话，就是请保证你离开的时候，比你进来的时候更加干净。我觉得这思想可以延伸的很广，也就是我想说的，下个人思维。这也是罗胖子早上发的微信的标题，他的文章给了我很多感悟，老样子，斜体部分是转载。<br><img src="http://case.ntu.edu.tw/hs/wordpress/wp-content/uploads/2011/08/76%E7%BE%A4%E9%AB%94%E5%8B%95%E7%89%A9%E7%9A%84%E5%88%A9%E4%BB%96%E8%A1%8C%E7%82%BA.jpg" alt="thinkother.jpg"><br>什么是下个人思维，用通俗的话来说，就是做一个事情的时候，可以为下个人考虑。网上经常看到很多人抱怨，老外存在偏见，总是看不起中国人，比如去国外旅游，我们经常被当做是很没素质的群体，在外国人眼里，我们就是Touch Then Leave，自己仔细想想，是不是自己出去玩，看到东西就有一股想要去摸的冲动，我承认，我有。而作为我们的邻居，作为我们仇恨的对象，日本人在这点上我觉得做的就很好。如果你觉得我在贬低自己民族，抬高猪狗不如的小日本，那么请别看下去了吧，我只抵制蠢货不抵制日货的。<br>我觉得日本人之所以能一次又一次的崛起，无外乎两点，一个是靠着勤奋和汗水可以实现梦想的日本梦，另一个就是协作能力，也就是下个人思维。<br>日本的很多厕所都写着这么一句话“为了下一位使用者，请保持干净”。每个人在自家的厕所，很自然的会保持干净，因为下一个人可能是你的妻子、儿子、父母，但是，这是公共厕所啊，下一个人我又不认识，我干嘛要辛苦保持干净呢？但是，如果我们这么想，我们也是上一个使用厕所的人眼里的下一个人，如果他不保持干净，那我们就没法使用到干净的厕所。如果我不保持干净，那么这必定会造成恶心循环，整个卫生就变脏了。以我旅游的经验，国内大多数城市旅游景区的厕所都很不干净。厦门可能算是国内比较干净的了，江西、云南的厕所，有的甚至让人作呕。有一些比较干净的，也是建立在厕所维护人员辛勤工作的基础上的。<br>日本人的下个人思维不仅仅是在这么一张小小的提示语上的，日本人对孩子的教育也是非常注重这些人性美的品质上，日本有一个童话故事，讲的是 <em>一只小熊，拿了一筐橡子赶路。他走着走着走累了，刚巧看到一把椅子，椅背上 写着“dozo（您请）”，于是他就在椅子上坐下，想休息一会，谁知不知不觉睡着了。这时来了一只小兔，小兔很饿，他看到了橡子和“dozo”，就吃了起 来。吃完了他想，呀，我把这橡子吃了，筐就空了，那下一个来的人咋办？于是他就去采了很多葡萄，放在筐里，高高兴兴的走了。这时来了一只小狗，小狗也饿了，看到葡萄和“dozo”很高兴，坐下来把葡萄吃了。吃完了也想，呀，那下一个人咋办？于是他就去采了蘑菇放在筐里。儿童的故事嘛，这种循环往复的桥段有点多，最后一个好像是小象，他采了栗子放在筐里。然后小熊睡醒了，他惊讶的发现：吚？我的橡子变栗子了！然后高高兴兴的走了。</em><br><strong>在儿童的教育中种下这种“下一个人”的概念的日本民族很了不起。这是一种为他人着想的善意，而且，也许会经历很长很久，但为善的，终究善会回来自己身上，这种观念实则也是利己主义。</strong><br>而我们从小的教育都是血淋淋的，比如我们“美好”的生活都是革命先辈们用血和肉堆积起来的，和孩子讲这样的故事，我觉得是完全偏离的人性的基本要素。虽然我今天写下个人思维，但是我自己就不是一个很有下个人思维的人，此文最根本目的也就是警示自己而已。<br>今天扯这个“高大上”的话题，难免陷入空洞说教的泥坑，所以我也赶紧把话题收了吧。其实，我一直有一个疑问，既然自私是人类的天性，为什么全世界的历朝历代，人类又在宣扬无私和利他，为什么要跟自己较劲？为什么制造出“高尚”“道德”这样 的概念来折磨自己？搞得好，我们也相信世界上的确存在典范和楷模，搞不好，不就是虚伪是绑架是卫道士么？为什么不能像动物一样直白的丛林法则？难道这不更顺应天性符合规律吗？ <strong>难道达尔文适者生存的进化论都是胡扯的吗？</strong><br>说一个历史事件，达尔文死后，1925年英国发生了法律史上著名的猴子审判，有大量的宗教人士推动立法，比如说1925年田纳西州就立了这么一个巴特勒法案，这个法案规定，不许在课堂上讲授一个字的进化论，否则就是犯法。这个事情不细说，就说说他们对进化论证伪的其中一个依据就是，动物有很多你观察到现象，用进化论是没法解释的，比如说互惠行为，吸血蝙蝠吸一口血，然后一看旁边的小伙伴没吃着，哎我喂你一口，发生这个事。有的鸟看见有天敌来了，它率先报警，要知道它报警会危害它自己的生命，但是它就愿意干这个事。在蜜蜂里面有一种叫工蜂，工蜂是没有后代的，但是它就是辛勤地哺乳，所有活都是它干，它没有任何进化上的利益。<br>但是，从我今天的主题来看，就是下个人思维，也就是利他。其实进化的单位不是物种，不是单个的生命，是一种叫基因的东西，基因是潜藏在每个生物体内部的，整个生物演化过程是基因的一个阴谋，它就一个目的，把我这玩意儿传下去。所谓的生物体不过是它搭的一辆公共汽车而已，只是它达到目的的手段。地球上的生物所有的协作行为，最后都导致该生物的基因可以更好的传下去。<br>从这点上可以明白，原来，利他，从而长久的利己，才是人类的本质。<br>所以啊，请你下次做事情的时候，请想一下下一个人，利他，从你我做起！</p>
 
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/03/24/2014-03-24-individual-thinking/" data-id="cisgxnm89001bgk3dpo6b4jyz" class="article-share-link">Partager</a>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/03/13/2014-03-13-linux-shell-programming-study-notes-d-process-variables/" rel="next" title="Linux Shell编程学习笔记（五）-进程变量">
+                <i class="fa fa-chevron-left"></i> Linux Shell编程学习笔记（五）-进程变量
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/03/28/2014-03-28-java-parse-xml-export-word/" rel="prev" title="Java解析Xml导出Word">
+                Java解析Xml导出Word <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
       
       
     </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
-  
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
     
-<nav id="article-nav">
-  
-    <a href="/2014/03/28/2014-03-28-java-parse-xml-export-word/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Récent</strong>
-      <div class="article-nav-title">
+  </div>
+
+
+        </div>
         
-          Java解析Xml导出Word
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="David Woo" />
+          <p class="site-author-name" itemprop="name">David Woo</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">91</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
         
       </div>
-    </a>
-  
-  
-    <a href="/2014/03/13/2014-03-13-linux-shell-programming-study-notes-d-process-variables/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Ancien</strong>
-      <div class="article-nav-title">Linux Shell编程学习笔记（五）-进程变量</div>
-    </a>
-  
-</nav>
+    </main>
 
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
   
-</article>
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Woo</span>
+</div>
 
-</section>
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
         
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Catégories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/">Amazon</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/">bezos</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/一网打尽/">一网打尽</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/一网打尽/EverythisIsStore/">EverythisIsStore</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/天道酬勤/">天道酬勤</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/天道酬勤/KataPotter/">KataPotter</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/天道酬勤/KataPotter/CodeJourney/">CodeJourney</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/责任链/">责任链</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/责任链/KataPotter/">KataPotter</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/责任链/KataPotter/一网打尽/">一网打尽</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/">bash</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/Shell/位置变量/">位置变量</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/Shell/进程变量/">进程变量</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/bit/">bit</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/bit/singlenum2/">singlenum2</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/函数/">函数</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/函数/LeetCode/">LeetCode</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/函数/LeetCode/链表循环起点/">链表循环起点</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/字符串/">字符串</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/字符串/str/">str</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/字符串/str/基础/">基础</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/设计/fizzbuzzwhizz/">fizzbuzzwhizz</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/">Sublime</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/工具/">工具</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/工具/编辑器/">编辑器</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/工具/编辑器/提升工作效率/">提升工作效率</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/UML/">UML</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/">BDD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/">TDD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/">KataPotter</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/cucumber/">cucumber</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/cucumber/责任链设计模式/">责任链设计模式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/cucumber/责任链设计模式/面向接口/">面向接口</a></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/">bezos</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/">jobs</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/乔布斯/">乔布斯</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/乔布斯/贝索斯/">贝索斯</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/乔布斯/贝索斯/干货/">干货</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/AFNetworking/">AFNetworking</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/GCD/">GCD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/GCD/obj-c/">obj-c</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/">cocoa</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/">block</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/obj-c/">obj-c</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/obj-c/代码块/">代码块</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/obj-c/代码块/闭包/">闭包</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/jvm/">jvm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/jvm/classloader/">classloader</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/">maven</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/">TDD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/">fizzbuzzwhizz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/">责任链</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/">模板方法</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/设计模式/">设计模式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/设计模式/趣味编程/">趣味编程</a></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/">spring</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/IoC/">IoC</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/IoC/XmlWebApplicationContext/">XmlWebApplicationContext</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/">application</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/IoC/">IoC</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/IoC/源码分析/">源码分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/IoC/源码分析/beanfactory/">beanfactory</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/">resource</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/">IoC</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/">源码分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/Resource加载/">Resource加载</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/Resource定位/">Resource定位</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/Resource注册/">Resource注册</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/多线程/synchronized/">synchronized</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/多线程/synchronized/人际关系/">人际关系</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/多线程/volatile/">volatile</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/">模板引擎</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/导出Word/">导出Word</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/导出Word/解析Xml/">解析Xml</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/导出Word/解析Xml/设计/">设计</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/express/">express</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/express/scrum/">scrum</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/express/scrum/感悟/">感悟</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/fizzbuzzwhizz/">fizzbuzzwhizz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/fizzbuzzwhizz/易中天/">易中天</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/fizzbuzzwhizz/易中天/百家争鸣/">百家争鸣</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/">javascript</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/">Node.js</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/">互联网</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/互联网思维/">互联网思维</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/互联网思维/去中心化/">去中心化</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/互联网思维/去中心化/全局对象/">全局对象</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/">工作</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/个人随笔/数组/">数组</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/个人随笔/数组/兴趣/">兴趣</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/">Regexp</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/正则表达式/">正则表达式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/码年/">码年</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/码年/正则表达式/">正则表达式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/prototype/">prototype</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/prototype/读书笔记/">读书笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/否定性思维/">否定性思维</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/否定性思维/自我反思/">自我反思</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/否定性思维/自我反思/数组/">数组</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/">游记</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/Node-js/">Node.js</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/Node-js/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/Node-js/个人随笔/数组/">数组</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/jvm/">jvm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/jvm/vertx/">vertx</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/">事件流</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/事件/">事件</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/事件/事件冒泡/">事件冒泡</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/事件/事件冒泡/添加事件方式/">添加事件方式</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/">scrum</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/敏捷/">敏捷</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/敏捷/需求/">需求</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/敏捷/需求/用户故事/">用户故事</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/sql/">sql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/sql/join/">join</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/sql/join/连接/">连接</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人简历/">个人简历</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/怨文/">怨文</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/怨文/年终/">年终</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/读后感/">读后感</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/项目管理/">项目管理</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/产品/">产品</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/产品/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/产品/设计/极简/">极简</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/人性/">人性</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/">总结</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/利他/">利他</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/利他/下个人思维/">下个人思维</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/利他/下个人思维/高大上/">高大上</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/创业/">创业</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/创业/总结/">总结</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/同步/">同步</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/同步/线程安全/">线程安全</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/同步/线程安全/ConcurrentHashMap/">ConcurrentHashMap</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/同步/线程安全/ConcurrentHashMap/桶分割远离/">桶分割远离</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/">HashMap</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/">HashTable</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/">CocurrentHashMap</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/同步/">同步</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/同步/线程安全/">线程安全</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/">孔子</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/">儒家</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/">易中天</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/百家争鸣/">百家争鸣</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/百家争鸣/中庸/">中庸</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/百家争鸣/中庸/仁爱/">仁爱</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习/">学习</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/学习/个人随笔/">个人随笔</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/属性/">属性</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/属性/obj-c/">obj-c</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/谷歌/">谷歌</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/谷歌/搜索/">搜索</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/谷歌/搜索/个人心得/">个人心得</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/obj-c/">obj-c</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/obj-c/不足/">不足</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/读后感/">读后感</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/读后感/管理学/">管理学</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/读后感/管理学/领导课/">领导课</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/转变/">转变</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/日记/">日记</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/">女朋友</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/向日葵/">向日葵</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/向日葵/信念/">信念</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/向日葵/信念/自信/">自信</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/架构设计/">架构设计</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/蛋疼/">蛋疼</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/蛋疼/折腾/">折腾</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/蛋疼/折腾/作死/">作死</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/设计/重构/">重构</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/载记/">载记</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/载记/警世钟/">警世钟</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/重构/">重构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理/">项目管理</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理/执行力/">执行力</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理/读记/">读记</a></li></ul></li></ul>
-    </div>
-  </div>
 
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2016/06/07/2016-06-07-dockercong-0dao-1de-bi-ji/">Docker从0到1的笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2015/07/13/2015-07-13-beginning-ios-pit-over-those-years-i/">初学IOS那些年踩过的坑（十）</a>
-          </li>
-        
-          <li>
-            <a href="/2015/06/29/2015-06-29-beginning-ios-pit-over-those-years-h/">初学IOS那些年踩过的坑（九）</a>
-          </li>
-        
-          <li>
-            <a href="/2015/05/13/2015-05-13-running-and-being-reading-notes-a/">跑步圣经读书笔记（一）</a>
-          </li>
-        
-          <li>
-            <a href="/2015/05/13/2015-05-13-beginning-ios-pit-over-those-years-g/">初学IOS那些年踩过的坑（八）</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
         
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2016 John Doe<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
     </div>
   </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
+
   
-    <a href="/" class="mobile-nav-link">Home</a>
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
   
-    <a href="/archives" class="mobile-nav-link">Archives</a>
+
+
+
   
-</nav>
-    
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
 
 
-<script src="/js/script.js"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
 
-  </div>
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
 </body>
 </html>
