@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java版FizzBuzzWhizz | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="#个人近况最近忙着替媳妇写论文，还忙招聘，忙写jQuery插件，忙写python，忙这忙那，今天赶紧利用晚上的1个多小时把五一期间做好的Java版本FizzBuzzWhizz博文也写了。有空还把Node.js的也贴上来，不过和Python差不多，到时候就大概贴代码了，不详细说明。
+#Java版FizzBuzzWhizz
+##1 概述上个系列博文已经讲述了Python版本的FizzBuzzWhizz">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java版FizzBuzzWhizz">
+<meta property="og:url" content="http://yoursite.com/2014/05/05/2014-05-05-java-version-fizzbuzzwhizz/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#个人近况最近忙着替媳妇写论文，还忙招聘，忙写jQuery插件，忙写python，忙这忙那，今天赶紧利用晚上的1个多小时把五一期间做好的Java版本FizzBuzzWhizz博文也写了。有空还把Node.js的也贴上来，不过和Python差不多，到时候就大概贴代码了，不详细说明。
+#Java版FizzBuzzWhizz
+##1 概述上个系列博文已经讲述了Python版本的FizzBuzzWhizz">
+<meta property="og:image" content="http://i1.tietuku.com/698717c0da7c4af0.jpg">
+<meta property="og:updated_time" content="2015-05-05T01:41:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java版FizzBuzzWhizz">
+<meta name="twitter:description" content="#个人近况最近忙着替媳妇写论文，还忙招聘，忙写jQuery插件，忙写python，忙这忙那，今天赶紧利用晚上的1个多小时把五一期间做好的Java版本FizzBuzzWhizz博文也写了。有空还把Node.js的也贴上来，不过和Python差不多，到时候就大概贴代码了，不详细说明。
+#Java版FizzBuzzWhizz
+##1 概述上个系列博文已经讲述了Python版本的FizzBuzzWhizz">
+<meta name="twitter:image" content="http://i1.tietuku.com/698717c0da7c4af0.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2014-05-05-java-version-fizzbuzzwhizz" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/05/05/2014-05-05-java-version-fizzbuzzwhizz/" class="article-date">
+  <time datetime="2014-05-05T07:26:00.000Z" itemprop="datePublished">2014-05-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>►<a class="article-category-link" href="/categories/java/maven/">maven</a>►<a class="article-category-link" href="/categories/java/maven/TDD/">TDD</a>►<a class="article-category-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/">fizzbuzzwhizz</a>►<a class="article-category-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/">责任链</a>►<a class="article-category-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/">模板方法</a>►<a class="article-category-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/设计模式/">设计模式</a>►<a class="article-category-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/设计模式/趣味编程/">趣味编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java版FizzBuzzWhizz
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#个人近况<br>最近忙着替媳妇写论文，还忙招聘，忙写jQuery插件，忙写python，忙这忙那，今天赶紧利用晚上的1个多小时把五一期间做好的Java版本FizzBuzzWhizz博文也写了。有空还把Node.js的也贴上来，不过和Python差不多，到时候就大概贴代码了，不详细说明。</p>
+<p>#Java版FizzBuzzWhizz</p>
+<p>##1 概述<br>上个系列博文已经讲述了Python版本的FizzBuzzWhizz的思考、设计和实现思路。那么Java版本的肯定不是在做一个C2C（copy to clipboard）的事情。</p>
+<p>##2 问题</p>
+<p>###2.1 开闭原则<br>一个软件实体如类、模块和函数应该对扩展开放，对修改关闭。<br>那么在python中虽然已经把规则的逻辑条理分的很细了，但是所有的规则还是集中在一个函数里面，如果新增加一个规则那么就必然要修改到原来已经实现的代码。那么这样的设计是有风险的，任何的新规则很可能会影响到老规则的逻辑。</p>
+<p>###2.2 封装<br>可以将信息封装为需要的数据对象，将数据与操作分离所带来的种种问题消除，提高了程序的可复用性和可维护性。</p>
+<p>###2.3 自动构建<br>Python版本中并没有对项目进行自动的构建，Java版本中引入Maven来做项目构建管理。</p>
+<p>##3 设计<br>在构思了下，用责任链模式、模板模式、工厂模式来完成这个设计。类设计图如下：<br> <img src="http://i1.tietuku.com/698717c0da7c4af0.jpg" alt=""></p>
+<p>其中，IHandler是项目中的核心接口，其只有一个方法handler，是提供给外部的调用的处理方法。在python文章已经介绍，该游戏的规则分为“或”和“与”两种，所以设计中也定义了两种实现功能，其中wordHandler是为接口实现了“或”的特性，而UnitHandler则是实现了“与”的特性。<br>“或”的特性是通过责任链路的模式去实现的，了解servlet的人都知道，filter的filterChain.doFilter(request, response)方法可以将一个请求在一系列的处理类中传递request。本项目中的请求就是报数的数字i。</p>
+<p>##4 代码<br>先看看核心接口IHandler。<br><figure class="highlight java"><figcaption><span>IHandler.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IHandler</span> </span>&#123;</div><div class="line"> 	   <span class="function"><span class="keyword">public</span> Word <span class="title">handle</span><span class="params">(<span class="keyword">int</span> number)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>通过这个接口，很好的体现了面对对象多态的特性。<br>在看看两个核心的实现类。<br><figure class="highlight java"><figcaption><span>WordHandler.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * User: David</div><div class="line"> * Date: 14-04-18</div><div class="line"> * Time: 下午7:03</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">WordHandler</span> <span class="keyword">implements</span> <span class="title">IHandler</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> IHandler wordHandler;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WordHandler</span><span class="params">(IHandler wordHandler)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.wordHandler = wordHandler;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Word <span class="title">handle</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">        String result = run(number);</div><div class="line">        Word resultWord = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">if</span>(result == <span class="keyword">null</span> || <span class="string">""</span>.equals(result))&#123;</div><div class="line">            resultWord = wordHandler.handle(number);</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            resultWord = Word.getWord(result);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> resultWord;</div><div class="line">    &#125;</div><div class="line">	<span class="comment">//钩子方法，类似Thread中的run方法</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> String <span class="title">run</span><span class="params">(<span class="keyword">int</span> number)</span></span>;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">protected</span> IHandler <span class="title">getWordHandler</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> wordHandler;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><figcaption><span>UnitHandler.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * User: David Date: 14-05-2 Time: 上午9:42</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UnitHandler</span> <span class="keyword">extends</span> <span class="title">WordHandler</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">private</span> IHandler[] unitHandlers;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnitHandler</span><span class="params">(IHandler wordHandler,IHandler ... unitHandlers)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(wordHandler);</div><div class="line">        <span class="keyword">this</span>.unitHandlers = unitHandlers;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">protected</span> IHandler[] getUnitHandlers() &#123;</div><div class="line">        <span class="keyword">return</span> unitHandlers;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> String <span class="title">run</span><span class="params">(<span class="keyword">int</span> number)</span> </span>&#123;</div><div class="line">        StringBuilder result = <span class="keyword">new</span> StringBuilder();</div><div class="line">        <span class="keyword">for</span> (IHandler handler : getUnitHandlers()) &#123;</div><div class="line">            <span class="keyword">if</span>(handler <span class="keyword">instanceof</span> WordHandler)&#123;</div><div class="line">                result.append(((WordHandler) handler).run(number));</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> result.toString();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>个人不是很爱写注释，力求把代码写的简单易懂。WordHandler这个类就是通过在handler方法中调用run这个模板方法，而run方法在子类中去实现，当前handler如果没有结果，则会通过责任链将请求转发给下一个handler。<br>而UnitHandler则是构造函数运行传入任意数量个WordHandler，UnitHandler的run方法则是组合每个子handler的run方法来组合“与”规则，来达到与的效果。<br>具体的handler就不具体举例了，实现方法很简单。直接来看看如何调用吧。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">translate</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</div><div class="line">        <span class="comment">//这里还可以用单例工厂模式就创建，这里就不画蛇添足了</span></div><div class="line">        IHandler commonNumberHandler = <span class="keyword">new</span> CommonNumberHandler();</div><div class="line">        IHandler fizzHandler = <span class="keyword">new</span> FizzHandler(<span class="keyword">null</span>);</div><div class="line">        IHandler buzzHandler = <span class="keyword">new</span> BuzzHandler(<span class="keyword">null</span>);</div><div class="line">        IHandler whizzHandler = <span class="keyword">new</span> WhizzHandler(<span class="keyword">null</span>);</div><div class="line">        IHandler fizzBuzzWhizzHandler = <span class="keyword">new</span> UnitHandler(</div><div class="line">                commonNumberHandler, fizzHandler, buzzHandler, whizzHandler);</div><div class="line">        IHandler containOneNumHandler = <span class="keyword">new</span> ContainOneNumHandler(</div><div class="line">                fizzBuzzWhizzHandler);</div><div class="line"></div><div class="line">        Word word = containOneNumHandler.handle(i);</div><div class="line">        <span class="keyword">return</span> word.say();</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>这个静态接口方法中通过组装需要的handler完成题目中所需要实现的游戏规则。handler的创建可以使用工厂模式，这里就不实现了，本次编码的重心并不在滥用设计模式上。</p>
+<p>##5 测试<br>本项目用Junit4来做单元测试，单元测试没什么新意，和Python中差不多。但是代码经过了很多次重构，重构后直接运行单元测试就明确知道代码没有问题，足以体现单元测试在敏捷开发中的重要性，就算不是敏捷开发，单元测试也对提高工作效率减少测试工作量监测返工有很大的作用。</p>
+<pre><code class="java"><span class="comment">/**
+ * User: David
+ * Date: 14-04-18
+ * Time: 下午1:30
+ */</span>
+<span class="meta">@RunWith</span>(JUnit4.class)
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FizzBuzzTest</span> </span>{
+    <span class="meta">@Test</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_One_SHOULD_SayOne</span><span class="params">()</span> </span>{
+        assertEquals(<span class="string">"Failure - 1 should be 1"</span>, <span class="string">"1"</span>, WordMaker.translate(<span class="number">1</span>));
+    }
+
+    <span class="meta">@Test</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_Three_SHOULD_SayFizz</span><span class="params">()</span> </span>{
+        assertEquals(<span class="string">"Failure - 3 should be Fizz"</span>, Constants.WORD1, WordMaker.translate(<span class="number">3</span>));
+    }
+
+    <span class="meta">@Test</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_Five_SHOULD_SayBuzz</span><span class="params">()</span> </span>{
+        assertEquals(<span class="string">"Failure - 5 should be Buzz"</span>, Constants.WORD2, WordMaker.translate(<span class="number">5</span>));
+    }
+
+    <span class="meta">@Test</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_Fifteen_SHOULD_SayFizzBuzz</span><span class="params">()</span> </span>{
+        assertEquals(<span class="string">"Failure - 15 should be FizzBuzz"</span>, Constants.WORD1+Constants.WORD2, WordMaker.translate(<span class="number">15</span>));
+    }
+
+    <span class="meta">@Test</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_Thirty_SHOULD_SayFizzBuzz</span><span class="params">()</span> </span>{
+        assertEquals(<span class="string">"Failure - 30 should be FizzBuzz"</span>, Constants.WORD1, WordMaker.translate(<span class="number">30</span>));
+    }
+
+    <span class="meta">@Test</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_Seven_SHOULD_SayWhizz</span><span class="params">()</span> </span>{
+        assertEquals(<span class="string">"Failure - 7 should be Whizz"</span>, Constants.WORD3, WordMaker.translate(<span class="number">7</span>));
+    }
+
+    <span class="meta">@Test</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_TwentyThree_SHOULD_SayFizz</span><span class="params">()</span> </span>{
+        assertEquals(<span class="string">"Failure - 23 should be Fizz"</span>, Constants.WORD1, WordMaker.translate(<span class="number">23</span>));
+    }
+
+    <span class="meta">@Test</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_HundredFive_SHOULD_SayFizzBuzzWhizz</span><span class="params">()</span> </span>{
+        assertEquals(<span class="string">"Failure - 105 should be FizzBuzzWhizz"</span>, Constants.WORD1+Constants.WORD2+Constants.WORD3, WordMaker.translate(<span class="number">105</span>));
+    }
+
+}
+</code></pre>
+<p>##6 构建<br>完成以后直接用mvn clean test package就好了，构建完成就可以在输入目录找到FizzBuzzWhizz-0.0.1-SNAPSHOT.jar，本文中就不介绍Maven的使用，详细可以参考之前写过的Maven系列博文（可能没有从Iteye迁移到LogDown上），控制台输出日志如下：</p>
+<p>[INFO] Scanning for projects…<br>[INFO]<br>[INFO] ————————————————————————<br>[INFO] Building FizzBuzzWhizz 0.0.1-SNAPSHOT<br>[INFO] ————————————————————————<br>[INFO]<br>[INFO] — maven-resources-plugin:2.5:resources (default-resources) @ FizzBuzzWhizz —<br>[debug] execute contextualize<br>[INFO] Using ‘UTF-8’ encoding to copy filtered resources.<br>[INFO] skip non existing resourceDirectory D:\backup\wudw\code_temp_workspace\FizzBuzzWhizz\src\main\resources<br>[INFO]<br>[INFO] — maven-compiler-plugin:2.3.2:compile (default-compile) @ FizzBuzzWhizz —<br>[INFO] Nothing to compile - all classes are up to date<br>[INFO]<br>[INFO] — maven-resources-plugin:2.5:testResources (default-testResources) @ FizzBuzzWhizz —<br>[debug] execute contextualize<br>[INFO] Using ‘UTF-8’ encoding to copy filtered resources.<br>[INFO] skip non existing resourceDirectory D:\backup\wudw\code_temp_workspace\FizzBuzzWhizz\src\test\resources<br>[INFO]<br>[INFO] — maven-compiler-plugin:2.3.2:testCompile (default-testCompile) @ FizzBuzzWhizz —<br>[INFO] Nothing to compile - all classes are up to date<br>[INFO]<br>[INFO] — maven-surefire-plugin:2.10:test (default-test) @ FizzBuzzWhizz —<br>[INFO] Surefire report directory: D:\backup\wudw\code_temp_workspace\FizzBuzzWhizz\target\surefire-reports</p>
+<hr>
+<h2 id="T-E-S-T-S"><a href="#T-E-S-T-S" class="headerlink" title=" T E S T S"></a> T E S T S</h2><p>Running com.dragonsoft.fbw.FizzBuzzTest<br>Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.132 sec</p>
+<p>Results :</p>
+<p>Tests run: 8, Failures: 0, Errors: 0, Skipped: 0</p>
+<p>[INFO]<br>[INFO] — maven-jar-plugin:2.3.2:jar (default-jar) @ FizzBuzzWhizz —<br>[INFO] Building jar: D:\backup\wudw\code_temp_workspace\FizzBuzzWhizz\target\FizzBuzzWhizz-0.0.1-SNAPSHOT.jar<br>[INFO] ————————————————————————<br>[INFO] BUILD SUCCESS<br>[INFO] ————————————————————————<br>[INFO] Total time: 4.128s<br>[INFO] Finished at: Mon May 05 23:21:47 CST 2014<br>[INFO] Final Memory: 3M/7M<br>[INFO] ————————————————————————</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/05/05/2014-05-05-java-version-fizzbuzzwhizz/" data-id="cisgxbbj7001hep3d7hwt1g93" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/05/07/2014-05-07-open-nodejs-fizzbuzzwhizz/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          百家争鸣（一）---Node.js版FizzBuzzWhizz
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/05/02/2014-05-02-python-version-of-fizzbuzzwhizz-b-reconstruction/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python版FizzBuzzWhizz(二)--重构</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/">Amazon</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/">bezos</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/一网打尽/">一网打尽</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/一网打尽/EverythisIsStore/">EverythisIsStore</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/天道酬勤/">天道酬勤</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/天道酬勤/KataPotter/">KataPotter</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/天道酬勤/KataPotter/CodeJourney/">CodeJourney</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/责任链/">责任链</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/责任链/KataPotter/">KataPotter</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/责任链/KataPotter/一网打尽/">一网打尽</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/">bash</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/Shell/位置变量/">位置变量</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/Shell/进程变量/">进程变量</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/bit/">bit</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/bit/singlenum2/">singlenum2</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/函数/">函数</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/函数/LeetCode/">LeetCode</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/函数/LeetCode/链表循环起点/">链表循环起点</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/字符串/">字符串</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/字符串/str/">str</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/字符串/str/基础/">基础</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/设计/fizzbuzzwhizz/">fizzbuzzwhizz</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/">Sublime</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/工具/">工具</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/工具/编辑器/">编辑器</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/工具/编辑器/提升工作效率/">提升工作效率</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/UML/">UML</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/">BDD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/">TDD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/">KataPotter</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/cucumber/">cucumber</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/cucumber/责任链设计模式/">责任链设计模式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/cucumber/责任链设计模式/面向接口/">面向接口</a></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/">bezos</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/">jobs</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/乔布斯/">乔布斯</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/乔布斯/贝索斯/">贝索斯</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/乔布斯/贝索斯/干货/">干货</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/AFNetworking/">AFNetworking</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/GCD/">GCD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/GCD/obj-c/">obj-c</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/">cocoa</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/">block</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/obj-c/">obj-c</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/obj-c/代码块/">代码块</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/obj-c/代码块/闭包/">闭包</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/jvm/">jvm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/jvm/classloader/">classloader</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/">maven</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/">TDD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/">fizzbuzzwhizz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/">责任链</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/">模板方法</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/设计模式/">设计模式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/设计模式/趣味编程/">趣味编程</a></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/">spring</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/IoC/">IoC</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/IoC/XmlWebApplicationContext/">XmlWebApplicationContext</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/">application</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/IoC/">IoC</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/IoC/源码分析/">源码分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/IoC/源码分析/beanfactory/">beanfactory</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/">resource</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/">IoC</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/">源码分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/Resource加载/">Resource加载</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/Resource定位/">Resource定位</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/Resource注册/">Resource注册</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/多线程/synchronized/">synchronized</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/多线程/synchronized/人际关系/">人际关系</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/多线程/volatile/">volatile</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/">模板引擎</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/导出Word/">导出Word</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/导出Word/解析Xml/">解析Xml</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/导出Word/解析Xml/设计/">设计</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/express/">express</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/express/scrum/">scrum</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/express/scrum/感悟/">感悟</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/fizzbuzzwhizz/">fizzbuzzwhizz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/fizzbuzzwhizz/易中天/">易中天</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/fizzbuzzwhizz/易中天/百家争鸣/">百家争鸣</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/">javascript</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/">Node.js</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/">互联网</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/互联网思维/">互联网思维</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/互联网思维/去中心化/">去中心化</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/互联网思维/去中心化/全局对象/">全局对象</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/">工作</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/个人随笔/数组/">数组</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/个人随笔/数组/兴趣/">兴趣</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/">Regexp</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/正则表达式/">正则表达式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/码年/">码年</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/码年/正则表达式/">正则表达式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/prototype/">prototype</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/prototype/读书笔记/">读书笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/否定性思维/">否定性思维</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/否定性思维/自我反思/">自我反思</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/否定性思维/自我反思/数组/">数组</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/">游记</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/Node-js/">Node.js</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/Node-js/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/Node-js/个人随笔/数组/">数组</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/jvm/">jvm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/jvm/vertx/">vertx</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/">事件流</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/事件/">事件</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/事件/事件冒泡/">事件冒泡</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/事件/事件冒泡/添加事件方式/">添加事件方式</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/">scrum</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/敏捷/">敏捷</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/敏捷/需求/">需求</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/敏捷/需求/用户故事/">用户故事</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/sql/">sql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/sql/join/">join</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/sql/join/连接/">连接</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人简历/">个人简历</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/怨文/">怨文</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/怨文/年终/">年终</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/读后感/">读后感</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/项目管理/">项目管理</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/产品/">产品</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/产品/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/产品/设计/极简/">极简</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/人性/">人性</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/">总结</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/利他/">利他</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/利他/下个人思维/">下个人思维</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/利他/下个人思维/高大上/">高大上</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/创业/">创业</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/创业/总结/">总结</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/同步/">同步</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/同步/线程安全/">线程安全</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/同步/线程安全/ConcurrentHashMap/">ConcurrentHashMap</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/同步/线程安全/ConcurrentHashMap/桶分割远离/">桶分割远离</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/">HashMap</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/">HashTable</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/">CocurrentHashMap</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/同步/">同步</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/同步/线程安全/">线程安全</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/">孔子</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/">儒家</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/">易中天</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/百家争鸣/">百家争鸣</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/百家争鸣/中庸/">中庸</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/百家争鸣/中庸/仁爱/">仁爱</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习/">学习</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/学习/个人随笔/">个人随笔</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/属性/">属性</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/属性/obj-c/">obj-c</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/谷歌/">谷歌</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/谷歌/搜索/">搜索</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/谷歌/搜索/个人心得/">个人心得</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/obj-c/">obj-c</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/obj-c/不足/">不足</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/读后感/">读后感</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/读后感/管理学/">管理学</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/读后感/管理学/领导课/">领导课</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/转变/">转变</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/日记/">日记</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/">女朋友</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/向日葵/">向日葵</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/向日葵/信念/">信念</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/向日葵/信念/自信/">自信</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/架构设计/">架构设计</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/蛋疼/">蛋疼</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/蛋疼/折腾/">折腾</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/蛋疼/折腾/作死/">作死</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/设计/重构/">重构</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/载记/">载记</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/载记/警世钟/">警世钟</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/重构/">重构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理/">项目管理</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理/执行力/">执行力</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理/读记/">读记</a></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/06/07/2016-06-07-dockercong-0dao-1de-bi-ji/">Docker从0到1的笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/13/2015-07-13-beginning-ios-pit-over-those-years-i/">初学IOS那些年踩过的坑（十）</a>
+          </li>
+        
+          <li>
+            <a href="/2015/06/29/2015-06-29-beginning-ios-pit-over-those-years-h/">初学IOS那些年踩过的坑（九）</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/13/2015-05-13-running-and-being-reading-notes-a/">跑步圣经读书笔记（一）</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/13/2015-05-13-beginning-ios-pit-over-those-years-g/">初学IOS那些年踩过的坑（八）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-2016-06-07-dockercong-0dao-1de-bi-ji" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/07/2016-06-07-dockercong-0dao-1de-bi-ji/" class="article-date">
+  <time datetime="2016-06-07T06:25:06.000Z" itemprop="datePublished">2016-06-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/07/2016-06-07-dockercong-0dao-1de-bi-ji/">Docker从0到1的笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#Docker从0到1的笔记</p>
+<p>##安装</p>
+<p>###https支持及GPG key添加<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install apt-transport-https ca-certificates</div><div class="line">$ sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D</div></pre></td></tr></table></figure></p>
+<p>###设置docker镜像源<br>编辑<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
+<p>deb <a href="https://apt.dockerproject.org/repo" target="_blank" rel="external">https://apt.dockerproject.org/repo</a> ubuntu-trusty main<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">###旧版本的清理及验证</div><div class="line"></div><div class="line">```bash</div><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get purge lxc-docker</div><div class="line">$ apt-cache policy docker-engine</div></pre></td></tr></table></figure></p>
+<p>###添加内核包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install linux-image-extra-$(uname -r)</div><div class="line">$ sudo apt-get install apparmor</div></pre></td></tr></table></figure>
+<p>###安装并启动docker</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install docker-engine</div><div class="line">$ sudo service docker start</div></pre></td></tr></table></figure>
+<p>###验证docker已启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo docker run hello-world</div></pre></td></tr></table></figure>
+<p>###其他docker可选配置<br>还一些docker配置，比如group这里就没做测试，只是单机上测试下简单的功能。</p>
+<p>##使用案例nodejs+mysql</p>
+<p>###创建一个容器测试下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker run -it ubuntu</div></pre></td></tr></table></figure>
+<ul>
+<li>run创建容器</li>
+<li>-it创建后会直接给生成的容器创建一个终端</li>
+<li>ubuntu创建容器所使用的镜像</li>
+</ul>
+<p>可以在容器的终端上运行一下命令，查看容器的信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">root@719059da250d:/# lsb_release -a  </div><div class="line">No LSB modules are available.  </div><div class="line">Distributor ID:    Ubuntu  </div><div class="line">Description:    Ubuntu 14.04.4 LTS  </div><div class="line">Release:    14.04  </div><div class="line">Codename:    trusty  </div><div class="line">root@719059da250d:/# exit</div></pre></td></tr></table></figure>
+<p>###开始案例吧，创建一个mysql的容器<br>创建一个文件夹test_database，文件夹结构为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">test_database\setup.sql  </div><div class="line">test_database\start.sh  </div><div class="line">test_database\stop.sh</div></pre></td></tr></table></figure>
+<p>start.sh</p>
+<figure class="highlight bash"><figcaption><span>start.sh</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line"><span class="comment"># Run the MySQL container, with a database named 'users' and credentials</span></div><div class="line"><span class="comment"># for a users-service user which can access it.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Starting DB..."</span>  </div><div class="line">docker run --name db <span class="_">-d</span> \</div><div class="line"> <span class="_">-e</span> MYSQL_ROOT_PASSWORD=123 \</div><div class="line"> <span class="_">-e</span> MYSQL_DATABASE=users <span class="_">-e</span> MYSQL_USER=users_service <span class="_">-e</span> MYSQL_PASSWORD=123 \</div><div class="line"> -p 3306:3306 mysql:latest</div><div class="line"></div><div class="line"><span class="comment"># Wait for the database service to start up.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Waiting for DB to start up..."</span>  </div><div class="line">docker <span class="built_in">exec</span> db mysqladmin --silent --wait=30 -uusers_service -p123 ping || <span class="built_in">exit</span> 1</div><div class="line"></div><div class="line"><span class="comment"># Run the setup script.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Setting up initial data..."</span>  </div><div class="line">docker <span class="built_in">exec</span> -i db mysql -uusers_service -p123 users &lt; setup.sql</div></pre></td></tr></table></figure>
+<ul>
+<li>–name db 给容器命名</li>
+<li>-d 在后台运行</li>
+<li>-e 环境变量</li>
+<li>-p 端口映射，即宿主机上的3306端口会映射到容器的3306端口上</li>
+<li>mysql:latest 最新版本的mysql</li>
+</ul>
+<p>stop.sh</p>
+<figure class="highlight bash"><figcaption><span>stop.sh</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line"><span class="comment"># Stop the db and remove the container.</span></div><div class="line">docker stop db &amp;&amp; docker rm db</div></pre></td></tr></table></figure>
+<ul>
+<li>stop 停止容器</li>
+<li>rm 删除容器</li>
+</ul>
+<p>setup.sql</p>
+<figure class="highlight sql"><figcaption><span>setup.sql</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">directory</span> (user_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT PRIMARY <span class="keyword">KEY</span>, email <span class="built_in">TEXT</span>, phone_number <span class="built_in">TEXT</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">directory</span> (email, phone_number) <span class="keyword">values</span> (<span class="string">'homer@thesimpsons.com'</span>, <span class="string">'+1 888 123 1111'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">directory</span> (email, phone_number) <span class="keyword">values</span> (<span class="string">'marge@thesimpsons.com'</span>, <span class="string">'+1 888 123 1112'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">directory</span> (email, phone_number) <span class="keyword">values</span> (<span class="string">'maggie@thesimpsons.com'</span>, <span class="string">'+1 888 123 1113'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">directory</span> (email, phone_number) <span class="keyword">values</span> (<span class="string">'lisa@thesimpsons.com'</span>, <span class="string">'+1 888 123 1114'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">directory</span> (email, phone_number) <span class="keyword">values</span> (<span class="string">'bart@thesimpsons.com'</span>, <span class="string">'+1 888 123 1115'</span>);</div></pre></td></tr></table></figure>
+<p>然后直接执行start.sh即可，不用的时候直接执行stop.sh。</p>
+<p>###构建nodejs 服务端代码</p>
+<p>创建文件夹users-service，然后 <figure class="highlight plain"><figcaption><span>clone</span><a href="https://github.com/yuezaixz/nodejs-in-docker.git```" target="_blank" rel="external">link</a></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">可以先执行```npm start```来测试是否可以运行，如果在浏览器中可以正常访问```localhost:8123/users```，那么就说明代码没问题了。</div><div class="line"></div><div class="line">###项目中的docker容器配置文件</div><div class="line">在users-service目录中已经有了一个文件Dockerfile,内容为</div></pre></td></tr></table></figure></p>
+<h1 id="Use-Node-v4-as-the-base-image"><a href="#Use-Node-v4-as-the-base-image" class="headerlink" title="Use Node v4 as the base image."></a>Use Node v4 as the base image.</h1><p>FROM node:4</p>
+<h1 id="Add-everything-in-the-current-directory-to-our-image-in-the-‘app’-folder"><a href="#Add-everything-in-the-current-directory-to-our-image-in-the-‘app’-folder" class="headerlink" title="Add everything in the current directory to our image, in the ‘app’ folder."></a>Add everything in the current directory to our image, in the ‘app’ folder.</h1><p>ADD . /app</p>
+<h1 id="Install-dependencies"><a href="#Install-dependencies" class="headerlink" title="Install dependencies"></a>Install dependencies</h1><p>RUN cd /app; \<br>    npm install –production</p>
+<h1 id="Expose-our-server-port"><a href="#Expose-our-server-port" class="headerlink" title="Expose our server port."></a>Expose our server port.</h1><p>EXPOSE 8123</p>
+<h1 id="Run-our-app"><a href="#Run-our-app" class="headerlink" title="Run our app."></a>Run our app.</h1><p>CMD [“node”, “/app/index.js”]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">* FROM node:4 用node4作为容器的景象</div><div class="line">* ADD . /app 把当前目录的所有文件都映射为容器中/app文件夹下的内容</div><div class="line">* RUN cd /app; npm install --production 运行容器时候，执行命令，添加项目所需要的依赖</div><div class="line">* EXPOSE 8123 输出端口</div><div class="line">* CMD [&quot;node&quot;, &quot;/app/index.js&quot;] 应用启动命令</div><div class="line"></div><div class="line">###运行nodejs的docker容器</div><div class="line">在users-service路径下运行以下命令来启动容器</div><div class="line"></div><div class="line">```bash</div><div class="line">$ docker build -t users-service .  </div><div class="line">$ docker run -it -p 8123:8123 users-service</div></pre></td></tr></table></figure></p>
+<ul>
+<li>docker build -t users-service .  根据当前目录的Dockerfile文件在创建容器users-service</li>
+</ul>
+<p>###容器与容器的依赖<br>运行上一段命令后会报错，因为当前容器依赖了宿主机上另一个mysql容器，nodejs容器访问容器种的3306端口无法访问到另一台容器的mysql容器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">--- Customer Service---</div><div class="line">Connecting to customer repository...  </div><div class="line">Connected. Starting server...  </div><div class="line">Server started successfully, running on port 8123.  </div><div class="line">GET /users 500 23.958 ms - 582  </div><div class="line">Error: An error occured getting the users: Error: connect ECONNREFUSED 127.0.0.1:3306  </div><div class="line">    at Query._callback (/app/repository/repository.js:21:25)</div><div class="line">    at Query.Sequence.end (/app/node_modules/mysql/lib/protocol/sequences/Sequence.js:96:24)</div><div class="line">    at /app/node_modules/mysql/lib/protocol/Protocol.js:399:18</div><div class="line">    at Array.forEach (native)</div><div class="line">    at /app/node_modules/mysql/lib/protocol/Protocol.js:398:13</div><div class="line">    at nextTickCallbackWith0Args (node.js:420:9)</div><div class="line">    at process._tickCallback (node.js:349:13)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</div><div class="line">ebcae11742af        users-service       &quot;node /app/index.js&quot;     2 days ago          Up 2 days           0.0.0.0:8123-&gt;8123/tcp   fervent_hopper</div><div class="line">0e6e2bacafa2        mysql:latest        &quot;docker-entrypoint.sh&quot;   2 days ago          Up 2 days           0.0.0.0:3306-&gt;3306/tcp   db</div></pre></td></tr></table></figure>
+<p>那么就需要让nodejs容器依赖mysql容器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it -p 8123:8123 --link db:db -e DATABASE_HOST=DB users-service</div></pre></td></tr></table></figure>
+<ul>
+<li>link db:db 连接到容器名为db的容器，把他引用为db</li>
+<li>-e DATABASE_HOST=db 设置环境变量</li>
+</ul>
+<p>查看config.js的代码可以发现，服务端代码配置数据源的方式是 <figure class="highlight plain"><figcaption><span>|| '127.0.0.1'```存在环境变量DATABASE_HOST的时候使用该环境变量</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
+<p>//  config.js<br>//<br>//  Simple application configuration. Extend as needed.<br>module.exports = {<br>    port: process.env.PORT || 8123,<br>  db: {<br>    host: process.env.DATABASE_HOST || ‘127.0.0.1’,<br>    database: ‘users’,<br>    user: ‘users_service’,<br>    password: ‘123’,<br>    port: 3306<br>  }<br>};</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">从下面可以看出，存在一个172.17.0.2，名为db的依赖。</div></pre></td></tr></table></figure>
+<p>ubuntu@VM-79-113-ubuntu:~/users-service$ sudo docker exec fervent_hopper cat /etc/hosts<br>127.0.0.1    localhost<br>::1    localhost ip6-localhost ip6-loopback<br>fe00::0    ip6-localnet<br>ff00::0    ip6-mcastprefix<br>ff02::1    ip6-allnodes<br>ff02::2    ip6-allrouters<br>172.17.0.2    db 0e6e2bacafa2<br>172.17.0.3    ebcae11742af<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">再从下面可以看出，DATABASE_HOST指向的就是这个名为db的依赖</div></pre></td></tr></table></figure></p>
+<p>ubuntu@VM-79-113-ubuntu:~/users-service$ sudo docker exec fervent_hopper printenv | grep DB<br>DB_PORT=tcp://172.17.0.2:3306<br>DB_PORT_3306_TCP=tcp://172.17.0.2:3306<br>DB_PORT_3306_TCP_ADDR=172.17.0.2<br>DB_PORT_3306_TCP_PORT=3306<br>DB_PORT_3306_TCP_PROTO=tcp<br>DB_NAME=/fervent_hopper/db<br>DB_ENV_MYSQL_ROOT_PASSWORD=123<br>DB_ENV_MYSQL_DATABASE=users<br>DB_ENV_MYSQL_USER=users_service<br>DB_ENV_MYSQL_PASSWORD=123<br>DB_ENV_GOSU_VERSION=1.7<br>DB_ENV_MYSQL_MAJOR=5.7<br>DB_ENV_MYSQL_VERSION=5.7.12-1debian8<br>DATABASE_HOST=DB<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">现在可以在浏览器中试试可以不可以正常访问```localhost:8123/users```，可以的话说明配置没问题了。</div><div class="line"></div><div class="line">##python flask框架的案例</div><div class="line">由于依赖的是外部数据库，所以很简单，只要定义好Docker文件即可。</div></pre></td></tr></table></figure></p>
+<p>FROM ubuntu:latest<br>MAINTAINER David Woo “xiao303178394@gmail.com”<br>RUN apt-get update -y<br>RUN apt-get install -y python-pip python-dev build-essential<br>COPY . /app<br>WORKDIR /app<br>RUN pip install -r etc/reqs-dev.txt<br>ENTRYPOINT [“python”]<br>CMD [“manager.py”,”runserver”]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">构建镜像</div></pre></td></tr></table></figure>
+<p>sudo docker build -t paodong-mng:latest .<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">运行容器</div></pre></td></tr></table></figure></p>
+<p>sudo docker run -d -p 80:8558 paodong-mng<br>```</p>
+<p>##命令</p>
+<ul>
+<li>run创建容器</li>
+<li>-it创建后会直接给生成的容器创建一个终端</li>
+<li>–name db 给容器命名</li>
+<li>-d 在后台运行</li>
+<li>-e 环境变量</li>
+<li>-t mysql 创建tag为mysql的容器</li>
+<li>-p 端口映射，即宿主机上的3306端口会映射到容器的3306端口上</li>
+<li>mysql:latest 最新版本的mysql</li>
+<li>ps 查看所有容器</li>
+<li>docker exec -it db /bin/bash 在容器db上执行终端，用bash执行</li>
+</ul>
+<p>##参阅</p>
+<ul>
+<li><a href="http://www.dwmkerr.com/learn-docker-by-building-a-microservice/" target="_blank" rel="external">Learn Docker by building a Microservice</a></li>
+<li><a href="https://docs.docker.com/engine/installation/linux/ubuntulinux/" target="_blank" rel="external">Installation on ubuntu</a></li>
+<li><a href="http://containertutorials.com/docker-compose/flask-simple-app.html" target="_blank" rel="external">Dockerize Simple Flask App</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/06/07/2016-06-07-dockercong-0dao-1de-bi-ji/" data-id="cisgxbblv003wep3d351ae2lq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-07-13-beginning-ios-pit-over-those-years-i" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/07/13/2015-07-13-beginning-ios-pit-over-those-years-i/" class="article-date">
+  <time datetime="2015-07-13T08:01:53.000Z" itemprop="datePublished">2015-07-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/07/13/2015-07-13-beginning-ios-pit-over-those-years-i/">初学IOS那些年踩过的坑（十）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##页面间pop和push导致的问题<br>问题描述：问题大概是这样，一个运动中页面RunningViewController，一个首页IndexViewController，一个结果页RunResultViewController<br>运动：IndexViewController–Push–&gt;RunningViewController<br>结束：RunningViewController –Pop–&gt;IndexViewController–push–&gt;</p>
+<p>结果IndexViewController的ViewWillAppear会弹出个UIAlertView，其逻辑会造成影响，在IOS8情况下UIAlertView不会弹出（应该是弹出后立马跳到了RunResultViewController），而IOS7情况下到RunResultViewController才弹出该UIAlertView。</p>
+<p>该问题很简单，该逻辑其实放错位置了，应该放在ViewDidLoad中，但是从UIAlertView造成的错误逻辑去排查到该问题比较麻烦。</p>
+<p>##TableView的load时机<br>问题描述：在使用FXForm做表单时候，在viewDidLoad中进行了初始化，但是初始化内容无效（同样也是排查比较麻烦，开始没怀疑这个问题）。IOS8是在ViewWillAppear之后（除非你调用了tableView.tableFooterView = … 之类方法，调用后）再进行loadView的操作，而IOS7则是在[super viewDidLoad]之后。最安全的做法就是在ViewWillAppear之后重新调用一次 [tableView reloadData];</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/07/13/2015-07-13-beginning-ios-pit-over-those-years-i/" data-id="cisgxbbls003rep3dqeiyr68p" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-06-29-beginning-ios-pit-over-those-years-h" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/29/2015-06-29-beginning-ios-pit-over-those-years-h/" class="article-date">
+  <time datetime="2015-06-29T03:25:10.000Z" itemprop="datePublished">2015-06-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/29/2015-06-29-beginning-ios-pit-over-those-years-h/">初学IOS那些年踩过的坑（九）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##如何让小图片按钮的点击区域变大<br>之前经常做的事情就是，用个imageView来放图片，然后用一个更大透明UIButton盖住他，这样有个问题就是，一旦按钮需要有点击高亮效果，就会很麻烦的（各种点击和释放的回调，然后去修改imageView的图片）。</p>
+<p>最近发现了个方法，可以用setContentEdgeInsets来设置Button内容的区域。注意，top、bottom等，都是与其距离，比如bottom，就是与底部距离。开始我以为是从(left,top)到(right,bottom)这两个点的范围做图片的位置，然后导致无法得到想要的效果。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//[self.runBtn setContentEdgeInsets:UIEdgeInsetsMake(&lt;#CGFloat top#&gt;, &lt;#CGFloat left#&gt;, &lt;#CGFloat bottom#&gt;, &lt;#CGFloat right#&gt;)];</span></div><div class="line">[<span class="keyword">self</span>.runBtn setContentEdgeInsets:<span class="built_in">UIEdgeInsetsMake</span>(<span class="number">8</span>, <span class="number">18</span>, <span class="number">8</span>, <span class="number">18</span>)];</div></pre></td></tr></table></figure>
+<p>##view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect&#123;</div><div class="line"><span class="comment">//….</span></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)touchesMoved:(<span class="built_in">NSSet</span> *)touches withEvent:(<span class="built_in">UIEvent</span> *)event&#123;</div><div class="line"><span class="comment">//….</span></div><div class="line">[<span class="keyword">self</span> setNeedsDisplay];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这时候drawRect中的内容会重复绘制，只要设置backgroundColor就不会重复绘制了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lineChartView.backgroundColor = [<span class="built_in">UIColor</span> whiteColor];</div></pre></td></tr></table></figure></p>
+<p>##ore-Data升级后导致数据升级失败<br>用的是MagicRecord，AppDelegate代码中有初始化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:SQLITE_NAME];</div><div class="line">[MagicalRecord shouldAutoCreateDefaultPersistentStoreCoordinator];</div><div class="line">[MagicalRecord setShouldDeleteStoreOnModelMismatch:<span class="literal">YES</span>];</div><div class="line">[MagicalRecord setupAutoMigratingCoreDataStack];<span class="comment">//这里报错</span></div></pre></td></tr></table></figure></p>
+<p>报错内容为Can’t find or automatically infer mapping model for migration。</p>
+<p>在SOF上找到了下文，具体原因不明，可能是添加版本时候有错误操作，这时候只要把版本先退回到上一个版本，然后删除新的版本，提交代码（不先提交SVN可能会出问题哦）。然后重新添加一次再提交就OK了。<br><a href="http://stackoverflow.com/questions/7708392/how-to-delete-an-old-unused-data-model-version-in-xcode-4" target="_blank" rel="external">参考</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/06/29/2015-06-29-beginning-ios-pit-over-those-years-h/" data-id="cisgxbblr003qep3dulmv40w3" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-05-13-running-and-being-reading-notes-a" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/13/2015-05-13-running-and-being-reading-notes-a/" class="article-date">
+  <time datetime="2015-05-13T03:30:45.000Z" itemprop="datePublished">2015-05-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/13/2015-05-13-running-and-being-reading-notes-a/">跑步圣经读书笔记（一）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#序——于嘉</p>
+<ul>
+<li>跑步，没错——人一旦具备运动能力就会做的运动，完全渗透于我的生活中，让我时刻都能感受到它的魅力</li>
+<li>我不承认跑步改变了我的生活，而是跑步成了我生活的一部分</li>
+<li>这不正是生活在浮躁社会里、快节奏的生活中以及巨大压力之下的我们所迫切需要的吗？</li>
+</ul>
+<p>#序——安德鲁-希恩</p>
+<ul>
+<li>和他那一代的大部分人一样，大家毕业后就收起跑鞋，把全部精力奉献给工作和他的家庭（我：时代问题，美国日本都精力这段时期后开始注重运动，而我认为中国还处于这个时期，体育还未回归教育、运动精神尚难达全民，但是这几年貌似好转起来了，无数白领放弃睡懒觉开始晨跑、放弃夜店嗨开始夜跑）。</li>
+</ul>
+<p>#引言</p>
+<ul>
+<li>跑步让这一切自然而然的发生了，创意必须是自发的，它不能被强迫，不能按照需求被生产出来。</li>
+</ul>
+<p>#第二章</p>
+<ul>
+<li>跑步开阔了我们的思维，把我们从每天模式化的活动或思考中挣脱出来，并重新安排我们的日常生活，比如用在吃饭、睡觉和其他休闲活动的时间。跑步不仅改变了我对工作和比赛的态度，改变了我对那些我欣赏的人和欣赏我的人的看法，还使我以一种全新的心态来体验生活——这种心态并非来源于外界，而来源于我的内心。</li>
+<li>跑者们之所以选择跑步，并非他们身体单薄不适合打橄榄球，或者没有天赋打不出漂亮的冰球，而是他们真正喜欢上这项运动。跑步让人身体疲惫、肌肉酸疼，但这也不断地挑战着跑者身体的抗压能力，也正是这样的过程中，跑者充分发挥了自己的能力，并且做回真正的自己。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/05/13/2015-05-13-running-and-being-reading-notes-a/" data-id="cisgxbblt003tep3d73ifmbzw" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-05-13-beginning-ios-pit-over-those-years-g" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/13/2015-05-13-beginning-ios-pit-over-those-years-g/" class="article-date">
+  <time datetime="2015-05-13T03:25:59.000Z" itemprop="datePublished">2015-05-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/13/2015-05-13-beginning-ios-pit-over-those-years-g/">初学IOS那些年踩过的坑（八）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##毛玻璃效果实现<br>不管是用FXBlurView还是用GPUImage实现，都会有卡顿的问题，所以在追求流畅度的时候可以考虑用一下代码替换。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">UIVisualEffectView</span> *visualEffectView = [[<span class="built_in">UIVisualEffectView</span> alloc] initWithEffect:[<span class="built_in">UIBlurEffect</span> effectWithStyle:<span class="built_in">UIBlurEffectStyleLight</span>]];</div><div class="line">visualEffectView.frame = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, _mapView.frame.size.height - <span class="keyword">self</span>.dataBed.frame.size.height, <span class="keyword">self</span>.dataBed.frame.size.width, <span class="keyword">self</span>.dataBed.frame.size.height);</div><div class="line">visualEffectView.alpha = <span class="number">0.92</span>;</div><div class="line">[_mapView addSubview:visualEffectView];</div><div class="line"></div><div class="line"><span class="comment">//注释掉的为旧代码</span></div><div class="line"><span class="comment">// if (nil == self.blurView) &#123;</span></div><div class="line"><span class="comment">// self.blurView = [[FXBlurView alloc]initWithFrame:CGRectMake(0, _mapView.frame.size.height - self.dataBed.frame.size.height, self.dataBed.frame.size.width, self.dataBed.frame.size.height)];</span></div><div class="line"><span class="comment">// [self.blurView setDynamic:YES];</span></div><div class="line"><span class="comment">// self.blurView.blurEnabled = YES;</span></div><div class="line"><span class="comment">// self.blurView.blurRadius = 5.0;</span></div><div class="line"><span class="comment">// self.blurView.tintColor = [UIColor clearColor];</span></div><div class="line"><span class="comment">// [_mapView addSubview:self.blurView];</span></div><div class="line"><span class="comment">// UIView *grayLine = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.blurView.frame.size.width, 1)];</span></div><div class="line"><span class="comment">// grayLine.backgroundColor = RUNMOVE_DARK_GRAY ;</span></div><div class="line"><span class="comment">// [self.blurView addSubview:grayLine];</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">// &#125;</span></div></pre></td></tr></table></figure>
+<p>##NSTimer结束一定要释放<br>因为NSTImer的创建会让你的ViewController计数加1，那么你的VC就不会释放，所以记得创建就一定要结束。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//创建</span></div><div class="line">heartrateTime = [<span class="built_in">NSTimer</span> scheduledTimerWithTimeInterval:HEARTRATE_TIME_INTERVAL target:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(insertHeartrate) userInfo:<span class="literal">nil</span> repeats:<span class="literal">YES</span>];</div><div class="line"></div><div class="line"><span class="comment">//释放</span></div><div class="line"><span class="keyword">if</span> (heartrateTime) &#123;</div><div class="line">[heartrateTime invalidate];</div><div class="line">&#125;</div><div class="line">heartrateTime = <span class="literal">nil</span>;</div></pre></td></tr></table></figure>
+<p>##CocoaPods的问题</p>
+<p>CocoaPods的问题颇多，竟然会遇到Apple Mach-O Linker Error相关的问题，多看看错误日志进行相应的解决，大多数都是找不到目录，找不到头文件的原因，也有找不到控件.o文件的时候（原因为模拟器是i386架构，所以相应Pods的Building Setting中设置）。<br>在一切办法都无法解决时候可以试试把Pods文件（除了podfile）都删了，重新进行pod install。</p>
+<p>##pod install的问题</p>
+<p>pod install后，编译出一堆问题，再删再装还是有问题，无法解决。可能是因为CocoaPods的控件缓存造成。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">rm -rf ~/Library/Caches/CocoaPods</div><div class="line">pod install</div></pre></td></tr></table></figure>
+<p>就ok了</p>
+<p>##用宏提速NSCoding<br><a href="http://stablekernel.com/blog/speeding-up-nscoding-with-macros/" target="_blank" rel="external">http://stablekernel.com/blog/speeding-up-nscoding-with-macros/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/05/13/2015-05-13-beginning-ios-pit-over-those-years-g/" data-id="cisgxbblu003uep3d6302sz4z" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-05-07-mysql-statistics-for-record" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/07/2015-05-07-mysql-statistics-for-record/" class="article-date">
+  <time datetime="2015-05-07T14:11:52.000Z" itemprop="datePublished">2015-05-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/07/2015-05-07-mysql-statistics-for-record/">用mysql对运动记录进行分时段统计</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##为什么写<br>之前做企业级应用都是使用Oracle的存储过程来做统计，用Job来定时执行。换成MySQL后一样用存储过程、视图、Event来完成相应的功能，只是函数和语法变得不大熟悉了，写篇博文来记录下。<br>这篇文章没什么特殊的，就是简单做点工作记录。</p>
+<p>##做什么<br>其实很简单，就是每周定时执行，统计上一周各时段的运动情况总和。先来看看效果把。<br><img src="http://blog.davidandty.com/images/15/1.jpg" alt=""></p>
+<p>##怎么做<br>mysql存储过程和Oracle差别还是很大的，游标不能用了，除基础函数外的一个函数都不一致了，语法也不一样了，不好还好这些东西点点数据谷歌百度就可以查到了。</p>
+<p>###存储过程<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">CREATE DEFINER=`runmove`@`%` PROCEDURE `week_runcount_statistics`(IN last_count int)</div><div class="line">BEGIN</div><div class="line">	Declare tempDayBegin int;</div><div class="line">	Declare tempNightBegin int;</div><div class="line">	Declare timeRouteCount int;</div><div class="line">	Declare curr_week int;</div><div class="line">    Declare dateBegin Date;</div><div class="line">    Declare dateEnd Date;</div><div class="line">	Declare vSQL varchar(2000);</div><div class="line">	Declare stmt varchar(2100);</div><div class="line">    set tempDayBegin = 0;</div><div class="line">    set tempNightBegin = 24;</div><div class="line">    if last_count = 0 then</div><div class="line">		set dateEnd = date(curdate());</div><div class="line">		set dateBegin = date(date_sub(curdate(),interval WEEKDAY(curdate()) day));</div><div class="line">    else </div><div class="line">		if last_count = 1 then</div><div class="line">			set dateEnd = date(date_sub(curdate(),interval WEEKDAY(curdate())+1 day));</div><div class="line">			set dateBegin = date(date_sub(dateEnd ,interval 7 day));</div><div class="line">		else </div><div class="line">			set dateEnd = date(date_sub(curdate(),interval WEEKDAY(curdate())+1+(last_count-1)*7 day));</div><div class="line">			set dateBegin = date(date_sub(dateEnd ,interval 7 day));</div><div class="line">		end if;</div><div class="line">    end if;</div><div class="line">    delete from route_statistics_by_week where week = YEARWEEK(dateBegin);</div><div class="line">    </div><div class="line">    set vSQL = ' ';</div><div class="line">	set vSQL=CONCAT(vSQL,' insert into route_statistics_by_week');</div><div class="line">	set vSQL=CONCAT(vSQL,' values ( date("',date_format(dateBegin,'%Y-%m-%d'),'"),date("',date_format(dateEnd,'%Y-%m-%d'),'"),',YEARWEEK(dateBegin));</div><div class="line">    </div><div class="line">    while tempDayBegin &lt; tempNightBegin do</div><div class="line">        </div><div class="line">		SELECT count(r.id) into timeRouteCount FROM runmove.route r</div><div class="line">		WHERE r.device_detail not like '%Simulator%' and r.flag = 1 and </div><div class="line">        YEARWEEK(date_format(r.create_date,'%Y-%m-%d')) = YEARWEEK(now())-last_count and </div><div class="line">        (DATE_FORMAT(r.create_date,'%H') between tempDayBegin and (tempDayBegin+1) )</div><div class="line">		order by create_date desc;</div><div class="line">		set vSQL=CONCAT(vSQL,',',timeRouteCount);</div><div class="line">        </div><div class="line">        set tempDayBegin = tempDayBegin + 1;</div><div class="line">        </div><div class="line">    end while;</div><div class="line">    set vSQL=CONCAT(vSQL,' )');</div><div class="line">    set @sqltext:=vSQL;</div><div class="line">	prepare stmt from @sqltext;</div><div class="line">	execute stmt;</div><div class="line">    </div><div class="line">END</div></pre></td></tr></table></figure></p>
+<p>###定时作业<br>event和Oracle的job定义逻辑也差不多，就是语法不大一样。</p>
+<figure class="highlight sql"><figcaption><span>event</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span>  <span class="keyword">EVENT</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span>  STAT</div><div class="line"><span class="keyword">ON</span>  SCHEDULE  EVERY  <span class="number">7</span>  <span class="keyword">DAY</span>  STARTS <span class="keyword">DATE_ADD</span>(<span class="keyword">DATE_ADD</span>(<span class="keyword">DATE_SUB</span>(<span class="keyword">CURDATE</span>(),<span class="built_in">INTERVAL</span> <span class="keyword">WEEKDAY</span>(<span class="keyword">CURDATE</span>())<span class="number">-1</span> <span class="keyword">DAY</span>), <span class="built_in">INTERVAL</span> <span class="number">7</span> <span class="keyword">DAY</span>),<span class="built_in">INTERVAL</span> <span class="number">1</span> <span class="keyword">HOUR</span>)</div><div class="line"><span class="keyword">ON</span>  COMPLETION  <span class="keyword">PRESERVE</span>  <span class="keyword">ENABLE</span></div><div class="line"><span class="keyword">DO</span> <span class="keyword">CALL</span> week_runcount_statistics(<span class="number">1</span>);</div></pre></td></tr></table></figure>
+<p>为了显示效果，所以再加了一个视图去显示。</p>
+<p>###视图</p>
+<figure class="highlight sql"><figcaption><span>view</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> </div><div class="line">    ALGORITHM = UNDEFINED </div><div class="line">    DEFINER = <span class="string">`runmove`</span>@<span class="string">`%`</span> </div><div class="line">    <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> DEFINER</div><div class="line"><span class="keyword">VIEW</span> <span class="string">`v_route_statistics_by_week`</span> <span class="keyword">AS</span></div><div class="line">    <span class="keyword">SELECT</span> </div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`week`</span> <span class="keyword">AS</span> <span class="string">`week`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`start_date`</span> <span class="keyword">AS</span> <span class="string">`start_date`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`end_date`</span> <span class="keyword">AS</span> <span class="string">`end_date`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone0`</span> <span class="keyword">AS</span> <span class="string">`0~1`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone1`</span> <span class="keyword">AS</span> <span class="string">`1~2`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone2`</span> <span class="keyword">AS</span> <span class="string">`2~3`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone3`</span> <span class="keyword">AS</span> <span class="string">`3~4`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone4`</span> <span class="keyword">AS</span> <span class="string">`4~5`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone5`</span> <span class="keyword">AS</span> <span class="string">`5~6`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone6`</span> <span class="keyword">AS</span> <span class="string">`6~7`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone7`</span> <span class="keyword">AS</span> <span class="string">`7~8`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone8`</span> <span class="keyword">AS</span> <span class="string">`8~9`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone9`</span> <span class="keyword">AS</span> <span class="string">`9~10`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone10`</span> <span class="keyword">AS</span> <span class="string">`10~11`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone11`</span> <span class="keyword">AS</span> <span class="string">`11~12`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone12`</span> <span class="keyword">AS</span> <span class="string">`12~13`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone13`</span> <span class="keyword">AS</span> <span class="string">`13~14`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone14`</span> <span class="keyword">AS</span> <span class="string">`14~15`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone15`</span> <span class="keyword">AS</span> <span class="string">`15~16`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone16`</span> <span class="keyword">AS</span> <span class="string">`16~17`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone17`</span> <span class="keyword">AS</span> <span class="string">`17~18`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone18`</span> <span class="keyword">AS</span> <span class="string">`18~19`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone19`</span> <span class="keyword">AS</span> <span class="string">`19~20`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone20`</span> <span class="keyword">AS</span> <span class="string">`20~21`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone21`</span> <span class="keyword">AS</span> <span class="string">`21~22`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone22`</span> <span class="keyword">AS</span> <span class="string">`22~23`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone23`</span> <span class="keyword">AS</span> <span class="string">`23~00`</span></div><div class="line">    <span class="keyword">FROM</span></div><div class="line">        <span class="string">`route_statistics_by_week`</span></div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/05/07/2015-05-07-mysql-statistics-for-record/" data-id="cisgxbblp003oep3dyvx2hjx9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-05-07-2015-04-20-beginning-ios-pit-over-those-years-f" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/07/2015-05-07-2015-04-20-beginning-ios-pit-over-those-years-f/" class="article-date">
+  <time datetime="2015-05-07T06:21:16.000Z" itemprop="datePublished">2015-05-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/07/2015-05-07-2015-04-20-beginning-ios-pit-over-those-years-f/">初学IOS那些年踩过的坑（七）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##地图的View退到后台后导致闪退<br>错误信息为gpus_ReturnNotPermittedKillClient</p>
+<p>###事因<br>情况大概是这样的，中间有个版本因为地图占用了内存，所以在4S上会有内存不足闪退的原因，然后做了一次修改就是进入后台的时候把地图销毁了，具体代码如下。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(applicationDidEnterBackgroundNotification:) name:RMApplicationDidEnterBackgroundNotification object:<span class="literal">nil</span>];</div><div class="line">[[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(applicationDidWillEnterForegroundNotification:) name:RMApplicationDidWillEnterForegroundNotification object:<span class="literal">nil</span>];</div></pre></td></tr></table></figure>
+<p>销毁代码如下</p>
+<figure class="highlight objc"><figcaption><span>RMMapView.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)applicationDidEnterBackgroundNotification:(<span class="built_in">NSNotification</span> *)notification &#123;</div><div class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span> viewController] == [<span class="keyword">self</span> topViewController]) &#123;</div><div class="line">        [<span class="keyword">self</span> setHiddenMap:<span class="literal">YES</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)applicationDidWillEnterForegroundNotification:(<span class="built_in">NSNotification</span> *)notification &#123;</div><div class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span> viewController] == [<span class="keyword">self</span> topViewController]) &#123;</div><div class="line">        [<span class="keyword">self</span> setHiddenMap:<span class="literal">NO</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)setHiddenMap:(<span class="built_in">BOOL</span>)hiddenMap &#123;</div><div class="line">    <span class="keyword">if</span> (hiddenMap == _hiddenMap) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">self</span>.hidden = hiddenMap;</div><div class="line">    _hiddenMap = hiddenMap;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (hiddenMap) &#123;</div><div class="line">        <span class="keyword">if</span> (_mapViewClient) &#123;</div><div class="line">            _latitudeDelta = [_mapViewClient getMapRegionLatitudeDelta];</div><div class="line">            _longitudeDelta = [_mapViewClient getMapRegionLatitudeDelta];</div><div class="line">            _coordinate = [_mapViewClient getMapCenterLocationCoordinate2D];</div><div class="line">            [_mapViewClient removeMapView];</div><div class="line">            _changedMapLevel = <span class="literal">NO</span>;</div><div class="line">            _mapViewClient = <span class="literal">nil</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">if</span> ([_mapViewClient getMapView] == <span class="literal">nil</span>) &#123;</div><div class="line"><span class="comment">//            [self performSelector:@selector(createMap) withObject:nil afterDelay:0.5];</span></div><div class="line">            _changedMapLevel = <span class="literal">NO</span>;</div><div class="line">            [<span class="keyword">self</span> createMap];</div><div class="line">            [<span class="keyword">self</span> drawLineForMapView];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight objc"><figcaption><span>MapViewClient.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)removeMapView &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="literal">nil</span> != mainMapView) &#123;</div><div class="line">        [mainMapView removeFromSuperview];</div><div class="line">    &#125;</div><div class="line">    mainMapView = <span class="literal">nil</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后就偶尔会出现退到后台会闪退的原因。Google了一些资料算是把自己误导了。<br>回答的意思基本上是销毁的方法不对（可能确实是销毁的有问题），但是回答也基本上都是设置成nil，要不就把delegate=nil，尝试了都没效果，还是一直会闪退。</p>
+<p>###解决<br>最后换了个思路，放弃销毁，把销毁的代码全部去了，只是在地图的代理方法里加判断，判断是否为Active，不是则不执行。暂时测试还未发现闪退问题</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ([<span class="built_in">UIApplication</span> sharedApplication].applicationState != <span class="built_in">UIApplicationStateActive</span>) &#123;</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/05/07/2015-05-07-2015-04-20-beginning-ios-pit-over-those-years-f/" data-id="cisgxbbll003lep3d9ydot7f5" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-05-06-whats-the-fucker-programmer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/05/06/2015-05-06-whats-the-fucker-programmer/" class="article-date">
+  <time datetime="2015-05-06T07:56:08.000Z" itemprop="datePublished">2015-05-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/06/2015-05-06-whats-the-fucker-programmer/">程序员何苦为难程序员系列</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##呵呵<br>最近都在做UI，初学IOS那些年系列呵呵的进展很慢，然后又挖了一个坑来作死，充分发扬了一贯不负责任的传统。</p>
+<p>##为啥呵呵<br>最近做的一个功能是把轨迹在服务端生成地图轨迹图片，然后存在小米的CDN上。然后功能都做好了，发现IOS客户端上图片无法显示，使用的SDWebImage，代码如下。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[cell.leftTrackImageView sd_setImageWithURL:[<span class="built_in">NSURL</span> URLWithString:leftUrl]];</div></pre></td></tr></table></figure>
+<p>报错信息如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Error Domain=NSURLErrorDomain Code=406 &quot;The operation couldn’t be completed. (NSURLErrorDomain error 406.)&quot;</div></pre></td></tr></table></figure></p>
+<p>##如何不呵呵<br>用charles拦截请求,可以看到请求头</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Host: cdn.fds.api.xiaomi.com</div><div class="line">Accept-Encoding: gzip, deflate</div><div class="line">Accept: image/webp,image/*;q=0.8</div><div class="line">Accept-Language: zh-cn</div><div class="line">Connection: keep-alive</div><div class="line">User-Agent: Runmove/110 CFNetwork/711.2.23 Darwin/14.0.0</div></pre></td></tr></table></figure>
+<p>然后用python的requests库来请求，发现可以正常获得，那看看python请求和相应的headers把。<br>请求如下：</p>
+<figure class="highlight"><figcaption><span>request.headers</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;'Connection': 'keep-alive', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'User-Agent': 'python-requests/2.6.0 CPython/2.7.6 Darwin/14.3.0'&#125;</div></pre></td></tr></table></figure>
+<p>响应如下：</p>
+<figure class="highlight"><figcaption><span>response.headers</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;'content-length': '68236', 'access-control-allow-headers': 'DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Content-MD5', 'proxy-connection': 'Keep-alive', 'access-control-max-age': '1728000', 'cache-control': 'max-age=86400', 'x-via': '1.1 zw11:8080 (Cdn Cache Server V2.0), 1.1 xiazai199:4 (Cdn Cache Server V2.0)', 'server': 'Tengine', 'content-md5': 'b4f3f2a873822d8f56ef928ef0587b8b', 'last-modified': 'Wed, 06 May 2015 03:20:02 GMT', 'access-control-allow-credentials': 'true', 'date': 'Wed, 06 May 2015 11:55:34 GMT', 'access-control-allow-methods': 'GET, POST, PUT, HEAD, DELETE, OPTIONS', 'content-type': 'image/jpeg'&#125;</div></pre></td></tr></table></figure>
+<p>发现客户端请求的Accept包含上面响应头的content-type（image/webp,image/<em>;q=0.8和image/jpeg）。而上面请求的请求头的Accept为</em>/*，这为默认的值，也是范围最广的。那么我在Python把请求头修改下试试。</p>
+<p>##偷天换日</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">headers = &#123;<span class="string">'Accept'</span>: <span class="string">'image/webp,image/*;q=0.8'</span>&#125;</div><div class="line">r = requests.get(<span class="string">'http://cdn.fds.api.xiaomi.com/ir-heatmap/pathmap/colorline/8122/53d501c213ba564c9958ead983d1b9c014ae2630-s788_640.jpg'</span>,headers=headers)</div><div class="line"><span class="comment">#r:&lt;Response [406]&gt;</span></div></pre></td></tr></table></figure>
+<p>呵呵重现了，嘿嘿。果然是小米那帮坑货，对请求头做了限制。</p>
+<p>##如何不呵呵<br>既然发现了原理，那么怎么可以不呵呵呢？<br>首先考虑，如果不设置，Accept应该是*/*的，肯定是被修改了，那么来看看SDWebImage的源码把。</p>
+<figure class="highlight objc"><figcaption><span>SDWebImageDownloader.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">_HTTPHeaders = [<span class="built_in">NSMutableDictionary</span> dictionaryWithObject:<span class="string">@"image/webp,image/*;q=0.8"</span> </div><div class="line">                                                  forKey:<span class="string">@"Accept"</span>];</div></pre></td></tr></table></figure>
+<p>原来是SDWebImage内部修改了请求头，那么我们把它修改下就好了，SDWebImageDownloader是个单例，修改一次就全局修改了。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[SDWebImageDownloader.sharedDownloader setValue:<span class="string">@"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"</span></div><div class="line">                             forHTTPHeaderField:<span class="string">@"Accept"</span>];</div></pre></td></tr></table></figure>
+<p>问题解决。</p>
+<p>##呵呵总结<br>程序员何苦为难程序员啊，挖了这么一个坑，谢谢你祖宗啊。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/05/06/2015-05-06-whats-the-fucker-programmer/" data-id="cisgxbblk003kep3dewzykwgq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-04-20-beginning-ios-pit-over-those-years-e" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/04/20/2015-04-20-beginning-ios-pit-over-those-years-e/" class="article-date">
+  <time datetime="2015-04-20T00:54:00.000Z" itemprop="datePublished">2015-04-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/20/2015-04-20-beginning-ios-pit-over-those-years-e/">初学IOS那些年踩过的坑（六）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>0、实现类似Eclipse的cmd+shift+r打开指定函数<br>一直以为没这功能，今天算发现了。在Xcode中可以用control+6打开所有函数的导航，然后可以进行输入检索，也可以按control+a显示所有。</p>
+<p>1、用IOS自带NSJSONSerialization 去把Foundation对象转成JSON串在NSNumber转换精度上存在问题<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSMutableArray</span> *pointArray = [[<span class="built_in">NSMutableArray</span> alloc] init];</div><div class="line"><span class="keyword">for</span> (RunningPoint *point <span class="keyword">in</span> pointEnityArray) &#123;</div><div class="line">[pointArray addObject:@&#123;</div><div class="line"><span class="string">@"latitude"</span> : point.latitude,</div><div class="line"><span class="string">@"longitude"</span> : point.longitude,</div><div class="line"><span class="string">@"chinaLatitude"</span> : point.chinaLatitude,</div><div class="line"><span class="string">@"chinaLongitude"</span> : point.chinaLongitude,</div><div class="line"><span class="string">@"isCorrect"</span> : point.isCorrect,</div><div class="line"><span class="string">@"distance"</span> : point.distance,</div><div class="line"><span class="string">@"altitude"</span> : point.altitude,</div><div class="line"><span class="string">@"speed"</span> : point.speed,</div><div class="line"><span class="string">@"mark"</span> : point.mark,</div><div class="line"><span class="string">@"pause_mark"</span> : point.pauseMark,</div><div class="line"><span class="string">@"britishMark"</span> : point.britishMark,</div><div class="line"><span class="string">@"running_time"</span> : point.runningTime,</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"collect_time"</span> : [point.collectTime toString],</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"running_time"</span>: point.runningTime,</div><div class="line">&#125;];</div><div class="line">&#125;</div><div class="line">running.pointsData = [<span class="built_in">NSKeyedArchiver</span> archivedDataWithRootObject:pointArray];</div></pre></td></tr></table></figure></p>
+<p>改为<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (RunningPoint *point <span class="keyword">in</span> pointEnityArray) &#123;</div><div class="line">[pointArray addObject:@&#123;</div><div class="line"><span class="string">@"latitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.latitude.doubleValue],</div><div class="line"><span class="string">@"longitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.longitude.doubleValue],</div><div class="line"><span class="string">@"chinaLatitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.chinaLatitude.doubleValue],</div><div class="line"><span class="string">@"chinaLongitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.chinaLongitude.doubleValue],</div><div class="line"><span class="string">@"isCorrect"</span> : point.isCorrect,</div><div class="line"><span class="string">@"distance"</span> : point.distance,</div><div class="line"><span class="string">@"altitude"</span> : point.altitude,</div><div class="line"><span class="string">@"speed"</span> : point.speed,</div><div class="line"><span class="string">@"mark"</span> : point.mark,</div><div class="line"><span class="string">@"pause_mark"</span> : point.pauseMark,</div><div class="line"><span class="string">@"britishMark"</span> : point.britishMark,</div><div class="line"><span class="string">@"running_time"</span> : point.runningTime,</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"collect_time"</span> : [point.collectTime toString],</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"running_time"</span>: point.runningTime,</div><div class="line">&#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>2、table header and footer的高度问题<br>问题描述：这几天在重构一个页面，那个页面有一个tableview，因为重构把它从漂浮出来改成了加在底部。<br>结果在底部的tableview最地上出现了一个空行，因为没遇到过这种问题，也不知道那个界面是什么引起的。<br>问题排查：经过有经验的同事提示，知道了这类问题的排查方式。就是用模拟器运行，然后如下图打开。<br><img src="http://chuantu.biz/t2/3/1429520293x-954497745.jpg" alt=""><br>然后在界面上找到不知来历的界面，就会看到提示这是啥。<br><img src="http://chuantu.biz/t2/3/1429520387x1822611348.jpg" alt=""><br>原来是下面这个tableView的HeaderFooterView啊。那么怎么去掉他呢<br>要排查两个方面，一是代码中<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">CGFloat</span>)tableView:(<span class="built_in">UITableView</span> *)tableView heightForHeaderInSection:(<span class="built_in">NSInteger</span>)section &#123;</div><div class="line"></div><div class="line"><span class="keyword">return</span> <span class="number">50.0</span>f;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>而是nib文件中设置，如下图。这样这个问题应该就解决了。<br><img src="http://chuantu.biz/t2/3/1429520410x1822611348.jpg" alt=""></p>
+<p>3、用了autolayout的界面中，要怎么实现位移动画呢？</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//x,y,z动画要偏移的量</span></div><div class="line"><span class="built_in">CATransform3D</span> transform = <span class="built_in">CATransform3DMakeTranslation</span>(x, y, z);</div><div class="line"><span class="built_in">CABasicAnimation</span> *animation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"transform"</span>];</div><div class="line"><span class="comment">//view为要进行动画的view</span></div><div class="line">animation.fromValue = [view.layer.presentationLayer valueForKey:animation.keyPath];</div><div class="line">animation.toValue = [<span class="built_in">NSValue</span> valueWithCATransform3D:transform];</div><div class="line"><span class="comment">//opacityAnimation.timingFunction 是用来控制动画线性发展。</span></div><div class="line"><span class="comment">//其中[CAMediaTimingFunction functionWithControlPoints:1.0 :0.0 :1.0 :0.1] 是一个贝塞尔曲线的控制方法。</span></div><div class="line"><span class="comment">//这也可以令动画做到先慢后快或先快后慢的结果。</span></div><div class="line"><span class="comment">//效果参考http://netcetera.org/camtf-playground.html</span></div><div class="line">animation.timingFunction = [<span class="built_in">CAMediaTimingFunction</span> functionWithControlPoints:<span class="number">0</span> :size :<span class="number">0</span> :size*<span class="number">2</span>];</div><div class="line">animation.duration = <span class="number">0.6</span>;</div><div class="line">view.layer.transform = transform;</div><div class="line">[view.layer addAnimation:animation forKey:animation.keyPath];</div></pre></td></tr></table></figure>
+<p>除此之外，用这种方式还可以做移动中大小变化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">float</span> bigInfoViewScale = scale*<span class="number">0.6</span> + <span class="number">0.4</span>;</div><div class="line"><span class="keyword">float</span> bigInfoViewY = -GET(<span class="number">200</span>) + GET(<span class="number">200</span>) * scale;</div><div class="line"><span class="built_in">CATransform3D</span> scaleTransform = <span class="built_in">CATransform3DMakeScale</span>(bigInfoViewScale, bigInfoViewScale, <span class="number">1</span>);</div><div class="line"><span class="built_in">CATransform3D</span> transform = <span class="built_in">CATransform3DTranslate</span>(scaleTransform, <span class="number">0</span>, bigInfoViewY, <span class="number">0</span>);</div><div class="line"></div><div class="line"><span class="built_in">CABasicAnimation</span> *animation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"transform"</span>];</div><div class="line">animation.fromValue = [<span class="keyword">self</span>.bigInfoView.layer.presentationLayer valueForKey:animation.keyPath];</div><div class="line">animation.toValue = [<span class="built_in">NSValue</span> valueWithCATransform3D:transform];</div><div class="line">animation.timingFunction = [<span class="built_in">CAMediaTimingFunction</span> functionWithControlPoints:<span class="number">0.3</span> :<span class="number">0.5</span> :<span class="number">0.9</span> :<span class="number">1.275</span>];</div><div class="line">animation.duration = duration;</div><div class="line"></div><div class="line"><span class="keyword">self</span>.bigInfoView.layer.transform = transform;</div><div class="line">[<span class="keyword">self</span>.bigInfoView.layer addAnimation:animation forKey:animation.keyPath];</div></pre></td></tr></table></figure></p>
+<p>4、ViewController中，当一个界面只有一个scrollView时候，scrollView会自动偏移一个状态栏的高度<br>在ViewController的ViewDidLoad中加入下面代码可解决该问题。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.automaticallyAdjustsScrollViewInsets = <span class="literal">NO</span>;</div></pre></td></tr></table></figure></p>
+<p>5、IOS中做类似GIF的动画<br>其实只要为每一帧切一张图，然后用如下代码就Ok了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *images = @[[<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step1"</span>], [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step2"</span>], [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step3"</span>]];</div><div class="line"><span class="built_in">UIImage</span> *animateImage = [<span class="built_in">UIImage</span> animatedImageWithImages:images duration:<span class="number">1.2</span>];</div><div class="line"><span class="built_in">UIImageView</span> *imageView = [[<span class="built_in">UIImageView</span> alloc] initWithImage:animateImage];</div><div class="line"><span class="comment">// 默认是0 0代表无限循环</span></div><div class="line">imageView.animationRepeatCount = <span class="number">0</span>;</div><div class="line">[imageView startAnimating];</div></pre></td></tr></table></figure></p>
+<p>6、主界面使用scrollView后，nib文件有警告<br>has ambigous scrollable content height<br>原因：scrollView需要确定的contentSize，而subViews并没有足够的约束可以确定contentSize<br>解决：在scrollView中套一层view，设置如下图<br><img src="http://chuantu.biz/t2/3/1429520432x1822611348.jpg" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/04/20/2015-04-20-beginning-ios-pit-over-those-years-e/" data-id="cisgxbblj003jep3dumy4aol3" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-03-07-beginning-ios-pit-over-those-years-d" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/03/07/2015-03-07-beginning-ios-pit-over-those-years-d/" class="article-date">
+  <time datetime="2015-03-06T22:33:00.000Z" itemprop="datePublished">2015-03-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/07/2015-03-07-beginning-ios-pit-over-those-years-d/">初学IOS那些年踩过的坑(五)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#集成友盟后报错<br>LOG：<br>15-02-12 09:26:47.206 Runmove[2532:13249] NSScanner: nil string argument<br>2015-02-12 09:26:47.206 Runmove[2532:13249] Umeng: Read binary image info failed!</p>
+<p>其实不是友盟问题，是自己程序中有了个错误，只是打开了友盟的调试开关，所以报了友盟错误。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//    [MobClick setLogEnabled:YES];</span></div></pre></td></tr></table></figure></p>
+<p>注释该行代码后可以正常报告出程序中的异常</p>
+<p>#tableview下方空白处的seprator line去除<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.tableView.tableFooterView = [<span class="built_in">UIView</span> new];</div></pre></td></tr></table></figure></p>
+<p>#navigationbar的左滑返回<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    <span class="keyword">self</span>.navigationItem.leftBarButtonItem = [[<span class="built_in">UIBarButtonItem</span> alloc]</div><div class="line">                                         initWithImage:img</div><div class="line">                                         style:<span class="built_in">UIBarButtonItemStylePlain</span></div><div class="line">                                         target:<span class="keyword">self</span></div><div class="line">                                         action:<span class="keyword">@selector</span>(onBack:)];</div><div class="line"><span class="keyword">self</span>.navigationController.interactivePopGestureRecognizer.delegate = (<span class="keyword">id</span>)<span class="keyword">self</span>;</div></pre></td></tr></table></figure></p>
+<p>#使用nib做界面，但是layoutAttribute有些又需要根据适配来适配，nib+手写混写好烦恼啊，感觉睡不着觉了<br>其实错了，混写其实很简单的，可以像拉button一样的拉你的约束.nslayoutattribute也是可以拉线的，这样一切都太平了</p>
+<p>#画面不流畅可能是因为一些透明视图影响了fps，可以去掉这些透明视图<br>方法：Product-&gt;Profile-&gt;Core Animation-&gt;右下第二个选项卡中勾上Color Blended Layers<br>然后看到红色的就都是透明的视图，不需要透明效果的可以去掉透明</p>
+<p>#UITableView拉倒底部最后行只显示一半问题<br>原因：计算UITableView高度的时候按整个屏幕来计算了，NavigationBar的高度被忽略。所以就少算了NavigationBar高度。</p>
+<p>#UILongPressGestureRecognizer会触发两次，分别是开始和结束<br>所以如果只想触发一次，就需要加个判断了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)longPress:(<span class="built_in">UILongPressGestureRecognizer</span> *)sender</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (sender.state == <span class="built_in">UIGestureRecognizerStateBegan</span>) &#123;</div><div class="line">        [<span class="keyword">self</span> yourMethod];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#简单实现下拉到底刷新数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView</div><div class="line">&#123;</div><div class="line">    if([_photos count] &gt;= LOAD_COUNT_DEFAULT*(_loadPage+1) &amp;&amp; scrollView.contentOffset.y + (scrollView.frame.size.height) &gt; scrollView.contentSize.height*0.8)&#123;</div><div class="line">        [[RunService sharedInstance] loadPhotosWithPage:(_loadPage+1) count:LOAD_COUNT_DEFAULT complete:^(NSArray *photos) &#123;</div><div class="line">            _loadPage++;</div><div class="line">            [_photos addObjectsFromArray:photos];</div><div class="line">            [self loadPhoto];</div><div class="line">        &#125;                                         fail:^(NSString *msg) &#123;</div><div class="line">            </div><div class="line">        &#125;];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#数据持久化到NSUserDefaults<br>需要数据持久化的对象必须实现NSCoding<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">"NSObject+NSCoding.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ServerPhoto</span> : <span class="title">NSObject</span> &lt;<span class="title">NSCoding</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>实现文件中还要重写2个方法<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)encodeWithCoder:(<span class="built_in">NSCoder</span> *)coder &#123;</div><div class="line">    [<span class="keyword">self</span> autoEncodeWithCoder:coder];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">id</span>)initWithCoder:(<span class="built_in">NSCoder</span> *)coder &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span> = [<span class="keyword">super</span> init]) &#123;</div><div class="line">        [<span class="keyword">self</span> autoDecode:coder];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>持久化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSUserDefaults</span> *udf = [<span class="built_in">NSUserDefaults</span> standardUserDefaults];</div><div class="line"><span class="built_in">NSData</span> *photosData = [<span class="built_in">NSKeyedArchiver</span> archivedDataWithRootObject:_photos];</div><div class="line">[udf setObject:photosData forKey:_dataCacheName];</div><div class="line">[udf synchronize];</div></pre></td></tr></table></figure></p>
+<p>反持久化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSUserDefaults</span> *udf = [<span class="built_in">NSUserDefaults</span> standardUserDefaults];</div><div class="line"><span class="built_in">NSData</span> *data = [udf objectForKey:_dataCacheName];</div><div class="line"><span class="built_in">NSMutableArray</span> *photoData = [<span class="built_in">NSKeyedUnarchiver</span> unarchiveObjectWithData:data];</div><div class="line"><span class="keyword">if</span> (photoData &amp;&amp; photoData.count &gt; <span class="number">0</span>) &#123;</div><div class="line">    _photos = photoData;</div><div class="line">    [_photoTableView reloadData];</div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span> &#123;</div><div class="line">    [SVProgressHUD showWithStatus:<span class="string">@"加载数据中"</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>10、SDWebImage<br>options用SDWebImageHighPriority，优先级高的话，会及时写入到磁盘<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[leftImageView sd_setImageWithURL:[<span class="built_in">NSURL</span> URLWithString:leftPhotoUrl] placeholderImage:[<span class="built_in">UIImage</span> new] options:SDWebImageHighPriority];</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/03/07/2015-03-07-beginning-ios-pit-over-those-years-d/" data-id="cisgxbbln003nep3ds3gsjbn6" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">__('next') &raquo;</a>
+  </nav>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/">Amazon</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/">bezos</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/一网打尽/">一网打尽</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/一网打尽/EverythisIsStore/">EverythisIsStore</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/天道酬勤/">天道酬勤</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/天道酬勤/KataPotter/">KataPotter</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/天道酬勤/KataPotter/CodeJourney/">CodeJourney</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/责任链/">责任链</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/责任链/KataPotter/">KataPotter</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/责任链/KataPotter/一网打尽/">一网打尽</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/">bash</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/Shell/位置变量/">位置变量</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/Shell/进程变量/">进程变量</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/bit/">bit</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/bit/singlenum2/">singlenum2</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/函数/">函数</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/函数/LeetCode/">LeetCode</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/函数/LeetCode/链表循环起点/">链表循环起点</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/字符串/">字符串</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/字符串/str/">str</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/字符串/str/基础/">基础</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/设计/fizzbuzzwhizz/">fizzbuzzwhizz</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/">Sublime</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/工具/">工具</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/工具/编辑器/">编辑器</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/工具/编辑器/提升工作效率/">提升工作效率</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/UML/">UML</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/">BDD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/">TDD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/">KataPotter</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/cucumber/">cucumber</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/cucumber/责任链设计模式/">责任链设计模式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/cucumber/责任链设计模式/面向接口/">面向接口</a></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/">bezos</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/">jobs</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/乔布斯/">乔布斯</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/乔布斯/贝索斯/">贝索斯</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/乔布斯/贝索斯/干货/">干货</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/AFNetworking/">AFNetworking</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/GCD/">GCD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/GCD/obj-c/">obj-c</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/">cocoa</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/">block</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/obj-c/">obj-c</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/obj-c/代码块/">代码块</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/obj-c/代码块/闭包/">闭包</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/jvm/">jvm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/jvm/classloader/">classloader</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/">maven</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/">TDD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/">fizzbuzzwhizz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/">责任链</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/">模板方法</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/设计模式/">设计模式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/设计模式/趣味编程/">趣味编程</a></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/">spring</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/IoC/">IoC</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/IoC/XmlWebApplicationContext/">XmlWebApplicationContext</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/">application</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/IoC/">IoC</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/IoC/源码分析/">源码分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/IoC/源码分析/beanfactory/">beanfactory</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/">resource</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/">IoC</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/">源码分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/Resource加载/">Resource加载</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/Resource定位/">Resource定位</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/Resource注册/">Resource注册</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/多线程/synchronized/">synchronized</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/多线程/synchronized/人际关系/">人际关系</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/多线程/volatile/">volatile</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/">模板引擎</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/导出Word/">导出Word</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/导出Word/解析Xml/">解析Xml</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/导出Word/解析Xml/设计/">设计</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/express/">express</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/express/scrum/">scrum</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/express/scrum/感悟/">感悟</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/fizzbuzzwhizz/">fizzbuzzwhizz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/fizzbuzzwhizz/易中天/">易中天</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/fizzbuzzwhizz/易中天/百家争鸣/">百家争鸣</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/">javascript</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/">Node.js</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/">互联网</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/互联网思维/">互联网思维</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/互联网思维/去中心化/">去中心化</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/互联网思维/去中心化/全局对象/">全局对象</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/">工作</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/个人随笔/数组/">数组</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/个人随笔/数组/兴趣/">兴趣</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/">Regexp</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/正则表达式/">正则表达式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/码年/">码年</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/码年/正则表达式/">正则表达式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/prototype/">prototype</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/prototype/读书笔记/">读书笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/否定性思维/">否定性思维</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/否定性思维/自我反思/">自我反思</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/否定性思维/自我反思/数组/">数组</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/">游记</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/Node-js/">Node.js</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/Node-js/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/Node-js/个人随笔/数组/">数组</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/jvm/">jvm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/jvm/vertx/">vertx</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/">事件流</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/事件/">事件</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/事件/事件冒泡/">事件冒泡</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/事件/事件冒泡/添加事件方式/">添加事件方式</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/">scrum</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/敏捷/">敏捷</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/敏捷/需求/">需求</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/敏捷/需求/用户故事/">用户故事</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/sql/">sql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/sql/join/">join</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/sql/join/连接/">连接</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人简历/">个人简历</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/怨文/">怨文</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/怨文/年终/">年终</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/读后感/">读后感</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/项目管理/">项目管理</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/产品/">产品</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/产品/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/产品/设计/极简/">极简</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/人性/">人性</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/">总结</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/利他/">利他</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/利他/下个人思维/">下个人思维</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/利他/下个人思维/高大上/">高大上</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/创业/">创业</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/创业/总结/">总结</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/同步/">同步</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/同步/线程安全/">线程安全</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/同步/线程安全/ConcurrentHashMap/">ConcurrentHashMap</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/同步/线程安全/ConcurrentHashMap/桶分割远离/">桶分割远离</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/">HashMap</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/">HashTable</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/">CocurrentHashMap</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/同步/">同步</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/同步/线程安全/">线程安全</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/">孔子</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/">儒家</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/">易中天</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/百家争鸣/">百家争鸣</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/百家争鸣/中庸/">中庸</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/百家争鸣/中庸/仁爱/">仁爱</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习/">学习</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/学习/个人随笔/">个人随笔</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/属性/">属性</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/属性/obj-c/">obj-c</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/谷歌/">谷歌</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/谷歌/搜索/">搜索</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/谷歌/搜索/个人心得/">个人心得</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/obj-c/">obj-c</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/obj-c/不足/">不足</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/读后感/">读后感</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/读后感/管理学/">管理学</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/读后感/管理学/领导课/">领导课</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/转变/">转变</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/日记/">日记</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/">女朋友</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/向日葵/">向日葵</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/向日葵/信念/">信念</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/向日葵/信念/自信/">自信</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/架构设计/">架构设计</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/蛋疼/">蛋疼</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/蛋疼/折腾/">折腾</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/蛋疼/折腾/作死/">作死</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/设计/重构/">重构</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/载记/">载记</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/载记/警世钟/">警世钟</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/重构/">重构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理/">项目管理</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理/执行力/">执行力</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理/读记/">读记</a></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/06/07/2016-06-07-dockercong-0dao-1de-bi-ji/">Docker从0到1的笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/13/2015-07-13-beginning-ios-pit-over-those-years-i/">初学IOS那些年踩过的坑（十）</a>
+          </li>
+        
+          <li>
+            <a href="/2015/06/29/2015-06-29-beginning-ios-pit-over-those-years-h/">初学IOS那些年踩过的坑（九）</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/13/2015-05-13-running-and-being-reading-notes-a/">跑步圣经读书笔记（一）</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/13/2015-05-13-beginning-ios-pit-over-those-years-g/">初学IOS那些年踩过的坑（八）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

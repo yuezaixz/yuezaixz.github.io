@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/page/3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-2014-12-15-ios-gcd-method-from-scratch-introduction" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/15/2014-12-15-ios-gcd-method-from-scratch-introduction/" class="article-date">
+  <time datetime="2014-12-15T01:04:00.000Z" itemprop="datePublished">2014-12-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/iOS/">iOS</a>►<a class="article-category-link" href="/categories/iOS/GCD/">GCD</a>►<a class="article-category-link" href="/categories/iOS/GCD/obj-c/">obj-c</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/15/2014-12-15-ios-gcd-method-from-scratch-introduction/">IOS从头开始之GCD基本方法介绍</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#概述<br>任务支持函数和块，GCD比NSOperation更底层，可以是并发的或串行的。他是纯C语言编写，性能很好，而是是对象化的，内存也是通过计数管理。</p>
+<p>#队列类型</p>
+<ul>
+<li>主线程队列：提交到该队列的任务会在主线程中执行。可以调用dispatch_get_main_queue()来获得。因为main queue是与主线程相关的，所以这是一个串行队列</li>
+<li><p>全局队列：是并发队列，并由整个进程共享。存在4个全局队列：高（DISPATCH_QUEUE_PRIORITY_HIGH ）、中（默认，DISPATCH_QUEUE_PRIORITY_DEFAULT ）、低（DISPATCH_QUEUE_PRIORITY_LOW ）、后台（DISPATCH_QUEUE_PRIORITY_BACKGROUND ）四个优先级队列。可以调用dispatch_get_global_queue函数传入优先级来访问队列。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);</div></pre></td></tr></table></figure>
+</li>
+<li><p>自创建队列：该队列是用函数 dispatch_queue_create 创建的队列，提交到队列中的任务是串行的，各个队列间是串行的。dispatch_queue_create 函数的第一个参数是一个标签，是提供唯一标示方便调试。官方建议我倒置包名来命名队列，比如“com.dragonsoft.subsystem.task”。这些名字会在崩溃日志中被显示出来，也可以被调试器调用，这在调试中会很有用。第二个参数是queue的类型，设为NULL时默认是DISPATCH_QUEUE_SERIAL，将创建串行队列，在必要情况下，你可以将其设置为DISPATCH_QUEUE_CONCURRENT来创建自定义并行队列。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> firstSerialQueue = dispatch_queue_create(<span class="string">"com.pixolity.GCD.serialQueue1"</span>, <span class="number">0</span>);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意：全局的队列，不用retain或release，自创建通过ARC进行，也不需要，如果想保留，就需要。</p>
+<p>#dispatch_async<br>将任务推到子线程中异步执行，注册的任务完成时间是随机不确定的。该函数会立即返回，任务会在后台异步执行。<br>该方法使用场景按我理解类似做Web前端开发时候，可能会有一个操作需要去后台请求数据，然后再对主页面进行局部刷新。在Web开发可以利用Ajax和Javascript的事件循环异步机制来轻松实现回调而在IOS程序中，这就意味着需要将数据的获取交给子线程去做，数据返回后再把任务推回到主线程来执行一些代码。使用GCD的dispatch_async可以简单地完成这个任务。使用嵌套的dispatch，在外层中执行后台任务，在内层中将任务dispatch到main queue，以下代码为网上拔来的示例。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_async</span>(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>), ^&#123;</div><div class="line">    <span class="built_in">NSURL</span> * url = [<span class="built_in">NSURL</span> URLWithString:<span class="string">@"http://avatar.csdn.net/2/C/D/1_totogo2010.jpg"</span>];</div><div class="line">    <span class="built_in">NSData</span> * data = [[<span class="built_in">NSData</span> alloc]initWithContentsOfURL:url];</div><div class="line">    <span class="built_in">UIImage</span> *image = [[<span class="built_in">UIImage</span> alloc]initWithData:data];</div><div class="line">    <span class="keyword">if</span> (data != <span class="literal">nil</span>) &#123;</div><div class="line">        <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;</div><div class="line">            <span class="keyword">self</span>.imageView.image = image;</div><div class="line">         &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>还有一个场景他的应用会比较有效，比如要计算1000以内的素数，那就要循环1000次，每次都是同步执行的，性能很差。可以应用如下代码，doSomethingIntensiveWith:obj改为判断当前循环到的数字是否为素数，是就添加到一个集合中。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);</div><div class="line"><span class="keyword">for</span>(<span class="keyword">id</span> obj <span class="keyword">in</span> array)</div><div class="line">    <span class="built_in">dispatch_async</span>(queue,^&#123;[<span class="keyword">self</span> doSomethingIntensiveWith:obj];&#125;);</div></pre></td></tr></table></figure></p>
+<p>#dispatch_sync<br>该函数干的事和dispatch<em>async相同，差异就是它不会立即返回，它会等待传入的block中的代码执行完成并返回。结合\</em>_block类型修饰符，可以用来从执行中的block获取一个值。例如，你可能有一段代码在后台执行，而它需要从界面控制层获取一个值。那么你可以使用dispatch_sync简单办到。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">__block <span class="built_in">NSString</span> *stringValue;</div><div class="line"><span class="built_in">dispatch_sync</span>(dispatch_get_main_queue(), ^&#123;</div><div class="line">        stringValue = [[textField stringValue] <span class="keyword">copy</span>];</div><div class="line">&#125;);</div><div class="line">[stringValue autorelease];</div><div class="line"><span class="comment">// 操作stringValue</span></div></pre></td></tr></table></figure></p>
+<p>有一个使用的例子就是替换锁。以下代码为something属性的getter&amp;setter，具体可以看程序中的注释。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">id</span>)something</div><div class="line">&#123;</div><div class="line">    __block <span class="keyword">id</span> localSomething;</div><div class="line">    <span class="comment">//会等待传入的block执行完后才返回，但是由于自定义队列是FIFO执行的，所以如果前面有多个setter操作，那么现在就在等待中。</span></div><div class="line">    <span class="built_in">dispatch_sync</span>(queue, ^&#123;</div><div class="line">        localSomething = [something <span class="keyword">retain</span>];</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> [localSomething autorelease];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)setSomething:(<span class="keyword">id</span>)newSomething</div><div class="line">&#123;</div><div class="line">      <span class="comment">//直接返回，把任务添加到队列中执行。</span></div><div class="line">    <span class="built_in">dispatch_async</span>(queue, ^&#123;</div><div class="line">        <span class="keyword">if</span>(newSomething != something)</div><div class="line">        &#123;</div><div class="line">            [something release];</div><div class="line">            something = [newSomething <span class="keyword">retain</span>];</div><div class="line">           <span class="comment">//修改缓存可能非常耗时间，所以立即返回完全不影响性能</span></div><div class="line">            [<span class="keyword">self</span> updateSomethingCaches];</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>不过这里要注意，小心有代码会造成互斥锁，导致getter中的dispatch_sync一直无法返回。</p>
+<p>#dispatch_group_async<br>它可以实现监听一组任务是否完成，完成后得到通知执行其他的操作。<br>可以想象这么一个场景，比如你执行10下载任务，然后程序将每个下载任务又分成了2步操作，第二步合并必须在第一步完成后才能进行，那么前面dispatch_async的那个循环的例子就不管用了。看以下代码<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_qeueue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);</div><div class="line">dispatch_group_t group = dispatch_group_create();</div><div class="line"><span class="keyword">for</span>(<span class="keyword">id</span> obj <span class="keyword">in</span> array)&#123;</div><div class="line">  dispatch_group_async(group,queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadIntensiveWith:obj];</div><div class="line">  &#125;);</div><div class="line">   <span class="comment">//group中的任务都结束了，就会去通知该block中的任务去执行</span></div><div class="line">  dispatch_group_notify(group,queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadCombaineWith:obj];</div><div class="line">  &#125;);</div><div class="line">  <span class="comment">//IOS 6.0后不需要自己去释放，函数的变量栈在函数退出时候会自己释放。这个释放不同于ARC，他是在运行时</span></div><div class="line">  dispatch_release(group);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>#dispatch_barrier_async<br>在前面的任务执行结束后它才执行，而且它后面的任务等它执行完成之后才会执行<br>还是前面那个场景，比如下载必须等前面的任务完成后才进行合并操作，合并结束后才进行提示操作，那么dispatch_group_async又不是很好用了，看以下代码</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_queue_create(<span class="string">"com.dragonsoft.queue1"</span>, DISPATCH_QUEUE_CONCURRENT);</div><div class="line"><span class="keyword">for</span>(<span class="keyword">id</span> obj <span class="keyword">in</span> array)&#123;</div><div class="line"><span class="built_in">dispatch_async</span>(queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadIntensiveWith:obj];</div><div class="line">&#125;);</div><div class="line"><span class="built_in">dispatch_async</span>(queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownload2IntensiveWith:obj];</div><div class="line">&#125;);</div><div class="line">dispatch_barrier_async(queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadCombaineWith:obj];</div><div class="line">&#125;);</div><div class="line"><span class="built_in">dispatch_async</span>(queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doNoticeWith:obj];</div><div class="line">&#125;);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>#dispatch_apply<br>执行某个代码片段N<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dispatch_apply(<span class="number">5</span>, globalQ, ^(size_t index) &#123;</div><div class="line">    <span class="comment">// 执行5次</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>使用场景还是刚刚那个下载，这下连循环都省了<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_qeueue(DISPATCH_QUEUE_PRIORITY_DEFAULT,  <span class="number">0</span>);</div><div class="line"><span class="comment">//推到后台去</span></div><div class="line"><span class="built_in">dispatch_async</span>(queue,^&#123;</div><div class="line">  dispatch_apply([array count], queue, ^(size_t index)&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadIntensiveWith:obj];</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/12/15/2014-12-15-ios-gcd-method-from-scratch-introduction/" data-id="cisgxbbkz002vep3d6qj6620f" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2014-12-13-ios-syntax-block-from-scratch" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/13/2014-12-13-ios-syntax-block-from-scratch/" class="article-date">
+  <time datetime="2014-12-12T18:41:00.000Z" itemprop="datePublished">2014-12-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/iOS/">iOS</a>►<a class="article-category-link" href="/categories/iOS/cocoa/">cocoa</a>►<a class="article-category-link" href="/categories/iOS/cocoa/block/">block</a>►<a class="article-category-link" href="/categories/iOS/cocoa/block/obj-c/">obj-c</a>►<a class="article-category-link" href="/categories/iOS/cocoa/block/obj-c/代码块/">代码块</a>►<a class="article-category-link" href="/categories/iOS/cocoa/block/obj-c/代码块/闭包/">闭包</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/13/2014-12-13-ios-syntax-block-from-scratch/">IOS从头开始之Block语法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#Block<br>我认为block（代码块）语法算是给Obj-c增加了很多优秀的特性，它类似于函数式编程中的闭包，通过他你可以像对待对象一样的对待函数，即函数成了面向对象中的头等公民，可以在方法和函数中定义及传递，这个是在Java中绝对无法想象的（在Java8之前必须在要传递的函数上套一层类，且无法在函数中定义）。<br>总之，通过这个特性，你可以创建比之前更灵活、可复用性更高的代码。</p>
+<p>#特性<br>对javascript比较熟悉的人都知道，回调函数除了事件循环异步IO的好处外，还有一个就是可以通过传递回调函数实现很多优秀的特性，比如以下代码中通过传入回调函数实现了打印和过滤。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//遍历并打印</span></div><div class="line">[<span class="string">"one"</span>,<span class="string">"two"</span>,<span class="string">"three"</span>].forEach(<span class="function"><span class="keyword">function</span>(<span class="params">element ,index</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(index+<span class="string">":"</span>+element);</div><div class="line">&#125;);</div><div class="line"><span class="comment">//过滤数组中含有wu的</span></div><div class="line"><span class="built_in">console</span>.log([<span class="string">"david-wu"</span>,<span class="string">"ying-tang"</span>,<span class="string">"lily-wu"</span>].filter(<span class="function"><span class="keyword">function</span>(<span class="params">element</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> element.indexOf(<span class="string">"wu"</span>) &gt;= <span class="number">0</span>;</div><div class="line">&#125;));</div></pre></td></tr></table></figure>
+<p>那么，通过block就可以实现代码段的复用，而且这种复用很灵活，不像普通函数那样，在Java中一个函数中不确定的逻辑经常是使用钩子方法，在函数中把不确定的逻辑抽象在钩子方法中，通过之类实现来达到多态的效果，但是这样的限制导致的应用场景非常有限，如果可以直接将函数作为参数传递，既可以充分的将函数抽象后高度复用。</p>
+<p>#声明与定义<br>如下代码，void (^firstBlock)(NSSring *x)声明了变量，void为返回类型。^则声明这是一个block，把他当做定义指针时候的*就好了。^为block的变量名，变量名和^一起用刮号刮起来。刮号后又是一个刮号，那个刮号中为参数，多个参数用“,”间隔。如果无参数则直接带一对刮号即可。注意，参数名字可以省略，但是书中建议最好不要这样，我也这么认为，因为这样很可能会造成迷惑，特别对于我这样的新手。<br>之后就是等号，等号后即为代码块的定义，也是以^开头，之后跟着刮号，刮号中为参数，参数如果为空可以省略该刮号及其内部内容，刮号之后就是花刮号包裹的代码块，可以在一行上定义，也可以跨多行，总之就和定义正常函数时候一样。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">void</span> (^firstBlock)(<span class="built_in">NSSring</span> \*x) = ^(<span class="built_in">NSString</span> \*x)&#123;</div><div class="line">	<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,x);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>其他定义</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//不带参数且一行内定义</span></div><div class="line"><span class="keyword">void</span> (^aVoidBlock)() = ^&#123;<span class="built_in">NSLog</span>(<span class="string">@"Hello Workld!"</span>)&#125;</div><div class="line"><span class="comment">//直接内联的定义，传入其他函数</span></div><div class="line">doIt(^(<span class="built_in">NSString</span> \*x)&#123;<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,x);&#125;)</div></pre></td></tr></table></figure>
+<p>#使用<br>首先，要了解如何声明一个使用代码块的函数。定义时注意不同于其他参数，他需要返回值，需要(^)声明他是变量，他需要参数列表，也可以把(NSComparisonResult (^)(NSString *value))里的都当做是定义这个参数的类型。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)userCodeBlock:(<span class="built_in">NSComparisonResult</span> (^)(<span class="built_in">NSString</span> \*value)) theBlock;</div></pre></td></tr></table></figure></p>
+<p>再来看看实现类中如何写<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)userCodeBlock:(<span class="built_in">NSComparisonResult</span> (^)(<span class="built_in">NSString</span> \*value)) theBlock&#123;</div><div class="line">	<span class="keyword">if</span>(<span class="built_in">NSOrderedSame</span> == theBlock(<span class="string">@"foo"</span>))</div><div class="line">  	doSomethingIfSame();</div><div class="line">  <span class="keyword">else</span></div><div class="line">  	doSomethingElse();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#作用域<br>这点我感觉和大多数函数式变成，如Javascript一样，block的作用域除了传入的参数外，还有他<strong>定义时</strong>作用域的变量栈的只读副本，即代码块拥有对所定义位置程序的完整状态的只读访问权限。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span> \*formatStr = <span class="string">@"%s"</span>;</div><div class="line"><span class="keyword">void</span> (^firstBlock)(<span class="built_in">NSSring</span> \*x) = ^(<span class="built_in">NSString</span> \*x)&#123;<span class="built_in">NSLog</span>(formatStr,x)&#125;;</div><div class="line">doIt(firstBlock);</div></pre></td></tr></table></figure></p>
+<p>注意，如果想对变量进行读写，那么可以在声明变量时通过 __block显示地将变量声明为可读写的。<br><strong>由于代码块具备了给应用状态拍快照的能力，并通过这种方式使其在应用的其他地方可用，这样就提供了一种可以封装和操作数据的及其强大的机制。</strong></p>
+<p>#内存管理<br>其内存管理和其他对象类似，由于它是在栈上分配的空间，因此传入的代码块对象需要使用-copy而不是retain，如果需要保留它就必须在对上得到一个副本。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span>:<span class="title">NSObject</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">void</span> (^myBlock)(<span class="built_in">NSString</span> *);</div><div class="line">&#125;</div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">readonly</span>,<span class="keyword">copy</span>) ((^)(<span class="built_in">NSString</span> \*)) \*myBlock;</div><div class="line"></div><div class="line">  -(<span class="keyword">void</span>)doSomethingWithBlock;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Person</span></span></div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)doSomethingWithBlock&#123;</div><div class="line">  myBlock(<span class="string">@"foo"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>#类型定义<br>使用typedef关键字进行代码块定义，可以使代码块的定义更加易读。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">void</span> (^BlockWithCHarArg)(<span class="keyword">char</span> \*)</div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span>:<span class="title">NSObject</span></span></div><div class="line">&#123;</div><div class="line">	BlockWithCHarArg myBlock;</div><div class="line">&#125;</div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">readonly</span>,<span class="keyword">copy</span>) BlockWithCHarArg myBlock;</div><div class="line">  -(<span class="keyword">void</span>)doSomethingWithBlock;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure></p>
+<p>#代码块的用处</p>
+<p>##GCD中的应用<br>GCD是一个Obj-c的框架，他提供了易用的抽象层，这样开发者不需要处理底层的线程管理就可以充分利用多处理器和多核架构。<br>这样开发者只需要提供代码块，GCD可以提供同步和异步的执行方式。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dispatch\_async(dispatch\_get\_global\_queue(<span class="number">0</span>, <span class="number">0</span>),^&#123;doSomethingSlow();&#125;);</div></pre></td></tr></table></figure></p>
+<p>dispatch_get_global_queue方法可以获得全局队列，第二个参数就是一个代码块，这样我们就不需要关心线程应该开多少，都可以交给GCD来完成，队列也可以通过dispatch_queue_create函数来创建一个私有的顺序执行的队列。如下代码<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> myQueue = dispatch_queue_create(<span class="string">"david.queue"</span>, DISPATCH_QUEUE_SERIAL);</div><div class="line"><span class="built_in">dispatch_async</span>(_captureQueue, ^&#123;</div><div class="line">	doSomething();</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>##过滤、映射、处理<br>如前面javascript的代码段的.filter函数对数组进行过滤，Obj-c也可以通过代码块来实现相应功能，这里就拿映射来举个例子。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> \*map(<span class="built_in">NSArray</span> \*items,<span class="keyword">id</span> (^block)(<span class="keyword">id</span> item))&#123;</div><div class="line">	<span class="built_in">NSMutableArray</span> \*result = [<span class="built_in">NSMutableArray</span> array];</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">id</span> item <span class="keyword">in</span> items)&#123;</div><div class="line">  	[result addObject:block(item)];</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>##标准API中的代码块<br>常见的类NsArray，NSDictionary、NSIndexSet和NSSet中，都用使用代码块的函数，NSString、NSAttributeString中也提供了使用代码块逐行逐个遍历的方法。</p>
+<p>##其他<br>比如说闭包教程中最常举的例子–计数器，先来看看JavaScript中如何做。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function getCounter()&#123;</div><div class="line">    var counter = <span class="number">0</span>;</div><div class="line">    <span class="keyword">return</span> function()&#123;</div><div class="line">        <span class="keyword">return</span> ++counter;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line">counter = getCounter();</div><div class="line">counter2 = getCounter();</div><div class="line">console.log(counter());<span class="comment">//1</span></div><div class="line">console.log(counter2());<span class="comment">//1</span></div><div class="line">console.log(counter());<span class="comment">//2</span></div><div class="line">console.log(counter());<span class="comment">//3</span></div><div class="line">console.log(counter2());<span class="comment">//2</span></div></pre></td></tr></table></figure></p>
+<p>正如前面所说，代码块（闭包）可以保存函数定义时候的状态，利用这种状态就实现了计数器的创建方法。那么Obj-c中能不能这样做呢？还是等我Mac机器弄起来后再试试吧，现在也只能敲敲代码。</p>
+<p>还有一些作用比如CPU复杂性的运算，可以通过GCD来完成多线程处理，这个也等Mac搞定后动手试一试。</p>
+<p>#不足<br>但是，Obj-c中的block不像函数式编程（JavaScript、Ruby、Python）中那么的灵活，但是至少是比Java灵活的多了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/12/13/2014-12-13-ios-syntax-block-from-scratch/" data-id="cisgxbbl1002wep3dxh5j5vx9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2014-12-11-properties-of-the-ios-obj-c-from-scratch" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/11/2014-12-11-properties-of-the-ios-obj-c-from-scratch/" class="article-date">
+  <time datetime="2014-12-11T06:48:00.000Z" itemprop="datePublished">2014-12-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/属性/">属性</a>►<a class="article-category-link" href="/categories/属性/obj-c/">obj-c</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/11/2014-12-11-properties-of-the-ios-obj-c-from-scratch/">IOS从头开始之Obj-C的属性</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#学习开始<br>开始学习obj-c了，最近工作的事情也挺忙的，只能抓住一点点的休息时间来看书。Mac机器还没弄起来，就按看书的理解瞎写点文章，看看之后敲代码后会不会觉得之前理解的偏差太大了。<br>今天就先随便写一点对属性的理解吧。</p>
+<p>#属性</p>
+<p>##什么是属性<br>对象是一个类的实例，而封装在一个对象中的数据在Java中常称为数据、状态、特性、成员变量或者属性，而在Obj-c中属性有另外一番意义。<br>在Obj-c中属性主要用于声明类的数据成员的存取方法，有了他们就不必使用很多标准代码（如Java中就需要定义getter &amp; setter）。</p>
+<p>##如何声明<br>@property，在头文件中的数据前加这个标志，就可以让编译好器自动编写一个与数据成员同名的方法声明来省去读写方法的声明。<br>例如：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> <span class="keyword">int</span> count;</div></pre></td></tr></table></figure></p>
+<p>等同于<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> <span class="keyword">int</span> count;</div><div class="line">- (<span class="keyword">void</span>)setCount:(<span class="keyword">int</span>)inCount;</div><div class="line">- (<span class="keyword">int</span>)count;</div></pre></td></tr></table></figure></p>
+<p>##参数<br>如下面代码，property的完整语法是：@property (参数1,参数2,…) 类型 属性1名,属性2名;<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) <span class="keyword">IBOutlet</span> <span class="built_in">UIBarButtonItem</span> \*clearButtonItem;</div></pre></td></tr></table></figure></p>
+<p>###nonatomic<br>指定生成的存取器函数是非原子性的，即线程安全的。默认为原子性。<br>书中是建议如果不需要多线程，不要使用原子性。我也这么认为，毕竟在取属性前都加一个锁的开销也是挺大的。</p>
+<p>###readwrite<br>既生成setter和getter方法，默认为readwrite</p>
+<p>###readonly<br>即只生成getter方法</p>
+<p>###assign<br>既生成赋值函数只是简单的变量赋值，就当做java中的set方法好了，毕竟java中没有内存管理。看旧的书说默认为assign，但是看新的书说已经改成默认strong了。这点暂不确定，有疑问。</p>
+<p>###retain<br>既生成的赋值函数在赋值到变量前，会对参数进行release旧值，再retain新值。这个开始我不是和理解，但结合后面学习的引用计数器就理解了，retain方法会给实例的引用计数器+1，而release会-1，那么set操作就需要把旧值的引用先去了，再将新值的引用+1.<br>但是，这个属性在ARC下编译就可以去掉了，ARC会在编译的时候在适当的地方加retain和release。</p>
+<p>###copy<br>生成的存取函数会复制传入值到数据成员，初始计数为1.<br>对于NSString、NSArray等非可变类，书中是推荐用copy来声明的。</p>
+<p>###strong<br>该属性值对应 __strong 关键字，即该属性所声明的变量将成为对象的持有者。</p>
+<p>###weak<br>该属性对应 <strong>weak 关键字，与 </strong>weak 定义的变量一致，该属性所声明的变量将没有对象的所有权，并且当对象被破弃之后，对象将被自动赋值nil。</p>
+<p>并且，delegate 和 Outlet 应该用 weak 属性来声明。同时，如上一回介绍的 iOS 5 之前的版本是没有 __weak 关键字的，所以 weak 属性是不能使用的。这种情况我们使用 unsafe_unretained。</p>
+<p>#如何实现<br>关在同文件中声明可不行，还得在实现文件中对属性的处理方式进行声明。</p>
+<p>#synthesize和dynamic<br>在实现文件中用前者就不用为实现文件中的属性写任何代码，而用后者编译器就会希望你为属性创建一对合适的getter &amp; setter。<br>但是，在Obj-c2.0后，已经不需要使用@synthesize关键字了，书中是这么建议的<strong>在以后的编程中都使用属性和自动合成的实例变量，在头文件中声明公用的属性，在实现文件的类扩展部分声明私有属性。</strong><br><figure class="highlight objc"><figcaption><span>MyClass.h</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyClass</span> : <span class="title">NSObject</span></span></div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">readwrite</span>,week) <span class="keyword">id</span> delegate;</div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">readonly</span>,<span class="keyword">strong</span>) <span class="built_in">NSString</span> \*readonlyString;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight objc"><figcaption><span>MyClass.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyClass</span> ()</span></div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">readwrite</span>,<span class="keyword">strong</span>)  <span class="built_in">NSString</span> \*privateString;</div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">readwrite</span>,<span class="keyword">strong</span>) <span class="built_in">NSString</span> \*readonlyString;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>注意：<strong>readonlyString在实现时候重定义使用了readwrite，那么他就有一个私用的setter方法。</strong></p>
+<p>##隐藏的实例变量<br>如上代码会自动创建几个实例变量：_readonlyString ,_delegate,\privateString。最右在init、dealloc和覆盖的存取器中才应该使用这些实例变量。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/12/11/2014-12-11-properties-of-the-ios-obj-c-from-scratch/" data-id="cisgxbbl50031ep3d9iis87xn" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2014-12-03-python-str-related-set-of-operations" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/03/2014-12-03-python-str-related-set-of-operations/" class="article-date">
+  <time datetime="2014-12-03T01:06:00.000Z" itemprop="datePublished">2014-12-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Python/">Python</a>►<a class="article-category-link" href="/categories/Python/字符串/">字符串</a>►<a class="article-category-link" href="/categories/Python/字符串/str/">str</a>►<a class="article-category-link" href="/categories/Python/字符串/str/基础/">基础</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/03/2014-12-03-python-str-related-set-of-operations/">python的str相关操作集合</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>结合做leetcode这些时间对python的字符串的了解，做了一下代码的总结，注释全写代码里了，看代码就好了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># coding:utf-8</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">printUnicode</span><span class="params">(s)</span>:</span></div><div class="line">    <span class="keyword">if</span> isinstance(s, unicode): </div><div class="line">        <span class="comment">#s=u"中文" </span></div><div class="line">        <span class="keyword">print</span> <span class="string">u"unicode字符："</span>,s.encode(<span class="string">'gb2312'</span>) </div><div class="line">    <span class="keyword">else</span>: </div><div class="line">        <span class="comment">#s="中文" </span></div><div class="line">        <span class="keyword">print</span> <span class="string">u"普通字符："</span>,s.decode(<span class="string">'utf-8'</span>).encode(<span class="string">'gb2312'</span>)</div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    <span class="comment">#1、查找元素find index，计算出现次数count，替换replace</span></div><div class="line">    <span class="comment">#   find和index区别,前者找不到返回-1，后者找不到报错</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.find(<span class="string">"9"</span>) <span class="comment"># 输出：-1</span></div><div class="line">    <span class="comment">#   print "aaab".index("9") # 抛出异常</span></div><div class="line">    <span class="comment">#   加r从右开始找</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.rfind(<span class="string">"a"</span>) <span class="comment"># 输出：2</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.rindex(<span class="string">"a"</span>) <span class="comment"># 输出：2</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.count(<span class="string">"a"</span>) <span class="comment"># 计算出现次数， 输出：3</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.replace(<span class="string">"a"</span>,<span class="string">"c"</span>,<span class="number">2</span>) <span class="comment"># 将a替换成c，替换2次，输出：ccab</span></div><div class="line"></div><div class="line">    <span class="comment">#2、去除元素 strip</span></div><div class="line">    <span class="comment">#   默认去除 \t\n，l从消除左边，r是消除右边</span></div><div class="line">    s = <span class="string">"  a  "</span></div><div class="line">    <span class="keyword">print</span> s.strip() <span class="comment"># 输出："a"</span></div><div class="line">    <span class="keyword">print</span> s.lstrip() <span class="comment"># 输出："  a"</span></div><div class="line">    <span class="keyword">print</span> s.rstrip() <span class="comment"># 输出："  a"</span></div><div class="line"></div><div class="line">    <span class="comment">#   去除字符串中含有序列的每个元素</span></div><div class="line">    s = <span class="string">"abcdeffedbca"</span></div><div class="line">    <span class="keyword">print</span> s.strip(<span class="string">"ab"</span>) <span class="comment"># 输出：cdeffedbc</span></div><div class="line"></div><div class="line">    <span class="comment">#3、反转，同样也可用于列表</span></div><div class="line">    s = <span class="string">"abcdefg"</span></div><div class="line">    <span class="keyword">print</span> s[::<span class="number">-1</span>] <span class="comment"># 输出：gfedcba</span></div><div class="line"></div><div class="line">    <span class="comment">#4、判断、测试字符串</span></div><div class="line">    <span class="comment">#4.1 是空格</span></div><div class="line">    <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"“ ”是否为空格:"</span>, <span class="string">" "</span>.isspace(),<span class="string">"\n“aaa”是否为空格:"</span>,<span class="string">"aaa"</span>.isspace()</div><div class="line">    <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"注意，空字符不为空格，“”是否为空格:"</span>, <span class="string">""</span>.isspace()</div><div class="line">    <span class="comment">#4.2 判断开始结束</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcd以ab开头吗？"</span>,<span class="string">"abcd"</span>.startswith(<span class="string">"ab"</span>),<span class="string">"\nabcd以b开头吗？"</span>,<span class="string">"abcd"</span>.startswith(<span class="string">"b"</span>)</div><div class="line">    <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcd以cd结尾吗？"</span>,<span class="string">"abcd"</span>.endswith(<span class="string">"cd"</span>),<span class="string">"\nabcd以c结尾吗？"</span>,<span class="string">"abcd"</span>.endswith(<span class="string">"c"</span>)</div><div class="line">    <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcd从第2个字符开始是以b开头吗？"</span>,<span class="string">"abcd"</span>.startswith(<span class="string">"b"</span>,<span class="number">1</span>)</div><div class="line">    <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcd从第2个字符到第3个字符的字符串是以c结尾吗？"</span>,<span class="string">"abcd"</span>.endswith(<span class="string">"c"</span>,<span class="number">1</span>,<span class="number">3</span>)</div><div class="line">    <span class="comment">#4.3 是否全是字母和数字，并至少有一个字符 </span></div><div class="line">    <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcdef123是否全为数字和字母："</span>,<span class="string">"abcdef123"</span>.isalnum()</div><div class="line">    <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcdef,,123是否全为数字和字母："</span>,<span class="string">"abcdef,,123"</span>.isalnum()</div><div class="line">    <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"“”是否全为数字和字母,并且至少有一个字母："</span>,<span class="string">""</span>.isalnum()</div><div class="line">    <span class="comment">#4.4 是否全为字母</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaa"</span>.isalpha() <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aa1"</span>.isalpha() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aa,"</span>.isalpha() <span class="comment"># 输出：False</span></div><div class="line">    <span class="comment">#4.5 是否全为数字</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaa"</span>.isdigit() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"221"</span>.isdigit() <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"22,"</span>.isdigit() <span class="comment"># 输出：False</span></div><div class="line">    <span class="comment">#4.6 大小写判断</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaa"</span>.islower() <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"AAA"</span>.islower() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaa"</span>.isupper() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"ABC"</span>.isupper() <span class="comment"># 输出：True</span></div><div class="line">    <span class="comment">#4.7 是否首字母大写，其他小写</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"ABC"</span>.istitle() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"Abc"</span>.istitle() <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"123"</span>.istitle() <span class="comment"># 输出：False</span></div><div class="line"></div><div class="line">    <span class="comment">#5、字符转换</span></div><div class="line">    <span class="comment">#大小写转换</span></div><div class="line">    s = <span class="string">"ABC"</span></div><div class="line">    <span class="keyword">print</span> s.lower() <span class="comment">#小写  输出：abc</span></div><div class="line">    <span class="keyword">print</span> s <span class="comment">#原字符不变 输出：ABC</span></div><div class="line">    <span class="keyword">print</span> s.upper() <span class="comment">#大写  输出：ABC</span></div><div class="line">    <span class="keyword">print</span> s.swapcase() <span class="comment">#大小写互换  输出：abc</span></div><div class="line">    <span class="keyword">print</span> s.capitalize() <span class="comment">#首字母大写  输出：Abc</span></div><div class="line"></div><div class="line">    <span class="comment">#6、比较字符串,也可以比较数字</span></div><div class="line">    <span class="keyword">print</span> cmp(<span class="string">"aaa"</span>,<span class="string">"bbb"</span>) <span class="comment"># 输出：-1</span></div><div class="line">    <span class="keyword">print</span> cmp(<span class="string">"ccc"</span>,<span class="string">"bbb"</span>) <span class="comment"># 输出：1</span></div><div class="line">    <span class="keyword">print</span> cmp(<span class="number">1</span>,<span class="number">2</span>) <span class="comment"># 输出：-1</span></div><div class="line"></div><div class="line">    <span class="comment">#7、字符串切片</span></div><div class="line">    s = <span class="string">"1234567890"</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">1</span>] <span class="comment">#截取第二个字符 输出：2</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">-1</span>] <span class="comment">#截取最后一个字符 输出：0</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">-3</span>] <span class="comment">#截取倒数第三个字符 输出：8</span></div><div class="line">    <span class="keyword">print</span> s[::] <span class="comment">#可用于克隆字符串 输出：1234567890</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">2</span>:] <span class="comment">#从第三个字符开始截取 输出：34567890</span></div><div class="line">    <span class="keyword">print</span> s[:<span class="number">9</span>] <span class="comment">#从头截取到第9个字符 输出：123456789</span></div><div class="line">    <span class="keyword">print</span> s[::<span class="number">2</span>] <span class="comment">#从头截取，每取一次间隔一个字符 输出：13579</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">10</span>::<span class="number">-1</span>] <span class="comment">#反向截取，输出：0987654321</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">-1</span>:<span class="number">-11</span>:<span class="number">-1</span>] <span class="comment">#与s[10::-1]结果相同 输出：0987654321</span></div><div class="line"></div><div class="line">    <span class="comment">#8、扫描字符串 输出1 2 3 4 5 6 7 8 9 0</span></div><div class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> s:<span class="keyword">print</span> char,</div><div class="line">    <span class="keyword">print</span></div><div class="line">    <span class="comment">#9、分割字符串</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"12,34,5,678,9,0"</span>.split(<span class="string">","</span>) <span class="comment"># 输出['12', '34', '5', '678', '9', '0']</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"   12    34  5  "</span>.split()<span class="comment">#默认按空格分割 输出['12', '34', '5']</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"   12    34  5  "</span>.split(<span class="string">" "</span>)<span class="comment">#但是不同的是，默认的方法会先strip 输出['', '', '', '12', '', '', '', '34', '', '5', '', '']</span></div><div class="line"></div><div class="line">    <span class="comment">#10、连接集合中的字符串</span></div><div class="line">    <span class="keyword">print</span> <span class="string">""</span>.join([<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>,<span class="string">"d"</span>]) <span class="comment"># 输出abcd</span></div><div class="line">    <span class="keyword">print</span> <span class="string">","</span>.join([<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>,<span class="string">"d"</span>]) <span class="comment"># 输出a,b,c,d</span></div><div class="line"></div><div class="line">    <span class="comment">#11、filter 结合lambda 输出：AmanaplanacanalPanama</span></div><div class="line">    <span class="comment"># lambda即为小函数</span></div><div class="line">    <span class="comment"># filter(function,sequence) sequence可为字符串、列表、tupple ，范围经过function过滤后返回true的相应类型结果</span></div><div class="line">    <span class="keyword">print</span> filter((<span class="keyword">lambda</span> x:x.isalnum()),<span class="string">"A man, a plan, a canal: Panama"</span>)</div><div class="line"></div><div class="line">    <span class="comment">#12、map操作</span></div><div class="line">    <span class="keyword">print</span> map((<span class="keyword">lambda</span> x,y:x+y),[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>,<span class="number">40</span>])</div><div class="line"></div><div class="line">    <span class="comment">#13、reduce操作 reduce(function,sequence,startNum)startNum默认为0</span></div><div class="line">    <span class="keyword">print</span>  reduce((<span class="keyword">lambda</span> x,y:x+y),[<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>],<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="comment">#14、补齐</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"\""</span>+<span class="string">"abcde"</span>.ljust(<span class="number">10</span>)+<span class="string">"\""</span> <span class="comment">#右边补 输出: "abcde     "</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"\""</span>+<span class="string">"abcde"</span>.rjust(<span class="number">10</span>)+<span class="string">"\""</span> <span class="comment"># 输出: "     abcde"</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"\""</span>+<span class="string">"abcde"</span>.center(<span class="number">10</span>)+<span class="string">"\""</span> <span class="comment">#中间对齐  输出:"  abcde   "</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"\""</span>+<span class="string">"abcde"</span>.center(<span class="number">10</span>,<span class="string">"-"</span>)+<span class="string">"\""</span> <span class="comment">#用-补齐  输出:"--abcde---"</span></div><div class="line"></div><div class="line">    <span class="comment">#15、编码解码</span></div><div class="line">    <span class="comment"># s="中文" </span></div><div class="line">    <span class="comment"># printUnicode(s) # 输出 ：普通字符： 中文</span></div><div class="line">    <span class="comment"># s=u"中文2" # 带u定义为unicode编码</span></div><div class="line">    <span class="comment"># printUnicode(s) # 输出 ：unicode字符： 中文2</span></div></pre></td></tr></table></figure>
+<p>#总结<br>python好神奇啊。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/12/03/2014-12-03-python-str-related-set-of-operations/" data-id="cisgxbbl70032ep3dwotsxss9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2014-12-01-wonderful-programming" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/01/2014-12-01-wonderful-programming/" class="article-date">
+  <time datetime="2014-11-30T18:01:00.000Z" itemprop="datePublished">2014-12-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Python/">Python</a>►<a class="article-category-link" href="/categories/Python/bit/">bit</a>►<a class="article-category-link" href="/categories/Python/bit/singlenum2/">singlenum2</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/01/2014-12-01-wonderful-programming/">编程的奇妙</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#背景<br>编程真是一个很奇妙的事情，感觉有点像研究数学，一些问题很奇妙，对于解法毫无眉毛。但是当你深入钻研下去，摸索出思路，渐渐将思路成型验证，最后在纸上解答出来，看到成果通过被验证的那一刻的感觉，真是谁试谁知道。<br>每天一题leetcode还在进行中，上周五做的一题，百思不得其解，自己只能用很愚蠢的方式完成，然后便网上搜索别人的解法，发现这思路真棒，但是有这思路还要能用程序去实现，也有一定难度，总之就是狠天高啊，自己怎么就想不到。</p>
+<p>#题目<br>Given an array of integers, every element appears three times except for one. Find that single one.</p>
+<p>#思考<br>这题之前还有道题是每个数出现两次，除了有一个出现一次，找到他。那题相对容易，第一反应就是用位运算，相同的数异或后一定是0，那全部数都异或一次，结果就是那个不同的数了。<br>但是，现在这题是两次，思考良久用位运算好像没什么办法，就只能用一个pc去计数，这样的时间复杂度是O(2n),用了一个dict的额外空间，但是结果accept了。<br>不放弃，还是想看看是否有聪明的解法，谷歌之。发现，这高人的思路真是奇妙啊。</p>
+<p>#解法<br>之前被限制无法用位运算是因为2进制，1+1就进1了，其实leetcode已经给你提示了，按这思路往下思考。那么为什么不用3进制运算了，1+1+1那么就是0了啊。<br>比如：3331222转换成二进制为：11 11 11 01 10 10 10。在第1位上，1出现了4次。第2位上，1出现了6次。那么第一位上3个一进位后就剩1，第二位上6个1结果就是0。那么合起来就是01，那结果就是1了。<br>但是，编程语言提供的数字类型只有二进制、八进制、十进制、十六进制，怎么实现3进制呢？<br>解题者思维方式真是不同寻常，他用2个位来实现进制。比如8这个数，3进制就应该是22，那么每位用两个二进制表示就是10 10。那么，高位合起来就是11，低位合起来就是00，那么高位即为3，低位为0。</p>
+<p>#代码<br>但是还是不知道怎么用程序实现啊，那么具体来看代码吧，也看看代码中的注释。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></div><div class="line">    <span class="comment"># @param A, a list of integer</span></div><div class="line">    <span class="comment"># @return an integer</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">singleNumber</span><span class="params">(self, A)</span>:</span></div><div class="line">        one = <span class="number">0</span>; two = <span class="number">0</span>; three = <span class="number">0</span></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(A)):</div><div class="line">            <span class="comment">#和低位与操作，结果为进位结果。如果都为1则进位结果为1，否则进位结果不为0</span></div><div class="line">            <span class="comment">#然后当two为1时，不管进位结果为什么，two都为1。如果two为0，则进位为1则为1</span></div><div class="line">            two |= A[i] &amp; one</div><div class="line">            <span class="comment">#异或操作，都是1就进位，低位one则清0</span></div><div class="line">            one = A[i] ^ one</div><div class="line">            <span class="comment">#以下三步的意思是：如果one和two都为1时，就清0，反之则保持原来状态。</span></div><div class="line">            three = ~(one &amp; two)</div><div class="line">            one &amp;= three</div><div class="line">            two &amp;= three</div><div class="line">        <span class="keyword">return</span> one</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/12/01/2014-12-01-wonderful-programming/" data-id="cisgxbbky002uep3dqp7ej3rb" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2014-11-28-represented-by-pictures-of-sql-join" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/11/28/2014-11-28-represented-by-pictures-of-sql-join/" class="article-date">
+  <time datetime="2014-11-27T21:32:00.000Z" itemprop="datePublished">2014-11-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/sql/">sql</a>►<a class="article-category-link" href="/categories/sql/join/">join</a>►<a class="article-category-link" href="/categories/sql/join/连接/">连接</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/28/2014-11-28-represented-by-pictures-of-sql-join/">用几张图片表示Sql的join</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#背景<br>上学的时候，学Sql有一个比较大的苦恼就是分清那一堆的连接，什么左外连接，右外连接，外全连接，内连接……等等一大堆了，不是说他们多难，只是考试会把他们记混掉。最近看到Jeff Wood的一篇文章，他用图片的方式表示，我觉得非常形象，就搬到自己的博客来，自己稍微简化了一下。</p>
+<p>##数据表</p>
+<p>####表A<br>1    Pirate<br>2    Monkey<br>3    Ninja<br>4    Spaghetti</p>
+<p>####表B<br>1    Rutabaga<br>2    Pirate<br>3    Darth Vader<br>4    Ninja</p>
+<p>#不用连接<br>多表查询最简单的方式就是下面这句，但是其实这句话的效率非常低，因为他产生的结果集说亮是两个表数量的笛卡尔积，即a*b，所以from a,b其实是先获取了一个a*b的结果集，然后再执行where去过滤，再执行group by去分组，再select的。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> a,b;</div></pre></td></tr></table></figure></p>
+<p>结果无法用图表示，输出为<br>1  |  Pirate  |  1  |  Rutabaga<br>2  |  Monkey  |  1  |  Rutabaga<br>3  |  Ninja  |  1  |  Rutabaga<br>4  |  Spaghetti  |  1  |  Rutabaga<br>1  |  Pirate  |  2  |  Pirate<br>2  |  Monkey  |  2  |  Pirate<br>3  |  Ninja  |  2  |  Pirate<br>4  |  Spaghetti  |  2  |  Pirate<br>1  |  Pirate  |  3  |  Darth Vader<br>2  |  Monkey  |  3  |  Darth Vader<br>3  |  Ninja  |  3  |  Darth Vader<br>4  |  Spaghetti  |  3  |  Darth Vader<br>1  |  Pirate  |  4  |  Ninja<br>2  |  Monkey  |  4  |  Ninja<br>3  |  Ninja  |  4  |  Ninja<br>4  |  Spaghetti  |  4  |  Ninja</p>
+<p>#内连接<br><img src="http://jbcdn2.b0.upaiyun.com/2013/05/iinner-join.png" alt=""><br>如图，内连接即为两个表交叉的部分。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> a <span class="keyword">INNER</span> <span class="keyword">JOIN</span> b <span class="keyword">ON</span> a.name = b.name;</div></pre></td></tr></table></figure></p>
+<p>输出为<br>1    Pirate    2    Pirate<br>3    Ninja    4    Ninja</p>
+<p>#全外连接<br><img src="http://jbcdn2.b0.upaiyun.com/2013/05/Full-outer-join.png" alt=""><br>如图，全外连接既打印出两个表所有的结果，包括无交叉的部分。<br>由于mysql不支持full outer join，所以下面列出了两条语句<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">---mysql</span></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> a <span class="keyword">left</span> <span class="keyword">JOIN</span> b <span class="keyword">ON</span> a.name = b.name <span class="keyword">union</span> <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> a <span class="keyword">right</span> <span class="keyword">JOIN</span> b <span class="keyword">ON</span> a.name = b.name;</div><div class="line"><span class="comment">---other</span></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> a <span class="keyword">FULL</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> b <span class="keyword">ON</span> a.name = b.name;</div></pre></td></tr></table></figure></p>
+<p>输出为<br>1    Pirate    2    Pirate<br>2    Monkey    \N    \N<br>3    Ninja    4    Ninja<br>4    Spaghetti    \N    \N<br>\N    \N    1    Rutabaga<br>\N    \N    3    Darth Vader</p>
+<p>#左外连接<br><img src="http://jbcdn2.b0.upaiyun.com/2013/05/Left-outer-join.png" alt=""><br>如图，就是列出左边表所有数据，如果右表与之有交叉，就把数据叠加上。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> a <span class="keyword">left</span> <span class="keyword">JOIN</span> b <span class="keyword">ON</span> a.name = b.name;</div></pre></td></tr></table></figure></p>
+<p>输出为<br>1    Pirate    2    Pirate<br>2    Monkey    \N    \N<br>3    Ninja    4    Ninja<br>4    Spaghetti    \N    \N</p>
+<p>#左外连接过滤交叉<br><img src="http://jbcdn2.b0.upaiyun.com/2013/05/WHERE-TableB.id-IS-nul.png" alt=""><br>如图，就是列出左边表与右表无交叉部分<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> a <span class="keyword">left</span> <span class="keyword">JOIN</span> b <span class="keyword">ON</span> a.name = b.name <span class="keyword">WHERE</span> b.id <span class="keyword">IS</span> <span class="literal">null</span>;</div></pre></td></tr></table></figure></p>
+<p>输出为<br>2    Monkey    \N    \N<br>4    Spaghetti    \N    \N</p>
+<p>#右外连接 与 右外连接过滤交叉<br>与左解释差不多，不重复解释。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> a <span class="keyword">right</span> <span class="keyword">JOIN</span> b <span class="keyword">ON</span> a.name = b.name;</div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> a <span class="keyword">right</span> <span class="keyword">JOIN</span> b <span class="keyword">ON</span> a.name = b.name <span class="keyword">WHERE</span> a.id <span class="keyword">IS</span> <span class="literal">null</span>;</div></pre></td></tr></table></figure></p>
+<p>输出为<br>左外：<br>\N    \N    1    Rutabaga<br>1    Pirate    2    Pirate<br>\N    \N    3    Darth Vader<br>3    Ninja    4    Ninja<br>左外去交叉：<br>\N    \N    1    Rutabaga<br>\N    \N    3    Darth Vader</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/11/28/2014-11-28-represented-by-pictures-of-sql-join/" data-id="cisgxbbkv002sep3d8phsbu81" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2014-11-27-concurrenthashmap-source-on-probation" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/11/27/2014-11-27-concurrenthashmap-source-on-probation/" class="article-date">
+  <time datetime="2014-11-26T16:50:00.000Z" itemprop="datePublished">2014-11-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/同步/">同步</a>►<a class="article-category-link" href="/categories/同步/线程安全/">线程安全</a>►<a class="article-category-link" href="/categories/同步/线程安全/ConcurrentHashMap/">ConcurrentHashMap</a>►<a class="article-category-link" href="/categories/同步/线程安全/ConcurrentHashMap/桶分割远离/">桶分割远离</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/27/2014-11-27-concurrenthashmap-source-on-probation/">ConcurrentHashMap源码试读</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#背景<br>接昨天的文章，继续深入探索ConcurrentHashMap是如何进行分段加锁的。今天的代码比较多，也不是那么理解，只当自己的源码试读记录。</p>
+<p>#桶分割<br>看下面这段代码，是ConcurrentHashMap的一些默认值，定义了默认桶的个数，索引位移数（segmentShift，如桶为16个，即2的4次方，那么该值为32-4=28），桶数组等<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_SEGMENTS = <span class="number">16</span>;</div><div class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_SEGMENTS = <span class="number">1</span> &lt;&lt; <span class="number">16</span>;</div><div class="line"><span class="keyword">final</span> <span class="keyword">int</span> segmentMask;</div><div class="line"><span class="keyword">final</span> <span class="keyword">int</span> segmentShift;</div><div class="line"><span class="keyword">final</span> Segment[] segments;</div></pre></td></tr></table></figure></p>
+<p>再来看看桶的数据结构，其成员变量的意义：</p>
+<ul>
+<li>count：Segment中元素的数量</li>
+<li>modCount：对table的大小造成影响的操作的数量（比如put或者remove操作）</li>
+<li>threshold：阈值，Segment里面元素的数量超过这个值依旧就会对Segment进行扩容</li>
+<li>table：链表数组，数组中的每一个元素代表了一个链表的头部</li>
+<li>loadFactor：负载因子，用于确定threshold</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Segment</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">ReentrantLock</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;  </div><div class="line">  <span class="keyword">transient</span> <span class="keyword">volatile</span> <span class="keyword">int</span> count;  </div><div class="line">  <span class="keyword">transient</span> <span class="keyword">int</span> modCount;  </div><div class="line">  <span class="keyword">transient</span> <span class="keyword">int</span> threshold;  </div><div class="line">  <span class="keyword">transient</span> <span class="keyword">volatile</span> HashEntry&lt;K,V&gt;[] table;  </div><div class="line">  <span class="keyword">final</span> <span class="keyword">float</span> loadFactor;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再看看代码是如何找到key值对应的桶，再在桶中获取相应的HashEnty的，可以看出，这里要进行两次hash的索引，所以速度会比HashMap、HashTable慢很多。<br><figure class="highlight java"><figcaption><span>ConcurrentHashMap.java片段</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">final</span> Segment&lt;K,V&gt; <span class="title">segmentFor</span><span class="params">(<span class="keyword">int</span> hash)</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span> (Segment&lt;K,V&gt;) segments[(hash &gt;&gt;&gt; segmentShift) &amp; segmentMask];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><figcaption><span>Segment类片段</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function">V <span class="title">get</span><span class="params">(Object key, <span class="keyword">int</span> hash)</span> </span>&#123;  </div><div class="line">		<span class="comment">//count定义为volatile，因为put、remove都会改变该值，竞争非常激烈</span></div><div class="line">    <span class="keyword">if</span> (count != <span class="number">0</span>) &#123; <span class="comment">// read-volatile  </span></div><div class="line">    		<span class="comment">//HashEntry相比Entry，它把hash和key都定义成了final，是防止链表结构被破坏，出现ConcurrentModification的情况</span></div><div class="line">        HashEntry&lt;K,V&gt; e = getFirst(hash);  </div><div class="line">        <span class="keyword">while</span> (e != <span class="keyword">null</span>) &#123;  </div><div class="line">        		<span class="comment">//在确定了链表的头部以后，就可以对整个链表进行遍历，取出key对应的value的值</span></div><div class="line">            <span class="keyword">if</span> (e.hash == hash &amp;&amp; key.equals(e.key)) &#123;  </div><div class="line">                V v = e.value;  </div><div class="line">                <span class="comment">//如果拿出的value的值是null，则可能这个key，value对正在put的过程中</span></div><div class="line">                <span class="keyword">if</span> (v != <span class="keyword">null</span>)  </div><div class="line">                    <span class="keyword">return</span> v;  </div><div class="line">                <span class="comment">//那么就加锁来保证取出的value是完整的，如果不是null，则直接返回value</span></div><div class="line">                <span class="keyword">return</span> readValueUnderLock(e); <span class="comment">// recheck  </span></div><div class="line">            &#125;  </div><div class="line">            e = e.next;  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里也是用位操作来确定链表的头部，与HashMap中的定位方式相同，具体为什么这样减一再与，不是很理解？<br><figure class="highlight java"><figcaption><span>Segment类片段</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function">HashEntry&lt;K,V&gt; <span class="title">getFirst</span><span class="params">(<span class="keyword">int</span> hash)</span> </span>&#123;</div><div class="line">    HashEntry[] tab = table;</div><div class="line">    <span class="keyword">return</span> (HashEntry&lt;K,V&gt;) tab[hash &amp; (tab.length - <span class="number">1</span>)];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#put操作<br>put操作一开始就锁定了整个segment，这保证并发的安全，修改数据是不能并发进行的，必须得有个判断是否超限的语句以确保容量不足时能够rehash。<br>仔细研究后发现，其实segment很像一个HashTable，只是在ConcurrentHashMap中定义了16个HashTable的桶，用来根据hashCode分段存储数据。<br><figure class="highlight java"><figcaption><span>ConcurrentHashMap.java片段</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (value == <span class="keyword">null</span>)</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</div><div class="line">        <span class="keyword">int</span> hash = hash(key);</div><div class="line">        <span class="keyword">return</span> segmentFor(hash).put(key, hash, value, <span class="keyword">false</span>);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><figcaption><span>segment片段</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function">V <span class="title">put</span><span class="params">(K key, <span class="keyword">int</span> hash, V value, <span class="keyword">boolean</span> onlyIfAbsent)</span> </span>&#123;</div><div class="line">        lock();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">int</span> c = count;</div><div class="line">            <span class="keyword">if</span> (c++ &gt; threshold) <span class="comment">// ensure capacity</span></div><div class="line">                rehash();</div><div class="line">            HashEntry[] tab = table;</div><div class="line">            <span class="keyword">int</span> index = hash &amp; (tab.length - <span class="number">1</span>);</div><div class="line">            HashEntry&lt;K,V&gt; first = (HashEntry&lt;K,V&gt;) tab[index];</div><div class="line">            HashEntry&lt;K,V&gt; e = first;</div><div class="line">            <span class="keyword">while</span> (e != <span class="keyword">null</span> &amp;&amp; (e.hash != hash || !key.equals(e.key)))</div><div class="line">                e = e.next;</div><div class="line"></div><div class="line">            V oldValue;</div><div class="line">            <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</div><div class="line">                oldValue = e.value;</div><div class="line">                <span class="keyword">if</span> (!onlyIfAbsent)</div><div class="line">                    e.value = value;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                oldValue = <span class="keyword">null</span>;</div><div class="line">                ++modCount;</div><div class="line">                tab[index] = <span class="keyword">new</span> HashEntry&lt;K,V&gt;(key, hash, first, value);</div><div class="line">                count = c; <span class="comment">// write-volatile</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> oldValue;</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            unlock();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>#remove<br>remove大多数代码都差不多，就是移除需要移除的元素的操作有些特殊，看代码的注释部分。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="function">V <span class="title">remove</span><span class="params">(Object key, <span class="keyword">int</span> hash, Object value)</span> </span>&#123;</div><div class="line">    lock();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">int</span> c = count - <span class="number">1</span>;</div><div class="line">        HashEntry[] tab = table;</div><div class="line">        <span class="keyword">int</span> index = hash &amp; (tab.length - <span class="number">1</span>);</div><div class="line">        HashEntry first = (HashEntry)tab[index];</div><div class="line">        HashEntry e = first;</div><div class="line">        <span class="keyword">while</span> (e != <span class="keyword">null</span> &amp;&amp; (e.hash != hash || !key.equals(e.key)))</div><div class="line">            e = e.next;</div><div class="line"></div><div class="line">        V oldValue = <span class="keyword">null</span>;</div><div class="line">        <span class="comment">//e为找到的要删除的元素</span></div><div class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</div><div class="line">            V v = e.value;</div><div class="line">            <span class="keyword">if</span> (value == <span class="keyword">null</span> || value.equals(v)) &#123;</div><div class="line">                oldValue = v;</div><div class="line">                ++modCount;</div><div class="line">                HashEntry newFirst = e.next;</div><div class="line">                <span class="comment">//从链表头开始往下扫，扫到e就跳过</span></div><div class="line">                <span class="keyword">for</span> (HashEntry p = first; p != e; p = p.next)</div><div class="line">                		<span class="comment">//不为e则重新new一个，加到链表中，所以每次remove都会颠倒链表的顺序</span></div><div class="line">                    newFirst = <span class="keyword">new</span> HashEntry(p.key, p.hash, </div><div class="line">                                                  newFirst, p.value);</div><div class="line">                tab[index] = newFirst;</div><div class="line">                count = c; <span class="comment">// write-volatile</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> oldValue;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        unlock();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>为什么要都重新new一个HashEntry出来呢？这个因为之前说过，他的hash、next和key都是final的，这意味着在第一次设置了next域之后便不能再改变它，取而代之的是将它之前的节点全都克隆一次。至于entry为什么要设置为不变性，这跟不变性的访问不需要同步从而节省时间有关。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/11/27/2014-11-27-concurrenthashmap-source-on-probation/" data-id="cisgxbbkq002mep3d2u057ue5" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2014-11-26-hashmap-and-hashtable-and-analysis-of-cocurrenthashmap" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/11/26/2014-11-26-hashmap-and-hashtable-and-analysis-of-cocurrenthashmap/" class="article-date">
+  <time datetime="2014-11-25T17:29:00.000Z" itemprop="datePublished">2014-11-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/多线程/">多线程</a>►<a class="article-category-link" href="/categories/多线程/HashMap/">HashMap</a>►<a class="article-category-link" href="/categories/多线程/HashMap/HashTable/">HashTable</a>►<a class="article-category-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/">CocurrentHashMap</a>►<a class="article-category-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/同步/">同步</a>►<a class="article-category-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/同步/线程安全/">线程安全</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/26/2014-11-26-hashmap-and-hashtable-and-analysis-of-cocurrenthashmap/">HashMap、HashTable、CocurrentHashMap的几点自问自答</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#背景<br>最近项目线程安全的问题比较严重，因此也对HashMap、HashTable、CocurrentHashMap、ArrayList、CopyOnWriteArrayList做了点浅析。以下是几点自问自答。</p>
+<p>#自问自答</p>
+<p>##HashMap与HashTable区别？</p>
+<ul>
+<li>HashMap可以接受null键值和值，而Hashtable则不能</li>
+<li>前置非synchronized，后者是</li>
+<li>前者的迭代器(Iterator)是fail-fast迭代器，而Hashtable的enumerator迭代器不是fail-fast的，区别见“把HashMap用在多线程环境会怎么样？”章节</li>
+</ul>
+<p>##HashMap的元素次序不变吗？<br>随着时间的推移，HashMap中的元素次序可能会变。</p>
+<p>##如何让Has和Map同步?<br> Map m = Collections.synchronizeMap(hashMap);<br><strong>但有些因素使得它们不适合高并发的系统。它们仅有单个锁，对整个集合加锁，以及为了防止ConcurrentModificationException异常经常要在迭代的时候要将集合锁定一段时间，这些特性对可扩展性来说都是障碍。</strong></p>
+<p>##那用什么集合类进行多线程既安全又提供高并发性?<br>ConcurrentHashMap和CopyOnWriteArrayList保留了线程安全的同时，也提供了更高的并发性。 ConcurrentHashMap和CopyOnWriteArrayList并不是处处都需要用，大部分时候你只需要用到HashMap和 ArrayList，它们用于应对一些普通的情况。</p>
+<p>##把HashMap用在多线程环境会怎么样？<br>HashMap的iterator是fail-fast迭代器，别的线程改变了map的结构， （增加或者移除元素），将会抛出ConcurrentModificationException，但迭代器本身的remove()方法移除元素则不会抛出ConcurrentModificationException异常。 但这并不是一个一定发生的行为，要看JVM。这条同样也是Enumeration和Iterator的区别。</p>
+<p>##性能都如何？<br>HashMap是非synchronized,CocurrentHashMap和 Hashtable 是，所以HashMap快</p>
+<p>##CocurrentHashMap和 Hashtable区别？<br>用于多线程的环境，但是当Hashtable的大小增加到一定的时候，性能会急剧下降，因为迭代时需要被锁定很长的时间。<br>ConcurrentHashMap同步性能更好，因为它仅仅根据同步级别对map的一部分进行上锁 ， 它引入了分割(segmentation)，不论它变得多么大，仅仅需要锁定map的某个部分，而其它的线程不需要等到迭代完成才能访问map。但是HashTable会锁整个map提供更强的线程安全性</p>
+<p>##HashMap内部实现原理？<br>HashMap在Put的时候，先对key进行hashCode()，返回的值用于查找bucket位置来存储对象，因此它是在bucket中储存键对象和值对象，作为Map.Entry。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (key == <span class="keyword">null</span>)</div><div class="line">	    <span class="keyword">return</span> putForNullKey(value);</div><div class="line">  <span class="comment">//计算key的hashCode</span></div><div class="line">  <span class="keyword">int</span> hash = hash(key.hashCode());</div><div class="line">  <span class="comment">//找hashCode在bucket中的索引值</span></div><div class="line">  <span class="keyword">int</span> i = indexFor(hash, table.length);</div><div class="line">  <span class="comment">//找相应索引值的Entry（链表结构）中是否有key相同的值，如果有则覆盖</span></div><div class="line">  <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[i]; e != <span class="keyword">null</span>; e = e.next) &#123;</div><div class="line">      Object k;</div><div class="line">      <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) &#123;</div><div class="line">        V oldValue = e.value;</div><div class="line">        e.value = value;</div><div class="line">        e.recordAccess(<span class="keyword">this</span>);</div><div class="line">        <span class="keyword">return</span> oldValue;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">//没找到就在该位置的链表增加一个Entry到头部，这里的addEntry还会检查容量，超过负载指数就扩容</span></div><div class="line">  modCount++;</div><div class="line">  addEntry(hash, key, value, i);</div><div class="line">  <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当我们调用get()方法，HashMap会使用键对象的hashcode找到bucket位置，这个位置是一个链表，包含有键值对的Map.Entry对象 ，存储的是键值对，当有两个值存在于同一个bucket时候， 在调用get时，会先找到bucket位置之后，会调用keys.equals()方法去找到链表中正确的节点，最终找到要找的值对象<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</div><div class="line">		<span class="keyword">if</span> (key == <span class="keyword">null</span>)</div><div class="line">    	<span class="keyword">return</span> getForNullKey();</div><div class="line">    <span class="keyword">int</span> hash = hash(key.hashCode());</div><div class="line">    <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[indexFor(hash, table.length)];e != <span class="keyword">null</span>;e = e.next) &#123;</div><div class="line">    	Object k;</div><div class="line">    	<span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k)))</div><div class="line">    		<span class="keyword">return</span> e.value;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>所以， 采用合适的equals()和hashCode()方法的话，将会减少碰撞的发生，提高效率。所以，用不可变性使得能够缓存不同键的hashcode，这将提高整个获取对象的速度，使用String，Interger这样的wrapper类作为键是非常好的选择</p>
+<p>##HashMap如何扩容？<br> 默认的负载因子大小为0.75，也就是说，当一个map填满了75%的bucket时候，和其它集合类(如ArrayList等)一样，将会创建原来 HashMap大小的两倍的bucket数组，来重新调整map的大小，并将原来的对象放入新的bucket数组中。这个过程叫作rehashing，因 为它调用hash方法找到新的bucket位置。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/11/26/2014-11-26-hashmap-and-hashtable-and-analysis-of-cocurrenthashmap/" data-id="cisgxbbkr002oep3dq1mtevfg" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2014-11-21-programming-and-mathematics" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/11/21/2014-11-21-programming-and-mathematics/" class="article-date">
+  <time datetime="2014-11-20T20:43:00.000Z" itemprop="datePublished">2014-11-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Python/">Python</a>►<a class="article-category-link" href="/categories/Python/函数/">函数</a>►<a class="article-category-link" href="/categories/Python/函数/LeetCode/">LeetCode</a>►<a class="article-category-link" href="/categories/Python/函数/LeetCode/链表循环起点/">链表循环起点</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/21/2014-11-21-programming-and-mathematics/">编程与数学</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#瞎扯<br>这几天抽空在做<a href="https://oj.leetcode.com/problems" target="_blank" rel="external">leetcode</a>，越做越有种工作越久数学退化越厉害的感觉，很多题目有点数学方面的思维都会更容易很多，这边博文就拿一道找链表循环起点的题目来分析下。</p>
+<p>#Linked List Cycle II</p>
+<p>##题目<br>Given a linked list, return the node where the cycle begins. If there is no cycle, return null.<br>Follow up:<br>Can you solve it without using extra space?</p>
+<p>##解析<br>这道题目分两部分，第一部分是求是否存在循环，这很简单，设置两个点去遍历链表，其中一个点一次移动一个节点，另一个一次移动两个，因此他们肯定会相遇，只要求是否相遇就能知道是否存在循环。<br>那么，如何求循环的起点呢？先看下这个图<br><img src="http://chuantu.biz/t/17/1416544742x1822610959.jpg" alt=""><br>图中从head到起点距离为x，相遇点里起点为y，周长为L，相遇时fast节点已经走了n次循环。<br>那么，设lSlow为相遇时慢节点走过的距离，lFast为相遇时快节点走过的距离<br>那么，lSlow = x+y ; lFast = x+y+n*L;lFast = 2lSlow;<br>从上面几个算式可以推导出，x = n*L - y<br>左边加1个L减1个L, x = (n-1)*L + (L-y)<br>转换成中文就是“Head到循环起点的距离 等于 几个循环 + 相遇点到循环起点的距离 ”<br>那么，把slow点丢回Head处，两个点同时一次走一个点的前进，那么slow点走过x后就会在循环起点处与fast点相遇，这样就可以求出相遇点。</p>
+<p>##代码<br>按上面思路，代码就可以这样写</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Definition for singly-linked list.</span></div><div class="line"><span class="comment"># class ListNode:</span></div><div class="line"><span class="comment">#     def __init__(self, x):</span></div><div class="line"><span class="comment">#         self.val = x</span></div><div class="line"><span class="comment">#         self.next = None</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></div><div class="line">    <span class="comment"># @param head, a ListNode</span></div><div class="line">    <span class="comment"># @return a boolean</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">detectCycle</span><span class="params">(self, head)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> head <span class="keyword">or</span> <span class="keyword">not</span> head.next: <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">        slow = fast = head</div><div class="line">        <span class="keyword">while</span> fast <span class="keyword">and</span> fast.next:</div><div class="line">            fast = fast.next.next</div><div class="line">            slow = slow.next</div><div class="line">            <span class="keyword">if</span> fast == slow:</div><div class="line">                slow = head</div><div class="line">                <span class="keyword">while</span> slow != fast:</div><div class="line">                    fast = fast.next</div><div class="line">                    slow = slow.next</div><div class="line">                <span class="keyword">return</span> slow</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div></pre></td></tr></table></figure>
+<p>##总结<br>不要死脑筋思考逻辑问题，其实用高中的数学就能很好的解决该问题。通过这道题，也增加了一点以后写程序的思维方式吧。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/11/21/2014-11-21-programming-and-mathematics/" data-id="cisgxbbkj002iep3dyt6j9lgs" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2014-11-20-november-2014-startup-weekend-summary" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/11/20/2014-11-20-november-2014-startup-weekend-summary/" class="article-date">
+  <time datetime="2014-11-19T21:44:00.000Z" itemprop="datePublished">2014-11-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/创业/">创业</a>►<a class="article-category-link" href="/categories/创业/总结/">总结</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/20/2014-11-20-november-2014-startup-weekend-summary/">2014年11月创业周末小结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h2><p>Talk is cheap ,show me the work.</p>
+<h2 id="啰嗦的总结"><a href="#啰嗦的总结" class="headerlink" title="啰嗦的总结"></a>啰嗦的总结</h2><p>以下总结可能语言略显尖锐，只是个人争对过程中出现的问题，用尖锐的方式来让自己记好这些问题。</p>
+<p>#个人</p>
+<ul>
+<li>能力上很欠缺，论深度不足，论广度也不足，技能不够全面，对于App这一块基本无经验；</li>
+<li>没组织意识，有时候已经发现其中问题，但是有种事不关己，任由其发展；</li>
+<li>在恶劣环境下快速休息恢复体力不足，导致熬夜过多后体力不足，零碎的时间又休息质量差；</li>
+<li>特殊情况下随机应变能力不足。</li>
+</ul>
+<p>#团队</p>
+<ul>
+<li>Leader很关键，业务场景的选择、市场及用户分析、清晰的蓝图和快速动手的意识非常关键，拿着一个原型再开始瞎扯总比指着空气好，如果你Talking more than working,please go home.Don’t kidding me.</li>
+<li>产品经理很重要，如果产品经理无法明确核心价值和关键特性，只是说要有个地图，要有人在地图上移动，要能发言这些显性特性，那么我觉得你还是回家洗洗睡吧，别出来坑程序员</li>
+<li>人员合理分配很重要，产品、市场、设计、研发需要均等，指手画脚漫天想象的人太多了，不利于产品，就算同时有Facebook，Google、twitter这么多个伟大的想法，也无法实践；</li>
+<li>创业团队虽然不能像大组织那样条条框框，规矩连起来可以绕地球一圈，但至少开会讨论什么的，要有主持人控制时间，要有发起人说明清晰的目的和期望结果，要有人做记录，很多伟大的想法就是这样在指缝间溜走的。能说会道不如白板上写写画画，难道你写的难看画的扭曲我就会笑你吗？</li>
+</ul>
+<p>#产品的策划</p>
+<ul>
+<li>用户为什么用？内容提供者为什么提供（如何给内容提供者成就感和利益链）？</li>
+<li>如何建立生态链？现有用户还是先有商家？</li>
+<li>Leader要能一句话说明产品，内容包括解决问题和为什么做这个</li>
+<li>用数据说服VO等。</li>
+</ul>
+<p>#产品的设计</p>
+<ul>
+<li>从Web交互到App交互的转变，APP的操作一般就是点、拉、拖拽</li>
+<li>开始不要考虑框架规范什么的，最早那一套肯定是会推翻重做的，把他当做简单的Demo就好，重点在验证猜想</li>
+</ul>
+<p>#工作方式</p>
+<ul>
+<li>不到万不得已别熬夜，特别是因为没有目的的讨论去熬夜</li>
+<li>每个人必须全能，至少能做很多事情，在资源稀缺的情况下，产品经理会切图都显得异常有价值</li>
+<li>动手，动手，再动手。</li>
+<li>发布，反馈，优化，发布，优化掉所有竞争对手</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/11/20/2014-11-20-november-2014-startup-weekend-summary/" data-id="cisgxbbkl002jep3d9luaaukx" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; __('prev')</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/">__('next') &raquo;</a>
+  </nav>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/">Amazon</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/">bezos</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/一网打尽/">一网打尽</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/一网打尽/EverythisIsStore/">EverythisIsStore</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/天道酬勤/">天道酬勤</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/天道酬勤/KataPotter/">KataPotter</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/天道酬勤/KataPotter/CodeJourney/">CodeJourney</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/责任链/">责任链</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/责任链/KataPotter/">KataPotter</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Amazon/bezos/设计/责任链/KataPotter/一网打尽/">一网打尽</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/">bash</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/Shell/位置变量/">位置变量</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/bash/Shell/进程变量/">进程变量</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/bit/">bit</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/bit/singlenum2/">singlenum2</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/函数/">函数</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/函数/LeetCode/">LeetCode</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/函数/LeetCode/链表循环起点/">链表循环起点</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/字符串/">字符串</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/字符串/str/">str</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/字符串/str/基础/">基础</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Python/设计/fizzbuzzwhizz/">fizzbuzzwhizz</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/">Sublime</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/工具/">工具</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/工具/编辑器/">编辑器</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Sublime/工具/编辑器/提升工作效率/">提升工作效率</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/UML/">UML</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/">BDD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/">TDD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/">KataPotter</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/cucumber/">cucumber</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/cucumber/责任链设计模式/">责任链设计模式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/UML/BDD/TDD/设计/KataPotter/cucumber/责任链设计模式/面向接口/">面向接口</a></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/">bezos</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/">jobs</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/乔布斯/">乔布斯</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/乔布斯/贝索斯/">贝索斯</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/bezos/jobs/设计/乔布斯/贝索斯/干货/">干货</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/AFNetworking/">AFNetworking</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/GCD/">GCD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/GCD/obj-c/">obj-c</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/">cocoa</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/">block</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/obj-c/">obj-c</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/obj-c/代码块/">代码块</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/cocoa/block/obj-c/代码块/闭包/">闭包</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/jvm/">jvm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/jvm/classloader/">classloader</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/">maven</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/">TDD</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/">fizzbuzzwhizz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/">责任链</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/">模板方法</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/设计模式/">设计模式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/设计模式/趣味编程/">趣味编程</a></li></ul></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/">spring</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/IoC/">IoC</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/IoC/XmlWebApplicationContext/">XmlWebApplicationContext</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/">application</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/IoC/">IoC</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/IoC/源码分析/">源码分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/application/IoC/源码分析/beanfactory/">beanfactory</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/">resource</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/">IoC</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/">源码分析</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/Resource加载/">Resource加载</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/Resource定位/">Resource定位</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/spring/resource/IoC/源码分析/Resource注册/">Resource注册</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/多线程/synchronized/">synchronized</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/个人随笔/多线程/synchronized/人际关系/">人际关系</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/多线程/volatile/">volatile</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/">模板引擎</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/导出Word/">导出Word</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/导出Word/解析Xml/">解析Xml</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/java/模板引擎/导出Word/解析Xml/设计/">设计</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/express/">express</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/express/scrum/">scrum</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/express/scrum/感悟/">感悟</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/fizzbuzzwhizz/">fizzbuzzwhizz</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/fizzbuzzwhizz/易中天/">易中天</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/fizzbuzzwhizz/易中天/百家争鸣/">百家争鸣</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/">javascript</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/">Node.js</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/">互联网</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/互联网思维/">互联网思维</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/互联网思维/去中心化/">去中心化</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/互联网/互联网思维/去中心化/全局对象/">全局对象</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/">工作</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/个人随笔/数组/">数组</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Node-js/工作/个人随笔/数组/兴趣/">兴趣</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/">Regexp</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/正则表达式/">正则表达式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/码年/">码年</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/Regexp/码年/正则表达式/">正则表达式</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/prototype/">prototype</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/prototype/读书笔记/">读书笔记</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/否定性思维/">否定性思维</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/否定性思维/自我反思/">自我反思</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/个人随笔/否定性思维/自我反思/数组/">数组</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/">游记</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/Node-js/">Node.js</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/Node-js/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/javascript/游记/Node-js/个人随笔/数组/">数组</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/jvm/">jvm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/jvm/vertx/">vertx</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/">事件流</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/事件/">事件</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/事件/事件冒泡/">事件冒泡</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/事件流/事件/事件冒泡/添加事件方式/">添加事件方式</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/">scrum</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/敏捷/">敏捷</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/敏捷/需求/">需求</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/scrum/敏捷/需求/用户故事/">用户故事</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/sql/">sql</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/sql/join/">join</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/sql/join/连接/">连接</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人简历/">个人简历</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/">个人随笔</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/怨文/">怨文</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/怨文/年终/">年终</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/读后感/">读后感</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人随笔/项目管理/">项目管理</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/产品/">产品</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/产品/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/产品/设计/极简/">极简</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/人性/">人性</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/">总结</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/利他/">利他</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/利他/下个人思维/">下个人思维</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/人性/总结/利他/下个人思维/高大上/">高大上</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/创业/">创业</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/创业/总结/">总结</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/同步/">同步</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/同步/线程安全/">线程安全</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/同步/线程安全/ConcurrentHashMap/">ConcurrentHashMap</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/同步/线程安全/ConcurrentHashMap/桶分割远离/">桶分割远离</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/">HashMap</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/">HashTable</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/">CocurrentHashMap</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/同步/">同步</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/同步/线程安全/">线程安全</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/">孔子</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/">儒家</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/">易中天</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/百家争鸣/">百家争鸣</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/百家争鸣/中庸/">中庸</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/孔子/儒家/易中天/百家争鸣/中庸/仁爱/">仁爱</a></li></ul></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习/">学习</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/学习/个人随笔/">个人随笔</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/属性/">属性</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/属性/obj-c/">obj-c</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/谷歌/">谷歌</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/谷歌/搜索/">搜索</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/谷歌/搜索/个人心得/">个人心得</a></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/obj-c/">obj-c</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/obj-c/不足/">不足</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/读后感/">读后感</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/读后感/管理学/">管理学</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/总结/读后感/管理学/领导课/">领导课</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/转变/">转变</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/日记/">日记</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/">女朋友</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/向日葵/">向日葵</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/向日葵/信念/">信念</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/日记/女朋友/向日葵/信念/自信/">自信</a></li></ul></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/架构设计/">架构设计</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/蛋疼/">蛋疼</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/蛋疼/折腾/">折腾</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/蛋疼/折腾/作死/">作死</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计/">设计</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/设计/重构/">重构</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/载记/">载记</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/载记/警世钟/">警世钟</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/重构/">重构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理/">项目管理</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理/执行力/">执行力</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理/读记/">读记</a></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">September 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">August 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">June 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">May 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/06/07/2016-06-07-dockercong-0dao-1de-bi-ji/">Docker从0到1的笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/13/2015-07-13-beginning-ios-pit-over-those-years-i/">初学IOS那些年踩过的坑（十）</a>
+          </li>
+        
+          <li>
+            <a href="/2015/06/29/2015-06-29-beginning-ios-pit-over-those-years-h/">初学IOS那些年踩过的坑（九）</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/13/2015-05-13-running-and-being-reading-notes-a/">跑步圣经读书笔记（一）</a>
+          </li>
+        
+          <li>
+            <a href="/2015/05/13/2015-05-13-beginning-ios-pit-over-those-years-g/">初学IOS那些年踩过的坑（八）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
