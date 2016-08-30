@@ -92,7 +92,7 @@
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
 <meta property="og:description" content="#Block我认为block（代码块）语法算是给Obj-c增加了很多优秀的特性，它类似于函数式编程中的闭包，通过他你可以像对待对象一样的对待函数，即函数成了面向对象中的头等公民，可以在方法和函数中定义及传递，这个是在Java中绝对无法想象的（在Java8之前必须在要传递的函数上套一层类，且无法在函数中定义）。总之，通过这个特性，你可以创建比之前更灵活、可复用性更高的代码。
 #特性对javascri">
-<meta property="og:updated_time" content="2015-05-04T15:19:24.000Z">
+<meta property="og:updated_time" content="2016-08-30T06:43:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IOS从头开始之Block语法">
 <meta name="twitter:description" content="#Block我认为block（代码块）语法算是给Obj-c增加了很多优秀的特性，它类似于函数式编程中的闭包，通过他你可以像对待对象一样的对待函数，即函数成了面向对象中的头等公民，可以在方法和函数中定义及传递，这个是在Java中绝对无法想象的（在Java8之前必须在要传递的函数上套一层类，且无法在函数中定义）。总之，通过这个特性，你可以创建比之前更灵活、可复用性更高的代码。
@@ -172,22 +172,22 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -364,11 +364,11 @@
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span>:<span class="title">NSObject</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">void</span> (^myBlock)(<span class="built_in">NSString</span> *);</div><div class="line">&#125;</div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">readonly</span>,<span class="keyword">copy</span>) ((^)(<span class="built_in">NSString</span> \*)) \*myBlock;</div><div class="line"></div><div class="line">  -(<span class="keyword">void</span>)doSomethingWithBlock;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Person</span></span></div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)doSomethingWithBlock&#123;</div><div class="line">  myBlock(<span class="string">@"foo"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
 <p>#类型定义<br>使用typedef关键字进行代码块定义，可以使代码块的定义更加易读。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">void</span> (^BlockWithCHarArg)(<span class="keyword">char</span> \*)</div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span>:<span class="title">NSObject</span></span></div><div class="line">&#123;</div><div class="line">	BlockWithCHarArg myBlock;</div><div class="line">&#125;</div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">readonly</span>,<span class="keyword">copy</span>) BlockWithCHarArg myBlock;</div><div class="line">  -(<span class="keyword">void</span>)doSomethingWithBlock;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure></p>
 <p>#代码块的用处</p>
-<p>##GCD中的应用<br>GCD是一个Obj-c的框架，他提供了易用的抽象层，这样开发者不需要处理底层的线程管理就可以充分利用多处理器和多核架构。<br>这样开发者只需要提供代码块，GCD可以提供同步和异步的执行方式。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dispatch\_async(dispatch\_get\_global\_queue(<span class="number">0</span>, <span class="number">0</span>),^&#123;doSomethingSlow();&#125;);</div></pre></td></tr></table></figure></p>
+<h2 id="GCD中的应用"><a href="#GCD中的应用" class="headerlink" title="GCD中的应用"></a>GCD中的应用</h2><p>GCD是一个Obj-c的框架，他提供了易用的抽象层，这样开发者不需要处理底层的线程管理就可以充分利用多处理器和多核架构。<br>这样开发者只需要提供代码块，GCD可以提供同步和异步的执行方式。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dispatch\_async(dispatch\_get\_global\_queue(<span class="number">0</span>, <span class="number">0</span>),^&#123;doSomethingSlow();&#125;);</div></pre></td></tr></table></figure></p>
 <p>dispatch_get_global_queue方法可以获得全局队列，第二个参数就是一个代码块，这样我们就不需要关心线程应该开多少，都可以交给GCD来完成，队列也可以通过dispatch_queue_create函数来创建一个私有的顺序执行的队列。如下代码<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> myQueue = dispatch_queue_create(<span class="string">"david.queue"</span>, DISPATCH_QUEUE_SERIAL);</div><div class="line"><span class="built_in">dispatch_async</span>(_captureQueue, ^&#123;</div><div class="line">	doSomething();</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>##过滤、映射、处理<br>如前面javascript的代码段的.filter函数对数组进行过滤，Obj-c也可以通过代码块来实现相应功能，这里就拿映射来举个例子。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> \*map(<span class="built_in">NSArray</span> \*items,<span class="keyword">id</span> (^block)(<span class="keyword">id</span> item))&#123;</div><div class="line">	<span class="built_in">NSMutableArray</span> \*result = [<span class="built_in">NSMutableArray</span> array];</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">id</span> item <span class="keyword">in</span> items)&#123;</div><div class="line">  	[result addObject:block(item)];</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>##标准API中的代码块<br>常见的类NsArray，NSDictionary、NSIndexSet和NSSet中，都用使用代码块的函数，NSString、NSAttributeString中也提供了使用代码块逐行逐个遍历的方法。</p>
-<p>##其他<br>比如说闭包教程中最常举的例子–计数器，先来看看JavaScript中如何做。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function getCounter()&#123;</div><div class="line">    var counter = <span class="number">0</span>;</div><div class="line">    <span class="keyword">return</span> function()&#123;</div><div class="line">        <span class="keyword">return</span> ++counter;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line">counter = getCounter();</div><div class="line">counter2 = getCounter();</div><div class="line">console.log(counter());<span class="comment">//1</span></div><div class="line">console.log(counter2());<span class="comment">//1</span></div><div class="line">console.log(counter());<span class="comment">//2</span></div><div class="line">console.log(counter());<span class="comment">//3</span></div><div class="line">console.log(counter2());<span class="comment">//2</span></div></pre></td></tr></table></figure></p>
+<h2 id="过滤、映射、处理"><a href="#过滤、映射、处理" class="headerlink" title="过滤、映射、处理"></a>过滤、映射、处理</h2><p>如前面javascript的代码段的.filter函数对数组进行过滤，Obj-c也可以通过代码块来实现相应功能，这里就拿映射来举个例子。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> \*map(<span class="built_in">NSArray</span> \*items,<span class="keyword">id</span> (^block)(<span class="keyword">id</span> item))&#123;</div><div class="line">	<span class="built_in">NSMutableArray</span> \*result = [<span class="built_in">NSMutableArray</span> array];</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">id</span> item <span class="keyword">in</span> items)&#123;</div><div class="line">  	[result addObject:block(item)];</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="标准API中的代码块"><a href="#标准API中的代码块" class="headerlink" title="标准API中的代码块"></a>标准API中的代码块</h2><p>常见的类NsArray，NSDictionary、NSIndexSet和NSSet中，都用使用代码块的函数，NSString、NSAttributeString中也提供了使用代码块逐行逐个遍历的方法。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>比如说闭包教程中最常举的例子–计数器，先来看看JavaScript中如何做。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function getCounter()&#123;</div><div class="line">    var counter = <span class="number">0</span>;</div><div class="line">    <span class="keyword">return</span> function()&#123;</div><div class="line">        <span class="keyword">return</span> ++counter;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line">counter = getCounter();</div><div class="line">counter2 = getCounter();</div><div class="line">console.log(counter());<span class="comment">//1</span></div><div class="line">console.log(counter2());<span class="comment">//1</span></div><div class="line">console.log(counter());<span class="comment">//2</span></div><div class="line">console.log(counter());<span class="comment">//3</span></div><div class="line">console.log(counter2());<span class="comment">//2</span></div></pre></td></tr></table></figure></p>
 <p>正如前面所说，代码块（闭包）可以保存函数定义时候的状态，利用这种状态就实现了计数器的创建方法。那么Obj-c中能不能这样做呢？还是等我Mac机器弄起来后再试试吧，现在也只能敲敲代码。</p>
 <p>还有一些作用比如CPU复杂性的运算，可以通过GCD来完成多线程处理，这个也等Mac搞定后动手试一试。</p>
 <p>#不足<br>但是，Obj-c中的block不像函数式编程（JavaScript、Ruby、Python）中那么的灵活，但是至少是比Java灵活的多了。</p>
@@ -482,10 +482,10 @@
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -521,7 +521,7 @@
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GCD中的应用"><span class="nav-number">1.</span> <span class="nav-text">GCD中的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤、映射、处理"><span class="nav-number">2.</span> <span class="nav-text">过滤、映射、处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准API中的代码块"><span class="nav-number">3.</span> <span class="nav-text">标准API中的代码块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a></li></ol></div>
             
           </div>
         </section>

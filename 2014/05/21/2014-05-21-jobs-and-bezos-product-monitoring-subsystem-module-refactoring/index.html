@@ -93,7 +93,7 @@
 <meta property="og:description" content="#旅游终于差不多可以休息个半个月去旅游下了。作为旅游前的最后一遍博文，就把这周的工作作为主体阐述下，也把最近看的书的一点感悟阐述下。
 #乔布斯与贝索斯最近看一网打尽，发现乔布斯和贝索斯还真是很像。虽然，他们人性中都有很多让正常人不好沟通交流的地方，让他们的员工都很怕和他们一起坐电梯，但是，他们的感染力、创新力、决策力、行动力，还是让我们尊称他们为神。首先，他们有产品经理应该有的嗅觉，可以说，乔布斯">
 <meta property="og:image" content="http://i1.tietuku.com/86a31da4f94810e3s.jpg">
-<meta property="og:updated_time" content="2015-05-04T06:05:28.000Z">
+<meta property="og:updated_time" content="2016-08-30T06:43:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="乔布斯与贝索斯-------公司产品监控子系统监控模块重构">
 <meta name="twitter:description" content="#旅游终于差不多可以休息个半个月去旅游下了。作为旅游前的最后一遍博文，就把这周的工作作为主体阐述下，也把最近看的书的一点感悟阐述下。
@@ -174,22 +174,22 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -357,21 +357,20 @@
 <li>Stay hungry stay foolish.</li>
 <li>We are our choice.</li>
 </ol>
-<h2 id="监控模块重构"><a href="#监控模块重构" class="headerlink" title="#监控模块重构"></a>#监控模块重构</h2><p>##原问题<br>原来监控模块的逻辑有两个问题</p>
+<h2 id="监控模块重构"><a href="#监控模块重构" class="headerlink" title="#监控模块重构"></a>#监控模块重构</h2><h2 id="原问题"><a href="#原问题" class="headerlink" title="原问题"></a>原问题</h2><p>原来监控模块的逻辑有两个问题</p>
 <ol>
 <li>原来的TMtObjItem与TMtObj的对应关系是固定的，比如原有4个监控项，那么就是4：1，就是说，比如一个监控对象是服务器，那么就有4个监测项（连通性、CPU、内存、磁盘）。那么就存在一个问题，如果有两个监控方案对应同一个监控对象，那么他们就存在同步的问题。比如监控方案A修改了CPU使用率的监测阀值，那么监控方案B就必须和A一样，如果B再设置了，就又会把A覆盖了；</li>
 <li>按原有的设计，注册监控对象的时候，就一定要创建监控项，因为他与方案是无关的，且还要建立与现有的类型监控方案的关系；</li>
 <li>按原有设计，监控项日志记录与监控项绑定，那么，就无法判断每次监测对象的时候是监测了几个对象。</li>
 </ol>
-<p>##重构设计UML<br><img src="http://i1.tietuku.com/86a31da4f94810e3s.jpg" alt=""></p>
-<p>##依赖关系调整</p>
-<p>###监控数据结构关系调整<br>去除了原数据结构TMtObjItem，TMTObjNorm，TMtObjThreadhol等对象，取而代之的是TMTSchemeItem、TMtShcemeObj，并且与方案1对n关联，TMtObj对象并不直接持有，但是TMtSchemeObj持有TMtObj作为MetaObj。</p>
-<p>###监控日志关系调整<br>让监测对象日志与调度方案日志绑定，这样做数据分析统计的时候，就可以根据查找相应对象最近调度方案来找到最近一次监控的结果，就算只监控了其中几个监测项，也可以发现。</p>
-<p>##溯源方式调整<br>在SerialMonitor中，会通过判断方案的类型，如果是类型监测方案就会向上追溯，比如监控数据库，有异常就会去监测是否是服务器存在异常。如果是组合监控方案，就会根据组合监控对象的组合结构，去往下追溯异常源头。</p>
-<p>##构造方式<br>原类型监测方案创建时候会去创建TMtObjItem，当创建监控对象的时候还要将新创建的监控对象添加到相应的类型监测方案下。现在只是运行监测方案的时候，会去构造TMtSchemeObj和TMtSchemeItem。</p>
-<p>##监控结果记录方式<br>原来的监控结果基本记录在TMtLogObjItem中。现在另外还记在TMtSchemeItem中，方便追溯。</p>
-<p>##调用方式<br>SerialMonitor的monitor方法为入口方法，可以争对不同的实现子类实现多态。而其基类的monitorOneItem方法为抽象的逻辑，对溯源、监控、记录日志、监控监控项状态等行为进行了调用。这些行为依赖于相应的接口，这些接口可以有不同的子类实现，通过策略模式与模板模式实现了具体监控的多态。</p>
-<p>##重构中发现的问题<br>代码的重构可以用单元测试来防止错误，那么，现有很多数据都是通过存储过程来分析统计的。对于存储过程这块没有相应的单元测试方法，为了验证重构有没有带来影响，我只能辛苦的造数据，而且测试完以后觉得还是存在隐患，因为覆盖度根本不够。<br>或许有人会说，那么就不用存储过程，吧分析统计写到java里面，将控制权把握在手上呗。但是，这要看场景。因为我们的业务线比较长，甚至到了新疆内蒙等地方，如果把分析统计这种会根据实际需要变的业务逻辑写到程序中，那么必定导致开发人员的维护工作大大增加，有的时候不得不出差到现场去解决问题。那么，如果用存储过程，我只要定义好需要的数据，存储过程怎么去统计和分析，都是现场的运维人员可控的。</p>
+<h2 id="重构设计UML"><a href="#重构设计UML" class="headerlink" title="重构设计UML"></a>重构设计UML</h2><p><img src="http://i1.tietuku.com/86a31da4f94810e3s.jpg" alt=""></p>
+<h2 id="依赖关系调整"><a href="#依赖关系调整" class="headerlink" title="依赖关系调整"></a>依赖关系调整</h2><h2 id="监控数据结构关系调整"><a href="#监控数据结构关系调整" class="headerlink" title="# 监控数据结构关系调整"></a># 监控数据结构关系调整</h2><p>去除了原数据结构TMtObjItem，TMTObjNorm，TMtObjThreadhol等对象，取而代之的是TMTSchemeItem、TMtShcemeObj，并且与方案1对n关联，TMtObj对象并不直接持有，但是TMtSchemeObj持有TMtObj作为MetaObj。</p>
+<h2 id="监控日志关系调整"><a href="#监控日志关系调整" class="headerlink" title="# 监控日志关系调整"></a># 监控日志关系调整</h2><p>让监测对象日志与调度方案日志绑定，这样做数据分析统计的时候，就可以根据查找相应对象最近调度方案来找到最近一次监控的结果，就算只监控了其中几个监测项，也可以发现。</p>
+<h2 id="溯源方式调整"><a href="#溯源方式调整" class="headerlink" title="溯源方式调整"></a>溯源方式调整</h2><p>在SerialMonitor中，会通过判断方案的类型，如果是类型监测方案就会向上追溯，比如监控数据库，有异常就会去监测是否是服务器存在异常。如果是组合监控方案，就会根据组合监控对象的组合结构，去往下追溯异常源头。</p>
+<h2 id="构造方式"><a href="#构造方式" class="headerlink" title="构造方式"></a>构造方式</h2><p>原类型监测方案创建时候会去创建TMtObjItem，当创建监控对象的时候还要将新创建的监控对象添加到相应的类型监测方案下。现在只是运行监测方案的时候，会去构造TMtSchemeObj和TMtSchemeItem。</p>
+<h2 id="监控结果记录方式"><a href="#监控结果记录方式" class="headerlink" title="监控结果记录方式"></a>监控结果记录方式</h2><p>原来的监控结果基本记录在TMtLogObjItem中。现在另外还记在TMtSchemeItem中，方便追溯。</p>
+<h2 id="调用方式"><a href="#调用方式" class="headerlink" title="调用方式"></a>调用方式</h2><p>SerialMonitor的monitor方法为入口方法，可以争对不同的实现子类实现多态。而其基类的monitorOneItem方法为抽象的逻辑，对溯源、监控、记录日志、监控监控项状态等行为进行了调用。这些行为依赖于相应的接口，这些接口可以有不同的子类实现，通过策略模式与模板模式实现了具体监控的多态。</p>
+<h2 id="重构中发现的问题"><a href="#重构中发现的问题" class="headerlink" title="重构中发现的问题"></a>重构中发现的问题</h2><p>代码的重构可以用单元测试来防止错误，那么，现有很多数据都是通过存储过程来分析统计的。对于存储过程这块没有相应的单元测试方法，为了验证重构有没有带来影响，我只能辛苦的造数据，而且测试完以后觉得还是存在隐患，因为覆盖度根本不够。<br>或许有人会说，那么就不用存储过程，吧分析统计写到java里面，将控制权把握在手上呗。但是，这要看场景。因为我们的业务线比较长，甚至到了新疆内蒙等地方，如果把分析统计这种会根据实际需要变的业务逻辑写到程序中，那么必定导致开发人员的维护工作大大增加，有的时候不得不出差到现场去解决问题。那么，如果用存储过程，我只要定义好需要的数据，存储过程怎么去统计和分析，都是现场的运维人员可控的。</p>
 
       
     </div>
@@ -482,10 +481,10 @@
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -521,7 +520,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#旅游"><span class="nav-number">1.</span> <span class="nav-text">#旅游</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#乔布斯与贝索斯"><span class="nav-number">2.</span> <span class="nav-text">#乔布斯与贝索斯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监控模块重构"><span class="nav-number">3.</span> <span class="nav-text">#监控模块重构</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#旅游"><span class="nav-number">1.</span> <span class="nav-text">#旅游</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#乔布斯与贝索斯"><span class="nav-number">2.</span> <span class="nav-text">#乔布斯与贝索斯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监控模块重构"><span class="nav-number">3.</span> <span class="nav-text">#监控模块重构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原问题"><span class="nav-number">4.</span> <span class="nav-text">原问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构设计UML"><span class="nav-number">5.</span> <span class="nav-text">重构设计UML</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖关系调整"><span class="nav-number">6.</span> <span class="nav-text">依赖关系调整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监控数据结构关系调整"><span class="nav-number">7.</span> <span class="nav-text"># 监控数据结构关系调整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监控日志关系调整"><span class="nav-number">8.</span> <span class="nav-text"># 监控日志关系调整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#溯源方式调整"><span class="nav-number">9.</span> <span class="nav-text">溯源方式调整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构造方式"><span class="nav-number">10.</span> <span class="nav-text">构造方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监控结果记录方式"><span class="nav-number">11.</span> <span class="nav-text">监控结果记录方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用方式"><span class="nav-number">12.</span> <span class="nav-text">调用方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构中发现的问题"><span class="nav-number">13.</span> <span class="nav-text">重构中发现的问题</span></a></li></ol></div>
             
           </div>
         </section>

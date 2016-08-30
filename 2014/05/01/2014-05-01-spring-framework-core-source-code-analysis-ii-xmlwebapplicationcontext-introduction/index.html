@@ -85,23 +85,23 @@
 
 
 <meta name="description" content="#3 XmlWebApplicationContextXmlWebApplicationContext是开发web应用最常用的上下文环境。
-##3.1 XmlWebApplicationContext的特性XmlWebApplicationContext提供了IoC容器对Web环境ServletAPI的集成，并提供Xml解析器，从而可以从xml文件中获取BeanDefinition数据。 
-##3">
+3.1 XmlWebApplicationContext的特性XmlWebApplicationContext提供了IoC容器对Web环境ServletAPI的集成，并提供Xml解析器，从而可以从xml文件中获取BeanDefinition数据。 
+3.2 X">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring Framework的核心源码解读（二）-XmlWebApplicationContext介绍">
 <meta property="og:url" content="http://yoursite.com/2014/05/01/2014-05-01-spring-framework-core-source-code-analysis-ii-xmlwebapplicationcontext-introduction/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
 <meta property="og:description" content="#3 XmlWebApplicationContextXmlWebApplicationContext是开发web应用最常用的上下文环境。
-##3.1 XmlWebApplicationContext的特性XmlWebApplicationContext提供了IoC容器对Web环境ServletAPI的集成，并提供Xml解析器，从而可以从xml文件中获取BeanDefinition数据。 
-##3">
+3.1 XmlWebApplicationContext的特性XmlWebApplicationContext提供了IoC容器对Web环境ServletAPI的集成，并提供Xml解析器，从而可以从xml文件中获取BeanDefinition数据。 
+3.2 X">
 <meta property="og:image" content="http://i1.tietuku.com/2ba01b6872beb1db.jpg">
 <meta property="og:image" content="http://i1.tietuku.com/5e8030512d81ede8.jpg">
-<meta property="og:updated_time" content="2015-05-05T00:28:36.000Z">
+<meta property="og:updated_time" content="2016-08-30T06:43:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Framework的核心源码解读（二）-XmlWebApplicationContext介绍">
 <meta name="twitter:description" content="#3 XmlWebApplicationContextXmlWebApplicationContext是开发web应用最常用的上下文环境。
-##3.1 XmlWebApplicationContext的特性XmlWebApplicationContext提供了IoC容器对Web环境ServletAPI的集成，并提供Xml解析器，从而可以从xml文件中获取BeanDefinition数据。 
-##3">
+3.1 XmlWebApplicationContext的特性XmlWebApplicationContext提供了IoC容器对Web环境ServletAPI的集成，并提供Xml解析器，从而可以从xml文件中获取BeanDefinition数据。 
+3.2 X">
 <meta name="twitter:image" content="http://i1.tietuku.com/2ba01b6872beb1db.jpg">
 
 
@@ -178,22 +178,22 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -331,8 +331,8 @@
 
       
         <p>#3 XmlWebApplicationContext<br>XmlWebApplicationContext是开发web应用最常用的上下文环境。</p>
-<p>##3.1 XmlWebApplicationContext的特性<br>XmlWebApplicationContext提供了IoC容器对Web环境ServletAPI的集成，并提供Xml解析器，从而可以从xml文件中获取BeanDefinition数据。<br> <img src="http://i1.tietuku.com/2ba01b6872beb1db.jpg" alt=""></p>
-<p>##3.2 XmlWebApplicationContext的加载<br>在系统中通过配置servlet或者listener（如下代码）就能让web系统从xml中加载BeanDefinition数据。<br><figure class="highlight xml"><figcaption><span>web.xml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">listener</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">listener-class</span>&gt;</span></div><div class="line">        org.springframework.web.context.ContextLoaderListener</div><div class="line">    <span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">listener</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="3-1-XmlWebApplicationContext的特性"><a href="#3-1-XmlWebApplicationContext的特性" class="headerlink" title="3.1 XmlWebApplicationContext的特性"></a>3.1 XmlWebApplicationContext的特性</h2><p>XmlWebApplicationContext提供了IoC容器对Web环境ServletAPI的集成，并提供Xml解析器，从而可以从xml文件中获取BeanDefinition数据。<br> <img src="http://i1.tietuku.com/2ba01b6872beb1db.jpg" alt=""></p>
+<h2 id="3-2-XmlWebApplicationContext的加载"><a href="#3-2-XmlWebApplicationContext的加载" class="headerlink" title="3.2 XmlWebApplicationContext的加载"></a>3.2 XmlWebApplicationContext的加载</h2><p>在系统中通过配置servlet或者listener（如下代码）就能让web系统从xml中加载BeanDefinition数据。<br><figure class="highlight xml"><figcaption><span>web.xml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">listener</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">listener-class</span>&gt;</span></div><div class="line">        org.springframework.web.context.ContextLoaderListener</div><div class="line">    <span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">listener</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>那再让我们看看ContextLoaderListener的源码片段。从下面的代码可以看出，该监听会判断上下载加载器是否存在，不存在就进行初始化。<br><figure class="highlight java"><figcaption><span>ContextLoaderListener.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.contextLoader = createContextLoader();</div><div class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.contextLoader == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">this</span>.contextLoader = <span class="keyword">this</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">this</span>.contextLoader.initWebApplicationContext(event.getServletContext());</div></pre></td></tr></table></figure></p>
 <p>而initWebApplicationContext()方法中，又通过BeanUtils.instantiateClass(contextClass)来获取ApplicationContext，我们再继续寻找源头。在ContextLoader类中我们找到了determineContextClass()方法。<br><figure class="highlight java"><figcaption><span>ContextLoader.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> Class&lt;?determineContextClass(ServletContext servletContext) &#123;</div><div class="line">		String contextClassName = servletContext.getInitParameter(CONTEXT_CLASS_PARAM);</div><div class="line">		<span class="keyword">if</span> (contextClassName != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="comment">//通过类加载器加载该类并返回</span></div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			contextClassName = defaultStrategies.getProperty(WebApplicationContext.class.getName());</div><div class="line">			<span class="comment">//通过类加载器加载该类并返回</span></div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
 <p>servletContext.getInitParameter是取web.xml里的配置参数，意思就是先看看我们有没有自己定义context的类，如果我们定义了，直接返回这个class。否则，去defaultStrategies里去取,WebApplicationContext的类名作为key。这里我Ctry+O搜了下defaultStrategies，发现了源头。<br><figure class="highlight java"><figcaption><span>ContextLoader.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DEFAULT_STRATEGIES_PATH = <span class="string">"ContextLoader.properties"</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Properties defaultStrategies;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			ClassPathResource resource = <span class="keyword">new</span> ClassPathResource(DEFAULT_STRATEGIES_PATH, ContextLoader.class);</div><div class="line">			defaultStrategies = PropertiesLoaderUtils.loadProperties(resource);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (IOException ex) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Could not load 'ContextLoader.properties': "</span> + ex.getMessage());</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
@@ -447,10 +447,10 @@
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -486,7 +486,7 @@
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-XmlWebApplicationContext的特性"><span class="nav-number">1.</span> <span class="nav-text">3.1 XmlWebApplicationContext的特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-XmlWebApplicationContext的加载"><span class="nav-number">2.</span> <span class="nav-text">3.2 XmlWebApplicationContext的加载</span></a></li></ol></div>
             
           </div>
         </section>

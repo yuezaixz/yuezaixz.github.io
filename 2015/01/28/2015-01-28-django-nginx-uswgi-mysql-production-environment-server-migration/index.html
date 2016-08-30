@@ -85,51 +85,45 @@
 
 
 <meta name="description" content="#迁移环境
-##source
-
+source
 (此处修改，不公开服务器)
 ubuntu 12.04
 
-##target
-
+target
 此处修改，不公开服务器
 ubuntu 14.04.1
 
 #旧服务器备份
-##数据备份12345#先连接sourcessh 此处修改，不公开服务器 -l unbx#使用mysqldump命令，用unbxprod用户登录，备份unbxprod库到用户根目录backUp文件夹中的unitybox_">
+数据备份12345#先连接sourcessh 此处修改，不公开服务器 -l unbx#使用mysqldump命令，用unbxprod用户登录，备份unbxprod库到用户根目录backUp文件夹中的unitybox_mysql_du">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Django、nginx、uswgi、mysql生产环境的服务器迁移">
 <meta property="og:url" content="http://yoursite.com/2015/01/28/2015-01-28-django-nginx-uswgi-mysql-production-environment-server-migration/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
 <meta property="og:description" content="#迁移环境
-##source
-
+source
 (此处修改，不公开服务器)
 ubuntu 12.04
 
-##target
-
+target
 此处修改，不公开服务器
 ubuntu 14.04.1
 
 #旧服务器备份
-##数据备份12345#先连接sourcessh 此处修改，不公开服务器 -l unbx#使用mysqldump命令，用unbxprod用户登录，备份unbxprod库到用户根目录backUp文件夹中的unitybox_">
-<meta property="og:updated_time" content="2015-05-04T23:56:27.000Z">
+数据备份12345#先连接sourcessh 此处修改，不公开服务器 -l unbx#使用mysqldump命令，用unbxprod用户登录，备份unbxprod库到用户根目录backUp文件夹中的unitybox_mysql_du">
+<meta property="og:updated_time" content="2016-08-30T06:43:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Django、nginx、uswgi、mysql生产环境的服务器迁移">
 <meta name="twitter:description" content="#迁移环境
-##source
-
+source
 (此处修改，不公开服务器)
 ubuntu 12.04
 
-##target
-
+target
 此处修改，不公开服务器
 ubuntu 14.04.1
 
 #旧服务器备份
-##数据备份12345#先连接sourcessh 此处修改，不公开服务器 -l unbx#使用mysqldump命令，用unbxprod用户登录，备份unbxprod库到用户根目录backUp文件夹中的unitybox_">
+数据备份12345#先连接sourcessh 此处修改，不公开服务器 -l unbx#使用mysqldump命令，用unbxprod用户登录，备份unbxprod库到用户根目录backUp文件夹中的unitybox_mysql_du">
 
 
 
@@ -205,22 +199,22 @@ ubuntu 14.04.1
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -303,38 +297,34 @@ ubuntu 14.04.1
 
       
         <p>#迁移环境</p>
-<p>##source</p>
-<ul>
+<h2 id="source"><a href="#source" class="headerlink" title="source"></a>source</h2><ul>
 <li>(此处修改，不公开服务器)</li>
 <li>ubuntu 12.04</li>
 </ul>
-<p>##target</p>
-<ul>
+<h2 id="target"><a href="#target" class="headerlink" title="target"></a>target</h2><ul>
 <li>此处修改，不公开服务器</li>
 <li>ubuntu 14.04.1</li>
 </ul>
 <p>#旧服务器备份</p>
-<p>##数据备份<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#先连接source</span></div><div class="line">ssh 此处修改，不公开服务器 <span class="_">-l</span> unbx</div><div class="line"><span class="comment">#使用mysqldump命令，用unbxprod用户登录，备份unbxprod库到用户根目录backUp文件夹中的unitybox_mysql_dump.txt文件</span></div><div class="line">mkdir ~/backUp</div><div class="line">mysqldump -u此处修改，不公开服务器 -p 此处修改，不公开服务器 &gt; ~/backUp/unitybox_mysql_dump.txt</div></pre></td></tr></table></figure></p>
-<p>##Python运行环境备份<br>使用pip命令备份，如果source环境为安装pip。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip freeze &gt; ~/backUp/requirements.txt</div></pre></td></tr></table></figure></p>
-<p>##ssl文件备份<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp -r nginx-conf/ backUp/</div></pre></td></tr></table></figure></p>
-<p>##脚本&amp;nginx &amp; uwsgi配置文件备份<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">mkdir ~/backUp/sript </div><div class="line">mkdir ~/backUp/ng_conf </div><div class="line">mkdir ~/backUp/wsgi_conf </div><div class="line">find ~/ -name *.sh -exec cp &#123;&#125; ~/backUp/sript  \</div><div class="line">find ~/ -name *.conf -exec cp &#123;&#125; ~/backUp/ng_conf  \</div><div class="line">find ~/ -name *.ini -exec cp &#123;&#125; ~/backUp/wsgi_conf  \</div></pre></td></tr></table></figure></p>
-<p>##备份文件传送<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp -r /home/unbx/backUp unbx@此处修改，不公开服务器:/home/unbx/</div></pre></td></tr></table></figure></p>
+<h2 id="数据备份"><a href="#数据备份" class="headerlink" title="数据备份"></a>数据备份</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#先连接source</span></div><div class="line">ssh 此处修改，不公开服务器 <span class="_">-l</span> unbx</div><div class="line"><span class="comment">#使用mysqldump命令，用unbxprod用户登录，备份unbxprod库到用户根目录backUp文件夹中的unitybox_mysql_dump.txt文件</span></div><div class="line">mkdir ~/backUp</div><div class="line">mysqldump -u此处修改，不公开服务器 -p 此处修改，不公开服务器 &gt; ~/backUp/unitybox_mysql_dump.txt</div></pre></td></tr></table></figure>
+<h2 id="Python运行环境备份"><a href="#Python运行环境备份" class="headerlink" title="Python运行环境备份"></a>Python运行环境备份</h2><p>使用pip命令备份，如果source环境为安装pip。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip freeze &gt; ~/backUp/requirements.txt</div></pre></td></tr></table></figure></p>
+<h2 id="ssl文件备份"><a href="#ssl文件备份" class="headerlink" title="ssl文件备份"></a>ssl文件备份</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp -r nginx-conf/ backUp/</div></pre></td></tr></table></figure>
+<h2 id="脚本-amp-nginx-amp-uwsgi配置文件备份"><a href="#脚本-amp-nginx-amp-uwsgi配置文件备份" class="headerlink" title="脚本&amp;nginx &amp; uwsgi配置文件备份"></a>脚本&amp;nginx &amp; uwsgi配置文件备份</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">mkdir ~/backUp/sript</div><div class="line">mkdir ~/backUp/ng_conf</div><div class="line">mkdir ~/backUp/wsgi_conf</div><div class="line">find ~/ -name *.sh -exec cp &#123;&#125; ~/backUp/sript  \</div><div class="line">find ~/ -name *.conf -exec cp &#123;&#125; ~/backUp/ng_conf  \</div><div class="line">find ~/ -name *.ini -exec cp &#123;&#125; ~/backUp/wsgi_conf  \</div></pre></td></tr></table></figure>
+<h2 id="备份文件传送"><a href="#备份文件传送" class="headerlink" title="备份文件传送"></a>备份文件传送</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp -r /home/unbx/backUp unbx@此处修改，不公开服务器:/home/unbx/</div></pre></td></tr></table></figure>
 <p>#新环境部署<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#先用root连接新服务器，如果unbx用户已创建，请直接用unbx登录</span></div><div class="line">ssh 此处修改，不公开服务器 <span class="_">-l</span> root</div></pre></td></tr></table></figure></p>
-<p>##系统用户初始</p>
-<p>###用户及用户组创建<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#记住这里要adduser，否则unbuntu将不会帮你创建用户主目录</span></div><div class="line">adduser unbx</div><div class="line">passwd unbx</div><div class="line">vim /etc/group</div><div class="line"><span class="comment">#配置unbx 组到www-data ，www-data到unbx</span></div></pre></td></tr></table></figure></p>
-<p>###设置sudoer<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">chmod u+w /etc/sudoers</div><div class="line">vim /etc/sudoers</div><div class="line">chmod u-w /etc/sudoers</div><div class="line"><span class="comment">#这时候用户已经创建完成，切换unbx开始工作</span></div><div class="line">su unbx</div><div class="line"><span class="built_in">cd</span> ~/</div></pre></td></tr></table></figure></p>
-<p>##数据清理<br>如果mysql在旧机器上未安装，请跳过该章节<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo apt-get autoremove --purge mysql-server-5.0</div><div class="line">sudo apt-get remove mysql-server</div><div class="line">sudo apt-get autoremove mysql-server</div><div class="line">sudo apt-get remove mysql-common </div><div class="line">dpkg <span class="_">-l</span> |grep ^rc|awk <span class="string">'&#123;print $2&#125;'</span> |sudo xargs dpkg -P</div></pre></td></tr></table></figure></p>
-<p>##安装环境<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install git mysql-server python-mysqldb python2.7 python2.7-dev</div><div class="line"><span class="comment">#安装pip</span></div><div class="line">wget https://bootstrap.pypa.io/get-pip.py </div><div class="line">python get-pip.py</div><div class="line">sudo python get-pip.py</div><div class="line"><span class="comment">#安装django</span></div><div class="line">sudo pip install https://www.djangoproject.com/download/1.7c1/tarball/</div><div class="line"><span class="comment">#安装pillow的jpg和png依赖</span></div><div class="line">sudo apt-get install libjpeg-dev zlib1g*</div><div class="line">sudo aptitude install libfreetype6-dev</div><div class="line"><span class="comment">#安装OpenSSL的依赖</span></div><div class="line">sudo apt-get install libssl-dev</div></pre></td></tr></table></figure></p>
-<p>##配置MySql字符集<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/mysql/my.cnf</div></pre></td></tr></table></figure></p>
+<h2 id="系统用户初始"><a href="#系统用户初始" class="headerlink" title="系统用户初始"></a>系统用户初始</h2><h2 id="用户及用户组创建"><a href="#用户及用户组创建" class="headerlink" title="# 用户及用户组创建"></a># 用户及用户组创建</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#记住这里要adduser，否则unbuntu将不会帮你创建用户主目录</span></div><div class="line">adduser unbx</div><div class="line">passwd unbx</div><div class="line">vim /etc/group</div><div class="line"><span class="comment">#配置unbx 组到www-data ，www-data到unbx</span></div></pre></td></tr></table></figure>
+<h2 id="设置sudoer"><a href="#设置sudoer" class="headerlink" title="# 设置sudoer"></a># 设置sudoer</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">chmod u+w /etc/sudoers</div><div class="line">vim /etc/sudoers</div><div class="line">chmod u-w /etc/sudoers</div><div class="line"><span class="comment">#这时候用户已经创建完成，切换unbx开始工作</span></div><div class="line">su unbx</div><div class="line"><span class="built_in">cd</span> ~/</div></pre></td></tr></table></figure>
+<h2 id="数据清理"><a href="#数据清理" class="headerlink" title="数据清理"></a>数据清理</h2><p>如果mysql在旧机器上未安装，请跳过该章节<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo apt-get autoremove --purge mysql-server-5.0</div><div class="line">sudo apt-get remove mysql-server</div><div class="line">sudo apt-get autoremove mysql-server</div><div class="line">sudo apt-get remove mysql-common</div><div class="line">dpkg <span class="_">-l</span> |grep ^rc|awk <span class="string">'&#123;print $2&#125;'</span> |sudo xargs dpkg -P</div></pre></td></tr></table></figure></p>
+<h2 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install git mysql-server python-mysqldb python2.7 python2.7-dev</div><div class="line"><span class="comment">#安装pip</span></div><div class="line">wget https://bootstrap.pypa.io/get-pip.py</div><div class="line">python get-pip.py</div><div class="line">sudo python get-pip.py</div><div class="line"><span class="comment">#安装django</span></div><div class="line">sudo pip install https://www.djangoproject.com/download/1.7c1/tarball/</div><div class="line"><span class="comment">#安装pillow的jpg和png依赖</span></div><div class="line">sudo apt-get install libjpeg-dev zlib1g*</div><div class="line">sudo aptitude install libfreetype6-dev</div><div class="line"><span class="comment">#安装OpenSSL的依赖</span></div><div class="line">sudo apt-get install libssl-dev</div></pre></td></tr></table></figure>
+<h2 id="配置MySql字符集"><a href="#配置MySql字符集" class="headerlink" title="配置MySql字符集"></a>配置MySql字符集</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/mysql/my.cnf</div></pre></td></tr></table></figure>
 <p>在my.cnf中添加相应内容，如下所示</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">……</div><div class="line">    [client]</div><div class="line">    default-character-set=utf8</div><div class="line">……</div><div class="line">    [mysql]</div><div class="line">    default-character-set=utf8</div><div class="line">……</div><div class="line">    [mysqld]</div><div class="line">    collation-server=utf8_unicode_ci</div><div class="line">    init-connect=&apos;SET NAMES utf8&apos;</div><div class="line">    character-set-server=utf8</div><div class="line">    default-storage-engine=InnoDB</div><div class="line">……</div></pre></td></tr></table></figure>
 <p>然后重启mysql服务</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service mysql restart</div></pre></td></tr></table></figure>
-<p>##设置git的ssh</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#https://confluence.atlassian.com/pages/viewpage.action?pageId=270827678</span></div><div class="line">ssh-v    <span class="comment">#看ssh版本</span></div><div class="line">ls<span class="_">-a</span>~/.ssh <span class="comment">#看是否存在.ssh目录，有的话备份后删除</span></div><div class="line">ssh-keygen <span class="comment">#生成ssh秘钥</span></div><div class="line">ls<span class="_">-a</span>~/.ssh <span class="comment">#查看是否生成</span></div><div class="line">ps<span class="_">-e</span>|grep[s]sh-agent  <span class="comment">#查看是否有ssh-agent进程，我的做法是由的话杀了</span></div><div class="line">ssh-agent/bin/bash <span class="comment">#启动ssh-agent</span></div><div class="line">ps<span class="_">-e</span>|grep[s]sh-agent <span class="comment">#查看是否生成</span></div><div class="line">ssh-add~/.ssh/id_rsa <span class="comment">#添加信息到秘钥</span></div><div class="line">ssh-add<span class="_">-l</span></div><div class="line">cat~/.ssh/id_rsa.pub <span class="comment">#查看公钥，添加到git服务器端的个人配置中</span></div></pre></td></tr></table></figure>
+<h2 id="设置git的ssh"><a href="#设置git的ssh" class="headerlink" title="设置git的ssh"></a>设置git的ssh</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#https://confluence.atlassian.com/pages/viewpage.action?pageId=270827678</span></div><div class="line">ssh-v    <span class="comment">#看ssh版本</span></div><div class="line">ls<span class="_">-a</span>~/.ssh <span class="comment">#看是否存在.ssh目录，有的话备份后删除</span></div><div class="line">ssh-keygen <span class="comment">#生成ssh秘钥</span></div><div class="line">ls<span class="_">-a</span>~/.ssh <span class="comment">#查看是否生成</span></div><div class="line">ps<span class="_">-e</span>|grep[s]sh-agent  <span class="comment">#查看是否有ssh-agent进程，我的做法是由的话杀了</span></div><div class="line">ssh-agent/bin/bash <span class="comment">#启动ssh-agent</span></div><div class="line">ps<span class="_">-e</span>|grep[s]sh-agent <span class="comment">#查看是否生成</span></div><div class="line">ssh-add~/.ssh/id_rsa <span class="comment">#添加信息到秘钥</span></div><div class="line">ssh-add<span class="_">-l</span></div><div class="line">cat~/.ssh/id_rsa.pub <span class="comment">#查看公钥，添加到git服务器端的个人配置中</span></div></pre></td></tr></table></figure>
 <p>把公钥添加到git服务器端的个人ssh配置后，就可以用git下载工程了。注意：【此处修改，不公开服务器】的秘钥时候我设置了密码，密码请参考<a href="https://bitbucket.org/unitybox/pyunitybox/wiki/passwords" target="_blank" rel="external">Account and Passwords</a></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gitclonegit@此处不公开</div></pre></td></tr></table></figure>
-<p>##安装Python运行环境<br>前面的步骤中我们已经安装了pip了，现在可以让他排上用场了。先修改requirenment.txt，首先Django刚刚我们已经安装了1.7c1，所以Django那行可以删除。另外，有一些依赖在pip环境上已经变更，所以也需要相应的调整，否则会受影响，这里我根据执行中的环境差异做的调整如下，x为已经不存在的。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -r requirenment.txt</div></pre></td></tr></table></figure></p>
+<h2 id="安装Python运行环境"><a href="#安装Python运行环境" class="headerlink" title="安装Python运行环境"></a>安装Python运行环境</h2><p>前面的步骤中我们已经安装了pip了，现在可以让他排上用场了。先修改requirenment.txt，首先Django刚刚我们已经安装了1.7c1，所以Django那行可以删除。另外，有一些依赖在pip环境上已经变更，所以也需要相应的调整，否则会受影响，这里我根据执行中的环境差异做的调整如下，x为已经不存在的。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -r requirenment.txt</div></pre></td></tr></table></figure></p>
 <p>有些环境不一致，可能会报错，很多依赖找不到或者版本不正确，如果遇到可以进行调整，参考如下：</p>
 <blockquote>
 <p>Twisted-Core==11.1.0 13.2.0</p>
@@ -351,28 +341,27 @@ ubuntu 14.04.1
 <p>python-apt==0.8.3ubuntu7.2   0.9.3.5</p>
 <p>unattended-upgrades==0.1 x</p>
 <p>wadllib==1.3.0 1.3.2</p>
-<p>ufw x </p>
+<p>ufw x</p>
 </blockquote>
 <p>调整完就可以进行安装了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -r requirenment.txt</div></pre></td></tr></table></figure></p>
-<p>##初始化数据库<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot -p</div></pre></td></tr></table></figure></p>
+<h2 id="初始化数据库"><a href="#初始化数据库" class="headerlink" title="初始化数据库"></a>初始化数据库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot -p</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">---初始化数据库用户和数据库</div><div class="line">此处不公开</div><div class="line">---初始化数据</div><div class="line">此处不公开</div><div class="line">source /home/unbx/backUp/unitybox_mysql_dump.txt</div></pre></td></tr></table></figure>
-<p>##配置uwsgi和nginx<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sudo ln <span class="_">-s</span> ~/PyUnitybox/Web/src/adm_nginx.conf /etc/nginx/sites-enabled/</div><div class="line">sudo ln <span class="_">-s</span> ~/PyUnitybox/Web/src/api_nginx.conf /etc/nginx/sites-enabled/</div><div class="line">sudo ln <span class="_">-s</span> ~/PyUnitybox/Web/src/biz_nginx.conf /etc/nginx/sites-enabled/</div><div class="line">sudo mkdir /etc/uwsgi</div><div class="line">sudo mkdir /etc/uwsgi/vassals</div><div class="line">sudo ln <span class="_">-s</span> ~/PyUnitybox/Web/src/adm_uwsgi.ini /etc/uwsgi/vassals</div><div class="line">sudo ln <span class="_">-s</span> ~/PyUnitybox/Web/src/api_uwsgi.ini /etc/uwsgi/vassals</div><div class="line">sudo ln <span class="_">-s</span> ~/PyUnitybox/Web/src/biz_uwsgi.ini /etc/uwsgi/vassals</div><div class="line"><span class="comment">#创建nginx的log目录</span></div><div class="line">mkdir <span class="built_in">log</span></div></pre></td></tr></table></figure></p>
-<p>##考核ssl文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp -r ~/backUp/nginx-conf ~/</div></pre></td></tr></table></figure></p>
-<p>##修改Django的setting配置文件<br>然后要根据所部署的服务器server name的不同，修改biz/settings.py和adm/settings.py中的相应部分。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">此处不公开</div></pre></td></tr></table></figure></p>
-<p>##启动uwsgi<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/rc.local</div><div class="line"><span class="comment">#增加内容：/usr/local/bin/uwsgi --emperor /etc/uwsgi/vassals --uid www-data --gid www-data</span></div></pre></td></tr></table></figure></p>
+<h2 id="配置uwsgi和nginx"><a href="#配置uwsgi和nginx" class="headerlink" title="配置uwsgi和nginx"></a>配置uwsgi和nginx</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sudo ln <span class="_">-s</span> ~/PyUnitybox/Web/src/adm_nginx.conf /etc/nginx/sites-enabled/</div><div class="line">sudo ln <span class="_">-s</span> ~/PyUnitybox/Web/src/api_nginx.conf /etc/nginx/sites-enabled/</div><div class="line">sudo ln <span class="_">-s</span> ~/PyUnitybox/Web/src/biz_nginx.conf /etc/nginx/sites-enabled/</div><div class="line">sudo mkdir /etc/uwsgi</div><div class="line">sudo mkdir /etc/uwsgi/vassals</div><div class="line">sudo ln <span class="_">-s</span> ~/PyUnitybox/Web/src/adm_uwsgi.ini /etc/uwsgi/vassals</div><div class="line">sudo ln <span class="_">-s</span> ~/PyUnitybox/Web/src/api_uwsgi.ini /etc/uwsgi/vassals</div><div class="line">sudo ln <span class="_">-s</span> ~/PyUnitybox/Web/src/biz_uwsgi.ini /etc/uwsgi/vassals</div><div class="line"><span class="comment">#创建nginx的log目录</span></div><div class="line">mkdir <span class="built_in">log</span></div></pre></td></tr></table></figure>
+<h2 id="考核ssl文件"><a href="#考核ssl文件" class="headerlink" title="考核ssl文件"></a>考核ssl文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp -r ~/backUp/nginx-conf ~/</div></pre></td></tr></table></figure>
+<h2 id="修改Django的setting配置文件"><a href="#修改Django的setting配置文件" class="headerlink" title="修改Django的setting配置文件"></a>修改Django的setting配置文件</h2><p>然后要根据所部署的服务器server name的不同，修改biz/settings.py和adm/settings.py中的相应部分。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">此处不公开</div></pre></td></tr></table></figure></p>
+<h2 id="启动uwsgi"><a href="#启动uwsgi" class="headerlink" title="启动uwsgi"></a>启动uwsgi</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/rc.local</div><div class="line"><span class="comment">#增加内容：/usr/local/bin/uwsgi --emperor /etc/uwsgi/vassals --uid www-data --gid www-data</span></div></pre></td></tr></table></figure>
 <p>#collectstatic<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> PyUnitybox/Web/src/</div><div class="line">python manage_biz.py collectstatic</div><div class="line">python manage_adm.py collectstatic</div></pre></td></tr></table></figure></p>
-<p>##重启测试是否能自动启动uwsgi<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">reboot</div></pre></td></tr></table></figure></p>
-<p>##创建启动脚本<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">vim restart_pyunitybox.sh</div><div class="line">sudo <span class="built_in">kill</span> -9 `cat ~/<span class="built_in">log</span>/unitybox-biz.pid`</div><div class="line">sudo <span class="built_in">kill</span> -9 `cat ~/<span class="built_in">log</span>/unitybox-adm.pid`</div><div class="line">sudo <span class="built_in">kill</span> -9 `cat ~/<span class="built_in">log</span>/unitybox-api.pid`</div><div class="line"></div><div class="line">chmod +x restart_pyunitybox.sh </div><div class="line">./restart_pyunitybox.sh</div></pre></td></tr></table></figure></p>
+<h2 id="重启测试是否能自动启动uwsgi"><a href="#重启测试是否能自动启动uwsgi" class="headerlink" title="重启测试是否能自动启动uwsgi"></a>重启测试是否能自动启动uwsgi</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">reboot</div></pre></td></tr></table></figure>
+<h2 id="创建启动脚本"><a href="#创建启动脚本" class="headerlink" title="创建启动脚本"></a>创建启动脚本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">vim restart_pyunitybox.sh</div><div class="line">sudo <span class="built_in">kill</span> -9 `cat ~/<span class="built_in">log</span>/unitybox-biz.pid`</div><div class="line">sudo <span class="built_in">kill</span> -9 `cat ~/<span class="built_in">log</span>/unitybox-adm.pid`</div><div class="line">sudo <span class="built_in">kill</span> -9 `cat ~/<span class="built_in">log</span>/unitybox-api.pid`</div><div class="line"></div><div class="line">chmod +x restart_pyunitybox.sh</div><div class="line">./restart_pyunitybox.sh</div></pre></td></tr></table></figure>
 <p>#FAQ</p>
-<p>##uwsgi无法启动，报错mysqld.sock</p>
-<p>###可能是mysql服务down了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo /etc/init.d/mysql restart </div><div class="line"><span class="comment">#如果启动不要，请先kill wsgi相关的pid，否则被占用服务重启</span></div></pre></td></tr></table></figure></p>
-<p>###可能是服务器内存不足造成<br>该情况可以在wsgi运行的内存中发现提示</p>
+<h2 id="uwsgi无法启动，报错mysqld-sock"><a href="#uwsgi无法启动，报错mysqld-sock" class="headerlink" title="uwsgi无法启动，报错mysqld.sock"></a>uwsgi无法启动，报错mysqld.sock</h2><h2 id="可能是mysql服务down了"><a href="#可能是mysql服务down了" class="headerlink" title="# 可能是mysql服务down了"></a># 可能是mysql服务down了</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo /etc/init.d/mysql restart</div><div class="line"><span class="comment">#如果启动不要，请先kill wsgi相关的pid，否则被占用服务重启</span></div></pre></td></tr></table></figure>
+<h2 id="可能是服务器内存不足造成"><a href="#可能是服务器内存不足造成" class="headerlink" title="# 可能是服务器内存不足造成"></a># 可能是服务器内存不足造成</h2><p>该情况可以在wsgi运行的内存中发现提示</p>
 <blockquote>
 <p>spawned uWSGI master process (pid: 12149) fork(): Cannot allocate memory [core/master_utils.c line 726]</p>
 </blockquote>
 <p>这情况就只能将云服务resize了。</p>
-<p>###部署后二维码打印图片无法显示问题<br>问题可能为pillow的依赖lib不存在，具体可以看日志，如果为该情况，可以执行以下脚本去安装依赖，安装后记得重装pillow<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo aptitude install libfreetype6-devpip </div><div class="line">uninstall Pillowpip </div><div class="line">install Pillow==2.5.1</div></pre></td></tr></table></figure></p>
-<p>###部署后，登录应用无法登录，后台报各种表找不到<br>按该章节操作<a href="#django_setting">Django的setting配置</a></p>
+<h2 id="部署后二维码打印图片无法显示问题"><a href="#部署后二维码打印图片无法显示问题" class="headerlink" title="# 部署后二维码打印图片无法显示问题"></a># 部署后二维码打印图片无法显示问题</h2><p>问题可能为pillow的依赖lib不存在，具体可以看日志，如果为该情况，可以执行以下脚本去安装依赖，安装后记得重装pillow<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo aptitude install libfreetype6-devpip</div><div class="line">uninstall Pillowpip</div><div class="line">install Pillow==2.5.1</div></pre></td></tr></table></figure></p>
+<h2 id="部署后，登录应用无法登录，后台报各种表找不到"><a href="#部署后，登录应用无法登录，后台报各种表找不到" class="headerlink" title="# 部署后，登录应用无法登录，后台报各种表找不到"></a># 部署后，登录应用无法登录，后台报各种表找不到</h2><p>按该章节操作<a href="#django_setting">Django的setting配置</a></p>
 
       
     </div>
@@ -483,10 +472,10 @@ ubuntu 14.04.1
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -522,7 +511,7 @@ ubuntu 14.04.1
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#source"><span class="nav-number">1.</span> <span class="nav-text">source</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#target"><span class="nav-number">2.</span> <span class="nav-text">target</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据备份"><span class="nav-number">3.</span> <span class="nav-text">数据备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python运行环境备份"><span class="nav-number">4.</span> <span class="nav-text">Python运行环境备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ssl文件备份"><span class="nav-number">5.</span> <span class="nav-text">ssl文件备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#脚本-amp-nginx-amp-uwsgi配置文件备份"><span class="nav-number">6.</span> <span class="nav-text">脚本&nginx & uwsgi配置文件备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#备份文件传送"><span class="nav-number">7.</span> <span class="nav-text">备份文件传送</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统用户初始"><span class="nav-number">8.</span> <span class="nav-text">系统用户初始</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户及用户组创建"><span class="nav-number">9.</span> <span class="nav-text"># 用户及用户组创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置sudoer"><span class="nav-number">10.</span> <span class="nav-text"># 设置sudoer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据清理"><span class="nav-number">11.</span> <span class="nav-text">数据清理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装环境"><span class="nav-number">12.</span> <span class="nav-text">安装环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置MySql字符集"><span class="nav-number">13.</span> <span class="nav-text">配置MySql字符集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置git的ssh"><span class="nav-number">14.</span> <span class="nav-text">设置git的ssh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Python运行环境"><span class="nav-number">15.</span> <span class="nav-text">安装Python运行环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化数据库"><span class="nav-number">16.</span> <span class="nav-text">初始化数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置uwsgi和nginx"><span class="nav-number">17.</span> <span class="nav-text">配置uwsgi和nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#考核ssl文件"><span class="nav-number">18.</span> <span class="nav-text">考核ssl文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改Django的setting配置文件"><span class="nav-number">19.</span> <span class="nav-text">修改Django的setting配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动uwsgi"><span class="nav-number">20.</span> <span class="nav-text">启动uwsgi</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重启测试是否能自动启动uwsgi"><span class="nav-number">21.</span> <span class="nav-text">重启测试是否能自动启动uwsgi</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建启动脚本"><span class="nav-number">22.</span> <span class="nav-text">创建启动脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#uwsgi无法启动，报错mysqld-sock"><span class="nav-number">23.</span> <span class="nav-text">uwsgi无法启动，报错mysqld.sock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可能是mysql服务down了"><span class="nav-number">24.</span> <span class="nav-text"># 可能是mysql服务down了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可能是服务器内存不足造成"><span class="nav-number">25.</span> <span class="nav-text"># 可能是服务器内存不足造成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署后二维码打印图片无法显示问题"><span class="nav-number">26.</span> <span class="nav-text"># 部署后二维码打印图片无法显示问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署后，登录应用无法登录，后台报各种表找不到"><span class="nav-number">27.</span> <span class="nav-text"># 部署后，登录应用无法登录，后台报各种表找不到</span></a></li></ol></div>
             
           </div>
         </section>

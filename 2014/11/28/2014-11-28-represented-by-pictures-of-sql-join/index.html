@@ -85,28 +85,25 @@
 
 
 <meta name="description" content="#背景上学的时候，学Sql有一个比较大的苦恼就是分清那一堆的连接，什么左外连接，右外连接，外全连接，内连接……等等一大堆了，不是说他们多难，只是考试会把他们记混掉。最近看到Jeff Wood的一篇文章，他用图片的方式表示，我觉得非常形象，就搬到自己的博客来，自己稍微简化了一下。
-##数据表
-####表A1    Pirate2    Monkey3    Ninja4    Spaghetti
-#">
+数据表# # 表A1    Pirate2    Monkey3    Ninja4    Spaghetti
+# #">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用几张图片表示Sql的join">
 <meta property="og:url" content="http://yoursite.com/2014/11/28/2014-11-28-represented-by-pictures-of-sql-join/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
 <meta property="og:description" content="#背景上学的时候，学Sql有一个比较大的苦恼就是分清那一堆的连接，什么左外连接，右外连接，外全连接，内连接……等等一大堆了，不是说他们多难，只是考试会把他们记混掉。最近看到Jeff Wood的一篇文章，他用图片的方式表示，我觉得非常形象，就搬到自己的博客来，自己稍微简化了一下。
-##数据表
-####表A1    Pirate2    Monkey3    Ninja4    Spaghetti
-#">
+数据表# # 表A1    Pirate2    Monkey3    Ninja4    Spaghetti
+# #">
 <meta property="og:image" content="http://jbcdn2.b0.upaiyun.com/2013/05/iinner-join.png">
 <meta property="og:image" content="http://jbcdn2.b0.upaiyun.com/2013/05/Full-outer-join.png">
 <meta property="og:image" content="http://jbcdn2.b0.upaiyun.com/2013/05/Left-outer-join.png">
 <meta property="og:image" content="http://jbcdn2.b0.upaiyun.com/2013/05/WHERE-TableB.id-IS-nul.png">
-<meta property="og:updated_time" content="2015-05-04T06:05:28.000Z">
+<meta property="og:updated_time" content="2016-08-30T06:43:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用几张图片表示Sql的join">
 <meta name="twitter:description" content="#背景上学的时候，学Sql有一个比较大的苦恼就是分清那一堆的连接，什么左外连接，右外连接，外全连接，内连接……等等一大堆了，不是说他们多难，只是考试会把他们记混掉。最近看到Jeff Wood的一篇文章，他用图片的方式表示，我觉得非常形象，就搬到自己的博客来，自己稍微简化了一下。
-##数据表
-####表A1    Pirate2    Monkey3    Ninja4    Spaghetti
-#">
+数据表# # 表A1    Pirate2    Monkey3    Ninja4    Spaghetti
+# #">
 <meta name="twitter:image" content="http://jbcdn2.b0.upaiyun.com/2013/05/iinner-join.png">
 
 
@@ -183,22 +180,22 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -324,9 +321,8 @@
 
       
         <p>#背景<br>上学的时候，学Sql有一个比较大的苦恼就是分清那一堆的连接，什么左外连接，右外连接，外全连接，内连接……等等一大堆了，不是说他们多难，只是考试会把他们记混掉。最近看到Jeff Wood的一篇文章，他用图片的方式表示，我觉得非常形象，就搬到自己的博客来，自己稍微简化了一下。</p>
-<p>##数据表</p>
-<p>####表A<br>1    Pirate<br>2    Monkey<br>3    Ninja<br>4    Spaghetti</p>
-<p>####表B<br>1    Rutabaga<br>2    Pirate<br>3    Darth Vader<br>4    Ninja</p>
+<h2 id="数据表"><a href="#数据表" class="headerlink" title="数据表"></a>数据表</h2><h2 id="表A"><a href="#表A" class="headerlink" title="# # 表A"></a># # 表A</h2><p>1    Pirate<br>2    Monkey<br>3    Ninja<br>4    Spaghetti</p>
+<h2 id="表B"><a href="#表B" class="headerlink" title="# # 表B"></a># # 表B</h2><p>1    Rutabaga<br>2    Pirate<br>3    Darth Vader<br>4    Ninja</p>
 <p>#不用连接<br>多表查询最简单的方式就是下面这句，但是其实这句话的效率非常低，因为他产生的结果集说亮是两个表数量的笛卡尔积，即a*b，所以from a,b其实是先获取了一个a*b的结果集，然后再执行where去过滤，再执行group by去分组，再select的。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> a,b;</div></pre></td></tr></table></figure></p>
 <p>结果无法用图表示，输出为<br>1  |  Pirate  |  1  |  Rutabaga<br>2  |  Monkey  |  1  |  Rutabaga<br>3  |  Ninja  |  1  |  Rutabaga<br>4  |  Spaghetti  |  1  |  Rutabaga<br>1  |  Pirate  |  2  |  Pirate<br>2  |  Monkey  |  2  |  Pirate<br>3  |  Ninja  |  2  |  Pirate<br>4  |  Spaghetti  |  2  |  Pirate<br>1  |  Pirate  |  3  |  Darth Vader<br>2  |  Monkey  |  3  |  Darth Vader<br>3  |  Ninja  |  3  |  Darth Vader<br>4  |  Spaghetti  |  3  |  Darth Vader<br>1  |  Pirate  |  4  |  Ninja<br>2  |  Monkey  |  4  |  Ninja<br>3  |  Ninja  |  4  |  Ninja<br>4  |  Spaghetti  |  4  |  Ninja</p>
 <p>#内连接<br><img src="http://jbcdn2.b0.upaiyun.com/2013/05/iinner-join.png" alt=""><br>如图，内连接即为两个表交叉的部分。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> a <span class="keyword">INNER</span> <span class="keyword">JOIN</span> b <span class="keyword">ON</span> a.name = b.name;</div></pre></td></tr></table></figure></p>
@@ -449,10 +445,10 @@
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -488,7 +484,7 @@
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据表"><span class="nav-number">1.</span> <span class="nav-text">数据表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表A"><span class="nav-number">2.</span> <span class="nav-text"># # 表A</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表B"><span class="nav-number">3.</span> <span class="nav-text"># # 表B</span></a></li></ol></div>
             
           </div>
         </section>

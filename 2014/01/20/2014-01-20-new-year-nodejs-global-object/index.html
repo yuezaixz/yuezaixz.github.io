@@ -90,7 +90,7 @@
 <meta property="og:url" content="http://yoursite.com/2014/01/20/2014-01-20-new-year-nodejs-global-object/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
 <meta property="og:description" content="上周六，公司的尾牙终于结束了。由于公司的尾牙的排练，也落下了不上工作，本周也是当前项目的关键一周，还有很多工作要做，因此这时候想撇开过去说辞旧迎新还是有点早的。但是，我就是一个标题党，我今天要说的辞旧迎新和你们想的肯定完全不一样，谁能猜到我要说的是什么呢？我要说的其实就是，工业时代的过去，互联网时代的到来。自蒸汽机以来250年间，工业思维一直主导着我们的社会，“中心化”、“集中化”、“标准化”、“">
-<meta property="og:updated_time" content="2015-05-05T00:28:36.000Z">
+<meta property="og:updated_time" content="2016-08-30T06:41:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="辞旧迎新---javascript的全局对象">
 <meta name="twitter:description" content="上周六，公司的尾牙终于结束了。由于公司的尾牙的排练，也落下了不上工作，本周也是当前项目的关键一周，还有很多工作要做，因此这时候想撇开过去说辞旧迎新还是有点早的。但是，我就是一个标题党，我今天要说的辞旧迎新和你们想的肯定完全不一样，谁能猜到我要说的是什么呢？我要说的其实就是，工业时代的过去，互联网时代的到来。自蒸汽机以来250年间，工业思维一直主导着我们的社会，“中心化”、“集中化”、“标准化”、“">
@@ -169,22 +169,22 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -370,16 +370,16 @@
 <p>##2 常用的全局变量</p>
 <p>###2.1 Process<br>process 是一个全局变量，即 global 对象的属性。它用于描述当前 Node.js 进程状态的对象，提供了一个与操作系统的简单接口。<br>下面将会介绍 process 对象的一些最常用的成员方法。</p>
 <p>####2.1.1 process.argv<br>process.argv是命令行参数数组，第一个元素是 node，第二个元素是脚本文件名，从第三个元素开始每个元素是一个运行参数。<br>看以下例子：<br><figure class="highlight javascript"><figcaption><span>argv.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(process.argv);</div></pre></td></tr></table></figure></p>
-<p>在控制台执行的结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[David@localhost javascriptStudy]$ node argv.js 19881114 name=David -V XMUT </div><div class="line">[ &apos;node&apos;,</div><div class="line">  &apos;/home/David/workspace/javascriptStudy/argv.js&apos;,</div><div class="line">  &apos;19881114&apos;,</div><div class="line">  &apos;name=David&apos;,</div><div class="line">  &apos;-V&apos;,</div><div class="line">  &apos;XMUT&apos; ]</div></pre></td></tr></table></figure></p>
+<p>在控制台执行的结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[David@localhost javascriptStudy]$ node argv.js 19881114 name=David -V XMUT</div><div class="line">[ &apos;node&apos;,</div><div class="line">  &apos;/home/David/workspace/javascriptStudy/argv.js&apos;,</div><div class="line">  &apos;19881114&apos;,</div><div class="line">  &apos;name=David&apos;,</div><div class="line">  &apos;-V&apos;,</div><div class="line">  &apos;XMUT&apos; ]</div></pre></td></tr></table></figure></p>
 <p>####2.1.2 process.stdout<br>标准输出流，通常我们使用的 console.log() 向标准输出打印字符，而 process.stdout.write() 函数提供了更底层的接口。下面这个例子我直接在控制台输出了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[David@localhost javascriptStudy]$ node -e &apos;process.stdout.write(&quot;aaa&quot;)&apos;</div><div class="line">aaa</div></pre></td></tr></table></figure></p>
-<p>####2.1.3 process.stdin<br>标准输入流，初始时它是被暂停的，要想从标准输入读取数据，你必须恢复流，并手动编写流的事件响应函数。<br><figure class="highlight javascript"><figcaption><span>testStdin.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">process.stdin.resume();</div><div class="line">process.stdin.setEncoding(<span class="string">'utf8'</span>);</div><div class="line">process.stdin.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">process.stdout.write(<span class="string">'read from console: '</span> + data.toString());</div><div class="line"><span class="keyword">if</span>(data.toString().substring(<span class="number">0</span>,<span class="number">3</span>) == <span class="string">'bye'</span>)&#123;</div><div class="line">    process.stdin.emit(<span class="string">'end'</span>);                                                  </div><div class="line">&#125;</div><div class="line">&#125;);</div><div class="line">process.stdin.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  process.stdout.write(<span class="string">'end!'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[David@localhost javascriptStudy]$ node testStdin.js </div><div class="line">我是David!</div><div class="line">read from console: 我是David!</div><div class="line">bye</div><div class="line">read from console: bye</div><div class="line">end!</div></pre></td></tr></table></figure>
+<p>####2.1.3 process.stdin<br>标准输入流，初始时它是被暂停的，要想从标准输入读取数据，你必须恢复流，并手动编写流的事件响应函数。<br><figure class="highlight javascript"><figcaption><span>testStdin.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">process.stdin.resume();</div><div class="line">process.stdin.setEncoding(<span class="string">'utf8'</span>);</div><div class="line">process.stdin.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">process.stdout.write(<span class="string">'read from console: '</span> + data.toString());</div><div class="line"><span class="keyword">if</span>(data.toString().substring(<span class="number">0</span>,<span class="number">3</span>) == <span class="string">'bye'</span>)&#123;</div><div class="line">    process.stdin.emit(<span class="string">'end'</span>);</div><div class="line">&#125;</div><div class="line">&#125;);</div><div class="line">process.stdin.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  process.stdout.write(<span class="string">'end!'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[David@localhost javascriptStudy]$ node testStdin.js</div><div class="line">我是David!</div><div class="line">read from console: 我是David!</div><div class="line">bye</div><div class="line">read from console: bye</div><div class="line">end!</div></pre></td></tr></table></figure>
 <p>还有一种方式就是把输入写到文件中重定向，比如我创建一个文件叫in，里面内容是“我是吴迪玮，我是中国人！”。然后执行下面命令。In中的内容会重定向输出到out中去。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[David@localhost javascriptStudy]$ cat in</div><div class="line">我是吴迪玮，是个中国人！</div><div class="line">[David@localhost javascriptStudy]$ cat out</div><div class="line">cat: out: 没有那个文件或目录</div><div class="line">[David@localhost javascriptStudy]$ node testStdin.js &lt; in out</div><div class="line">[David@localhost javascriptStudy]$ cat out</div><div class="line">read from console: 我是吴迪玮，是个中国人！</div></pre></td></tr></table></figure>
 <p>####2.1.4 process.nextTick(callback)<br>process.nextTick(callback) 的功能是为事件循环设置一项任务，Node.js 会在下次事件循环调响应时调用 callback。<br>先解释下下次时间循环响应时调用是什么意思。<br>任何javascript应用都是一个单线程，任何时刻都只有一个事件在执行，因此javascript应用应该尽可能缩短事件的执行时间。process.nextTick(callback)提供了一个这样的工具，可以吧复杂的工作拆散，变成一个一个较小的时间。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSomething</span>(<span class="params">args, callback</span>) </span>&#123;</div><div class="line">somethingComplicated(args);</div><div class="line">process.nextTick(callback);</div><div class="line">&#125;</div><div class="line">doSomething(<span class="function"><span class="keyword">function</span> <span class="title">onEnd</span>(<span class="params"></span>) </span>&#123;</div><div class="line">compute();</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
 <p>上面的程序中，somethingComplicated和compute都执行时间较长，因此，后面的process.nextTick(callback);会把耗时的操作拆分，减少每个时间的执行时间，提高响应速度。<br>你也可以使用setTimeout()函数来达到貌似同样的执行效果：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSomething</span>(<span class="params">args, callback</span>) </span>&#123;</div><div class="line">somethingComplicated(args);</div><div class="line">setTimeout(callback, <span class="number">0</span>);</div><div class="line">&#125;</div><div class="line">doSomething(<span class="function"><span class="keyword">function</span> <span class="title">onEnd</span>(<span class="params"></span>) </span>&#123;</div><div class="line">compute();</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
 <p>但是 <strong>注意</strong> ：不要使用setTimeout（fn,0）来代替，nextTick效率高的多。</p>
-<p>#####2.1.4.1 process.nextTick()和setTimeout(fn, 0)的不同<br>在内部的处理机制上，process.nextTick()和setTimeout(fn, 0)是不同的，process.nextTick()不是一个单纯的延时，他有更多的<a href="https://gist.github.com/mmalecki/1257394" target="_blank" rel="external">特性</a>。<br>更精确的说，process.nextTick()定义的调用会创建一个新的子堆栈。在当前的栈里，你可以执行任意多的操作。但一旦调用netxTick，函数就必须返回到父堆栈。然后事件轮询机制又重新等待处理新的事件，如果发现nextTick的调用，就会创建一个新的栈。 </p>
+<p>#####2.1.4.1 process.nextTick()和setTimeout(fn, 0)的不同<br>在内部的处理机制上，process.nextTick()和setTimeout(fn, 0)是不同的，process.nextTick()不是一个单纯的延时，他有更多的<a href="https://gist.github.com/mmalecki/1257394" target="_blank" rel="external">特性</a>。<br>更精确的说，process.nextTick()定义的调用会创建一个新的子堆栈。在当前的栈里，你可以执行任意多的操作。但一旦调用netxTick，函数就必须返回到父堆栈。然后事件轮询机制又重新等待处理新的事件，如果发现nextTick的调用，就会创建一个新的栈。</p>
 <p>#####2.1.4.2 nextTick()的具体用途<br>可以参考该文，戳<a href="http://www.oschina.net/translate/understanding-process-next-tick?cmp" target="_blank" rel="external">这里</a></p>
 <p>####2.1.5 其他<br>除此之外process还展示了process.platform、process.pid、process.execPath、process.memoryUsage() 等方法，以及 POSIX进程信号响应机制。有兴趣的读者可以查看<a href="http://javascript.org/api/process.html" target="_blank" rel="external">API</a>了解详细内容。</p>
 <p>###2.2 Console</p>
@@ -496,10 +496,10 @@
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 

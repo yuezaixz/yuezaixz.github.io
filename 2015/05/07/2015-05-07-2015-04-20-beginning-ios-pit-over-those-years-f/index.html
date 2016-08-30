@@ -84,22 +84,22 @@
 
 
 
-<meta name="description" content="##地图的View退到后台后导致闪退错误信息为gpus_ReturnNotPermittedKillClient
-###事因情况大概是这样的，中间有个版本因为地图占用了内存，所以在4S上会有内存不足闪退的原因，然后做了一次修改就是进入后台的时候把地图销毁了，具体代码如下。
-12[[NSNotificationCenter defaultCenter] addObserver:self select">
+<meta name="description" content="地图的View退到后台后导致闪退错误信息为gpus_ReturnNotPermittedKillClient
+# 事因情况大概是这样的，中间有个版本因为地图占用了内存，所以在4S上会有内存不足闪退的原因，然后做了一次修改就是进入后台的时候把地图销毁了，具体代码如下。
+12[[NSNotificationCenter defaultCenter] addObserver:self selector:">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初学IOS那些年踩过的坑（七）">
 <meta property="og:url" content="http://yoursite.com/2015/05/07/2015-05-07-2015-04-20-beginning-ios-pit-over-those-years-f/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
-<meta property="og:description" content="##地图的View退到后台后导致闪退错误信息为gpus_ReturnNotPermittedKillClient
-###事因情况大概是这样的，中间有个版本因为地图占用了内存，所以在4S上会有内存不足闪退的原因，然后做了一次修改就是进入后台的时候把地图销毁了，具体代码如下。
-12[[NSNotificationCenter defaultCenter] addObserver:self select">
-<meta property="og:updated_time" content="2015-05-07T06:35:16.000Z">
+<meta property="og:description" content="地图的View退到后台后导致闪退错误信息为gpus_ReturnNotPermittedKillClient
+# 事因情况大概是这样的，中间有个版本因为地图占用了内存，所以在4S上会有内存不足闪退的原因，然后做了一次修改就是进入后台的时候把地图销毁了，具体代码如下。
+12[[NSNotificationCenter defaultCenter] addObserver:self selector:">
+<meta property="og:updated_time" content="2016-08-30T06:43:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初学IOS那些年踩过的坑（七）">
-<meta name="twitter:description" content="##地图的View退到后台后导致闪退错误信息为gpus_ReturnNotPermittedKillClient
-###事因情况大概是这样的，中间有个版本因为地图占用了内存，所以在4S上会有内存不足闪退的原因，然后做了一次修改就是进入后台的时候把地图销毁了，具体代码如下。
-12[[NSNotificationCenter defaultCenter] addObserver:self select">
+<meta name="twitter:description" content="地图的View退到后台后导致闪退错误信息为gpus_ReturnNotPermittedKillClient
+# 事因情况大概是这样的，中间有个版本因为地图占用了内存，所以在4S上会有内存不足闪退的原因，然后做了一次修改就是进入后台的时候把地图销毁了，具体代码如下。
+12[[NSNotificationCenter defaultCenter] addObserver:self selector:">
 
 
 
@@ -175,22 +175,22 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -272,15 +272,16 @@
       
 
       
-        <p>##地图的View退到后台后导致闪退<br>错误信息为gpus_ReturnNotPermittedKillClient</p>
-<p>###事因<br>情况大概是这样的，中间有个版本因为地图占用了内存，所以在4S上会有内存不足闪退的原因，然后做了一次修改就是进入后台的时候把地图销毁了，具体代码如下。</p>
+        <h2 id="地图的View退到后台后导致闪退"><a href="#地图的View退到后台后导致闪退" class="headerlink" title="地图的View退到后台后导致闪退"></a>地图的View退到后台后导致闪退</h2><p>错误信息为gpus_ReturnNotPermittedKillClient</p>
+<h2 id="事因"><a href="#事因" class="headerlink" title="# 事因"></a># 事因</h2><p>情况大概是这样的，中间有个版本因为地图占用了内存，所以在4S上会有内存不足闪退的原因，然后做了一次修改就是进入后台的时候把地图销毁了，具体代码如下。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(applicationDidEnterBackgroundNotification:) name:RMApplicationDidEnterBackgroundNotification object:<span class="literal">nil</span>];</div><div class="line">[[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(applicationDidWillEnterForegroundNotification:) name:RMApplicationDidWillEnterForegroundNotification object:<span class="literal">nil</span>];</div></pre></td></tr></table></figure>
 <p>销毁代码如下</p>
 <figure class="highlight objc"><figcaption><span>RMMapView.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)applicationDidEnterBackgroundNotification:(<span class="built_in">NSNotification</span> *)notification &#123;</div><div class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span> viewController] == [<span class="keyword">self</span> topViewController]) &#123;</div><div class="line">        [<span class="keyword">self</span> setHiddenMap:<span class="literal">YES</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)applicationDidWillEnterForegroundNotification:(<span class="built_in">NSNotification</span> *)notification &#123;</div><div class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span> viewController] == [<span class="keyword">self</span> topViewController]) &#123;</div><div class="line">        [<span class="keyword">self</span> setHiddenMap:<span class="literal">NO</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)setHiddenMap:(<span class="built_in">BOOL</span>)hiddenMap &#123;</div><div class="line">    <span class="keyword">if</span> (hiddenMap == _hiddenMap) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">self</span>.hidden = hiddenMap;</div><div class="line">    _hiddenMap = hiddenMap;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (hiddenMap) &#123;</div><div class="line">        <span class="keyword">if</span> (_mapViewClient) &#123;</div><div class="line">            _latitudeDelta = [_mapViewClient getMapRegionLatitudeDelta];</div><div class="line">            _longitudeDelta = [_mapViewClient getMapRegionLatitudeDelta];</div><div class="line">            _coordinate = [_mapViewClient getMapCenterLocationCoordinate2D];</div><div class="line">            [_mapViewClient removeMapView];</div><div class="line">            _changedMapLevel = <span class="literal">NO</span>;</div><div class="line">            _mapViewClient = <span class="literal">nil</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">if</span> ([_mapViewClient getMapView] == <span class="literal">nil</span>) &#123;</div><div class="line"><span class="comment">//            [self performSelector:@selector(createMap) withObject:nil afterDelay:0.5];</span></div><div class="line">            _changedMapLevel = <span class="literal">NO</span>;</div><div class="line">            [<span class="keyword">self</span> createMap];</div><div class="line">            [<span class="keyword">self</span> drawLineForMapView];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <figure class="highlight objc"><figcaption><span>MapViewClient.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)removeMapView &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="literal">nil</span> != mainMapView) &#123;</div><div class="line">        [mainMapView removeFromSuperview];</div><div class="line">    &#125;</div><div class="line">    mainMapView = <span class="literal">nil</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>然后就偶尔会出现退到后台会闪退的原因。Google了一些资料算是把自己误导了。<br>回答的意思基本上是销毁的方法不对（可能确实是销毁的有问题），但是回答也基本上都是设置成nil，要不就把delegate=nil，尝试了都没效果，还是一直会闪退。</p>
-<p>###解决<br>最后换了个思路，放弃销毁，把销毁的代码全部去了，只是在地图的代理方法里加判断，判断是否为Active，不是则不执行。暂时测试还未发现闪退问题</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="# 解决"></a># 解决</h2><p>最后换了个思路，放弃销毁，把销毁的代码全部去了，只是在地图的代理方法里加判断，判断是否为Active，不是则不执行。暂时测试还未发现闪退问题</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ([<span class="built_in">UIApplication</span> sharedApplication].applicationState != <span class="built_in">UIApplicationStateActive</span>) &#123;</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -390,10 +391,10 @@
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -429,7 +430,7 @@
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#地图的View退到后台后导致闪退"><span class="nav-number">1.</span> <span class="nav-text">地图的View退到后台后导致闪退</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事因"><span class="nav-number">2.</span> <span class="nav-text"># 事因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决"><span class="nav-number">3.</span> <span class="nav-text"># 解决</span></a></li></ol></div>
             
           </div>
         </section>

@@ -86,20 +86,20 @@
 
 <meta name="description" content="#学习开始开始学习obj-c了，最近工作的事情也挺忙的，只能抓住一点点的休息时间来看书。Mac机器还没弄起来，就按看书的理解瞎写点文章，看看之后敲代码后会不会觉得之前理解的偏差太大了。今天就先随便写一点对属性的理解吧。
 #属性
-##什么是属性对象是一个类的实例，而封装在一个对象中的数据在Java中常称为数据、状态、特性、成员变量或者属性，而在Obj-c中属性有另外一番意义。在Obj-c中属性主要用">
+什么是属性对象是一个类的实例，而封装在一个对象中的数据在Java中常称为数据、状态、特性、成员变量或者属性，而在Obj-c中属性有另外一番意义。在Obj-c中属性主要用于声">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IOS从头开始之Obj-C的属性">
 <meta property="og:url" content="http://yoursite.com/2014/12/11/2014-12-11-properties-of-the-ios-obj-c-from-scratch/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
 <meta property="og:description" content="#学习开始开始学习obj-c了，最近工作的事情也挺忙的，只能抓住一点点的休息时间来看书。Mac机器还没弄起来，就按看书的理解瞎写点文章，看看之后敲代码后会不会觉得之前理解的偏差太大了。今天就先随便写一点对属性的理解吧。
 #属性
-##什么是属性对象是一个类的实例，而封装在一个对象中的数据在Java中常称为数据、状态、特性、成员变量或者属性，而在Obj-c中属性有另外一番意义。在Obj-c中属性主要用">
-<meta property="og:updated_time" content="2015-05-04T15:14:47.000Z">
+什么是属性对象是一个类的实例，而封装在一个对象中的数据在Java中常称为数据、状态、特性、成员变量或者属性，而在Obj-c中属性有另外一番意义。在Obj-c中属性主要用于声">
+<meta property="og:updated_time" content="2016-08-30T06:43:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IOS从头开始之Obj-C的属性">
 <meta name="twitter:description" content="#学习开始开始学习obj-c了，最近工作的事情也挺忙的，只能抓住一点点的休息时间来看书。Mac机器还没弄起来，就按看书的理解瞎写点文章，看看之后敲代码后会不会觉得之前理解的偏差太大了。今天就先随便写一点对属性的理解吧。
 #属性
-##什么是属性对象是一个类的实例，而封装在一个对象中的数据在Java中常称为数据、状态、特性、成员变量或者属性，而在Obj-c中属性有另外一番意义。在Obj-c中属性主要用">
+什么是属性对象是一个类的实例，而封装在一个对象中的数据在Java中常称为数据、状态、特性、成员变量或者属性，而在Obj-c中属性有另外一番意义。在Obj-c中属性主要用于声">
 
 
 
@@ -175,22 +175,22 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -305,24 +305,24 @@
       
         <p>#学习开始<br>开始学习obj-c了，最近工作的事情也挺忙的，只能抓住一点点的休息时间来看书。Mac机器还没弄起来，就按看书的理解瞎写点文章，看看之后敲代码后会不会觉得之前理解的偏差太大了。<br>今天就先随便写一点对属性的理解吧。</p>
 <p>#属性</p>
-<p>##什么是属性<br>对象是一个类的实例，而封装在一个对象中的数据在Java中常称为数据、状态、特性、成员变量或者属性，而在Obj-c中属性有另外一番意义。<br>在Obj-c中属性主要用于声明类的数据成员的存取方法，有了他们就不必使用很多标准代码（如Java中就需要定义getter &amp; setter）。</p>
-<p>##如何声明<br>@property，在头文件中的数据前加这个标志，就可以让编译好器自动编写一个与数据成员同名的方法声明来省去读写方法的声明。<br>例如：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> <span class="keyword">int</span> count;</div></pre></td></tr></table></figure></p>
+<h2 id="什么是属性"><a href="#什么是属性" class="headerlink" title="什么是属性"></a>什么是属性</h2><p>对象是一个类的实例，而封装在一个对象中的数据在Java中常称为数据、状态、特性、成员变量或者属性，而在Obj-c中属性有另外一番意义。<br>在Obj-c中属性主要用于声明类的数据成员的存取方法，有了他们就不必使用很多标准代码（如Java中就需要定义getter &amp; setter）。</p>
+<h2 id="如何声明"><a href="#如何声明" class="headerlink" title="如何声明"></a>如何声明</h2><p>@property，在头文件中的数据前加这个标志，就可以让编译好器自动编写一个与数据成员同名的方法声明来省去读写方法的声明。<br>例如：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> <span class="keyword">int</span> count;</div></pre></td></tr></table></figure></p>
 <p>等同于<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> <span class="keyword">int</span> count;</div><div class="line">- (<span class="keyword">void</span>)setCount:(<span class="keyword">int</span>)inCount;</div><div class="line">- (<span class="keyword">int</span>)count;</div></pre></td></tr></table></figure></p>
-<p>##参数<br>如下面代码，property的完整语法是：@property (参数1,参数2,…) 类型 属性1名,属性2名;<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) <span class="keyword">IBOutlet</span> <span class="built_in">UIBarButtonItem</span> \*clearButtonItem;</div></pre></td></tr></table></figure></p>
-<p>###nonatomic<br>指定生成的存取器函数是非原子性的，即线程安全的。默认为原子性。<br>书中是建议如果不需要多线程，不要使用原子性。我也这么认为，毕竟在取属性前都加一个锁的开销也是挺大的。</p>
-<p>###readwrite<br>既生成setter和getter方法，默认为readwrite</p>
-<p>###readonly<br>即只生成getter方法</p>
-<p>###assign<br>既生成赋值函数只是简单的变量赋值，就当做java中的set方法好了，毕竟java中没有内存管理。看旧的书说默认为assign，但是看新的书说已经改成默认strong了。这点暂不确定，有疑问。</p>
-<p>###retain<br>既生成的赋值函数在赋值到变量前，会对参数进行release旧值，再retain新值。这个开始我不是和理解，但结合后面学习的引用计数器就理解了，retain方法会给实例的引用计数器+1，而release会-1，那么set操作就需要把旧值的引用先去了，再将新值的引用+1.<br>但是，这个属性在ARC下编译就可以去掉了，ARC会在编译的时候在适当的地方加retain和release。</p>
-<p>###copy<br>生成的存取函数会复制传入值到数据成员，初始计数为1.<br>对于NSString、NSArray等非可变类，书中是推荐用copy来声明的。</p>
-<p>###strong<br>该属性值对应 __strong 关键字，即该属性所声明的变量将成为对象的持有者。</p>
-<p>###weak<br>该属性对应 <strong>weak 关键字，与 </strong>weak 定义的变量一致，该属性所声明的变量将没有对象的所有权，并且当对象被破弃之后，对象将被自动赋值nil。</p>
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>如下面代码，property的完整语法是：@property (参数1,参数2,…) 类型 属性1名,属性2名;<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) <span class="keyword">IBOutlet</span> <span class="built_in">UIBarButtonItem</span> \*clearButtonItem;</div></pre></td></tr></table></figure></p>
+<h2 id="nonatomic"><a href="#nonatomic" class="headerlink" title="# nonatomic"></a># nonatomic</h2><p>指定生成的存取器函数是非原子性的，即线程安全的。默认为原子性。<br>书中是建议如果不需要多线程，不要使用原子性。我也这么认为，毕竟在取属性前都加一个锁的开销也是挺大的。</p>
+<h2 id="readwrite"><a href="#readwrite" class="headerlink" title="# readwrite"></a># readwrite</h2><p>既生成setter和getter方法，默认为readwrite</p>
+<h2 id="readonly"><a href="#readonly" class="headerlink" title="# readonly"></a># readonly</h2><p>即只生成getter方法</p>
+<h2 id="assign"><a href="#assign" class="headerlink" title="# assign"></a># assign</h2><p>既生成赋值函数只是简单的变量赋值，就当做java中的set方法好了，毕竟java中没有内存管理。看旧的书说默认为assign，但是看新的书说已经改成默认strong了。这点暂不确定，有疑问。</p>
+<h2 id="retain"><a href="#retain" class="headerlink" title="# retain"></a># retain</h2><p>既生成的赋值函数在赋值到变量前，会对参数进行release旧值，再retain新值。这个开始我不是和理解，但结合后面学习的引用计数器就理解了，retain方法会给实例的引用计数器+1，而release会-1，那么set操作就需要把旧值的引用先去了，再将新值的引用+1.<br>但是，这个属性在ARC下编译就可以去掉了，ARC会在编译的时候在适当的地方加retain和release。</p>
+<h2 id="copy"><a href="#copy" class="headerlink" title="# copy"></a># copy</h2><p>生成的存取函数会复制传入值到数据成员，初始计数为1.<br>对于NSString、NSArray等非可变类，书中是推荐用copy来声明的。</p>
+<h2 id="strong"><a href="#strong" class="headerlink" title="# strong"></a># strong</h2><p>该属性值对应 __strong 关键字，即该属性所声明的变量将成为对象的持有者。</p>
+<h2 id="weak"><a href="#weak" class="headerlink" title="# weak"></a># weak</h2><p>该属性对应 <strong>weak 关键字，与 </strong>weak 定义的变量一致，该属性所声明的变量将没有对象的所有权，并且当对象被破弃之后，对象将被自动赋值nil。</p>
 <p>并且，delegate 和 Outlet 应该用 weak 属性来声明。同时，如上一回介绍的 iOS 5 之前的版本是没有 __weak 关键字的，所以 weak 属性是不能使用的。这种情况我们使用 unsafe_unretained。</p>
 <p>#如何实现<br>关在同文件中声明可不行，还得在实现文件中对属性的处理方式进行声明。</p>
 <p>#synthesize和dynamic<br>在实现文件中用前者就不用为实现文件中的属性写任何代码，而用后者编译器就会希望你为属性创建一对合适的getter &amp; setter。<br>但是，在Obj-c2.0后，已经不需要使用@synthesize关键字了，书中是这么建议的<strong>在以后的编程中都使用属性和自动合成的实例变量，在头文件中声明公用的属性，在实现文件的类扩展部分声明私有属性。</strong><br><figure class="highlight objc"><figcaption><span>MyClass.h</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyClass</span> : <span class="title">NSObject</span></span></div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">readwrite</span>,week) <span class="keyword">id</span> delegate;</div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">readonly</span>,<span class="keyword">strong</span>) <span class="built_in">NSString</span> \*readonlyString;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure></p>
 <figure class="highlight objc"><figcaption><span>MyClass.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyClass</span> ()</span></div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">readwrite</span>,<span class="keyword">strong</span>)  <span class="built_in">NSString</span> \*privateString;</div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">readwrite</span>,<span class="keyword">strong</span>) <span class="built_in">NSString</span> \*readonlyString;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
 <p>注意：<strong>readonlyString在实现时候重定义使用了readwrite，那么他就有一个私用的setter方法。</strong></p>
-<p>##隐藏的实例变量<br>如上代码会自动创建几个实例变量：_readonlyString ,_delegate,\privateString。最右在init、dealloc和覆盖的存取器中才应该使用这些实例变量。</p>
+<h2 id="隐藏的实例变量"><a href="#隐藏的实例变量" class="headerlink" title="隐藏的实例变量"></a>隐藏的实例变量</h2><p>如上代码会自动创建几个实例变量：_readonlyString ,_delegate,\privateString。最右在init、dealloc和覆盖的存取器中才应该使用这些实例变量。</p>
 
       
     </div>
@@ -433,10 +433,10 @@
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -472,7 +472,7 @@
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是属性"><span class="nav-number">1.</span> <span class="nav-text">什么是属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何声明"><span class="nav-number">2.</span> <span class="nav-text">如何声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数"><span class="nav-number">3.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nonatomic"><span class="nav-number">4.</span> <span class="nav-text"># nonatomic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#readwrite"><span class="nav-number">5.</span> <span class="nav-text"># readwrite</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#readonly"><span class="nav-number">6.</span> <span class="nav-text"># readonly</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#assign"><span class="nav-number">7.</span> <span class="nav-text"># assign</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#retain"><span class="nav-number">8.</span> <span class="nav-text"># retain</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#copy"><span class="nav-number">9.</span> <span class="nav-text"># copy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#strong"><span class="nav-number">10.</span> <span class="nav-text"># strong</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#weak"><span class="nav-number">11.</span> <span class="nav-text"># weak</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隐藏的实例变量"><span class="nav-number">12.</span> <span class="nav-text">隐藏的实例变量</span></a></li></ol></div>
             
           </div>
         </section>

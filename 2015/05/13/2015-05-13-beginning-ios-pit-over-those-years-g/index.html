@@ -84,19 +84,19 @@
 
 
 
-<meta name="description" content="##毛玻璃效果实现不管是用FXBlurView还是用GPUImage实现，都会有卡顿的问题，所以在追求流畅度的时候可以考虑用一下代码替换。
-123456789101112131415161718UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectW">
+<meta name="description" content="毛玻璃效果实现不管是用FXBlurView还是用GPUImage实现，都会有卡顿的问题，所以在追求流畅度的时候可以考虑用一下代码替换。
+123456789101112131415161718UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWit">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初学IOS那些年踩过的坑（八）">
 <meta property="og:url" content="http://yoursite.com/2015/05/13/2015-05-13-beginning-ios-pit-over-those-years-g/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
-<meta property="og:description" content="##毛玻璃效果实现不管是用FXBlurView还是用GPUImage实现，都会有卡顿的问题，所以在追求流畅度的时候可以考虑用一下代码替换。
-123456789101112131415161718UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectW">
-<meta property="og:updated_time" content="2015-05-13T03:27:52.000Z">
+<meta property="og:description" content="毛玻璃效果实现不管是用FXBlurView还是用GPUImage实现，都会有卡顿的问题，所以在追求流畅度的时候可以考虑用一下代码替换。
+123456789101112131415161718UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWit">
+<meta property="og:updated_time" content="2016-08-30T06:43:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初学IOS那些年踩过的坑（八）">
-<meta name="twitter:description" content="##毛玻璃效果实现不管是用FXBlurView还是用GPUImage实现，都会有卡顿的问题，所以在追求流畅度的时候可以考虑用一下代码替换。
-123456789101112131415161718UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectW">
+<meta name="twitter:description" content="毛玻璃效果实现不管是用FXBlurView还是用GPUImage实现，都会有卡顿的问题，所以在追求流畅度的时候可以考虑用一下代码替换。
+123456789101112131415161718UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWit">
 
 
 
@@ -172,22 +172,22 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -269,17 +269,15 @@
       
 
       
-        <p>##毛玻璃效果实现<br>不管是用FXBlurView还是用GPUImage实现，都会有卡顿的问题，所以在追求流畅度的时候可以考虑用一下代码替换。</p>
+        <h2 id="毛玻璃效果实现"><a href="#毛玻璃效果实现" class="headerlink" title="毛玻璃效果实现"></a>毛玻璃效果实现</h2><p>不管是用FXBlurView还是用GPUImage实现，都会有卡顿的问题，所以在追求流畅度的时候可以考虑用一下代码替换。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">UIVisualEffectView</span> *visualEffectView = [[<span class="built_in">UIVisualEffectView</span> alloc] initWithEffect:[<span class="built_in">UIBlurEffect</span> effectWithStyle:<span class="built_in">UIBlurEffectStyleLight</span>]];</div><div class="line">visualEffectView.frame = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, _mapView.frame.size.height - <span class="keyword">self</span>.dataBed.frame.size.height, <span class="keyword">self</span>.dataBed.frame.size.width, <span class="keyword">self</span>.dataBed.frame.size.height);</div><div class="line">visualEffectView.alpha = <span class="number">0.92</span>;</div><div class="line">[_mapView addSubview:visualEffectView];</div><div class="line"></div><div class="line"><span class="comment">//注释掉的为旧代码</span></div><div class="line"><span class="comment">// if (nil == self.blurView) &#123;</span></div><div class="line"><span class="comment">// self.blurView = [[FXBlurView alloc]initWithFrame:CGRectMake(0, _mapView.frame.size.height - self.dataBed.frame.size.height, self.dataBed.frame.size.width, self.dataBed.frame.size.height)];</span></div><div class="line"><span class="comment">// [self.blurView setDynamic:YES];</span></div><div class="line"><span class="comment">// self.blurView.blurEnabled = YES;</span></div><div class="line"><span class="comment">// self.blurView.blurRadius = 5.0;</span></div><div class="line"><span class="comment">// self.blurView.tintColor = [UIColor clearColor];</span></div><div class="line"><span class="comment">// [_mapView addSubview:self.blurView];</span></div><div class="line"><span class="comment">// UIView *grayLine = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.blurView.frame.size.width, 1)];</span></div><div class="line"><span class="comment">// grayLine.backgroundColor = RUNMOVE_DARK_GRAY ;</span></div><div class="line"><span class="comment">// [self.blurView addSubview:grayLine];</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">// &#125;</span></div></pre></td></tr></table></figure>
-<p>##NSTimer结束一定要释放<br>因为NSTImer的创建会让你的ViewController计数加1，那么你的VC就不会释放，所以记得创建就一定要结束。</p>
+<h2 id="NSTimer结束一定要释放"><a href="#NSTimer结束一定要释放" class="headerlink" title="NSTimer结束一定要释放"></a>NSTimer结束一定要释放</h2><p>因为NSTImer的创建会让你的ViewController计数加1，那么你的VC就不会释放，所以记得创建就一定要结束。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//创建</span></div><div class="line">heartrateTime = [<span class="built_in">NSTimer</span> scheduledTimerWithTimeInterval:HEARTRATE_TIME_INTERVAL target:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(insertHeartrate) userInfo:<span class="literal">nil</span> repeats:<span class="literal">YES</span>];</div><div class="line"></div><div class="line"><span class="comment">//释放</span></div><div class="line"><span class="keyword">if</span> (heartrateTime) &#123;</div><div class="line">[heartrateTime invalidate];</div><div class="line">&#125;</div><div class="line">heartrateTime = <span class="literal">nil</span>;</div></pre></td></tr></table></figure>
-<p>##CocoaPods的问题</p>
-<p>CocoaPods的问题颇多，竟然会遇到Apple Mach-O Linker Error相关的问题，多看看错误日志进行相应的解决，大多数都是找不到目录，找不到头文件的原因，也有找不到控件.o文件的时候（原因为模拟器是i386架构，所以相应Pods的Building Setting中设置）。<br>在一切办法都无法解决时候可以试试把Pods文件（除了podfile）都删了，重新进行pod install。</p>
-<p>##pod install的问题</p>
-<p>pod install后，编译出一堆问题，再删再装还是有问题，无法解决。可能是因为CocoaPods的控件缓存造成。</p>
+<h2 id="CocoaPods的问题"><a href="#CocoaPods的问题" class="headerlink" title="CocoaPods的问题"></a>CocoaPods的问题</h2><p>CocoaPods的问题颇多，竟然会遇到Apple Mach-O Linker Error相关的问题，多看看错误日志进行相应的解决，大多数都是找不到目录，找不到头文件的原因，也有找不到控件.o文件的时候（原因为模拟器是i386架构，所以相应Pods的Building Setting中设置）。<br>在一切办法都无法解决时候可以试试把Pods文件（除了podfile）都删了，重新进行pod install。</p>
+<h2 id="pod-install的问题"><a href="#pod-install的问题" class="headerlink" title="pod install的问题"></a>pod install的问题</h2><p>pod install后，编译出一堆问题，再删再装还是有问题，无法解决。可能是因为CocoaPods的控件缓存造成。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">rm -rf ~/Library/Caches/CocoaPods</div><div class="line">pod install</div></pre></td></tr></table></figure>
 <p>就ok了</p>
-<p>##用宏提速NSCoding<br><a href="http://stablekernel.com/blog/speeding-up-nscoding-with-macros/" target="_blank" rel="external">http://stablekernel.com/blog/speeding-up-nscoding-with-macros/</a></p>
+<h2 id="用宏提速NSCoding"><a href="#用宏提速NSCoding" class="headerlink" title="用宏提速NSCoding"></a>用宏提速NSCoding</h2><p><a href="http://stablekernel.com/blog/speeding-up-nscoding-with-macros/" target="_blank" rel="external">http://stablekernel.com/blog/speeding-up-nscoding-with-macros/</a></p>
 
       
     </div>
@@ -390,10 +388,10 @@
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -429,7 +427,7 @@
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#毛玻璃效果实现"><span class="nav-number">1.</span> <span class="nav-text">毛玻璃效果实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NSTimer结束一定要释放"><span class="nav-number">2.</span> <span class="nav-text">NSTimer结束一定要释放</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CocoaPods的问题"><span class="nav-number">3.</span> <span class="nav-text">CocoaPods的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pod-install的问题"><span class="nav-number">4.</span> <span class="nav-text">pod install的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用宏提速NSCoding"><span class="nav-number">5.</span> <span class="nav-text">用宏提速NSCoding</span></a></li></ol></div>
             
           </div>
         </section>

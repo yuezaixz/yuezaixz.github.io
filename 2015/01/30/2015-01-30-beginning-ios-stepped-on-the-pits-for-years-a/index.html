@@ -85,26 +85,26 @@
 
 
 <meta name="description" content="#Indicator的隐藏显示
-##结论ActivityIndicator的隐藏用stopAnimating，不要用hidden = YES。
-##坑描述：代码的停止方式使用这种方式去停止1self.heartIndicator.hidden = YES;
-带来的问题是push到别的页面pop回来后，又开始旋转了。创建了个Indicator子类，用KVO可以发现页面PUSH走和POP回来都会cha">
+结论ActivityIndicator的隐藏用stopAnimating，不要用hidden = YES。
+坑描述：代码的停止方式使用这种方式去停止1self.heartIndicator.hidden = YES;
+带来的问题是push到别的页面pop回来后，又开始旋转了。创建了个Indicator子类，用KVO可以发现页面PUSH走和POP回来都会change">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初学IOS那些年踩过的坑(一)">
 <meta property="og:url" content="http://yoursite.com/2015/01/30/2015-01-30-beginning-ios-stepped-on-the-pits-for-years-a/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
 <meta property="og:description" content="#Indicator的隐藏显示
-##结论ActivityIndicator的隐藏用stopAnimating，不要用hidden = YES。
-##坑描述：代码的停止方式使用这种方式去停止1self.heartIndicator.hidden = YES;
-带来的问题是push到别的页面pop回来后，又开始旋转了。创建了个Indicator子类，用KVO可以发现页面PUSH走和POP回来都会cha">
+结论ActivityIndicator的隐藏用stopAnimating，不要用hidden = YES。
+坑描述：代码的停止方式使用这种方式去停止1self.heartIndicator.hidden = YES;
+带来的问题是push到别的页面pop回来后，又开始旋转了。创建了个Indicator子类，用KVO可以发现页面PUSH走和POP回来都会change">
 <meta property="og:image" content="http://chuantu.biz/t/63/1422585664x1822611446.jpg">
 <meta property="og:image" content="http://chuantu.biz/t/63/1422585698x-954497586.jpg">
-<meta property="og:updated_time" content="2015-05-04T06:05:28.000Z">
+<meta property="og:updated_time" content="2016-08-30T06:43:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初学IOS那些年踩过的坑(一)">
 <meta name="twitter:description" content="#Indicator的隐藏显示
-##结论ActivityIndicator的隐藏用stopAnimating，不要用hidden = YES。
-##坑描述：代码的停止方式使用这种方式去停止1self.heartIndicator.hidden = YES;
-带来的问题是push到别的页面pop回来后，又开始旋转了。创建了个Indicator子类，用KVO可以发现页面PUSH走和POP回来都会cha">
+结论ActivityIndicator的隐藏用stopAnimating，不要用hidden = YES。
+坑描述：代码的停止方式使用这种方式去停止1self.heartIndicator.hidden = YES;
+带来的问题是push到别的页面pop回来后，又开始旋转了。创建了个Indicator子类，用KVO可以发现页面PUSH走和POP回来都会change">
 <meta name="twitter:image" content="http://chuantu.biz/t/63/1422585664x1822611446.jpg">
 
 
@@ -181,22 +181,22 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -279,10 +279,10 @@
 
       
         <p>#Indicator的隐藏显示</p>
-<p>##结论<br>ActivityIndicator的隐藏用stopAnimating，不要用hidden = YES。</p>
-<p>##坑描述：<br><img src="http://chuantu.biz/t/63/1422585664x1822611446.jpg" alt=""><br>代码的停止方式使用这种方式去停止<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.heartIndicator.hidden = <span class="literal">YES</span>;</div></pre></td></tr></table></figure></p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>ActivityIndicator的隐藏用stopAnimating，不要用hidden = YES。</p>
+<h2 id="坑描述："><a href="#坑描述：" class="headerlink" title="坑描述："></a>坑描述：</h2><p><img src="http://chuantu.biz/t/63/1422585664x1822611446.jpg" alt=""><br>代码的停止方式使用这种方式去停止<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.heartIndicator.hidden = <span class="literal">YES</span>;</div></pre></td></tr></table></figure></p>
 <p>带来的问题是push到别的页面pop回来后，又开始旋转了。<br><img src="http://chuantu.biz/t/63/1422585698x-954497586.jpg" alt=""><br>创建了个Indicator子类，用KVO可以发现页面PUSH走和POP回来都会change hidden的值</p>
-<p>##坑解释<br>所以可以看出，IOS对于显示隐藏都会对View属性进行重构，而Indicator的Hidden值在重构时候是根据animate的值来判断的，如果值为YES，那hidden的属性则为NO。<br>所以，千万别用hidden属性来隐藏Indicator（其他地方都操作View都如此），要用[self.heartIndicator stopAnimating];</p>
+<h2 id="坑解释"><a href="#坑解释" class="headerlink" title="坑解释"></a>坑解释</h2><p>所以可以看出，IOS对于显示隐藏都会对View属性进行重构，而Indicator的Hidden值在重构时候是根据animate的值来判断的，如果值为YES，那hidden的属性则为NO。<br>所以，千万别用hidden属性来隐藏Indicator（其他地方都操作View都如此），要用[self.heartIndicator stopAnimating];</p>
 
       
     </div>
@@ -393,10 +393,10 @@
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -432,7 +432,7 @@
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">1.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坑描述："><span class="nav-number">2.</span> <span class="nav-text">坑描述：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#坑解释"><span class="nav-number">3.</span> <span class="nav-text">坑解释</span></a></li></ol></div>
             
           </div>
         </section>

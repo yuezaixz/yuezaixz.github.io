@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="##页面间pop和push导致的问题问题描述：问题大概是这样，一个运动中页面RunningViewController，一个首页IndexViewController，一个结果页RunResultViewController运动：IndexViewController–Push–&amp;gt;RunningViewController结束：RunningViewController –Pop–&amp;gt;I">
+<meta name="description" content="页面间pop和push导致的问题问题描述：问题大概是这样，一个运动中页面RunningViewController，一个首页IndexViewController，一个结果页RunResultViewController运动：IndexViewController–Push–&amp;gt;RunningViewController结束：RunningViewController –Pop–&amp;gt;Ind">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初学IOS那些年踩过的坑（十）">
 <meta property="og:url" content="http://yoursite.com/2015/07/13/2015-07-13-beginning-ios-pit-over-those-years-i/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
-<meta property="og:description" content="##页面间pop和push导致的问题问题描述：问题大概是这样，一个运动中页面RunningViewController，一个首页IndexViewController，一个结果页RunResultViewController运动：IndexViewController–Push–&amp;gt;RunningViewController结束：RunningViewController –Pop–&amp;gt;I">
-<meta property="og:updated_time" content="2015-07-13T08:16:59.000Z">
+<meta property="og:description" content="页面间pop和push导致的问题问题描述：问题大概是这样，一个运动中页面RunningViewController，一个首页IndexViewController，一个结果页RunResultViewController运动：IndexViewController–Push–&amp;gt;RunningViewController结束：RunningViewController –Pop–&amp;gt;Ind">
+<meta property="og:updated_time" content="2016-08-30T06:43:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初学IOS那些年踩过的坑（十）">
-<meta name="twitter:description" content="##页面间pop和push导致的问题问题描述：问题大概是这样，一个运动中页面RunningViewController，一个首页IndexViewController，一个结果页RunResultViewController运动：IndexViewController–Push–&amp;gt;RunningViewController结束：RunningViewController –Pop–&amp;gt;I">
+<meta name="twitter:description" content="页面间pop和push导致的问题问题描述：问题大概是这样，一个运动中页面RunningViewController，一个首页IndexViewController，一个结果页RunResultViewController运动：IndexViewController–Push–&amp;gt;RunningViewController结束：RunningViewController –Pop–&amp;gt;Ind">
 
 
 
@@ -169,22 +169,22 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -266,10 +266,10 @@
       
 
       
-        <p>##页面间pop和push导致的问题<br>问题描述：问题大概是这样，一个运动中页面RunningViewController，一个首页IndexViewController，一个结果页RunResultViewController<br>运动：IndexViewController–Push–&gt;RunningViewController<br>结束：RunningViewController –Pop–&gt;IndexViewController–push–&gt;</p>
+        <h2 id="页面间pop和push导致的问题"><a href="#页面间pop和push导致的问题" class="headerlink" title="页面间pop和push导致的问题"></a>页面间pop和push导致的问题</h2><p>问题描述：问题大概是这样，一个运动中页面RunningViewController，一个首页IndexViewController，一个结果页RunResultViewController<br>运动：IndexViewController–Push–&gt;RunningViewController<br>结束：RunningViewController –Pop–&gt;IndexViewController–push–&gt;</p>
 <p>结果IndexViewController的ViewWillAppear会弹出个UIAlertView，其逻辑会造成影响，在IOS8情况下UIAlertView不会弹出（应该是弹出后立马跳到了RunResultViewController），而IOS7情况下到RunResultViewController才弹出该UIAlertView。</p>
 <p>该问题很简单，该逻辑其实放错位置了，应该放在ViewDidLoad中，但是从UIAlertView造成的错误逻辑去排查到该问题比较麻烦。</p>
-<p>##TableView的load时机<br>问题描述：在使用FXForm做表单时候，在viewDidLoad中进行了初始化，但是初始化内容无效（同样也是排查比较麻烦，开始没怀疑这个问题）。IOS8是在ViewWillAppear之后（除非你调用了tableView.tableFooterView = … 之类方法，调用后）再进行loadView的操作，而IOS7则是在[super viewDidLoad]之后。最安全的做法就是在ViewWillAppear之后重新调用一次 [tableView reloadData];</p>
+<h2 id="TableView的load时机"><a href="#TableView的load时机" class="headerlink" title="TableView的load时机"></a>TableView的load时机</h2><p>问题描述：在使用FXForm做表单时候，在viewDidLoad中进行了初始化，但是初始化内容无效（同样也是排查比较麻烦，开始没怀疑这个问题）。IOS8是在ViewWillAppear之后（除非你调用了tableView.tableFooterView = … 之类方法，调用后）再进行loadView的操作，而IOS7则是在[super viewDidLoad]之后。最安全的做法就是在ViewWillAppear之后重新调用一次 [tableView reloadData];</p>
 
       
     </div>
@@ -380,10 +380,10 @@
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -419,7 +419,7 @@
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#页面间pop和push导致的问题"><span class="nav-number">1.</span> <span class="nav-text">页面间pop和push导致的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TableView的load时机"><span class="nav-number">2.</span> <span class="nav-text">TableView的load时机</span></a></li></ol></div>
             
           </div>
         </section>

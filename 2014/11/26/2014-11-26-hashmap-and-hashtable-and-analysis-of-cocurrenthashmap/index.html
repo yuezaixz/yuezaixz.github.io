@@ -86,32 +86,29 @@
 
 <meta name="description" content="#背景最近项目线程安全的问题比较严重，因此也对HashMap、HashTable、CocurrentHashMap、ArrayList、CopyOnWriteArrayList做了点浅析。以下是几点自问自答。
 #自问自答
-##HashMap与HashTable区别？
-
+HashMap与HashTable区别？
 HashMap可以接受null键值和值，而Hashtable则不能
 前置非synchronized，后者是
-前者的迭代器(Iter">
+前者的迭代器(Iterato">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HashMap、HashTable、CocurrentHashMap的几点自问自答">
 <meta property="og:url" content="http://yoursite.com/2014/11/26/2014-11-26-hashmap-and-hashtable-and-analysis-of-cocurrenthashmap/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
 <meta property="og:description" content="#背景最近项目线程安全的问题比较严重，因此也对HashMap、HashTable、CocurrentHashMap、ArrayList、CopyOnWriteArrayList做了点浅析。以下是几点自问自答。
 #自问自答
-##HashMap与HashTable区别？
-
+HashMap与HashTable区别？
 HashMap可以接受null键值和值，而Hashtable则不能
 前置非synchronized，后者是
-前者的迭代器(Iter">
-<meta property="og:updated_time" content="2015-05-04T06:05:28.000Z">
+前者的迭代器(Iterato">
+<meta property="og:updated_time" content="2016-08-30T06:43:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HashMap、HashTable、CocurrentHashMap的几点自问自答">
 <meta name="twitter:description" content="#背景最近项目线程安全的问题比较严重，因此也对HashMap、HashTable、CocurrentHashMap、ArrayList、CopyOnWriteArrayList做了点浅析。以下是几点自问自答。
 #自问自答
-##HashMap与HashTable区别？
-
+HashMap与HashTable区别？
 HashMap可以接受null键值和值，而Hashtable则不能
 前置非synchronized，后者是
-前者的迭代器(Iter">
+前者的迭代器(Iterato">
 
 
 
@@ -187,22 +184,22 @@ HashMap可以接受null键值和值，而Hashtable则不能
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -365,23 +362,22 @@ HashMap可以接受null键值和值，而Hashtable则不能
       
         <p>#背景<br>最近项目线程安全的问题比较严重，因此也对HashMap、HashTable、CocurrentHashMap、ArrayList、CopyOnWriteArrayList做了点浅析。以下是几点自问自答。</p>
 <p>#自问自答</p>
-<p>##HashMap与HashTable区别？</p>
-<ul>
+<h2 id="HashMap与HashTable区别？"><a href="#HashMap与HashTable区别？" class="headerlink" title="HashMap与HashTable区别？"></a>HashMap与HashTable区别？</h2><ul>
 <li>HashMap可以接受null键值和值，而Hashtable则不能</li>
 <li>前置非synchronized，后者是</li>
 <li>前者的迭代器(Iterator)是fail-fast迭代器，而Hashtable的enumerator迭代器不是fail-fast的，区别见“把HashMap用在多线程环境会怎么样？”章节</li>
 </ul>
-<p>##HashMap的元素次序不变吗？<br>随着时间的推移，HashMap中的元素次序可能会变。</p>
-<p>##如何让Has和Map同步?<br> Map m = Collections.synchronizeMap(hashMap);<br><strong>但有些因素使得它们不适合高并发的系统。它们仅有单个锁，对整个集合加锁，以及为了防止ConcurrentModificationException异常经常要在迭代的时候要将集合锁定一段时间，这些特性对可扩展性来说都是障碍。</strong></p>
-<p>##那用什么集合类进行多线程既安全又提供高并发性?<br>ConcurrentHashMap和CopyOnWriteArrayList保留了线程安全的同时，也提供了更高的并发性。 ConcurrentHashMap和CopyOnWriteArrayList并不是处处都需要用，大部分时候你只需要用到HashMap和 ArrayList，它们用于应对一些普通的情况。</p>
-<p>##把HashMap用在多线程环境会怎么样？<br>HashMap的iterator是fail-fast迭代器，别的线程改变了map的结构， （增加或者移除元素），将会抛出ConcurrentModificationException，但迭代器本身的remove()方法移除元素则不会抛出ConcurrentModificationException异常。 但这并不是一个一定发生的行为，要看JVM。这条同样也是Enumeration和Iterator的区别。</p>
-<p>##性能都如何？<br>HashMap是非synchronized,CocurrentHashMap和 Hashtable 是，所以HashMap快</p>
-<p>##CocurrentHashMap和 Hashtable区别？<br>用于多线程的环境，但是当Hashtable的大小增加到一定的时候，性能会急剧下降，因为迭代时需要被锁定很长的时间。<br>ConcurrentHashMap同步性能更好，因为它仅仅根据同步级别对map的一部分进行上锁 ， 它引入了分割(segmentation)，不论它变得多么大，仅仅需要锁定map的某个部分，而其它的线程不需要等到迭代完成才能访问map。但是HashTable会锁整个map提供更强的线程安全性</p>
-<p>##HashMap内部实现原理？<br>HashMap在Put的时候，先对key进行hashCode()，返回的值用于查找bucket位置来存储对象，因此它是在bucket中储存键对象和值对象，作为Map.Entry。</p>
+<h2 id="HashMap的元素次序不变吗？"><a href="#HashMap的元素次序不变吗？" class="headerlink" title="HashMap的元素次序不变吗？"></a>HashMap的元素次序不变吗？</h2><p>随着时间的推移，HashMap中的元素次序可能会变。</p>
+<h2 id="如何让Has和Map同步"><a href="#如何让Has和Map同步" class="headerlink" title="如何让Has和Map同步?"></a>如何让Has和Map同步?</h2><p> Map m = Collections.synchronizeMap(hashMap);<br><strong>但有些因素使得它们不适合高并发的系统。它们仅有单个锁，对整个集合加锁，以及为了防止ConcurrentModificationException异常经常要在迭代的时候要将集合锁定一段时间，这些特性对可扩展性来说都是障碍。</strong></p>
+<h2 id="那用什么集合类进行多线程既安全又提供高并发性"><a href="#那用什么集合类进行多线程既安全又提供高并发性" class="headerlink" title="那用什么集合类进行多线程既安全又提供高并发性?"></a>那用什么集合类进行多线程既安全又提供高并发性?</h2><p>ConcurrentHashMap和CopyOnWriteArrayList保留了线程安全的同时，也提供了更高的并发性。 ConcurrentHashMap和CopyOnWriteArrayList并不是处处都需要用，大部分时候你只需要用到HashMap和 ArrayList，它们用于应对一些普通的情况。</p>
+<h2 id="把HashMap用在多线程环境会怎么样？"><a href="#把HashMap用在多线程环境会怎么样？" class="headerlink" title="把HashMap用在多线程环境会怎么样？"></a>把HashMap用在多线程环境会怎么样？</h2><p>HashMap的iterator是fail-fast迭代器，别的线程改变了map的结构， （增加或者移除元素），将会抛出ConcurrentModificationException，但迭代器本身的remove()方法移除元素则不会抛出ConcurrentModificationException异常。 但这并不是一个一定发生的行为，要看JVM。这条同样也是Enumeration和Iterator的区别。</p>
+<h2 id="性能都如何？"><a href="#性能都如何？" class="headerlink" title="性能都如何？"></a>性能都如何？</h2><p>HashMap是非synchronized,CocurrentHashMap和 Hashtable 是，所以HashMap快</p>
+<h2 id="CocurrentHashMap和-Hashtable区别？"><a href="#CocurrentHashMap和-Hashtable区别？" class="headerlink" title="CocurrentHashMap和 Hashtable区别？"></a>CocurrentHashMap和 Hashtable区别？</h2><p>用于多线程的环境，但是当Hashtable的大小增加到一定的时候，性能会急剧下降，因为迭代时需要被锁定很长的时间。<br>ConcurrentHashMap同步性能更好，因为它仅仅根据同步级别对map的一部分进行上锁 ， 它引入了分割(segmentation)，不论它变得多么大，仅仅需要锁定map的某个部分，而其它的线程不需要等到迭代完成才能访问map。但是HashTable会锁整个map提供更强的线程安全性</p>
+<h2 id="HashMap内部实现原理？"><a href="#HashMap内部实现原理？" class="headerlink" title="HashMap内部实现原理？"></a>HashMap内部实现原理？</h2><p>HashMap在Put的时候，先对key进行hashCode()，返回的值用于查找bucket位置来存储对象，因此它是在bucket中储存键对象和值对象，作为Map.Entry。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (key == <span class="keyword">null</span>)</div><div class="line">	    <span class="keyword">return</span> putForNullKey(value);</div><div class="line">  <span class="comment">//计算key的hashCode</span></div><div class="line">  <span class="keyword">int</span> hash = hash(key.hashCode());</div><div class="line">  <span class="comment">//找hashCode在bucket中的索引值</span></div><div class="line">  <span class="keyword">int</span> i = indexFor(hash, table.length);</div><div class="line">  <span class="comment">//找相应索引值的Entry（链表结构）中是否有key相同的值，如果有则覆盖</span></div><div class="line">  <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[i]; e != <span class="keyword">null</span>; e = e.next) &#123;</div><div class="line">      Object k;</div><div class="line">      <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) &#123;</div><div class="line">        V oldValue = e.value;</div><div class="line">        e.value = value;</div><div class="line">        e.recordAccess(<span class="keyword">this</span>);</div><div class="line">        <span class="keyword">return</span> oldValue;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">//没找到就在该位置的链表增加一个Entry到头部，这里的addEntry还会检查容量，超过负载指数就扩容</span></div><div class="line">  modCount++;</div><div class="line">  addEntry(hash, key, value, i);</div><div class="line">  <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>当我们调用get()方法，HashMap会使用键对象的hashcode找到bucket位置，这个位置是一个链表，包含有键值对的Map.Entry对象 ，存储的是键值对，当有两个值存在于同一个bucket时候， 在调用get时，会先找到bucket位置之后，会调用keys.equals()方法去找到链表中正确的节点，最终找到要找的值对象<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</div><div class="line">		<span class="keyword">if</span> (key == <span class="keyword">null</span>)</div><div class="line">    	<span class="keyword">return</span> getForNullKey();</div><div class="line">    <span class="keyword">int</span> hash = hash(key.hashCode());</div><div class="line">    <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[indexFor(hash, table.length)];e != <span class="keyword">null</span>;e = e.next) &#123;</div><div class="line">    	Object k;</div><div class="line">    	<span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k)))</div><div class="line">    		<span class="keyword">return</span> e.value;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>所以， 采用合适的equals()和hashCode()方法的话，将会减少碰撞的发生，提高效率。所以，用不可变性使得能够缓存不同键的hashcode，这将提高整个获取对象的速度，使用String，Interger这样的wrapper类作为键是非常好的选择</p>
-<p>##HashMap如何扩容？<br> 默认的负载因子大小为0.75，也就是说，当一个map填满了75%的bucket时候，和其它集合类(如ArrayList等)一样，将会创建原来 HashMap大小的两倍的bucket数组，来重新调整map的大小，并将原来的对象放入新的bucket数组中。这个过程叫作rehashing，因 为它调用hash方法找到新的bucket位置。</p>
+<h2 id="HashMap如何扩容？"><a href="#HashMap如何扩容？" class="headerlink" title="HashMap如何扩容？"></a>HashMap如何扩容？</h2><p> 默认的负载因子大小为0.75，也就是说，当一个map填满了75%的bucket时候，和其它集合类(如ArrayList等)一样，将会创建原来 HashMap大小的两倍的bucket数组，来重新调整map的大小，并将原来的对象放入新的bucket数组中。这个过程叫作rehashing，因 为它调用hash方法找到新的bucket位置。</p>
 
       
     </div>
@@ -492,10 +488,10 @@ HashMap可以接受null键值和值，而Hashtable则不能
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -531,7 +527,7 @@ HashMap可以接受null键值和值，而Hashtable则不能
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap与HashTable区别？"><span class="nav-number">1.</span> <span class="nav-text">HashMap与HashTable区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap的元素次序不变吗？"><span class="nav-number">2.</span> <span class="nav-text">HashMap的元素次序不变吗？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何让Has和Map同步"><span class="nav-number">3.</span> <span class="nav-text">如何让Has和Map同步?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#那用什么集合类进行多线程既安全又提供高并发性"><span class="nav-number">4.</span> <span class="nav-text">那用什么集合类进行多线程既安全又提供高并发性?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#把HashMap用在多线程环境会怎么样？"><span class="nav-number">5.</span> <span class="nav-text">把HashMap用在多线程环境会怎么样？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能都如何？"><span class="nav-number">6.</span> <span class="nav-text">性能都如何？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CocurrentHashMap和-Hashtable区别？"><span class="nav-number">7.</span> <span class="nav-text">CocurrentHashMap和 Hashtable区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap内部实现原理？"><span class="nav-number">8.</span> <span class="nav-text">HashMap内部实现原理？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap如何扩容？"><span class="nav-number">9.</span> <span class="nav-text">HashMap如何扩容？</span></a></li></ol></div>
             
           </div>
         </section>

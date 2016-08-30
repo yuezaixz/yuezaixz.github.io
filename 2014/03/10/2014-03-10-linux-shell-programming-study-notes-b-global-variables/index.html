@@ -84,25 +84,25 @@
 
 
 
-<meta name="description" content="变量全局环境变量文件/etc/profile 这个文件中预设了系统的环境变量。修改后记得 . /etc/profile(中间有个空格)
-启动执行路径/etc/profile.d 将脚本放到该目录下，登陆用户的时候就会自动执行脚本。
-规范记得，传统上，所有全局环境变量要大写，注意，大小写是有区别的。
-定义export myname=’David’export MYNAME=’David_Wu’123">
+<meta name="description" content="变量全局环境变量#  文件/etc/profile 这个文件中预设了系统的环境变量。修改后记得 . /etc/profile(中间有个空格)
+#  启动执行路径/etc/profile.d 将脚本放到该目录下，登陆用户的时候就会自动执行脚本。
+#  规范记得，传统上，所有全局环境变量要大写，注意，大小写是有区别的。
+#  定义export myname=’David’export MYNAME=’">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux Shell编程学习笔记（二）全局变量">
 <meta property="og:url" content="http://yoursite.com/2014/03/10/2014-03-10-linux-shell-programming-study-notes-b-global-variables/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
-<meta property="og:description" content="变量全局环境变量文件/etc/profile 这个文件中预设了系统的环境变量。修改后记得 . /etc/profile(中间有个空格)
-启动执行路径/etc/profile.d 将脚本放到该目录下，登陆用户的时候就会自动执行脚本。
-规范记得，传统上，所有全局环境变量要大写，注意，大小写是有区别的。
-定义export myname=’David’export MYNAME=’David_Wu’123">
-<meta property="og:updated_time" content="2015-05-05T00:11:14.000Z">
+<meta property="og:description" content="变量全局环境变量#  文件/etc/profile 这个文件中预设了系统的环境变量。修改后记得 . /etc/profile(中间有个空格)
+#  启动执行路径/etc/profile.d 将脚本放到该目录下，登陆用户的时候就会自动执行脚本。
+#  规范记得，传统上，所有全局环境变量要大写，注意，大小写是有区别的。
+#  定义export myname=’David’export MYNAME=’">
+<meta property="og:updated_time" content="2016-08-30T06:43:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux Shell编程学习笔记（二）全局变量">
-<meta name="twitter:description" content="变量全局环境变量文件/etc/profile 这个文件中预设了系统的环境变量。修改后记得 . /etc/profile(中间有个空格)
-启动执行路径/etc/profile.d 将脚本放到该目录下，登陆用户的时候就会自动执行脚本。
-规范记得，传统上，所有全局环境变量要大写，注意，大小写是有区别的。
-定义export myname=’David’export MYNAME=’David_Wu’123">
+<meta name="twitter:description" content="变量全局环境变量#  文件/etc/profile 这个文件中预设了系统的环境变量。修改后记得 . /etc/profile(中间有个空格)
+#  启动执行路径/etc/profile.d 将脚本放到该目录下，登陆用户的时候就会自动执行脚本。
+#  规范记得，传统上，所有全局环境变量要大写，注意，大小写是有区别的。
+#  定义export myname=’David’export MYNAME=’">
 
 
 
@@ -178,22 +178,22 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -318,13 +318,13 @@
       
 
       
-        <h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><h2 id="全局环境变量"><a href="#全局环境变量" class="headerlink" title="全局环境变量"></a>全局环境变量</h2><h3 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h3><p>/etc/profile 这个文件中预设了系统的环境变量。<br>修改后记得 . /etc/profile(中间有个空格)</p>
-<h3 id="启动执行路径"><a href="#启动执行路径" class="headerlink" title="启动执行路径"></a>启动执行路径</h3><p>/etc/profile.d 将脚本放到该目录下，登陆用户的时候就会自动执行脚本。</p>
-<h3 id="规范"><a href="#规范" class="headerlink" title="规范"></a>规范</h3><p>记得，传统上，所有全局环境变量要大写，注意，大小写是有区别的。</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>export myname=’David’<br>export MYNAME=’David_Wu’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[David@localhost study]$ export MYNAME=&apos;David_Wu&apos;</div><div class="line">[David@localhost study]$ echo $MYNAME</div><div class="line">David_Wu</div><div class="line">[David@localhost study]$ echo $myname</div><div class="line">David</div></pre></td></tr></table></figure></p>
-<h3 id="常用的全局变量"><a href="#常用的全局变量" class="headerlink" title="常用的全局变量"></a>常用的全局变量</h3><p>HOME目录<br>UID登陆用户ID<br>USER登陆用户<br>OSTYPE操作系统类似<br>HISTSIZE历史操作大小<br>HISTFILESIZE历史文件行数<br>TMOUT 超时退出时间<br>IFS系统分隔符</p>
-<h3 id="取消全局变量"><a href="#取消全局变量" class="headerlink" title="取消全局变量"></a>取消全局变量</h3><p>unset MYNAME<br><figure class="highlight bash"><figcaption><span>控制台</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ <span class="built_in">export</span> MYNAME=David</div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$MYNAME</span></div><div class="line">David</div><div class="line">[David@localhost ~]$ <span class="built_in">unset</span> MYNAME</div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$MYNAME</span></div></pre></td></tr></table></figure></p>
-<h3 id="用户环境变量和系统环境变量"><a href="#用户环境变量和系统环境变量" class="headerlink" title="用户环境变量和系统环境变量"></a>用户环境变量和系统环境变量</h3><p>ll ~ -al命令可以看到家目录下隐藏的用户环境变量<br>etc/profile就是系统环境变量</p>
+        <h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><h2 id="全局环境变量"><a href="#全局环境变量" class="headerlink" title="全局环境变量"></a>全局环境变量</h2><h2 id="文件"><a href="#文件" class="headerlink" title="#  文件"></a>#  文件</h2><p>/etc/profile 这个文件中预设了系统的环境变量。<br>修改后记得 . /etc/profile(中间有个空格)</p>
+<h2 id="启动执行路径"><a href="#启动执行路径" class="headerlink" title="#  启动执行路径"></a>#  启动执行路径</h2><p>/etc/profile.d 将脚本放到该目录下，登陆用户的时候就会自动执行脚本。</p>
+<h2 id="规范"><a href="#规范" class="headerlink" title="#  规范"></a>#  规范</h2><p>记得，传统上，所有全局环境变量要大写，注意，大小写是有区别的。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="#  定义"></a>#  定义</h2><p>export myname=’David’<br>export MYNAME=’David_Wu’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[David@localhost study]$ export MYNAME=&apos;David_Wu&apos;</div><div class="line">[David@localhost study]$ echo $MYNAME</div><div class="line">David_Wu</div><div class="line">[David@localhost study]$ echo $myname</div><div class="line">David</div></pre></td></tr></table></figure></p>
+<h2 id="常用的全局变量"><a href="#常用的全局变量" class="headerlink" title="#  常用的全局变量"></a>#  常用的全局变量</h2><p>HOME目录<br>UID登陆用户ID<br>USER登陆用户<br>OSTYPE操作系统类似<br>HISTSIZE历史操作大小<br>HISTFILESIZE历史文件行数<br>TMOUT 超时退出时间<br>IFS系统分隔符</p>
+<h2 id="取消全局变量"><a href="#取消全局变量" class="headerlink" title="#  取消全局变量"></a>#  取消全局变量</h2><p>unset MYNAME<br><figure class="highlight bash"><figcaption><span>控制台</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ <span class="built_in">export</span> MYNAME=David</div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$MYNAME</span></div><div class="line">David</div><div class="line">[David@localhost ~]$ <span class="built_in">unset</span> MYNAME</div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$MYNAME</span></div></pre></td></tr></table></figure></p>
+<h2 id="用户环境变量和系统环境变量"><a href="#用户环境变量和系统环境变量" class="headerlink" title="#  用户环境变量和系统环境变量"></a>#  用户环境变量和系统环境变量</h2><p>ll ~ -al命令可以看到家目录下隐藏的用户环境变量<br>etc/profile就是系统环境变量</p>
 
       
     </div>
@@ -435,10 +435,10 @@
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -474,7 +474,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#变量"><span class="nav-number">1.</span> <span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#全局环境变量"><span class="nav-number">1.1.</span> <span class="nav-text">全局环境变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件"><span class="nav-number">1.1.1.</span> <span class="nav-text">文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动执行路径"><span class="nav-number">1.1.2.</span> <span class="nav-text">启动执行路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#规范"><span class="nav-number">1.1.3.</span> <span class="nav-text">规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">1.1.4.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的全局变量"><span class="nav-number">1.1.5.</span> <span class="nav-text">常用的全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取消全局变量"><span class="nav-number">1.1.6.</span> <span class="nav-text">取消全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户环境变量和系统环境变量"><span class="nav-number">1.1.7.</span> <span class="nav-text">用户环境变量和系统环境变量</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#变量"><span class="nav-number">1.</span> <span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#全局环境变量"><span class="nav-number">1.1.</span> <span class="nav-text">全局环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件"><span class="nav-number">1.2.</span> <span class="nav-text">#  文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动执行路径"><span class="nav-number">1.3.</span> <span class="nav-text">#  启动执行路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#规范"><span class="nav-number">1.4.</span> <span class="nav-text">#  规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">1.5.</span> <span class="nav-text">#  定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用的全局变量"><span class="nav-number">1.6.</span> <span class="nav-text">#  常用的全局变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取消全局变量"><span class="nav-number">1.7.</span> <span class="nav-text">#  取消全局变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户环境变量和系统环境变量"><span class="nav-number">1.8.</span> <span class="nav-text">#  用户环境变量和系统环境变量</span></a></li></ol></li></ol></div>
             
           </div>
         </section>

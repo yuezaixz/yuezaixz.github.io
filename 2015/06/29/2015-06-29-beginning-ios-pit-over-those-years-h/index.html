@@ -84,19 +84,19 @@
 
 
 
-<meta name="description" content="##如何让小图片按钮的点击区域变大之前经常做的事情就是，用个imageView来放图片，然后用一个更大透明UIButton盖住他，这样有个问题就是，一旦按钮需要有点击高亮效果，就会很麻烦的（各种点击和释放的回调，然后去修改imageView的图片）。
-最近发现了个方法，可以用setContentEdgeInsets来设置Button内容的区域。注意，top、bottom等，都是与其距离，比如bot">
+<meta name="description" content="如何让小图片按钮的点击区域变大之前经常做的事情就是，用个imageView来放图片，然后用一个更大透明UIButton盖住他，这样有个问题就是，一旦按钮需要有点击高亮效果，就会很麻烦的（各种点击和释放的回调，然后去修改imageView的图片）。
+最近发现了个方法，可以用setContentEdgeInsets来设置Button内容的区域。注意，top、bottom等，都是与其距离，比如botto">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初学IOS那些年踩过的坑（九）">
 <meta property="og:url" content="http://yoursite.com/2015/06/29/2015-06-29-beginning-ios-pit-over-those-years-h/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
-<meta property="og:description" content="##如何让小图片按钮的点击区域变大之前经常做的事情就是，用个imageView来放图片，然后用一个更大透明UIButton盖住他，这样有个问题就是，一旦按钮需要有点击高亮效果，就会很麻烦的（各种点击和释放的回调，然后去修改imageView的图片）。
-最近发现了个方法，可以用setContentEdgeInsets来设置Button内容的区域。注意，top、bottom等，都是与其距离，比如bot">
-<meta property="og:updated_time" content="2015-07-13T08:13:19.000Z">
+<meta property="og:description" content="如何让小图片按钮的点击区域变大之前经常做的事情就是，用个imageView来放图片，然后用一个更大透明UIButton盖住他，这样有个问题就是，一旦按钮需要有点击高亮效果，就会很麻烦的（各种点击和释放的回调，然后去修改imageView的图片）。
+最近发现了个方法，可以用setContentEdgeInsets来设置Button内容的区域。注意，top、bottom等，都是与其距离，比如botto">
+<meta property="og:updated_time" content="2016-08-30T06:43:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初学IOS那些年踩过的坑（九）">
-<meta name="twitter:description" content="##如何让小图片按钮的点击区域变大之前经常做的事情就是，用个imageView来放图片，然后用一个更大透明UIButton盖住他，这样有个问题就是，一旦按钮需要有点击高亮效果，就会很麻烦的（各种点击和释放的回调，然后去修改imageView的图片）。
-最近发现了个方法，可以用setContentEdgeInsets来设置Button内容的区域。注意，top、bottom等，都是与其距离，比如bot">
+<meta name="twitter:description" content="如何让小图片按钮的点击区域变大之前经常做的事情就是，用个imageView来放图片，然后用一个更大透明UIButton盖住他，这样有个问题就是，一旦按钮需要有点击高亮效果，就会很麻烦的（各种点击和释放的回调，然后去修改imageView的图片）。
+最近发现了个方法，可以用setContentEdgeInsets来设置Button内容的区域。注意，top、bottom等，都是与其距离，比如botto">
 
 
 
@@ -172,22 +172,22 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            menu.首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Kategorien
+            menu.文章
           </a>
         </li>
       
@@ -269,13 +269,12 @@
       
 
       
-        <p>##如何让小图片按钮的点击区域变大<br>之前经常做的事情就是，用个imageView来放图片，然后用一个更大透明UIButton盖住他，这样有个问题就是，一旦按钮需要有点击高亮效果，就会很麻烦的（各种点击和释放的回调，然后去修改imageView的图片）。</p>
+        <h2 id="如何让小图片按钮的点击区域变大"><a href="#如何让小图片按钮的点击区域变大" class="headerlink" title="如何让小图片按钮的点击区域变大"></a>如何让小图片按钮的点击区域变大</h2><p>之前经常做的事情就是，用个imageView来放图片，然后用一个更大透明UIButton盖住他，这样有个问题就是，一旦按钮需要有点击高亮效果，就会很麻烦的（各种点击和释放的回调，然后去修改imageView的图片）。</p>
 <p>最近发现了个方法，可以用setContentEdgeInsets来设置Button内容的区域。注意，top、bottom等，都是与其距离，比如bottom，就是与底部距离。开始我以为是从(left,top)到(right,bottom)这两个点的范围做图片的位置，然后导致无法得到想要的效果。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//[self.runBtn setContentEdgeInsets:UIEdgeInsetsMake(&lt;#CGFloat top#&gt;, &lt;#CGFloat left#&gt;, &lt;#CGFloat bottom#&gt;, &lt;#CGFloat right#&gt;)];</span></div><div class="line">[<span class="keyword">self</span>.runBtn setContentEdgeInsets:<span class="built_in">UIEdgeInsetsMake</span>(<span class="number">8</span>, <span class="number">18</span>, <span class="number">8</span>, <span class="number">18</span>)];</div></pre></td></tr></table></figure>
-<p>##view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect&#123;</div><div class="line"><span class="comment">//….</span></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)touchesMoved:(<span class="built_in">NSSet</span> *)touches withEvent:(<span class="built_in">UIEvent</span> *)event&#123;</div><div class="line"><span class="comment">//….</span></div><div class="line">[<span class="keyword">self</span> setNeedsDisplay];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制"><a href="#view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制" class="headerlink" title="view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制"></a>view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect&#123;</div><div class="line"><span class="comment">//….</span></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)touchesMoved:(<span class="built_in">NSSet</span> *)touches withEvent:(<span class="built_in">UIEvent</span> *)event&#123;</div><div class="line"><span class="comment">//….</span></div><div class="line">[<span class="keyword">self</span> setNeedsDisplay];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这时候drawRect中的内容会重复绘制，只要设置backgroundColor就不会重复绘制了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lineChartView.backgroundColor = [<span class="built_in">UIColor</span> whiteColor];</div></pre></td></tr></table></figure></p>
-<p>##ore-Data升级后导致数据升级失败<br>用的是MagicRecord，AppDelegate代码中有初始化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:SQLITE_NAME];</div><div class="line">[MagicalRecord shouldAutoCreateDefaultPersistentStoreCoordinator];</div><div class="line">[MagicalRecord setShouldDeleteStoreOnModelMismatch:<span class="literal">YES</span>];</div><div class="line">[MagicalRecord setupAutoMigratingCoreDataStack];<span class="comment">//这里报错</span></div></pre></td></tr></table></figure></p>
+<h2 id="ore-Data升级后导致数据升级失败"><a href="#ore-Data升级后导致数据升级失败" class="headerlink" title="ore-Data升级后导致数据升级失败"></a>ore-Data升级后导致数据升级失败</h2><p>用的是MagicRecord，AppDelegate代码中有初始化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:SQLITE_NAME];</div><div class="line">[MagicalRecord shouldAutoCreateDefaultPersistentStoreCoordinator];</div><div class="line">[MagicalRecord setShouldDeleteStoreOnModelMismatch:<span class="literal">YES</span>];</div><div class="line">[MagicalRecord setupAutoMigratingCoreDataStack];<span class="comment">//这里报错</span></div></pre></td></tr></table></figure></p>
 <p>报错内容为Can’t find or automatically infer mapping model for migration。</p>
 <p>在SOF上找到了下文，具体原因不明，可能是添加版本时候有错误操作，这时候只要把版本先退回到上一个版本，然后删除新的版本，提交代码（不先提交SVN可能会出问题哦）。然后重新添加一次再提交就OK了。<br><a href="http://stackoverflow.com/questions/7708392/how-to-delete-an-old-unused-data-model-version-in-xcode-4" target="_blank" rel="external">参考</a></p>
 
@@ -388,10 +387,10 @@
 
           
             <div class="site-state-item site-state-categories">
-              <a href="/categories">
+              
                 <span class="site-state-item-count">195</span>
                 <span class="site-state-item-name">Kategorien</span>
-              </a>
+              
             </div>
           
 
@@ -427,7 +426,7 @@
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何让小图片按钮的点击区域变大"><span class="nav-number">1.</span> <span class="nav-text">如何让小图片按钮的点击区域变大</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制"><span class="nav-number">2.</span> <span class="nav-text">view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ore-Data升级后导致数据升级失败"><span class="nav-number">3.</span> <span class="nav-text">ore-Data升级后导致数据升级失败</span></a></li></ol></div>
             
           </div>
         </section>
