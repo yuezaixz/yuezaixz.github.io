@@ -225,6 +225,110 @@
             
               
                 
+                <a class="post-title-link" href="/2015/04/20/2015-04-20-beginning-ios-pit-over-those-years-e/" itemprop="url">
+                  初学IOS那些年踩过的坑（六）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-04-20T08:54:00+08:00" content="2015-04-20">
+              2015-04-20
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>0、实现类似Eclipse的cmd+shift+r打开指定函数<br>一直以为没这功能，今天算发现了。在Xcode中可以用control+6打开所有函数的导航，然后可以进行输入检索，也可以按control+a显示所有。</p>
+<p>1、用IOS自带NSJSONSerialization 去把Foundation对象转成JSON串在NSNumber转换精度上存在问题<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSMutableArray</span> *pointArray = [[<span class="built_in">NSMutableArray</span> alloc] init];</div><div class="line"><span class="keyword">for</span> (RunningPoint *point <span class="keyword">in</span> pointEnityArray) &#123;</div><div class="line">[pointArray addObject:@&#123;</div><div class="line"><span class="string">@"latitude"</span> : point.latitude,</div><div class="line"><span class="string">@"longitude"</span> : point.longitude,</div><div class="line"><span class="string">@"chinaLatitude"</span> : point.chinaLatitude,</div><div class="line"><span class="string">@"chinaLongitude"</span> : point.chinaLongitude,</div><div class="line"><span class="string">@"isCorrect"</span> : point.isCorrect,</div><div class="line"><span class="string">@"distance"</span> : point.distance,</div><div class="line"><span class="string">@"altitude"</span> : point.altitude,</div><div class="line"><span class="string">@"speed"</span> : point.speed,</div><div class="line"><span class="string">@"mark"</span> : point.mark,</div><div class="line"><span class="string">@"pause_mark"</span> : point.pauseMark,</div><div class="line"><span class="string">@"britishMark"</span> : point.britishMark,</div><div class="line"><span class="string">@"running_time"</span> : point.runningTime,</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"collect_time"</span> : [point.collectTime toString],</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"running_time"</span>: point.runningTime,</div><div class="line">&#125;];</div><div class="line">&#125;</div><div class="line">running.pointsData = [<span class="built_in">NSKeyedArchiver</span> archivedDataWithRootObject:pointArray];</div></pre></td></tr></table></figure></p>
+<p>改为<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (RunningPoint *point <span class="keyword">in</span> pointEnityArray) &#123;</div><div class="line">[pointArray addObject:@&#123;</div><div class="line"><span class="string">@"latitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.latitude.doubleValue],</div><div class="line"><span class="string">@"longitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.longitude.doubleValue],</div><div class="line"><span class="string">@"chinaLatitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.chinaLatitude.doubleValue],</div><div class="line"><span class="string">@"chinaLongitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.chinaLongitude.doubleValue],</div><div class="line"><span class="string">@"isCorrect"</span> : point.isCorrect,</div><div class="line"><span class="string">@"distance"</span> : point.distance,</div><div class="line"><span class="string">@"altitude"</span> : point.altitude,</div><div class="line"><span class="string">@"speed"</span> : point.speed,</div><div class="line"><span class="string">@"mark"</span> : point.mark,</div><div class="line"><span class="string">@"pause_mark"</span> : point.pauseMark,</div><div class="line"><span class="string">@"britishMark"</span> : point.britishMark,</div><div class="line"><span class="string">@"running_time"</span> : point.runningTime,</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"collect_time"</span> : [point.collectTime toString],</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"running_time"</span>: point.runningTime,</div><div class="line">&#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>2、table header and footer的高度问题<br>问题描述：这几天在重构一个页面，那个页面有一个tableview，因为重构把它从漂浮出来改成了加在底部。<br>结果在底部的tableview最地上出现了一个空行，因为没遇到过这种问题，也不知道那个界面是什么引起的。<br>问题排查：经过有经验的同事提示，知道了这类问题的排查方式。就是用模拟器运行，然后如下图打开。<br><img src="http://chuantu.biz/t2/3/1429520293x-954497745.jpg" alt=""><br>然后在界面上找到不知来历的界面，就会看到提示这是啥。<br><img src="http://chuantu.biz/t2/3/1429520387x1822611348.jpg" alt=""><br>原来是下面这个tableView的HeaderFooterView啊。那么怎么去掉他呢<br>要排查两个方面，一是代码中<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">CGFloat</span>)tableView:(<span class="built_in">UITableView</span> *)tableView heightForHeaderInSection:(<span class="built_in">NSInteger</span>)section &#123;</div><div class="line"></div><div class="line"><span class="keyword">return</span> <span class="number">50.0</span>f;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>而是nib文件中设置，如下图。这样这个问题应该就解决了。<br><img src="http://chuantu.biz/t2/3/1429520410x1822611348.jpg" alt=""></p>
+<p>3、用了autolayout的界面中，要怎么实现位移动画呢？</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//x,y,z动画要偏移的量</span></div><div class="line"><span class="built_in">CATransform3D</span> transform = <span class="built_in">CATransform3DMakeTranslation</span>(x, y, z);</div><div class="line"><span class="built_in">CABasicAnimation</span> *animation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"transform"</span>];</div><div class="line"><span class="comment">//view为要进行动画的view</span></div><div class="line">animation.fromValue = [view.layer.presentationLayer valueForKey:animation.keyPath];</div><div class="line">animation.toValue = [<span class="built_in">NSValue</span> valueWithCATransform3D:transform];</div><div class="line"><span class="comment">//opacityAnimation.timingFunction 是用来控制动画线性发展。</span></div><div class="line"><span class="comment">//其中[CAMediaTimingFunction functionWithControlPoints:1.0 :0.0 :1.0 :0.1] 是一个贝塞尔曲线的控制方法。</span></div><div class="line"><span class="comment">//这也可以令动画做到先慢后快或先快后慢的结果。</span></div><div class="line"><span class="comment">//效果参考http://netcetera.org/camtf-playground.html</span></div><div class="line">animation.timingFunction = [<span class="built_in">CAMediaTimingFunction</span> functionWithControlPoints:<span class="number">0</span> :size :<span class="number">0</span> :size*<span class="number">2</span>];</div><div class="line">animation.duration = <span class="number">0.6</span>;</div><div class="line">view.layer.transform = transform;</div><div class="line">[view.layer addAnimation:animation forKey:animation.keyPath];</div></pre></td></tr></table></figure>
+<p>除此之外，用这种方式还可以做移动中大小变化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">float</span> bigInfoViewScale = scale*<span class="number">0.6</span> + <span class="number">0.4</span>;</div><div class="line"><span class="keyword">float</span> bigInfoViewY = -GET(<span class="number">200</span>) + GET(<span class="number">200</span>) * scale;</div><div class="line"><span class="built_in">CATransform3D</span> scaleTransform = <span class="built_in">CATransform3DMakeScale</span>(bigInfoViewScale, bigInfoViewScale, <span class="number">1</span>);</div><div class="line"><span class="built_in">CATransform3D</span> transform = <span class="built_in">CATransform3DTranslate</span>(scaleTransform, <span class="number">0</span>, bigInfoViewY, <span class="number">0</span>);</div><div class="line"></div><div class="line"><span class="built_in">CABasicAnimation</span> *animation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"transform"</span>];</div><div class="line">animation.fromValue = [<span class="keyword">self</span>.bigInfoView.layer.presentationLayer valueForKey:animation.keyPath];</div><div class="line">animation.toValue = [<span class="built_in">NSValue</span> valueWithCATransform3D:transform];</div><div class="line">animation.timingFunction = [<span class="built_in">CAMediaTimingFunction</span> functionWithControlPoints:<span class="number">0.3</span> :<span class="number">0.5</span> :<span class="number">0.9</span> :<span class="number">1.275</span>];</div><div class="line">animation.duration = duration;</div><div class="line"></div><div class="line"><span class="keyword">self</span>.bigInfoView.layer.transform = transform;</div><div class="line">[<span class="keyword">self</span>.bigInfoView.layer addAnimation:animation forKey:animation.keyPath];</div></pre></td></tr></table></figure></p>
+<p>4、ViewController中，当一个界面只有一个scrollView时候，scrollView会自动偏移一个状态栏的高度<br>在ViewController的ViewDidLoad中加入下面代码可解决该问题。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.automaticallyAdjustsScrollViewInsets = <span class="literal">NO</span>;</div></pre></td></tr></table></figure></p>
+<p>5、IOS中做类似GIF的动画<br>其实只要为每一帧切一张图，然后用如下代码就Ok了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *images = @[[<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step1"</span>], [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step2"</span>], [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step3"</span>]];</div><div class="line"><span class="built_in">UIImage</span> *animateImage = [<span class="built_in">UIImage</span> animatedImageWithImages:images duration:<span class="number">1.2</span>];</div><div class="line"><span class="built_in">UIImageView</span> *imageView = [[<span class="built_in">UIImageView</span> alloc] initWithImage:animateImage];</div><div class="line"><span class="comment">// 默认是0 0代表无限循环</span></div><div class="line">imageView.animationRepeatCount = <span class="number">0</span>;</div><div class="line">[imageView startAnimating];</div></pre></td></tr></table></figure></p>
+<p>6、主界面使用scrollView后，nib文件有警告<br>has ambigous scrollable content height<br>原因：scrollView需要确定的contentSize，而subViews并没有足够的约束可以确定contentSize<br>解决：在scrollView中套一层view，设置如下图<br><img src="http://chuantu.biz/t2/3/1429520432x1822611348.jpg" alt=""></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/03/07/2015-03-07-beginning-ios-pit-over-those-years-d/" itemprop="url">
                   初学IOS那些年踩过的坑(五)
                 </a>
@@ -238,7 +342,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-03-07T06:33:00+08:00" content="2015-03-07">
               2015-03-07
             </time>
@@ -346,7 +450,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-02-28T02:51:00+08:00" content="2015-02-28">
               2015-02-28
             </time>
@@ -440,7 +544,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-02-28T02:47:00+08:00" content="2015-02-28">
               2015-02-28
             </time>
@@ -540,7 +644,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-02-05T05:05:00+08:00" content="2015-02-05">
               2015-02-05
             </time>
@@ -552,7 +656,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/蛋疼/" itemprop="url" rel="index">
@@ -562,7 +666,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -574,7 +678,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -684,7 +788,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-02-05T04:55:00+08:00" content="2015-02-05">
               2015-02-05
             </time>
@@ -791,7 +895,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-02-01T10:02:00+08:00" content="2015-02-01">
               2015-02-01
             </time>
@@ -888,7 +992,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-01-30T02:36:00+08:00" content="2015-01-30">
               2015-01-30
             </time>
@@ -986,7 +1090,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-01-28T08:28:00+08:00" content="2015-01-28">
               2015-01-28
             </time>
@@ -1145,7 +1249,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-01-08T02:47:00+08:00" content="2015-01-08">
               2015-01-08
             </time>
@@ -1157,7 +1261,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/iOS/" itemprop="url" rel="index">
@@ -1167,7 +1271,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1212,138 +1316,6 @@
 <p>发现是字符串引擎的问题就找了很久。之后开始尝试解决。</p>
 <p>#在APP端直接给AFNetworking传字符串。<br>如下代码，但是新问题就来了，服务器端接收的数据格式为{“(null)”:”{\”details\”:\”fffdfd\”,\”categories\”:[],\”name\”:\”福建省厦门市思明区开元街道厦门歌仔戏研习中心\”,\”location\”:{\”type\”:\”Point\”,\”coordinates\”:[118.0860650539398,24.45868229051323]},\”placename\”:\”福建省厦门市思明区开元街道厦门歌仔戏研习中心\”}”}，多了一层。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//IOS自己的JSON转换方式</div><div class="line">NSData* data = [NSJSONSerialization dataWithJSONObject:[location toDictionary] options:0 error:NULL];</div><div class="line">NSString *jsonString = [NSString stringWithUTF8String:[data bytes]];</div><div class="line"></div><div class="line">NSString* urlStr = isExistingLocation ?[locations stringByAppendingPathComponent:location._id]:locations;</div><div class="line">AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];</div><div class="line">[manager.requestSerializer setValue:@&quot;application/json&quot; forHTTPHeaderField:@&quot;Accept&quot;];</div><div class="line">[manager  POST:urlStr parameters:jsonString success:successCallback failure:^(AFHTTPRequestOperation *operation, NSError *error) &#123;</div><div class="line">        NSLog(@&quot;%@&quot;,error);</div><div class="line"> &#125;];</div></pre></td></tr></table></figure></p>
 <p>#在服务器端操作<br>APP端不变，在服务器端接收时候做转换，int(inputStr)。好，问题就这么简单解决了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/01/06/2015-01-06-just-to-summarize-discuss-changes-in-2014-individual-plans/" itemprop="url">
-                  随便总结，谈谈2014年个人规划上的转变
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2015-01-06T06:19:00+08:00" content="2015-01-06">
-              2015-01-06
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/总结/" itemprop="url" rel="index">
-                    <span itemprop="name">总结</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/总结/转变/" itemprop="url" rel="index">
-                    <span itemprop="name">转变</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#Change<br>2014年的总结最大转变是两个，一个就是放弃Java开始转函数式的元编程语言，第二个就是放弃项目管理发展的规划转往产品发展。</p>
-<p>#One<br>其实早在一年多前就放弃Java语言方面的提升了，放弃Java的主要原因是因为他太严谨了，当然，Java从过去到未来都是一种设计保守的语言，这也是Java的一大优势。（学习曲线低易上手，易读，容错让编译器帮你解决大多数问题，对于大型系统来说严谨是有好处的）。当我没有找到完成一件事情正确方法的时候，那么用Java我就什么都不能做。个人是不大喜欢束缚，就像现在公司的管理方式太严谨了，个人偏向于那种扁平式的管理风格。<br>James Gosling所说的一句话比较有感触，<em>很多人觉得Java老了，编程语言需要改变，但是他们没有搞清楚的是，真正变化的是他们自己。他们在能力上有了发展，他们想看得更远更深，而语言反映出了这一点。并不是语言需要改变，而是提出这个观点的程序员自身发生了变化。</em> ，所以Java的地位不会变，所以很多公司把Java换成了Scala和Node.js。</p>
-<p>#Transition<br>那么说到技术，其实把玩的技术多了，也真觉得技术就是个工具。拿锤子举例，我要敲钉子，那我就必须学会使用锤子。而钉子的大小、形状不同，使用的锤子也不一样，用一个20斤的锤子敲一个小钉子就牛刀杀鸡了，而当钉子变成了螺丝，你又需要学会使用螺丝刀了，螺丝的型号就多了，但是使用方法基本是想通的，但是用螺丝等零件做出来的机器确实千变万化的，这就看使用工具的人了。</p>
-<p>#Two<br>那么这么也就说到产品吧，最近有人问我，你觉得做产品最重要的是什么呢？当时我第一反应的回答是用户分析、业务场景分析、产品精简、产品动态发布等。但是我回去后思考后觉得这些东西都太具体化了，产品经理首先最应该关注的是解决了什么问题，然后分析这个问题的潜在用户有哪些，是否为刚性需求，然后是解决这个问题有什么关键特性。<br>腾讯产品经理第一课的例子，以一台ATM机为例。<br>ATM机提供什么服务（腾讯不讲解决什么问题，讲服务）？ATM机的核心服务：取现金。<br>那么一台ATM机的设计，有哪些特性？<br>在这个问题上，不懂产品的人就会说ATM机的前端界面，是公司形象，还是操作提醒；从第一次操作，到拿到钞票，需要几步达成；提醒放在哪个环节出现，声音提醒还是字幕提醒；先取卡，还是先取钞。但 <strong>这些特性，叫显性特性</strong> 。</p>
-<p>ATM机，还有关键特性。是隐形特性。<br>比如，一台ATM机里要放20万现金。也就是说，如果一个银行提供100台ATM机，那么他要把2000万现金放在外面。所以，看似ATM机分流了银行的营业压力，提升了品牌曝光，同时也分流了公司的核心资源。<br>因此，如何统计数据同步数据，支持决策，让ATM机发挥战略价值，同时不让资金过多闲置，是一台ATM机设计的隐形特性。也是核心服务。<br>说关键特性潜，就要先分析一台ATM机，服务的全流程是什么？<br>作为一个用户体会到的一台ATM机的服务是，查卡，输密码，输金额，取钞，打印凭条，退卡。如果有问题，拨打服务热线。</p>
-<p>那么作为一个ATM机的服务提供者，为了让用户持续稳定的获得上述简单的服务，日常操作性的服务流程包括：<br>现金管理：保证ATM机里随时有钱。包括了数据、现金出库、运送等复杂流程。<br>硬件管理：电源工作正常，打印机工作正常，打印机的纸、油墨耗材正常…<br>客服管理：遇到客户问题或者投诉的处理全流程。</p>
-<p>这时，再分析战略问题，银行为什么要提供ATM机的服务？<br><strong>第一是为了分流营业网点的取现压力。第二是更多的品牌曝光机会。</strong></p>
-<p>因此关键特性就是如何让管理运营的人知道，某台机器没钱了，再不补现金进去，客户要投诉了；哪个服务点的设置没有足够的客流，是否裁撤这个网点。<br>所以，以下特征的菜鸟，就别认为自己可以创业，然后陷入无限妄境了，让信任你的人，跟随你的人受苦了。<br>过分强调显性特性的，菜鸟之中的最初级。过去，我最怕的就是听谁说，我们要改版了，新版哪天……显性特性很重要，但是显性特性救不了你。把核心资源与时间，放在一次次优化显性特性上，基本上是互联网初级从业者的狂热症。<br>那些只是搭个网站界面的创业团队，是就做了个ATM机的空壳子，就认为自己提供ATM机服务了。<br>如何持续稳定地，不断优化地，符合用户预期地，让用户从这里获得他要的服务？他说这是第二步。<br>他说，我先融资，拿到钱，再考虑后面的问题。<br>这里是互联网的成熟时代，已经不是那片蓝海了，是成熟的猎人的厮杀，只看显性特性的产品经理就是出来坑人。</p>
 
           
         
@@ -1417,8 +1389,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">92</span>
-              <span class="site-state-item-name">Artikel</span>
+              <span class="site-state-item-count">93</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
@@ -1426,7 +1398,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">Kategorien</span>
+                <span class="site-state-item-name">categories</span>
               
             </div>
           
@@ -1434,8 +1406,8 @@
           
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">Tags</span>
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">tags</span>
               
             </div>
           
@@ -1479,7 +1451,7 @@
 </div>
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

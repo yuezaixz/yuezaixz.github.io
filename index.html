@@ -225,6 +225,121 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/12/Core-Plot针对设计的一些应用/" itemprop="url">
+                  Core Plot针对设计的一些应用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-12T11:27:16+08:00" content="2016-09-12">
+              2016-09-12
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Core-Plot针对设计的一些应用"><a href="#Core-Plot针对设计的一些应用" class="headerlink" title="Core Plot针对设计的一些应用"></a>Core Plot针对设计的一些应用</h1><h2 id="设计样式"><a href="#设计样式" class="headerlink" title="设计样式"></a>设计样式</h2><p>这次APP结果页界面改版，收到了这个图表样式的设计，之前图表使用的库，一部分用Core Plot，一部分用自己实现的一个轻量级曲线图（只支持画曲线和一些曲线动画效果），由于时间比较紧，没有打算在自己实现的曲线图上增加如此多的自定义功能，所以把Core Plot研究了下，了解下这些设计要如何自定义。<br><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-09-12-1.png" alt="1"></p>
+<h2 id="拆分细节"><a href="#拆分细节" class="headerlink" title="拆分细节"></a>拆分细节</h2><p>先要分析下，这个图表有哪些东西需要自定义</p>
+<ul>
+<li>曲线需要打点，打点的图形是两个圆叠加出来的，而且打的点有4种样式：处于阈值范围内点（小白绿点），超出阈值范围点（小白红点），当前点处于阈值范围内点（大白绿点），当期点超出阈值范围点（大白红点）</li>
+<li>x轴label（当前点label颜色不一样）和点上方的label实现</li>
+<li>曲线的范围不固定，曲线的阈值范围是大于等于某值或小于等于某值，所以绿和红的是不固定的</li>
+<li>y轴label分2种颜色，majorTickLine也分两种颜色</li>
+</ul>
+<p>预期外问题</p>
+<ul>
+<li>x轴和y轴的label，会超出范围，就是在图表范围外了，所以不显示出来</li>
+</ul>
+<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><h3 id="两个圆叠加的打点"><a href="#两个圆叠加的打点" class="headerlink" title="两个圆叠加的打点"></a>两个圆叠加的打点</h3><p>这个其实就是普通的打点画圆，但是远外层line的宽度设置大一点，就可以实现这个效果了，代码如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">CPTScatterPlot *rightScatterPlot_ = [[CPTScatterPlot alloc] init];</div><div class="line">rightScatterPlot_.identifier = <span class="string">@"rightScatterPlot"</span>;</div><div class="line">rightScatterPlot_.interpolation = CPTScatterPlotInterpolationCurved;</div><div class="line"><span class="comment">// 注意：这里为什么成nil，后面一节就说到</span></div><div class="line">rightScatterPlot_.dataLineStyle = <span class="literal">nil</span>;</div><div class="line">rightScatterPlot_.dataSource    = <span class="keyword">self</span>;</div><div class="line">rightScatterPlot_.areaBaseValue = CPTDecimalFromString ( <span class="string">@"0.0"</span> );</div><div class="line"></div><div class="line"><span class="comment">// Add plot symbols: 表示数值的符号的形状</span></div><div class="line">CPTMutableLineStyle * symbolLineStyle = [CPTMutableLineStyle lineStyle];</div><div class="line">symbolLineStyle.lineColor = [CPTColor whiteColor];</div><div class="line">symbolLineStyle.lineWidth = <span class="number">3.0</span>;<span class="comment">//白色范围宽度3</span></div><div class="line"></div><div class="line">CPTPlotSymbol * plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];</div><div class="line">plotSymbol.fill          = [CPTFill fillWithColor:[CPTColor colorWithComponentRed:<span class="number">65.0</span>/<span class="number">255.0</span> green:<span class="number">117.0</span>/<span class="number">255.0</span> blue:<span class="number">5.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>]];<span class="comment">//绿色</span></div><div class="line">plotSymbol.lineStyle     = symbolLineStyle;</div><div class="line">plotSymbol.size          = <span class="built_in">CGSizeMake</span>(<span class="number">10.0</span>, <span class="number">10.0</span>);<span class="comment">//整个圆的大小，大绿点就把这个圆大一些，line的宽度也大一些</span></div><div class="line">rightScatterPlot_.plotSymbol = plotSymbol;</div><div class="line"></div><div class="line">[graph_ addPlot:rightScatterPlot_];</div></pre></td></tr></table></figure>
+<h3 id="多种打点的样式"><a href="#多种打点的样式" class="headerlink" title="多种打点的样式"></a>多种打点的样式</h3><p>这里Core Plot并不支持，为了实现该设计，用了一个方法，就是这种图表，其实我画了4个CPTScatterPlot来实现，也就是上一节『rightScatterPlot_.dataLineStyle = nil;』的原因，因为我只为了打点，不画曲线。<br>然后在datasource的代理方法中根据identifier来返回数据，返回的是nil就是该点在该x值上不画，如下代码</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ([plot.identifier isEqual:<span class="string">@"dataScatterPlot"</span>]) &#123;<span class="comment">//画曲线</span></div><div class="line">    <span class="keyword">return</span> [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_];</div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ([plot.identifier isEqual:<span class="string">@"rightScatterPlot"</span>]) &#123;<span class="comment">//画阈值范围内点</span></div><div class="line">    <span class="keyword">if</span> (index == [datas_ count] - <span class="number">1</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (isMore_) &#123;<span class="comment">//isMore_为初始化参数，规定阈值的比较是大于等于还是小于等于</span></div><div class="line">        <span class="keyword">return</span> [[[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] floatValue] &lt;= threshold_ ? [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] : <span class="literal">nil</span> ;<span class="comment">//不是阈值范围内的点，就不画小绿点了</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> [[[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] floatValue] &gt;= threshold_ ? [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] : <span class="literal">nil</span> ;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ([plot.identifier isEqual:<span class="string">@"errorScatterPlot"</span>]) &#123;<span class="comment">//画阈值范围外的点</span></div><div class="line">    <span class="keyword">if</span> (index == [datas_ count] - <span class="number">1</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (isMore_) &#123;</div><div class="line">        <span class="keyword">return</span> [[[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] floatValue] &gt;= threshold_ ? [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] : <span class="literal">nil</span> ;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> [[[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] floatValue] &lt;= threshold_ ? [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] : <span class="literal">nil</span> ;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ([plot.identifier isEqual:<span class="string">@"currentScatterPlot"</span>]) &#123;<span class="comment">//画当前点</span></div><div class="line">    <span class="keyword">if</span> (index == [datas_ count] - <span class="number">1</span>) &#123;<span class="comment">//是当前点才画</span></div><div class="line">        <span class="keyword">return</span> [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="点上方的label的实现"><a href="#点上方的label的实现" class="headerlink" title="点上方的label的实现"></a>点上方的label的实现</h3><p> 就在当前点的CPTScatterPlot上实现就好了</p>
+ <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//字体样式</span></div><div class="line">CPTMutableTextStyle *currentTextStyle = [CPTMutableTextStyle textStyle];</div><div class="line">currentTextStyle.color     = [CPTColor colorWithComponentRed:<span class="number">208.0</span>/<span class="number">255.0</span> green:<span class="number">2.0</span>/<span class="number">255.0</span> blue:<span class="number">27.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>];</div><div class="line">currentTextStyle.fontSize = <span class="number">13</span>;</div><div class="line"></div><div class="line"><span class="comment">//打点的样式</span></div><div class="line">CPTPlotSymbol * plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];</div><div class="line">plotSymbol.fill          = [CPTFill fillWithColor:[CPTColor colorWithComponentRed:<span class="number">208.0</span>/<span class="number">255.0</span> green:<span class="number">2.0</span>/<span class="number">255.0</span> blue:<span class="number">27.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>]];</div><div class="line"></div><div class="line"><span class="comment">//颜色控制</span></div><div class="line"><span class="keyword">if</span> ( ( isMore_ &amp;&amp; [[[datas_ firstObject] objectForKey:key_] floatValue] &lt;= threshold_ ) || (!isMore_ &amp;&amp; [[[datas_ firstObject] objectForKey:key_] floatValue] &gt;= threshold_)) &#123;</div><div class="line">    currentTextStyle.color     = [CPTColor colorWithComponentRed:<span class="number">65.0</span>/<span class="number">255.0</span> green:<span class="number">117.0</span>/<span class="number">255.0</span> blue:<span class="number">5.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>];</div><div class="line">    plotSymbol.fill          = [CPTFill fillWithColor:[CPTColor colorWithComponentRed:<span class="number">65.0</span>/<span class="number">255.0</span> green:<span class="number">117.0</span>/<span class="number">255.0</span> blue:<span class="number">5.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>]];</div><div class="line">&#125;</div><div class="line">plotSymbol.lineStyle     = symbolLineStyle;</div><div class="line">plotSymbol.size          = <span class="built_in">CGSizeMake</span>(<span class="number">15.0</span>, <span class="number">15.0</span>);</div><div class="line">currentScatterPlot_.plotSymbol = plotSymbol;</div><div class="line"><span class="comment">//label位置偏移量，正数为向上偏移</span></div><div class="line">currentScatterPlot_.labelOffset = <span class="number">10</span>;</div><div class="line">currentScatterPlot_.labelTextStyle = currentTextStyle;</div></pre></td></tr></table></figure>
+<h3 id="y轴label的实现"><a href="#y轴label的实现" class="headerlink" title="y轴label的实现"></a>y轴label的实现</h3><p>y轴上多个label，在MAX和MIN相差过大情况下画出来不好看，和设计商量后改用只画阈值线的方式</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">-(<span class="built_in">BOOL</span>)axis:(CPTAxis *)axis shouldUpdateAxisLabelsAtLocations:(<span class="built_in">NSSet</span> *)locations</div><div class="line">&#123;</div><div class="line">    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)graph_.axisSet;</div><div class="line">    <span class="keyword">if</span> (axis == axisSet.xAxis) &#123;</div><div class="line">        <span class="comment">//……比较简单，返回日期的label即可，不做说明</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">//y轴实现</span></div><div class="line">        <span class="built_in">NSNumberFormatter</span> *formatter = [[<span class="built_in">NSNumberFormatter</span> alloc] init];</div><div class="line">        formatter.numberStyle = <span class="built_in">NSNumberFormatterRoundCeiling</span>;</div><div class="line">        <span class="built_in">CGFloat</span> labelOffset             = axis.labelOffset;</div><div class="line">        CPTMutableTextStyle * newStyle = [axis.labelTextStyle mutableCopy];</div><div class="line">        newStyle.color = [CPTColor colorWithComponentRed:<span class="number">233.0</span>/<span class="number">255.0</span> green:<span class="number">85.0</span>/<span class="number">255.0</span> blue:<span class="number">19.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>];<span class="comment">//橙色</span></div><div class="line">        CPTTextStyle *theLabelTextStyle = newStyle;</div><div class="line">        CPTTextLayer * newLabelLayer= [[CPTTextLayer alloc] initWithText:threshold_ &gt; <span class="number">50</span> ?[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%ld"</span>,(<span class="keyword">long</span>)threshold_] : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%.1f"</span>,threshold_] style:theLabelTextStyle];<span class="comment">//这里写比较死，因为图表分两种，步频的曲线就不用显示小数点了</span></div><div class="line">        CPTAxisLabel * newLabel     = [[CPTAxisLabel alloc] initWithContentLayer:newLabelLayer];</div><div class="line">        newLabel.tickLocation       = [<span class="built_in">NSDecimalNumber</span> numberWithDouble:threshold_].decimalValue;</div><div class="line">        newLabel.offset             = labelOffset;</div><div class="line">        </div><div class="line">        axis.majorTickLocations = [<span class="built_in">NSSet</span> setWithObjects:[<span class="built_in">NSDecimalNumber</span> numberWithDouble:threshold_], <span class="literal">nil</span>];</div><div class="line">        axis.axisLabels = [<span class="built_in">NSSet</span> setWithObjects:newLabel,<span class="literal">nil</span>];<span class="comment">//这里label多创建几个，就能实现多个label和majorTickLine的效果，样式不一致只要不同label用不同样式的ContentLayer就好了</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="keyword">return</span> <span class="literal">NO</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="label超出范围被遮盖的问题"><a href="#label超出范围被遮盖的问题" class="headerlink" title="label超出范围被遮盖的问题"></a>label超出范围被遮盖的问题</h3><p>由于gragh范围限制了，图表值域范围也确定了（x：0~7，y：0~max），x轴label居左，y轴label居下的话，就超出gragh的范围了<br>那么解决办法其实就是把值域范围设置大一些，然后设置坐标轴原点在（0，0）处即可。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)graph_.defaultPlotSpace;</div><div class="line">    </div><div class="line">    <span class="comment">// x y 轴</span></div><div class="line">    CPTMutableLineStyle *majorGridLineStyle = [CPTMutableLineStyle lineStyle];</div><div class="line">    majorGridLineStyle.lineWidth = <span class="number">1.0</span>;</div><div class="line">    majorGridLineStyle.lineColor = [CPTColor colorWithComponentRed:<span class="number">233.0</span>/<span class="number">255.0</span> green:<span class="number">85.0</span>/<span class="number">255.0</span> blue:<span class="number">19.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>];</div><div class="line">    </div><div class="line">    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)graph_.axisSet;</div><div class="line">    CPTXYAxis *x          = axisSet.xAxis;</div><div class="line">    &#123;</div><div class="line">        x.axisLineStyle               = <span class="literal">nil</span>;</div><div class="line">        x.majorTickLineStyle          = <span class="literal">nil</span>;</div><div class="line">        x.minorTickLineStyle          = <span class="literal">nil</span>;</div><div class="line">        x.majorIntervalLength         = CPTDecimalFromDouble(<span class="number">1</span>);</div><div class="line">        <span class="keyword">if</span> (min_ &gt; <span class="number">0</span>) &#123;</div><div class="line">            x.orthogonalCoordinateDecimal = CPTDecimalFromDouble(min_ + (max_ - min_)/<span class="number">8</span>);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            x.orthogonalCoordinateDecimal = CPTDecimalFromDouble(<span class="number">0.0</span>);</div><div class="line">        &#125;</div><div class="line">        x.minorTicksPerInterval       = <span class="number">1.0</span>;</div><div class="line">        x.tickDirection = CPTSignNegative; <span class="comment">//CPTSignNegative  左  CPTSignPositive  右</span></div><div class="line"><span class="comment">//        x.labelingPolicy = CPTAxisLabelingPolicyNone;</span></div><div class="line">        x.plotSpace = plotSpace;</div><div class="line">        </div><div class="line">        x.delegate = <span class="keyword">self</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    CPTXYAxis *y = axisSet.yAxis;</div><div class="line">    &#123;</div><div class="line">        y.orthogonalCoordinateDecimal = CPTDecimalFromDouble(<span class="number">-0.1</span>);</div><div class="line">        y.majorGridLineStyle          = <span class="literal">nil</span>;</div><div class="line">        y.axisLineStyle               = <span class="literal">nil</span>;</div><div class="line">        y.minorTickLineStyle          = <span class="literal">nil</span>;</div><div class="line">        y.majorTickLineStyle          = majorGridLineStyle;</div><div class="line">        y.tickDirection = CPTSignPositive; <span class="comment">//CPTSignNegative  左  CPTSignPositive  右</span></div><div class="line">        y.labelOffset = <span class="number">-25.5</span>;</div><div class="line">        y.majorTickLength = <span class="keyword">self</span>.frame.size.width<span class="number">-35</span>;</div><div class="line">        y.majorTickLocations = [<span class="built_in">NSSet</span> setWithObjects:[<span class="built_in">NSDecimalNumber</span> numberWithDouble:<span class="number">3.3</span>], <span class="literal">nil</span>];</div><div class="line">        </div><div class="line">        y.delegate = <span class="keyword">self</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">//初始化范围</span></div><div class="line">    plotSpace.momentumAnimationCurve = CPTAnimationCurveCubicIn;</div><div class="line">    plotSpace.bounceAnimationCurve = CPTAnimationCurveBackIn;</div><div class="line">    plotSpace.momentumAcceleration = <span class="number">20000.0</span>;</div><div class="line">    </div><div class="line">    </div><div class="line">    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromDouble(<span class="number">-0.9</span>) length:CPTDecimalFromDouble(<span class="number">8</span>)];</div><div class="line">    </div><div class="line">    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromDouble(min_) length:CPTDecimalFromDouble(max_-min_)];</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/30/安卓蓝牙模块踩坑集合/" itemprop="url">
                   安卓蓝牙模块踩坑集合
                 </a>
@@ -238,7 +353,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2016-08-30T14:31:40+08:00" content="2016-08-30">
               2016-08-30
             </time>
@@ -345,7 +460,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2016-06-07T14:25:06+08:00" content="2016-06-07">
               2016-06-07
             </time>
@@ -517,7 +632,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-07-13T16:01:53+08:00" content="2015-07-13">
               2015-07-13
             </time>
@@ -614,7 +729,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-06-29T11:25:10+08:00" content="2015-06-29">
               2015-06-29
             </time>
@@ -715,7 +830,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-05-13T11:30:45+08:00" content="2015-05-13">
               2015-05-13
             </time>
@@ -823,7 +938,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-05-13T11:25:59+08:00" content="2015-05-13">
               2015-05-13
             </time>
@@ -925,7 +1040,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-05-07T22:11:52+08:00" content="2015-05-07">
               2015-05-07
             </time>
@@ -1026,7 +1141,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-05-07T14:21:16+08:00" content="2015-05-07">
               2015-05-07
             </time>
@@ -1128,7 +1243,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2015-05-06T15:56:08+08:00" content="2015-05-06">
               2015-05-06
             </time>
@@ -1206,110 +1321,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/04/20/2015-04-20-beginning-ios-pit-over-those-years-e/" itemprop="url">
-                  初学IOS那些年踩过的坑（六）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2015-04-20T08:54:00+08:00" content="2015-04-20">
-              2015-04-20
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>0、实现类似Eclipse的cmd+shift+r打开指定函数<br>一直以为没这功能，今天算发现了。在Xcode中可以用control+6打开所有函数的导航，然后可以进行输入检索，也可以按control+a显示所有。</p>
-<p>1、用IOS自带NSJSONSerialization 去把Foundation对象转成JSON串在NSNumber转换精度上存在问题<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSMutableArray</span> *pointArray = [[<span class="built_in">NSMutableArray</span> alloc] init];</div><div class="line"><span class="keyword">for</span> (RunningPoint *point <span class="keyword">in</span> pointEnityArray) &#123;</div><div class="line">[pointArray addObject:@&#123;</div><div class="line"><span class="string">@"latitude"</span> : point.latitude,</div><div class="line"><span class="string">@"longitude"</span> : point.longitude,</div><div class="line"><span class="string">@"chinaLatitude"</span> : point.chinaLatitude,</div><div class="line"><span class="string">@"chinaLongitude"</span> : point.chinaLongitude,</div><div class="line"><span class="string">@"isCorrect"</span> : point.isCorrect,</div><div class="line"><span class="string">@"distance"</span> : point.distance,</div><div class="line"><span class="string">@"altitude"</span> : point.altitude,</div><div class="line"><span class="string">@"speed"</span> : point.speed,</div><div class="line"><span class="string">@"mark"</span> : point.mark,</div><div class="line"><span class="string">@"pause_mark"</span> : point.pauseMark,</div><div class="line"><span class="string">@"britishMark"</span> : point.britishMark,</div><div class="line"><span class="string">@"running_time"</span> : point.runningTime,</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"collect_time"</span> : [point.collectTime toString],</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"running_time"</span>: point.runningTime,</div><div class="line">&#125;];</div><div class="line">&#125;</div><div class="line">running.pointsData = [<span class="built_in">NSKeyedArchiver</span> archivedDataWithRootObject:pointArray];</div></pre></td></tr></table></figure></p>
-<p>改为<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (RunningPoint *point <span class="keyword">in</span> pointEnityArray) &#123;</div><div class="line">[pointArray addObject:@&#123;</div><div class="line"><span class="string">@"latitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.latitude.doubleValue],</div><div class="line"><span class="string">@"longitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.longitude.doubleValue],</div><div class="line"><span class="string">@"chinaLatitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.chinaLatitude.doubleValue],</div><div class="line"><span class="string">@"chinaLongitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.chinaLongitude.doubleValue],</div><div class="line"><span class="string">@"isCorrect"</span> : point.isCorrect,</div><div class="line"><span class="string">@"distance"</span> : point.distance,</div><div class="line"><span class="string">@"altitude"</span> : point.altitude,</div><div class="line"><span class="string">@"speed"</span> : point.speed,</div><div class="line"><span class="string">@"mark"</span> : point.mark,</div><div class="line"><span class="string">@"pause_mark"</span> : point.pauseMark,</div><div class="line"><span class="string">@"britishMark"</span> : point.britishMark,</div><div class="line"><span class="string">@"running_time"</span> : point.runningTime,</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"collect_time"</span> : [point.collectTime toString],</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"running_time"</span>: point.runningTime,</div><div class="line">&#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>2、table header and footer的高度问题<br>问题描述：这几天在重构一个页面，那个页面有一个tableview，因为重构把它从漂浮出来改成了加在底部。<br>结果在底部的tableview最地上出现了一个空行，因为没遇到过这种问题，也不知道那个界面是什么引起的。<br>问题排查：经过有经验的同事提示，知道了这类问题的排查方式。就是用模拟器运行，然后如下图打开。<br><img src="http://chuantu.biz/t2/3/1429520293x-954497745.jpg" alt=""><br>然后在界面上找到不知来历的界面，就会看到提示这是啥。<br><img src="http://chuantu.biz/t2/3/1429520387x1822611348.jpg" alt=""><br>原来是下面这个tableView的HeaderFooterView啊。那么怎么去掉他呢<br>要排查两个方面，一是代码中<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">CGFloat</span>)tableView:(<span class="built_in">UITableView</span> *)tableView heightForHeaderInSection:(<span class="built_in">NSInteger</span>)section &#123;</div><div class="line"></div><div class="line"><span class="keyword">return</span> <span class="number">50.0</span>f;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>而是nib文件中设置，如下图。这样这个问题应该就解决了。<br><img src="http://chuantu.biz/t2/3/1429520410x1822611348.jpg" alt=""></p>
-<p>3、用了autolayout的界面中，要怎么实现位移动画呢？</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//x,y,z动画要偏移的量</span></div><div class="line"><span class="built_in">CATransform3D</span> transform = <span class="built_in">CATransform3DMakeTranslation</span>(x, y, z);</div><div class="line"><span class="built_in">CABasicAnimation</span> *animation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"transform"</span>];</div><div class="line"><span class="comment">//view为要进行动画的view</span></div><div class="line">animation.fromValue = [view.layer.presentationLayer valueForKey:animation.keyPath];</div><div class="line">animation.toValue = [<span class="built_in">NSValue</span> valueWithCATransform3D:transform];</div><div class="line"><span class="comment">//opacityAnimation.timingFunction 是用来控制动画线性发展。</span></div><div class="line"><span class="comment">//其中[CAMediaTimingFunction functionWithControlPoints:1.0 :0.0 :1.0 :0.1] 是一个贝塞尔曲线的控制方法。</span></div><div class="line"><span class="comment">//这也可以令动画做到先慢后快或先快后慢的结果。</span></div><div class="line"><span class="comment">//效果参考http://netcetera.org/camtf-playground.html</span></div><div class="line">animation.timingFunction = [<span class="built_in">CAMediaTimingFunction</span> functionWithControlPoints:<span class="number">0</span> :size :<span class="number">0</span> :size*<span class="number">2</span>];</div><div class="line">animation.duration = <span class="number">0.6</span>;</div><div class="line">view.layer.transform = transform;</div><div class="line">[view.layer addAnimation:animation forKey:animation.keyPath];</div></pre></td></tr></table></figure>
-<p>除此之外，用这种方式还可以做移动中大小变化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">float</span> bigInfoViewScale = scale*<span class="number">0.6</span> + <span class="number">0.4</span>;</div><div class="line"><span class="keyword">float</span> bigInfoViewY = -GET(<span class="number">200</span>) + GET(<span class="number">200</span>) * scale;</div><div class="line"><span class="built_in">CATransform3D</span> scaleTransform = <span class="built_in">CATransform3DMakeScale</span>(bigInfoViewScale, bigInfoViewScale, <span class="number">1</span>);</div><div class="line"><span class="built_in">CATransform3D</span> transform = <span class="built_in">CATransform3DTranslate</span>(scaleTransform, <span class="number">0</span>, bigInfoViewY, <span class="number">0</span>);</div><div class="line"></div><div class="line"><span class="built_in">CABasicAnimation</span> *animation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"transform"</span>];</div><div class="line">animation.fromValue = [<span class="keyword">self</span>.bigInfoView.layer.presentationLayer valueForKey:animation.keyPath];</div><div class="line">animation.toValue = [<span class="built_in">NSValue</span> valueWithCATransform3D:transform];</div><div class="line">animation.timingFunction = [<span class="built_in">CAMediaTimingFunction</span> functionWithControlPoints:<span class="number">0.3</span> :<span class="number">0.5</span> :<span class="number">0.9</span> :<span class="number">1.275</span>];</div><div class="line">animation.duration = duration;</div><div class="line"></div><div class="line"><span class="keyword">self</span>.bigInfoView.layer.transform = transform;</div><div class="line">[<span class="keyword">self</span>.bigInfoView.layer addAnimation:animation forKey:animation.keyPath];</div></pre></td></tr></table></figure></p>
-<p>4、ViewController中，当一个界面只有一个scrollView时候，scrollView会自动偏移一个状态栏的高度<br>在ViewController的ViewDidLoad中加入下面代码可解决该问题。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.automaticallyAdjustsScrollViewInsets = <span class="literal">NO</span>;</div></pre></td></tr></table></figure></p>
-<p>5、IOS中做类似GIF的动画<br>其实只要为每一帧切一张图，然后用如下代码就Ok了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *images = @[[<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step1"</span>], [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step2"</span>], [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step3"</span>]];</div><div class="line"><span class="built_in">UIImage</span> *animateImage = [<span class="built_in">UIImage</span> animatedImageWithImages:images duration:<span class="number">1.2</span>];</div><div class="line"><span class="built_in">UIImageView</span> *imageView = [[<span class="built_in">UIImageView</span> alloc] initWithImage:animateImage];</div><div class="line"><span class="comment">// 默认是0 0代表无限循环</span></div><div class="line">imageView.animationRepeatCount = <span class="number">0</span>;</div><div class="line">[imageView startAnimating];</div></pre></td></tr></table></figure></p>
-<p>6、主界面使用scrollView后，nib文件有警告<br>has ambigous scrollable content height<br>原因：scrollView需要确定的contentSize，而subViews并没有足够的约束可以确定contentSize<br>解决：在scrollView中套一层view，设置如下图<br><img src="http://chuantu.biz/t2/3/1429520432x1822611348.jpg" alt=""></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1355,8 +1366,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">92</span>
-              <span class="site-state-item-name">Artikel</span>
+              <span class="site-state-item-count">93</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
@@ -1364,7 +1375,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">Kategorien</span>
+                <span class="site-state-item-name">categories</span>
               
             </div>
           
@@ -1372,8 +1383,8 @@
           
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">Tags</span>
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">tags</span>
               
             </div>
           
@@ -1417,7 +1428,7 @@
 </div>
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

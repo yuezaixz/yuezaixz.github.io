@@ -225,6 +225,161 @@
             
               
                 
+                <a class="post-title-link" href="/2014/11/21/2014-11-21-programming-and-mathematics/" itemprop="url">
+                  编程与数学
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-11-21T04:43:00+08:00" content="2014-11-21">
+              2014-11-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/函数/" itemprop="url" rel="index">
+                    <span itemprop="name">函数</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/函数/LeetCode/" itemprop="url" rel="index">
+                    <span itemprop="name">LeetCode</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/函数/LeetCode/链表循环起点/" itemprop="url" rel="index">
+                    <span itemprop="name">链表循环起点</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#瞎扯<br>这几天抽空在做<a href="https://oj.leetcode.com/problems" target="_blank" rel="external">leetcode</a>，越做越有种工作越久数学退化越厉害的感觉，很多题目有点数学方面的思维都会更容易很多，这边博文就拿一道找链表循环起点的题目来分析下。</p>
+<p>#Linked List Cycle II</p>
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>Given a linked list, return the node where the cycle begins. If there is no cycle, return null.<br>Follow up:<br>Can you solve it without using extra space?</p>
+<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><p>这道题目分两部分，第一部分是求是否存在循环，这很简单，设置两个点去遍历链表，其中一个点一次移动一个节点，另一个一次移动两个，因此他们肯定会相遇，只要求是否相遇就能知道是否存在循环。<br>那么，如何求循环的起点呢？先看下这个图<br><img src="http://chuantu.biz/t/17/1416544742x1822610959.jpg" alt=""><br>图中从head到起点距离为x，相遇点里起点为y，周长为L，相遇时fast节点已经走了n次循环。<br>那么，设lSlow为相遇时慢节点走过的距离，lFast为相遇时快节点走过的距离<br>那么，lSlow = x+y ; lFast = x+y+n*L;lFast = 2lSlow;<br>从上面几个算式可以推导出，x = n*L - y<br>左边加1个L减1个L, x = (n-1)*L + (L-y)<br>转换成中文就是“Head到循环起点的距离 等于 几个循环 + 相遇点到循环起点的距离 ”<br>那么，把slow点丢回Head处，两个点同时一次走一个点的前进，那么slow点走过x后就会在循环起点处与fast点相遇，这样就可以求出相遇点。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>按上面思路，代码就可以这样写</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Definition for singly-linked list.</span></div><div class="line"><span class="comment"># class ListNode:</span></div><div class="line"><span class="comment">#     def __init__(self, x):</span></div><div class="line"><span class="comment">#         self.val = x</span></div><div class="line"><span class="comment">#         self.next = None</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></div><div class="line">    <span class="comment"># @param head, a ListNode</span></div><div class="line">    <span class="comment"># @return a boolean</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">detectCycle</span><span class="params">(self, head)</span>:</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> head <span class="keyword">or</span> <span class="keyword">not</span> head.next: <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">        slow = fast = head</div><div class="line">        <span class="keyword">while</span> fast <span class="keyword">and</span> fast.next:</div><div class="line">            fast = fast.next.next</div><div class="line">            slow = slow.next</div><div class="line">            <span class="keyword">if</span> fast == slow:</div><div class="line">                slow = head</div><div class="line">                <span class="keyword">while</span> slow != fast:</div><div class="line">                    fast = fast.next</div><div class="line">                    slow = slow.next</div><div class="line">                <span class="keyword">return</span> slow</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>不要死脑筋思考逻辑问题，其实用高中的数学就能很好的解决该问题。通过这道题，也增加了一点以后写程序的思维方式吧。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/11/20/2014-11-20-november-2014-startup-weekend-summary/" itemprop="url">
                   2014年11月创业周末小结
                 </a>
@@ -238,7 +393,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-11-20T05:44:00+08:00" content="2014-11-20">
               2014-11-20
             </time>
@@ -250,7 +405,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/创业/" itemprop="url" rel="index">
@@ -260,7 +415,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -397,7 +552,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-11-17T14:49:00+08:00" content="2014-11-17">
               2014-11-17
             </time>
@@ -409,7 +564,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/个人简历/" itemprop="url" rel="index">
@@ -542,7 +697,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-11-14T07:37:00+08:00" content="2014-11-14">
               2014-11-14
             </time>
@@ -642,7 +797,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-11-13T15:19:00+08:00" content="2014-11-13">
               2014-11-13
             </time>
@@ -744,7 +899,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-11-11T15:14:00+08:00" content="2014-11-11">
               2014-11-11
             </time>
@@ -841,7 +996,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-10-26T01:45:00+08:00" content="2014-10-26">
               2014-10-26
             </time>
@@ -853,7 +1008,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Sublime/" itemprop="url" rel="index">
@@ -863,7 +1018,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -875,7 +1030,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -887,7 +1042,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1020,7 +1175,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-10-26T01:40:00+08:00" content="2014-10-26">
               2014-10-26
             </time>
@@ -1119,7 +1274,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-09-03T13:17:00+08:00" content="2014-09-03">
               2014-09-03
             </time>
@@ -1131,7 +1286,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -1141,7 +1296,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1153,7 +1308,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1165,7 +1320,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1177,7 +1332,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1290,7 +1445,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-09-02T13:58:00+08:00" content="2014-09-02">
               2014-09-02
             </time>
@@ -1302,7 +1457,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/重构/" itemprop="url" rel="index">
@@ -1393,151 +1548,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/08/26/2014-08-26-reconstruction-of-chatter/" itemprop="url">
-                  闲扯重构
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-08-26T09:26:00+08:00" content="2014-08-26">
-              2014-08-26
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/设计/" itemprop="url" rel="index">
-                    <span itemprop="name">设计</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/设计/重构/" itemprop="url" rel="index">
-                    <span itemprop="name">重构</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#为何要重构<br>最近，我经常思考一个问题，这个问题源自我一个做会计的朋友给我说“程序员有什么了不起的，写程序这种事情他们也会，他们经常也写一些程序、脚本来帮助他们工作。”<br>乔布斯就说过，每个人都应该学编程，他不仅能改变你的思维方式，还能帮助你的生活和工作。比如，我也帮女朋友写一些爬虫程序，帮他在互联网上抓一些数据。<br>这个问题思考后我觉得是这样的，程序员不仅仅是用编程语言来实现一个工具，而且这个工具是可维护、可移植、可复用、可维护、可扩展、可读的，就如最近公司的架构师交流会上讲师所说，编程就应该是一门艺术，你可以在别人的作品（代码、算法、设计）上微创新，做一些精进，还可以自己完成一幅大作。<br>因此，要让代码可维护、可移植、可复用、可维护、可扩展、可读的光是最好设计是不够的，还要不断的重构。</p>
-<p>#代码的演进<br>（演进的方向一直是让代码可读、可维护、灵活等）</p>
-<p>#从自身谈重构<br>重构并不是按照一个重构清单，一点一点的照做，而是一种感觉，比如，你感觉这段代码写了超过3次了，那你必须抽个方法出来；比如，你觉得在现有代码上增加一个功能不是那么容易了，那么，你也应该重新设计，让代码又可扩展性；比如，你在单元测试时候，觉得输入和输出不好写断言了，那么，你的代码相互直接的逻辑依赖就太深了，要做重构，最好让代码在语义上是可读的、函数式的（相同输入可以得到相同的输出，函数内部不改变全局环境）。</p>
-<p>重构也不是一件一开始就要做的事情。初学编程时，总是浑浑噩噩的写代码，由于大学并不是很认真学习加上专业方向上是嵌入式，接触的大多数也是过程式的编程，写代码总是写写一些想一些。大四上的最后几个月才真正开始学Java，也慢慢会预先设计，这确实让我在开始时候节省返工的高昂成本，然后在大四下的实习时，我加强了这种预先设计的风格，而且滥用设计模式，很简单的一个模块一定要套上好几个设计模式。业内也有许多人把设计看做软件开发的关键环节，而编程只是搬砖，只是苦力活。<br>但是，慢慢的我又发现，有了设计我可以思考的很快，但是其中也充满了漏洞，在开发过程中和测试过程中还是要做很多设计上的返工，这意味着，在开始时候我要花更多的时间和经理在预先设计上，以避免日后的修改。我们总是在力求找到准确无误的解决方案，任何一个需求都让我们提心吊胆得猜疑。<br>这时候由于开始工作的公司是用敏捷开发的，我开始接触了很多敏捷思想，参加各种敏捷大会和沙龙，重构这想法也就在我耳边经常出现了。特别是XP的支持者们认为，可以完全由重构代替预先设计。<br>但是我觉得这太绝对了。如果你选择重构，你仍然要做预先设计，单不一定必须找到正确的解决方案，刺客你只需要得到一个足够合理的解决方案就够了。你肯定地知道，在实现这个初始解决方案的时候，你对问题的理解也会逐渐加深（项目管理课程中也提到，随着项目的实施，对项目的理解也会逐渐加深），你就会察觉到最佳解决方案和你当初想的有些不同，只要有重构在手，那这些也就不成问题，重构让日后的修改成本不再高昂。<br>这也是软件设计向简化前进了一大步。有一次敏捷大会上，一位讲师提到了极简（也就是乔布斯一直追求的，多一分太多，少一分太少），我觉得，通过重构也能让软件的设计达到极简的状态。<br>从此，我认为重构可以带来更简单的设计，同时又不损失灵活性，这也降低了设计过程的难度，减轻了设计压力。</p>
-<p>但是，重构不是万能的银弹，如上面所说，只有当你嗅到了代码中的坏味道时候才会进行重构，这种坏味道，也就是上面说的一种感觉，只有轻松经历这种重构带来的美妙后，你就可以在感觉到这种不好的味道时候立马察觉。</p>
-<p>#重构要注意什么，如何重构<br>个人觉得重构还有几个注意点：</p>
-<ul>
-<li>如果代码在绝大部分情况下都无法正常运行了，那就别重构了，重写吧；</li>
-<li>在项目结尾阶段不要进行重构，特别是在单元测试不足的情况下；</li>
-<li>对于重构后接口的调整，一般是保留原接口的基础上开放新接口，然后在原先接口上注释上不推荐时候。还有就是尽可能的推迟接口的发布，因为一旦发布，你就要考虑兼容旧的接口；</li>
-<li>对于数据库，只能说架构设计阶段，就应该设计数据库持久化层和service层，让数据库和业务逻辑松耦合，然后通过mock的方式就做单元测试，保证相关代码重构后依然正常，也让数据库相关代码不在是侵入式的。</li>
-</ul>
-<p>对于初级的重构，个人认为注意以下几个点就好了：</p>
-<ul>
-<li>修改变量名，更改变量名称是值得的行为吗？绝对值得，好的代码应该清楚表达出自己的功能，变量名是代码清晰地关键。任何一个傻瓜都能写出计算机可以理解的代码，惟有写出人类容易理解的代码才是优秀的程序员 </li>
-<li>用简洁易懂的句法，控制一个函数类代码的数量，让一个函数只做一件事情</li>
-<li>相同逻辑代码出现3次，抽方法</li>
-<li>一个类中的一个方法出现与另一个类进行更多的交流时，考虑搬移函数到该类中，然后该方法中直接调用该类的新方法</li>
-<li>用多态代替过多的条件判断</li>
-<li>将固定的逻辑封装在父类中，把不确定的逻辑用钩子方法（回调函数）描述，通过子类（调用者）实现</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1583,8 +1593,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">92</span>
-              <span class="site-state-item-name">Artikel</span>
+              <span class="site-state-item-count">93</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
@@ -1592,7 +1602,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">Kategorien</span>
+                <span class="site-state-item-name">categories</span>
               
             </div>
           
@@ -1600,8 +1610,8 @@
           
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">Tags</span>
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">tags</span>
               
             </div>
           
@@ -1645,7 +1655,7 @@
 </div>
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
