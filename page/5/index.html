@@ -225,6 +225,143 @@
             
               
                 
+                <a class="post-title-link" href="/2014/09/02/2014-09-02-refactoring-code-example/" itemprop="url">
+                  重构-代码示例
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-09-02T13:58:00+08:00" content="2014-09-02">
+              2014-09-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/重构/" itemprop="url" rel="index">
+                    <span itemprop="name">重构</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#Round.1案例<br>这里的案例是从重构这本书上直接拿来的，但是我通过不同的理解，做了些不一样的重构，总在先上源码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Movie</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> CHILDRENS = <span class="number">2</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> NEW_RELEASE = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> REGULAR = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> String _title;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> _priceCode;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Movie</span><span class="params">(String title, <span class="keyword">int</span> priceCode)</span> </span>&#123;</div><div class="line">        _title = title;</div><div class="line">        _priceCode = priceCode;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPriceCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> _priceCode;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPriceCode</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</div><div class="line">        _priceCode = arg;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getTitle</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> _title;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rental</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Movie _movie;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> _daysRented;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Rental</span><span class="params">(Movie movie, <span class="keyword">int</span> daysRented)</span> </span>&#123;</div><div class="line">        _movie = movie;</div><div class="line">        _daysRented = daysRented;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDaysRented</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> _daysRented;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Movie <span class="title">getMovie</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> _movie;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Customer</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> String _name;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> List&lt;Rental_rentals = <span class="keyword">new</span> ArrayList&lt;Rental&gt;();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Customer</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        _name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addRental</span><span class="params">(Rental arg)</span> </span>&#123;</div><div class="line">        _rentals.add(arg);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> _name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">statement</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">double</span> totalAmount = <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> frequentRenterPoints = <span class="number">0</span>;</div><div class="line">        String result = <span class="string">"Rental record for "</span> + getName() + <span class="string">"\n"</span>;</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; _rentals.size(); index++) &#123;</div><div class="line">            <span class="keyword">double</span> thisAmount = <span class="number">0</span>;</div><div class="line">            Rental each = (Rental) _rentals.get(index);</div><div class="line"></div><div class="line">            <span class="keyword">switch</span> (each.getMovie().getPriceCode()) &#123;</div><div class="line">            <span class="keyword">case</span> Movie.REGULAR:</div><div class="line">                thisAmount += <span class="number">2</span>;</div><div class="line">                <span class="keyword">if</span> (each.getDaysRented() <span class="number">2</span>)</div><div class="line">                    thisAmount += (each.getDaysRented() - <span class="number">2</span>) * <span class="number">1.5</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> Movie.NEW_RELEASE:</div><div class="line">                thisAmount += each.getDaysRented() * <span class="number">3</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> Movie.CHILDRENS:</div><div class="line">                thisAmount += <span class="number">1.5</span>;</div><div class="line">                <span class="keyword">if</span> (each.getDaysRented() <span class="number">3</span>)</div><div class="line">                    thisAmount += (each.getDaysRented() - <span class="number">3</span>) * <span class="number">1.5</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">            frequentRenterPoints++;</div><div class="line">            <span class="keyword">if</span> (each.getMovie().getPriceCode() == Movie.NEW_RELEASE</div><div class="line">                    &amp;&amp; each.getDaysRented() <span class="number">1</span>)</div><div class="line">                frequentRenterPoints++;</div><div class="line"></div><div class="line">            result += <span class="string">"\t"</span> + each.getMovie().getTitle() + <span class="string">"\t"</span></div><div class="line">                    + String.valueOf(thisAmount) + <span class="string">"\n"</span>;</div><div class="line">            totalAmount += thisAmount;</div><div class="line">        &#125;</div><div class="line">        result += <span class="string">"Amount owed is "</span> + String.valueOf(totalAmount) + <span class="string">"\n"</span>;</div><div class="line">        result += <span class="string">"You earned "</span> + String.valueOf(frequentRenterPoints)</div><div class="line">                + <span class="string">"frequent renter points"</span>;</div><div class="line">        <span class="keyword">return</span> result;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Cp1Demo1</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Customer cuntomer = <span class="keyword">new</span> Customer(<span class="string">"David"</span>);</div><div class="line">        cuntomer.addRental(<span class="keyword">new</span> Rental(<span class="keyword">new</span> Movie(<span class="string">"Lost Template"</span>, Movie.NEW_RELEASE), <span class="number">5</span>));</div><div class="line">        cuntomer.addRental(<span class="keyword">new</span> Rental(<span class="keyword">new</span> Movie(<span class="string">"The Great Gatsby"</span>, Movie.REGULAR), <span class="number">4</span>));</div><div class="line">        cuntomer.addRental(<span class="keyword">new</span> Rental(<span class="keyword">new</span> Movie(<span class="string">"Wolf and Sheep"</span>, Movie.CHILDRENS), <span class="number">2</span>));</div><div class="line">        cuntomer.addRental(<span class="keyword">new</span> Rental(<span class="keyword">new</span> Movie(<span class="string">"Star Trek"</span>, Movie.REGULAR), <span class="number">2</span>));</div><div class="line">        System.out.println(cuntomer.statement());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#Round.2 让代码变得可测试（增加单元测试）<br>首先，先改造Customer类，让statement中的核心计算方法（算价格和算积分的方法）抽出。<br><figure class="highlight java"><figcaption><span>Customer.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line"></div><div class="line">    <span class="comment">//......省略部分代码</span></div><div class="line"></div><div class="line">    <span class="comment">//去除statement和main部分</span></div><div class="line"></div><div class="line">    <span class="comment">//对于statement中的方法，抽出两个关键的核心方法</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">amountTotalConsume</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">double</span> totalAmount = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; getRentals().size(); index++) &#123;</div><div class="line">            <span class="keyword">double</span> thisAmount = <span class="number">0</span>;</div><div class="line">            Rental each = (Rental) getRentals().get(index);</div><div class="line"></div><div class="line">            <span class="keyword">switch</span> (each.getMovie().getPriceCode()) &#123;</div><div class="line">            <span class="keyword">case</span> Movie.REGULAR:</div><div class="line">                thisAmount += <span class="number">2</span>;</div><div class="line">                <span class="keyword">if</span> (each.getDaysRented() <span class="number">2</span>)</div><div class="line">                    thisAmount += (each.getDaysRented() - <span class="number">2</span>) * <span class="number">1.5</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> Movie.NEW_RELEASE:</div><div class="line">                thisAmount += each.getDaysRented() * <span class="number">3</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> Movie.CHILDRENS:</div><div class="line">                thisAmount += <span class="number">1.5</span>;</div><div class="line">                <span class="keyword">if</span> (each.getDaysRented() <span class="number">3</span>)</div><div class="line">                    thisAmount += (each.getDaysRented() - <span class="number">3</span>) * <span class="number">1.5</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 日志</span></div><div class="line">            System.out.println(<span class="string">"\t"</span> + each.getMovie().getTitle() + <span class="string">"\t"</span></div><div class="line">                    + String.valueOf(thisAmount));</div><div class="line">            totalAmount += thisAmount;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> totalAmount;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">countFrequentRenterPoints</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> frequentRenterPoints = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; getRentals().size(); index++) &#123;</div><div class="line">            Rental each = (Rental) getRentals().get(index);</div><div class="line"></div><div class="line">            frequentRenterPoints++;</div><div class="line">            <span class="keyword">if</span> (each.getMovie().getPriceCode() == Movie.NEW_RELEASE</div><div class="line">                    &amp;&amp; each.getDaysRented() <span class="number">1</span>)</div><div class="line">                frequentRenterPoints++;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> frequentRenterPoints;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>抽出后，也留有打印信息的事务入口，将入口创建一个新的类CustomerConsumeClinent<br><figure class="highlight java"><figcaption><span>CustomerConsumeClinent.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomerConsumeClinent</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">statement</span><span class="params">(Customer customer)</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Rental record for "</span> + customer.getName());</div><div class="line">        StringBuilder resultSb = <span class="keyword">new</span> StringBuilder();</div><div class="line">        resultSb.append(<span class="string">"Amount owed is "</span>)</div><div class="line">                .append(String.valueOf(customer.amountTotalConsume()))</div><div class="line">                .append(<span class="string">"\n"</span>).append(<span class="string">"You earned "</span>)</div><div class="line">                .append(String.valueOf(customer.countFrequentRenterPoints()))</div><div class="line">                .append(<span class="string">" frequent renter points"</span>);</div><div class="line">        <span class="keyword">return</span> resultSb.toString();</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Customer customer = <span class="keyword">new</span> Customer(<span class="string">"David"</span>);</div><div class="line">        customer.addRental(<span class="keyword">new</span> Rental(<span class="keyword">new</span> Movie(<span class="string">"Lost Template"</span>,</div><div class="line">                Movie.NEW_RELEASE), <span class="number">2</span>));</div><div class="line">        customer.addRental(<span class="keyword">new</span> Rental(<span class="keyword">new</span> Movie(<span class="string">"Lost Template2"</span>,</div><div class="line">                Movie.NEW_RELEASE), <span class="number">2</span>));</div><div class="line">        customer.addRental(<span class="keyword">new</span> Rental(<span class="keyword">new</span> Movie(<span class="string">"The Great Gatsby"</span>,</div><div class="line">                Movie.REGULAR), <span class="number">2</span>));</div><div class="line">        customer.addRental(<span class="keyword">new</span> Rental(<span class="keyword">new</span> Movie(<span class="string">"Wolf and Sheep"</span>,</div><div class="line">                Movie.CHILDRENS), <span class="number">2</span>));</div><div class="line">        customer.addRental(<span class="keyword">new</span> Rental(<span class="keyword">new</span> Movie(<span class="string">"Star Trek"</span>, Movie.REGULAR), <span class="number">2</span>));</div><div class="line">        System.out.println(<span class="keyword">new</span> CustomerConsumeClinent().statement(customer));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后添加单元测试，这里使用的是Junit4加上cucumber-java（Ruby中cucumber的java版本）进行BDD。<br>先修改maven的配置文件。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></div><div class="line">	<span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"</span>&gt;</div><div class="line">	<span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.david.codejourney<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>refactoring-book<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">build</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">plugins</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">version</span>&gt;</span>2.5.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">source</span>&gt;</span>1.6<span class="tag">&lt;/<span class="name">source</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">target</span>&gt;</span>1.6<span class="tag">&lt;/<span class="name">target</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line"></div><div class="line">			<span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-surefire-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">version</span>&gt;</span>2.12.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">useFile</span>&gt;</span>false<span class="tag">&lt;/<span class="name">useFile</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">build</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>info.cukes<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>cucumber-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>info.cukes<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>cucumber-junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.rubiconproject.oss<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jchronic<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>0.2.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>4.11<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">properties</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">file.encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">file.encoding</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.build.sourceEncoding</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">properties</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>然后写功能描述文件，也就是单元测试的依据。这里不详细说明cucumber如何使用，有兴趣的自己去搜索相关知识再来看这部分代码，没兴趣的就跳过，知道他是在单元测试就好。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Feature: Refactoring Book</div><div class="line">  In order to study.</div><div class="line"></div><div class="line">  Scenario Outline: potter tests</div><div class="line">    Given Init the customer</div><div class="line">    And customer rental &lt;number of 1st moviedays of REGULAR movie</div><div class="line">    And customer rental &lt;number of 2nd moviedays of REGULAR movie</div><div class="line">    And customer rental &lt;number of 3rd moviedays of NEW_RELEASE movie</div><div class="line">    And customer rental &lt;number of 4th moviedays of NEW_RELEASE movie</div><div class="line">    And customer rental &lt;number of 5th moviedays of REGULAR movie</div><div class="line">    When I calculate the price and point</div><div class="line">    Then I should get the lowest price &lt;total amountand frequent points &lt;frequent renter points&gt;</div><div class="line"></div><div class="line">  Examples: test basics</div><div class="line">    | number of 1st movie| number of 2nd movie| number of 3rd movie| number of 4th movie| number of 5th movie| total amount | frequent renter points |</div><div class="line">    |         5          |           3        |           4        |         2          |          2         |       32.5   |           7            |</div><div class="line">    |         2          |           2        |           2        |         2          |          2         |       17.5   |           7            |</div><div class="line"></div><div class="line">  Examples: test simple discounts</div><div class="line">    | number of 1st movie| number of 2nd movie| number of 3rd movie| number of 4th movie| number of 5th movie| total amount | frequent renter points |</div><div class="line">    |         1          |           1        |           1        |         1          |          1         |       11.5   |           5            |</div></pre></td></tr></table></figure></p>
+<p>然后写单元测试类，该类需要和前面的功能文件对应。<br><figure class="highlight java"><figcaption><span>RefactoringStepdefs.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RefactoringStepdefs</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> Customer customer;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> bookCount;</div><div class="line"></div><div class="line">    <span class="meta">@Given</span>(<span class="string">"^Init the customer$"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        customer = <span class="keyword">new</span> Customer(<span class="string">"David"</span>);</div><div class="line">        bookCount = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Given</span>(<span class="string">"^customer rental (\\d+) days of (\\w+) movie$"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">customerRentalMovieSimpleTest</span><span class="params">(<span class="keyword">int</span> days, String movieType)</span></span></div><div class="line">            <span class="keyword">throws</span> Throwable &#123;</div><div class="line">        bookCount++;</div><div class="line">        customer.addRental(<span class="keyword">new</span> Rental(<span class="keyword">new</span> Movie(<span class="string">"Movie "</span> + bookCount, movieType</div><div class="line">                .equals(<span class="string">"REGULAR"</span>) ? <span class="number">0</span> : movieType.equals(<span class="string">"NEW_RELEASE"</span>) ? <span class="number">1</span></div><div class="line">                : <span class="number">2</span>), days));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@When</span>(<span class="string">"^I calculate the price and point$"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">calcAndCount</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Then</span>(<span class="string">"I should get the lowest price (\\S+) and frequent points (\\d+)$"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">I_should_get_the_lowest_price</span><span class="params">(<span class="keyword">double</span> totalAmout,</span></span></div><div class="line">            <span class="keyword">int</span> frequentRenterPoints) <span class="keyword">throws</span> Throwable &#123;</div><div class="line"></div><div class="line">        assertEquals(<span class="string">"failure - not the same with expected amout"</span>,</div><div class="line">                totalAmout, customer.amountTotalConsume(),<span class="number">5</span>);</div><div class="line">        assertEquals(<span class="string">"failure - not the same with expected point"</span>,</div><div class="line">                frequentRenterPoints, customer.countFrequentRenterPoints());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#Round.3 大胆的进行重构<br>现在已经有了单元测试的保证了，可以大胆进行重构了，按前篇博文中说到的进行。</p>
+<h2 id="用简洁易懂的句法，控制一个函数类代码的数量，让一个函数只做一件事情"><a href="#用简洁易懂的句法，控制一个函数类代码的数量，让一个函数只做一件事情" class="headerlink" title="用简洁易懂的句法，控制一个函数类代码的数量，让一个函数只做一件事情"></a>用简洁易懂的句法，控制一个函数类代码的数量，让一个函数只做一件事情</h2><p>这个round2已经做了，不在让一个打印输出的方法，又同时做计算价格、统计积分等事情。</p>
+<h2 id="修改变量名"><a href="#修改变量名" class="headerlink" title="修改变量名"></a>修改变量名</h2><p>这个较多地方都有问题，比如round1中的成员变量命名不是java的规范，全部重新写过。还比如遍历中用each作为变量名，很难表达变量的意思。</p>
+<h2 id="相同的逻辑出现3次，抽方法"><a href="#相同的逻辑出现3次，抽方法" class="headerlink" title="相同的逻辑出现3次，抽方法"></a>相同的逻辑出现3次，抽方法</h2><p>这里功能比较简单，会重复出现的方法已经抽出来了，所以这里用不到该方法。</p>
+<h2 id="一个类中的一个方法出现与另一个类进行更多的交流时，考虑搬移函数到该类中，然后该方法中直接调用该类的新方法"><a href="#一个类中的一个方法出现与另一个类进行更多的交流时，考虑搬移函数到该类中，然后该方法中直接调用该类的新方法" class="headerlink" title="一个类中的一个方法出现与另一个类进行更多的交流时，考虑搬移函数到该类中，然后该方法中直接调用该类的新方法"></a>一个类中的一个方法出现与另一个类进行更多的交流时，考虑搬移函数到该类中，然后该方法中直接调用该类的新方法</h2><p>这里对于每个Rental的计算积分和计算价格方法，都更应该移动到Rental中，因为看代码可以看到，他调用了很多次Rental的方法。<br>重构后的代码<br><figure class="highlight java"><figcaption><span>Customer.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line">    <span class="keyword">private</span> List&lt;Rentalrentals = <span class="keyword">new</span> ArrayList&lt;Rental&gt;();</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Customer</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addRental</span><span class="params">(Rental arg)</span> </span>&#123;</div><div class="line">        rentals.add(arg);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">public</span> List&lt;RentalgetRentals() &#123;</div><div class="line">        <span class="keyword">return</span> rentals;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">amountTotalConsume</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">double</span> result = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (Rental aRental : getRentals()) &#123;</div><div class="line">            result += aRental.getCharge();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> result;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">countFrequentRenterPoints</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> frequentRenterPoints = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (Rental aRental : getRentals()) &#123;</div><div class="line">            frequentRenterPoints += aRental.getFrquentRenterPoints();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> frequentRenterPoints;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><figcaption><span>Rental.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Rental</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Movie movie;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> daysRented;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Rental</span><span class="params">(Movie movie, <span class="keyword">int</span> daysRented)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.movie = movie;</div><div class="line">        <span class="keyword">this</span>.daysRented = daysRented;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDaysRented</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.daysRented;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> Movie <span class="title">getMovie</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.movie;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getFrquentRenterPoints</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> frequentRenterPoints = <span class="number">0</span>;</div><div class="line">        frequentRenterPoints++;</div><div class="line">        <span class="keyword">if</span> (getMovie().getPriceCode() == Movie.NEW_RELEASE</div><div class="line">                &amp;&amp; getDaysRented() <span class="number">1</span>) &#123;</div><div class="line">            frequentRenterPoints++;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> frequentRenterPoints;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getCharge</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">double</span> thisAmount = <span class="number">0</span>;</div><div class="line">        <span class="keyword">switch</span> (getMovie().getPriceCode()) &#123;</div><div class="line">        <span class="comment">// 这里的数量和定价策略可以先不改变，当增加新功能需要的时候</span></div><div class="line">        <span class="keyword">case</span> Movie.REGULAR:</div><div class="line">            thisAmount += <span class="number">2</span>;</div><div class="line">            <span class="keyword">if</span> (getDaysRented() <span class="number">2</span>)</div><div class="line">                thisAmount += (getDaysRented() - <span class="number">2</span>) * <span class="number">1.5</span>;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> Movie.NEW_RELEASE:</div><div class="line">            thisAmount += getDaysRented() * <span class="number">3</span>;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> Movie.CHILDRENS:</div><div class="line">            thisAmount += <span class="number">1.5</span>;</div><div class="line">            <span class="keyword">if</span> (getDaysRented() <span class="number">3</span>)</div><div class="line">                thisAmount += (getDaysRented() - <span class="number">3</span>) * <span class="number">1.5</span>;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 日志</span></div><div class="line">        System.out.println(<span class="string">"\t"</span> + getMovie().getTitle() + <span class="string">"\t"</span></div><div class="line">                + String.valueOf(thisAmount));</div><div class="line">        <span class="keyword">return</span> thisAmount;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><figcaption><span>Movie.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Movie</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> CHILDRENS = <span class="number">2</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> NEW_RELEASE = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> REGULAR = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> String title;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> priceCode;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Movie</span><span class="params">(String title, <span class="keyword">int</span> priceCode)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        <span class="keyword">this</span>.priceCode = priceCode;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPriceCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.priceCode;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPriceCode</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.priceCode = arg;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getTitle</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.title;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>重构完后，运行下单元测试，没问题，那么很好，完美收工。</p>
+<p>#Round.4 如果发现增加一个功能很差，那么继续重构吧<br>一般情况下，做到第3步已经够了，第四部主要是说明，当你遇到新的需求，增加这个需求需要改动过大时候，那么说明代码的设计不够可维护可扩展可复用。<br>如下重构则为当需要增加一个类型，或者更改价格、积分计算策略时候的调整。</p>
+<h2 id="开始重构，用多态替换逻辑判断"><a href="#开始重构，用多态替换逻辑判断" class="headerlink" title="开始重构，用多态替换逻辑判断"></a>开始重构，用多态替换逻辑判断</h2><p>首先，把getCharge与getFrquentRenterPoints方法移动到Movie中，因为我们需要用多态来代替逻辑状态判断。<br><figure class="highlight java"><figcaption><span>Rental.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Rental</span> </span>&#123;</div><div class="line">		<span class="comment">//...省略</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getFrquentRenterPoints</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> getMovie().getFrquentRenterPoints(daysRented);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getCharge</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> getMovie().getCharge(daysRented);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><figcaption><span>Movie.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Movie</span> </span>&#123;</div><div class="line">		<span class="comment">//...省略部分代码，然后把priceType变量替换成一个枚举类型的变量</span></div><div class="line">    <span class="keyword">private</span> MovieTypeEnum movieType;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Movie</span><span class="params">(String title, <span class="keyword">int</span> movieTypeCode)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        movieType = MovieTypeEnum.convertByCode(String.valueOf(movieTypeCode));</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Movie</span><span class="params">(String title, String movieTypeName)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        movieType = MovieTypeEnum.convertByName(movieTypeName);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getFrquentRenterPoints</span><span class="params">(<span class="keyword">int</span> daysRented)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> movieType.getFrquentRenterPoints(daysRented);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getCharge</span><span class="params">(<span class="keyword">int</span> daysRented)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> movieType.getCharge(daysRented);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPriceCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> Integer.valueOf(<span class="keyword">this</span>.movieType.getCode());</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPriceCode</span><span class="params">(<span class="keyword">int</span> movieTypeCode)</span> </span>&#123;</div><div class="line">        movieType = MovieTypeEnum.convertByCode(String.valueOf(movieTypeCode));</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> MovieTypeEnum <span class="title">getMovieType</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> movieType;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMovieType</span><span class="params">(MovieTypeEnum movieType)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.movieType = movieType;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getTitle</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.title;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="创建枚举"><a href="#创建枚举" class="headerlink" title="创建枚举"></a>创建枚举</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> MovieTypeEnum &#123;</div><div class="line"><span class="comment">//这部分代码是我重构过程中犯下的低级错误，但是只要有单元测试，就能保证错误一旦出现，很快就能发现</span></div><div class="line"><span class="comment">//    CHILDRENS("2","CHILDRENS",new ChildrensPriceHandler(),new DefaultPointHandler()),</span></div><div class="line"><span class="comment">//    NEW_RELEASE("1","NEW_RELEASE",new ChildrensPriceHandler(),new DefaultPointHandler()),</span></div><div class="line"><span class="comment">//    REGULAR("0","REGULAR",new ChildrensPriceHandler(),new DefaultPointHandler());</span></div><div class="line"></div><div class="line">    CHILDRENS(<span class="string">"2"</span>,<span class="string">"CHILDRENS"</span>,<span class="keyword">new</span> ChildrensPriceHandler(),<span class="keyword">new</span> DefaultPointHandler()),</div><div class="line">    NEW_RELEASE(<span class="string">"1"</span>,<span class="string">"NEW_RELEASE"</span>,<span class="keyword">new</span> NewReleasePriceHandler(),<span class="keyword">new</span> NewReleasePointHandler()),</div><div class="line">    REGULAR(<span class="string">"0"</span>,<span class="string">"REGULAR"</span>,<span class="keyword">new</span> RegularPriceHandler(),<span class="keyword">new</span> DefaultPointHandler());</div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String code;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String name;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> IPriceHandler priceHandler;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> IPointHandler pointHandler;</div><div class="line">    MovieTypeEnum(String code,String name,IPriceHandler priceHandler , IPointHandler pointHandler)&#123;</div><div class="line">        <span class="keyword">this</span>.code = code;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">        <span class="keyword">this</span>.priceHandler = priceHandler;</div><div class="line">        <span class="keyword">this</span>.pointHandler = pointHandler;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> code;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> name;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> IPriceHandler <span class="title">getPriceHandler</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> priceHandler;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> IPointHandler <span class="title">getPointHandler</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> pointHandler;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getFrquentRenterPoints</span><span class="params">(<span class="keyword">int</span> daysRented)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> pointHandler.getFrquentRenterPoints(daysRented);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getCharge</span><span class="params">(<span class="keyword">int</span> daysRented)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> priceHandler.getCharge(daysRented);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> MovieTypeEnum <span class="title">convertByCode</span><span class="params">(String code)</span></span>&#123;</div><div class="line">        <span class="keyword">if</span>(MovieTypeEnum.CHILDRENS.getCode().equals(code))&#123;</div><div class="line">            <span class="keyword">return</span> MovieTypeEnum.CHILDRENS;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(MovieTypeEnum.NEW_RELEASE.getCode().equals(code))&#123;</div><div class="line">            <span class="keyword">return</span> MovieTypeEnum.NEW_RELEASE;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(MovieTypeEnum.REGULAR.getCode().equals(code))&#123;</div><div class="line">            <span class="keyword">return</span> MovieTypeEnum.REGULAR;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> MovieTypeEnum <span class="title">convertByName</span><span class="params">(String name)</span></span>&#123;</div><div class="line">        <span class="keyword">if</span>(MovieTypeEnum.CHILDRENS.getName().equals(name))&#123;</div><div class="line">            <span class="keyword">return</span> MovieTypeEnum.CHILDRENS;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(MovieTypeEnum.NEW_RELEASE.getName().equals(name))&#123;</div><div class="line">            <span class="keyword">return</span> MovieTypeEnum.NEW_RELEASE;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(MovieTypeEnum.REGULAR.getName().equals(name))&#123;</div><div class="line">            <span class="keyword">return</span> MovieTypeEnum.REGULAR;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="处理器"><a href="#处理器" class="headerlink" title="处理器"></a>处理器</h2><p>这里分别实现了价格处理器和积分处理器，接口如下：<br><figure class="highlight java"><figcaption><span>IPointHandler.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IPointHandler</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getFrquentRenterPoints</span><span class="params">(<span class="keyword">int</span> daysRented)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><figcaption><span>IPriceHandler.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IPriceHandler</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getCharge</span><span class="params">(<span class="keyword">int</span> daysRented)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>具体处理器的实现这里就举一个例子，顺便看看同个处理逻辑两段代码的实现有多大差别。下面两段代码功能一样，代码前者多了那么多代码和临时变量。可以看出，写的优美的代码，不但易懂，而且优美。</p>
+<figure class="highlight java"><figcaption><span>旧NewReleasePointHandler.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewReleasePointHandler</span> <span class="keyword">extends</span> <span class="title">DefaultPointHandler</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getFrquentRenterPoints</span><span class="params">(<span class="keyword">int</span> daysRented)</span> </span>&#123;</div><div class="line">				<span class="keyword">int</span> frequentRenterPoints = <span class="number">1</span>;</div><div class="line">        <span class="keyword">if</span> (daysRented <span class="number">1</span>) &#123;</div><div class="line">            frequentRenterPoints++;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> frequentRenterPoints;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><figcaption><span>新NewReleasePointHandler.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewReleasePointHandler</span> <span class="keyword">extends</span> <span class="title">DefaultPointHandler</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getFrquentRenterPoints</span><span class="params">(<span class="keyword">int</span> daysRented)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> (daysRented <span class="number">1</span>) ? <span class="number">2</span> : <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行单元而是，没问题，很好，又可以收工了（当然中间有出现错误，还有很多的调试）。</p>
+<p>#Round.5 to be continue<br>重构不是一种状态，他是不断根据环境、需求、设计的变化去变化的。俗话说，只有变化是不变的，因此，重构一定会陪伴着整个软件过程，有了重构，也不用再怕这些变化了。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/08/26/2014-08-26-reconstruction-of-chatter/" itemprop="url">
                   闲扯重构
                 </a>
@@ -238,7 +375,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-08-26T09:26:00+08:00" content="2014-08-26">
               2014-08-26
             </time>
@@ -250,7 +387,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/设计/" itemprop="url" rel="index">
@@ -260,7 +397,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -383,7 +520,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-07-30T01:57:00+08:00" content="2014-07-30">
               2014-07-30
             </time>
@@ -395,7 +532,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -405,7 +542,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -417,7 +554,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -429,7 +566,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -571,7 +708,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-07-23T14:54:00+08:00" content="2014-07-23">
               2014-07-23
             </time>
@@ -583,7 +720,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/架构设计/" itemprop="url" rel="index">
@@ -729,7 +866,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-06-30T00:02:00+08:00" content="2014-06-30">
               2014-06-30
             </time>
@@ -741,7 +878,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/项目管理/" itemprop="url" rel="index">
@@ -751,7 +888,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -916,7 +1053,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-06-15T08:50:00+08:00" content="2014-06-15">
               2014-06-15
             </time>
@@ -928,7 +1065,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/总结/" itemprop="url" rel="index">
@@ -938,7 +1075,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -950,7 +1087,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -962,7 +1099,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1181,7 +1318,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-05-21T14:12:00+08:00" content="2014-05-21">
               2014-05-21
             </time>
@@ -1193,7 +1330,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/bezos/" itemprop="url" rel="index">
@@ -1203,7 +1340,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1215,7 +1352,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1227,7 +1364,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1239,7 +1376,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1251,7 +1388,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1374,7 +1511,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-05-20T14:32:00+08:00" content="2014-05-20">
               2014-05-20
             </time>
@@ -1386,7 +1523,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Amazon/" itemprop="url" rel="index">
@@ -1396,7 +1533,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1408,7 +1545,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1420,7 +1557,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1541,7 +1678,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-05-20T12:25:00+08:00" content="2014-05-20">
               2014-05-20
             </time>
@@ -1553,7 +1690,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/UML/" itemprop="url" rel="index">
@@ -1563,7 +1700,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1575,7 +1712,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1587,7 +1724,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1599,7 +1736,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1611,7 +1748,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1623,7 +1760,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1635,7 +1772,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1765,7 +1902,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-05-18T12:29:00+08:00" content="2014-05-18">
               2014-05-18
             </time>
@@ -1777,7 +1914,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Amazon/" itemprop="url" rel="index">
@@ -1787,7 +1924,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1799,7 +1936,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1811,7 +1948,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1823,7 +1960,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1835,7 +1972,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1916,182 +2053,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/05/14/2014-05-14-i-think-bezos/" itemprop="url">
-                  我眼里的Bezos&Amazon----Code Journey for Kata Potter
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-14T13:58:00+08:00" content="2014-05-14">
-              2014-05-14
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/" itemprop="url" rel="index">
-                    <span itemprop="name">Amazon</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/bezos/" itemprop="url" rel="index">
-                    <span itemprop="name">bezos</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/bezos/天道酬勤/" itemprop="url" rel="index">
-                    <span itemprop="name">天道酬勤</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/bezos/天道酬勤/KataPotter/" itemprop="url" rel="index">
-                    <span itemprop="name">KataPotter</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/bezos/天道酬勤/KataPotter/CodeJourney/" itemprop="url" rel="index">
-                    <span itemprop="name">CodeJourney</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="近况"><a href="#近况" class="headerlink" title="近况"></a>近况</h2><p>感觉现在忙的事情越来越多了。给我家媳妇调毕业论文的日子结束了，紧接上来的就是给媳妇找房子租。然后V1.0版本差不多搞定了，立项、整体计划、下个阶段需求、设计等事情也连绵不绝。然后因为用户开始试用，V1.0版本很多的问题开始暴露，要搜集问题分析问题，紧急的还要打补丁解决，一些用户还需用定制一些特殊功能。<br>忙的事情实在多，只能拼凑一些晚上时间来做做Code Journey，再利用各种班车上、午间、饭后时间看书。<br>所以今天博文就是写最近我看的Bezos传记和Kata Potter的编程之旅，Kata Potter暂时未实现，只是有了一些思路，在设计中。</p>
-<h2 id="Bezos-amp-Amazon"><a href="#Bezos-amp-Amazon" class="headerlink" title="Bezos&amp;Amazon"></a>Bezos&amp;Amazon</h2><p>#Amazon<br>亚马逊开始时候不过就是个网络书商，靠从出版商那里批发图书转卖挣其中的利润。什么当当网之类的不过都是亚马逊的中国制造——山寨。从普通网络书店，到地球上最大的书店，到最大的综合网络零售商，最后到今天这样一个综合性的网络服务商。<br>亚马逊崛起的平缓而持续，得益于Bezos。</p>
-<p>#Bezos<br>Bezos的经历告诉我们一个事情，天道不一定酬勤，但是会决定你成为一个怎样的人。就像我去年考系统集成项目管理认证，两个月的高压工作下学习，虽然最后差之毫厘，但是这个过程中，<strong>我已经得到了这样的能力与见识，我已经将自己变成了一个不一样的人。外在的评估与期待只是一个结果而已，但是绝不应该是目的</strong>。<br>如果你真的早已知晓你所希望成就的一切（说到这里可能又会被认为是成功学），并努力一直将生命向这个方向推动，不懈怠，专注思考，穷尽一切可能，你一定会得到你所想要得到的。虽然至于得到多少，能不能闻达于天下，仍然取决于概率，但是这种主动至少能够帮助你战胜概率。在机会来临前，如果你能做好准备，你才有资格去丰收。我不信儒家思想中的天命，天命不过是未来的一种不确定性，会掌控和颠覆我们的生活，但是想一想，这种不确定性在人的一生这七八十年的样本区间里，就被概率抹平了，大部分的你们终会回归预期轨迹。虽然没几个人能达到Bezos的高度，但是主动至少能给我们获得成功的概率，这概率大小就取决于我们的努力有多少以及我们定义的成功有多高。</p>
-<p>以下为Bezos2010年在普林斯顿大学的演讲，<a href="http://c.blog.sina.com.cn/profile.php?blogid=bec49e8b8900143l" target="_blank" rel="external">全文</a></p>
-<blockquote>
-<p>对我来说，这真是个困难的选择（指辞去对冲基金的工作去创建亚马逊），最终，我决定放手一搏。因为，万一试了以后失败，我并不会后悔；但如果不去试试看，我可能永远都会耿耿于怀。考虑了很久，我最后选择了一条比较不安全的路，去追随我的热情。今天，对于这个选择，我感到非常自豪。</p>
-<p>我要斗胆做个预测。当你们活到八十岁，在某个安静的沉思时刻，回到内心深处，想起自己的人生故事时，最有意义的部份，将会是你所做过的那些选择。人生到头来，我们的选择，决定了我们是什么样的人（We are our choices.）。替你们自己写一篇精彩的人生故事吧。</p>
-</blockquote>
-<h2 id="Kata-Potter"><a href="#Kata-Potter" class="headerlink" title="Kata Potter"></a>Kata Potter</h2><p>#Problem Description<br> Once upon a time there was a series of 5 books about a very English hero called Harry. (At least when this Kata was invented, there were only 5. Since then they have multiplied) Children all over the world thought he was fantastic, and, of course, so did the publisher. So in a gesture of immense generosity to mankind, (and to increase sales) they set up the following pricing model to take advantage of Harry’s magical powers.</p>
-<p>One copy of any of the five books costs 8 EUR. If, however, you buy two different books from the series, you get a 5% discount on those two books. If you buy 3 different books, you get a 10% discount. With 4 different books, you get a 20% discount. If you go the whole hog, and buy all 5, you get a huge 25% discount.</p>
-<p>Note that if you buy, say, four books, of which 3 are different titles, you get a 10% discount on the 3 that form part of a set, but the fourth book still costs 8 EUR.</p>
-<p>Potter mania is sweeping the country and parents of teenagers everywhere are queueing up with shopping baskets overflowing with Potter books. Your mission is to write a piece of code to calculate the price of any conceivable shopping basket, giving as big a discount as possible.</p>
-<p>For example, how much does this basket of books cost?<br>  2 copies of the first book<br>  2 copies of the second book<br>  2 copies of the third book<br>  1 copy of the fourth book<br>  1 copy of the fifth book</p>
-<p>(answer: 51.20 EUR) </p>
-<p>#含义<br>原题目很长，大意就是出版社要促销一套哈利波特图书，该套图书共5集，每集单册购买价8元。若任意两集各买一本，打95折；若任意三集各买一本，打9折；若任意四集各买一本，打8折；若所有这五集都各买一本，打75折。上述优惠之外再购买的单册还是按8元一本计价。比如五集各买一本之外再加一本第一集，五本书打75折，这本另加的第一集按8元计价。若有人第一集买2本，第二集买2本，第三集买2本，第四集买1本，第五集买1本。问打折后最低的优惠价是多少钱？提示，不是51.6元，而是51.2元。</p>
-<p>#思路<br>现在我想了一个办法，就是一个DiscountHandler，集成了95折、9折、8折、75折的handler，然后有一个购物车，从购物车用不同的handler去处理，然后会剩下剩余的购物车（这个购物车会有多种情况，比如1、2、3、4、5、3、4、5在8折策略后可能会是5、3、4、5，也可能是1、3、4、5），然后再把剩余的购物车用DiscountHandler去处理。<br>具体实现，还需要用业余时间去设计实现。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2137,8 +2098,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">93</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-count">94</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
@@ -2146,7 +2107,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">categories</span>
+                <span class="site-state-item-name">Kategorien</span>
               
             </div>
           
@@ -2155,7 +2116,7 @@
             <div class="site-state-item site-state-tags">
               
                 <span class="site-state-item-count">2</span>
-                <span class="site-state-item-name">tags</span>
+                <span class="site-state-item-name">Tags</span>
               
             </div>
           
@@ -2199,7 +2160,7 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
