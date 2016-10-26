@@ -84,39 +84,27 @@
 
 
 
-<meta name="description" content="#从零搭建Flask+Celery+Redis后台任务服务器
-##大体架构
-手残画了画
+<meta name="description" content="从零搭建Flask+Celery+Redis后台任务服务器大体架构手残画了画
 
-##搭建环境
-环境：Ubuntu 14.04 Python 2.7
-###安装git以及下载源码
-123$ sudo apt-get update$ sudo apt-get install git$ sudo git clone https://git.coding.net/David_woo/rm-map">
+搭建环境环境：Ubuntu 14.04 Python 2.7
+安装git以及下载源码123$ sudo apt-get update$ sudo apt-get install git$ sudo git clone https://git.coding.net/David_woo/rm-map-api.git rm_">
 <meta property="og:type" content="article">
-<meta property="og:title" content="从零搭建Flask+Celery+Redis后台任务服务器">
-<meta property="og:url" content="http://yoursite.com/2016/10/25/从零搭建Flask-Celery-Redis后台任务服务器/index.html">
+<meta property="og:title" content="大胃吴的闲话唠嗑">
+<meta property="og:url" content="http://yoursite.com/2016/10/26/从零搭建Flask-Celery-Redis后台任务服务器/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
-<meta property="og:description" content="#从零搭建Flask+Celery+Redis后台任务服务器
-##大体架构
-手残画了画
+<meta property="og:description" content="从零搭建Flask+Celery+Redis后台任务服务器大体架构手残画了画
 
-##搭建环境
-环境：Ubuntu 14.04 Python 2.7
-###安装git以及下载源码
-123$ sudo apt-get update$ sudo apt-get install git$ sudo git clone https://git.coding.net/David_woo/rm-map">
-<meta property="og:image" content="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-10-25-1.jpg">
-<meta property="og:updated_time" content="2016-10-25T10:26:15.000Z">
+搭建环境环境：Ubuntu 14.04 Python 2.7
+安装git以及下载源码123$ sudo apt-get update$ sudo apt-get install git$ sudo git clone https://git.coding.net/David_woo/rm-map-api.git rm_">
+<meta property="og:image" content="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-10-26-1.jpg">
+<meta property="og:updated_time" content="2016-10-26T01:07:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="从零搭建Flask+Celery+Redis后台任务服务器">
-<meta name="twitter:description" content="#从零搭建Flask+Celery+Redis后台任务服务器
-##大体架构
-手残画了画
+<meta name="twitter:title" content="大胃吴的闲话唠嗑">
+<meta name="twitter:description" content="从零搭建Flask+Celery+Redis后台任务服务器大体架构手残画了画
 
-##搭建环境
-环境：Ubuntu 14.04 Python 2.7
-###安装git以及下载源码
-123$ sudo apt-get update$ sudo apt-get install git$ sudo git clone https://git.coding.net/David_woo/rm-map">
-<meta name="twitter:image" content="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-10-25-1.jpg">
+搭建环境环境：Ubuntu 14.04 Python 2.7
+安装git以及下载源码123$ sudo apt-get update$ sudo apt-get install git$ sudo git clone https://git.coding.net/David_woo/rm-map-api.git rm_">
+<meta name="twitter:image" content="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-10-26-1.jpg">
 
 
 
@@ -137,9 +125,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/10/25/从零搭建Flask-Celery-Redis后台任务服务器/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/10/26/从零搭建Flask-Celery-Redis后台任务服务器/"/>
 
-  <title> 从零搭建Flask+Celery+Redis后台任务服务器 | 大胃吴的闲话唠嗑 </title>
+  <title>  | 大胃吴的闲话唠嗑 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -249,7 +237,7 @@
             
             
               
-                从零搭建Flask+Celery+Redis后台任务服务器
+                
               
             
           </h1>
@@ -261,8 +249,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2016-10-25T18:25:51+08:00" content="2016-10-25">
-              2016-10-25
+            <time itemprop="dateCreated" datetime="2016-10-26T09:07:06+08:00" content="2016-10-26">
+              2016-10-26
             </time>
           </span>
 
@@ -289,40 +277,28 @@
       
 
       
-        <p>#从零搭建Flask+Celery+Redis后台任务服务器</p>
-<p>##大体架构</p>
-<p>手残画了画</p>
-<p><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-10-25-1.jpg" alt="1"></p>
-<p>##搭建环境</p>
-<p>环境：Ubuntu 14.04 Python 2.7</p>
-<p>###安装git以及下载源码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install git</div><div class="line">$ sudo git clone https://git.coding.net/David_woo/rm-map-api.git rm_api</div></pre></td></tr></table></figure>
-<p>###安装Pillow的一些底层依赖</p>
-<p>由于热图绘制用到Pillow，所以需要这部，不用Pillow可以无视</p>
+        <h1 id="从零搭建Flask-Celery-Redis后台任务服务器"><a href="#从零搭建Flask-Celery-Redis后台任务服务器" class="headerlink" title="从零搭建Flask+Celery+Redis后台任务服务器"></a>从零搭建Flask+Celery+Redis后台任务服务器</h1><h2 id="大体架构"><a href="#大体架构" class="headerlink" title="大体架构"></a>大体架构</h2><p>手残画了画</p>
+<p><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-10-26-1.jpg" alt="1"></p>
+<h2 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h2><p>环境：Ubuntu 14.04 Python 2.7</p>
+<h3 id="安装git以及下载源码"><a href="#安装git以及下载源码" class="headerlink" title="安装git以及下载源码"></a>安装git以及下载源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install git</div><div class="line">$ sudo git clone https://git.coding.net/David_woo/rm-map-api.git rm_api</div></pre></td></tr></table></figure>
+<h3 id="安装Pillow的一些底层依赖"><a href="#安装Pillow的一些底层依赖" class="headerlink" title="安装Pillow的一些底层依赖"></a>安装Pillow的一些底层依赖</h3><p>由于热图绘制用到Pillow，所以需要这部，不用Pillow可以无视</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install libjpeg-dev zlib1g*</div><div class="line">$ sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk</div></pre></td></tr></table></figure>
-<p>###安装Python的一些依赖库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install -y python-pip python-dev build-essential</div><div class="line">$ sudo pip install -r requirements.txt</div><div class="line">$ sudo pip install gunicorn</div></pre></td></tr></table></figure>
-<p>###安装nginx</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install nginx</div></pre></td></tr></table></figure>
-<p>##配置后台服务</p>
-<p>这里用gunicorn做wsgi运行程序，然后nginx做服务器。</p>
-<p>###gunicorn运行程序</p>
-<p>程序源码根目录下，创建wsgi.py文件，内容如下即可。</p>
+<h3 id="安装Python的一些依赖库"><a href="#安装Python的一些依赖库" class="headerlink" title="安装Python的一些依赖库"></a>安装Python的一些依赖库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install -y python-pip python-dev build-essential</div><div class="line">$ sudo pip install -r requirements.txt</div><div class="line">$ sudo pip install gunicorn</div></pre></td></tr></table></figure>
+<h3 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install nginx</div></pre></td></tr></table></figure>
+<h2 id="配置后台服务"><a href="#配置后台服务" class="headerlink" title="配置后台服务"></a>配置后台服务</h2><p>这里用gunicorn做wsgi运行程序，然后nginx做服务器。</p>
+<h3 id="gunicorn运行程序"><a href="#gunicorn运行程序" class="headerlink" title="gunicorn运行程序"></a>gunicorn运行程序</h3><p>程序源码根目录下，创建wsgi.py文件，内容如下即可。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line">__doc__ = <span class="string">"""</span></div><div class="line">"""</div><div class="line"></div><div class="line"><span class="keyword">from</span> api <span class="keyword">import</span> create_app</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># application = create_app('api/config_dev.cfg')</span></div><div class="line">application = create_app(<span class="string">'api/config_qcloud.cfg'</span>)`</div></pre></td></tr></table></figure>
 <p>同样在根目录下，创建gunicorn.cfg，内容如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> multiprocessing</div><div class="line"></div><div class="line">bind = <span class="string">"0.0.0.0:8092"</span></div><div class="line">daemon = <span class="keyword">True</span></div><div class="line">worker_class=<span class="string">"gevent"</span></div><div class="line">pidfile = <span class="string">"/var/run/gunicorn.pid"</span></div><div class="line">workers = multiprocessing.cpu_count() * <span class="number">2</span> + <span class="number">1</span></div><div class="line">worker_connections=<span class="number">1000</span></div><div class="line">backlog = <span class="number">2048</span></div><div class="line">errorlog = <span class="string">"/data/www/rm_api/gunicorn-error.log"</span></div><div class="line">loglevel = <span class="string">"info"</span></div></pre></td></tr></table></figure>
 <p>执行命令，就把程序在 127.0.0.1:8092上跑起来了，记住这个地址，之后在nginx的配置上要用到</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[david@XXX rmserver]$ sudo /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">[david@XXX rmserver]$ ps aux | grep gunicorn</div><div class="line">root     30836  0.6  0.1 210704 12696 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30841  9.3  0.4 258636 35516 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30842 10.6  0.4 340304 37748 ?        Sl   17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30843 10.3  0.4 340308 37752 ?        Sl   17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30846  9.3  0.4 258660 35540 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30851  9.3  0.4 258668 35548 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30854  9.3  0.4 258684 35560 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30857  9.0  0.4 258688 35548 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30860  9.0  0.4 258700 35552 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30863 10.0  0.4 340364 37676 ?        Sl   17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">david    30872  0.0  0.0 103248   848 pts/0    S+   17:21   0:00 grep gunicorn</div></pre></td></tr></table></figure>
-<p>###通过nginx作为服务器</p>
-<p>把nginx的配置放在源码根目录下，通过软链接到nginx/sites-enabled里，我觉得是一个比较好的方式，保证服务器的配置不会丢失。<br>当然，如果用Docker更好了</p>
+<h3 id="通过nginx作为服务器"><a href="#通过nginx作为服务器" class="headerlink" title="通过nginx作为服务器"></a>通过nginx作为服务器</h3><p>把nginx的配置放在源码根目录下，通过软链接到nginx/sites-enabled里，我觉得是一个比较好的方式，保证服务器的配置不会丢失。<br>当然，如果用Docker更好了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo ln -s rm_api_nginx.conf /etc/nginx/sites-enabled/</div></pre></td></tr></table></figure>
 <p>内容大概如下,127.0.0.1:8092这里就用到了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen 8552;</div><div class="line">    server_name  xxx.xxx.xxx.xxx;</div><div class="line"></div><div class="line">    access_log  logs/nginx_rm_api_https.access.log;</div><div class="line">    error_log  logs/nginx_rm_api_https.error.log;</div><div class="line">    root   html;</div><div class="line">    index  index.html index.htm index.php;</div><div class="line"></div><div class="line">    location ~*$ &#123;</div><div class="line">        resolver xxx.xxx.xxx.xxx;</div><div class="line"></div><div class="line">          proxy_pass            http://127.0.0.1:8092;</div><div class="line">          proxy_redirect        off;</div><div class="line">          proxy_set_header      Host             $host;</div><div class="line">          proxy_set_header      X-Real-IP        $remote_addr;</div><div class="line">          proxy_set_header      X-Forwarded-For  $proxy_add_x_forwarded_for;</div><div class="line">          client_max_body_size  30m;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">          proxy_pass            http://127.0.0.1:8092;</div><div class="line">          proxy_redirect        off;</div><div class="line">          proxy_set_header      Host             $host;</div><div class="line">          proxy_set_header      X-Real-IP        $remote_addr;</div><div class="line">          proxy_set_header      X-Forwarded-For  $proxy_add_x_forwarded_for;</div><div class="line">          client_max_body_size  10m;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>##redis</p>
-<p>redis这里用到了腾讯的redis服务，一是用来做消息队列，而是用来做瓦片图的缓存。</p>
+<h2 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h2><p>redis这里用到了腾讯的redis服务，一是用来做消息队列，而是用来做瓦片图的缓存。</p>
 <p>瓦片图缓存的相关。</p>
-<p>###消息队列的redis配置及woker的启动</p>
-<p>在源码根目录创建celery_tasks.py</p>
+<h3 id="消息队列的redis配置及woker的启动"><a href="#消息队列的redis配置及woker的启动" class="headerlink" title="消息队列的redis配置及woker的启动"></a>消息队列的redis配置及woker的启动</h3><p>在源码根目录创建celery_tasks.py</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"></div><div class="line"><span class="keyword">from</span> api <span class="keyword">import</span> create_app</div><div class="line"><span class="keyword">from</span> celery <span class="keyword">import</span> Celery, platforms</div><div class="line"><span class="keyword">from</span> celery.app.amqp <span class="keyword">import</span> Queue,Exchange</div><div class="line"></div><div class="line">app = create_app(<span class="string">'api/config_qcloud.cfg'</span>)</div><div class="line"><span class="comment"># app = create_app('api/config_dev.cfg')</span></div><div class="line"><span class="comment"># root执行任务，就必须开启</span></div><div class="line">platforms.C_FORCE_ROOT = <span class="keyword">True</span></div><div class="line"></div><div class="line">celery = Celery(app.import_name, broker=app.config[<span class="string">'CELERY_BROKER_URL'</span>])<span class="comment">#redis的url、密码</span></div><div class="line">celery.conf.update(app.config)</div><div class="line">celery.conf.CELERY_DEFAULT_QUEUE = <span class="string">'rm.map.api'</span></div><div class="line">celery.conf.CELERY_ENABLE_REMOTE_CONTROL = <span class="keyword">False</span></div></pre></td></tr></table></figure>
 <p>通过下面命令执行，就通过daemon方式启动了woker</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo celery -A celery_tasks.celery multi start worker  --loglevel=info -P processes -c 4</div></pre></td></tr></table></figure>
@@ -336,8 +312,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> ..extensions <span class="keyword">import</span> celery</div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line">生成矩形轨迹路线图</div><div class="line">'''</div><div class="line"><span class="meta">@celery.task(name='get_pathmap', acks_late=True)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_pathmap</span><span class="params">(path_map, heat_path)</span>:</span></div><div class="line">		<span class="comment">#......，任务代码</span></div></pre></td></tr></table></figure>
 <p>最后如下调用即可</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#通过配置决定是否用消息队列，方便调试功能</span></div><div class="line"><span class="keyword">if</span> current_app.config.get(<span class="string">'IS_CELERY_WORK'</span>):</div><div class="line">	get_pathmap.delay(path_map, heat_path)</div><div class="line"><span class="keyword">else</span>:</div><div class="line">	get_pathmap(path_map, heat_path)</div></pre></td></tr></table></figure>
-<p>###瓦片图的reids缓存</p>
-<p>redis_utils.py内容如下</p>
+<h3 id="瓦片图的reids缓存"><a href="#瓦片图的reids缓存" class="headerlink" title="瓦片图的reids缓存"></a>瓦片图的reids缓存</h3><p>redis_utils.py内容如下</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> redis</div><div class="line"><span class="keyword">import</span> socket</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">RedisConnectionPool</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name=<span class="string">''</span>, app=None)</span>:</span></div><div class="line">        self.name = name</div><div class="line">        self._pool = <span class="keyword">None</span></div><div class="line">        self.max_try = <span class="number">3</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> app <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</div><div class="line">            self.app = app</div><div class="line">            self.init_app(self.app)</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            self.app = <span class="keyword">None</span></div><div class="line"></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init_app</span><span class="params">(self, app)</span>:</span></div><div class="line">        self._pool = redis.BlockingConnectionPool(</div><div class="line">            host=app.config.get(<span class="string">"REDIS_%s_HOST"</span>%self.name),</div><div class="line">            port=app.config.get(<span class="string">"REDIS_%s_PORT"</span>%self.name),</div><div class="line">            db=app.config.get(<span class="string">"REDIS_%s_DB"</span>%self.name),</div><div class="line">            password=app.config.get(<span class="string">"REDIS_%s_PASSWORD"</span>%self.name),</div><div class="line">            socket_timeout=app.config.get(<span class="string">"REDIS_%s_TIMEOUT"</span>%self.name),</div><div class="line">            max_connections=app.config.get(<span class="string">"REDIS_%s_POOL_MAX"</span>%self.name),</div><div class="line">            timeout=app.config.get(<span class="string">"REDIS_%s_POOL_MAXWAIT"</span>%self.name)</div><div class="line">        )</div><div class="line">        self.app = app</div><div class="line"></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_redis</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">return</span> redis.Redis(connection_pool=self._pool)</div><div class="line"></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getattr__</span><span class="params">(self, item)</span>:</span></div><div class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__call_with_retries</span><span class="params">(*args)</span>:</span></div><div class="line">            <span class="keyword">if</span> <span class="keyword">None</span> == self.app:</div><div class="line">                <span class="keyword">raise</span> Exception(<span class="string">'the redis client is not initial!'</span>)</div><div class="line"></div><div class="line">            retry = <span class="number">0</span></div><div class="line">            <span class="keyword">while</span> retry &lt; self.max_try:</div><div class="line">                <span class="keyword">try</span>:</div><div class="line">                  <span class="keyword">return</span> getattr(self.get_redis(), item)(*args)</div><div class="line">                <span class="keyword">except</span> socket.timeout, se:</div><div class="line">                  <span class="keyword">if</span> retry &lt; self.max_try:</div><div class="line">                    retry += <span class="number">1</span></div><div class="line">                  <span class="keyword">else</span>:</div><div class="line">                    <span class="keyword">raise</span> se</div><div class="line"></div><div class="line">        <span class="keyword">return</span> __call_with_retries</div></pre></td></tr></table></figure>
 <p>调用时候，判断是否命中即可</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> redis.exists(redis_key) <span class="keyword">and</span> <span class="keyword">not</span> force_refresh:</div><div class="line">   <span class="keyword">return</span> redis.get(redis_key)</div><div class="line"><span class="keyword">else</span>:</div><div class="line">   str_tile_data = download_tilemap_file(lang, tile_x, tile_y, zoom)</div><div class="line">   ex_dt = timedelta(days=<span class="number">60</span>)</div><div class="line">   redis.set(redis_key, str_tile_data, ex_dt)</div><div class="line">   <span class="keyword">return</span> str_tile_data</div></pre></td></tr></table></figure>
@@ -486,7 +461,7 @@
               
             
             
-              <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#从零搭建Flask-Celery-Redis后台任务服务器"><span class="nav-number">1.</span> <span class="nav-text">从零搭建Flask+Celery+Redis后台任务服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#大体架构"><span class="nav-number">1.1.</span> <span class="nav-text">大体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建环境"><span class="nav-number">1.2.</span> <span class="nav-text">搭建环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装git以及下载源码"><span class="nav-number">1.2.1.</span> <span class="nav-text">安装git以及下载源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Pillow的一些底层依赖"><span class="nav-number">1.2.2.</span> <span class="nav-text">安装Pillow的一些底层依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Python的一些依赖库"><span class="nav-number">1.2.3.</span> <span class="nav-text">安装Python的一些依赖库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装nginx"><span class="nav-number">1.2.4.</span> <span class="nav-text">安装nginx</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置后台服务"><span class="nav-number">1.3.</span> <span class="nav-text">配置后台服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gunicorn运行程序"><span class="nav-number">1.3.1.</span> <span class="nav-text">gunicorn运行程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过nginx作为服务器"><span class="nav-number">1.3.2.</span> <span class="nav-text">通过nginx作为服务器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis"><span class="nav-number">1.4.</span> <span class="nav-text">redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#消息队列的redis配置及woker的启动"><span class="nav-number">1.4.1.</span> <span class="nav-text">消息队列的redis配置及woker的启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#瓦片图的reids缓存"><span class="nav-number">1.4.2.</span> <span class="nav-text">瓦片图的reids缓存</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
         </section>
