@@ -239,7 +239,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2016-10-26T09:07:06+08:00" content="2016-10-26">
+            <time itemprop="dateCreated" datetime="2016-10-26T09:16:39+08:00" content="2016-10-26">
               2016-10-26
             </time>
           </span>
@@ -269,7 +269,11 @@
       
         
           
-            <h1 id="从零搭建Flask-Celery-Redis后台任务服务器"><a href="#从零搭建Flask-Celery-Redis后台任务服务器" class="headerlink" title="从零搭建Flask+Celery+Redis后台任务服务器"></a>从零搭建Flask+Celery+Redis后台任务服务器</h1><h2 id="大体架构"><a href="#大体架构" class="headerlink" title="大体架构"></a>大体架构</h2><p>手残画了画</p>
+            <h1 id="从零搭建Flask-Celery-Redis后台任务服务器"><a href="#从零搭建Flask-Celery-Redis后台任务服务器" class="headerlink" title="从零搭建Flask+Celery+Redis后台任务服务器"></a>从零搭建Flask+Celery+Redis后台任务服务器</h1><h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>记录运动轨迹，那么在记录上传服务器后，要根据轨迹生成几张所需要的轨迹热图，也就是根据传来的经纬度集合，抓取适合的瓦片图，在上面绘制轨迹以及加蒙版等， 生成的图片如下。</p>
+<p><img src="http://pathmap-10048881.file.myqcloud.com/pathmap/v0/colorline/RM/a0085622f4a26b1cb5912d82e97763bb/map.jpg" alt="热力图"></p>
+<p>本文并不是要说热力图生成的逻辑，只是说说整个服务的架构与配置实现。</p>
+<p><strong><em><font color="red">PS.本文主要用作自己记录，有兴趣的可以交流沟通，邮箱：xiao303178394@gmail.com</font></em></strong></p>
+<h2 id="大体架构"><a href="#大体架构" class="headerlink" title="大体架构"></a>大体架构</h2><p>手残画了画</p>
 <p><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-10-26-1.jpg" alt="1"></p>
 <h2 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h2><p>环境：Ubuntu 14.04 Python 2.7</p>
 <h3 id="安装git以及下载源码"><a href="#安装git以及下载源码" class="headerlink" title="安装git以及下载源码"></a>安装git以及下载源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install git</div><div class="line">$ sudo git clone https://git.coding.net/David_woo/rm-map-api.git rm_api</div></pre></td></tr></table></figure>

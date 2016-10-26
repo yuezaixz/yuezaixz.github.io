@@ -84,27 +84,28 @@
 
 
 
-<meta name="description" content="从零搭建Flask+Celery+Redis后台任务服务器大体架构手残画了画
+<meta name="description" content="从零搭建Flask+Celery+Redis后台任务服务器需求记录运动轨迹，那么在记录上传服务器后，要根据轨迹生成几张所需要的轨迹热图，也就是根据传来的经纬度集合，抓取适合的瓦片图，在上面绘制轨迹以及加蒙版等， 生成的图片如下。
 
-搭建环境环境：Ubuntu 14.04 Python 2.7
-安装git以及下载源码123$ sudo apt-get update$ sudo apt-get install git$ sudo git clone https://git.coding.net/David_woo/rm-map-api.git rm_">
+本文并不是要说热力图生成的逻辑，只是说说整个服务的架构与配置实现。
+PS.本文主要用作自己记录，有兴趣的可以交流沟通，邮箱：xiao303178394@gmail.co">
 <meta property="og:type" content="article">
 <meta property="og:title" content="大胃吴的闲话唠嗑">
 <meta property="og:url" content="http://yoursite.com/2016/10/26/从零搭建Flask-Celery-Redis后台任务服务器/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
-<meta property="og:description" content="从零搭建Flask+Celery+Redis后台任务服务器大体架构手残画了画
+<meta property="og:description" content="从零搭建Flask+Celery+Redis后台任务服务器需求记录运动轨迹，那么在记录上传服务器后，要根据轨迹生成几张所需要的轨迹热图，也就是根据传来的经纬度集合，抓取适合的瓦片图，在上面绘制轨迹以及加蒙版等， 生成的图片如下。
 
-搭建环境环境：Ubuntu 14.04 Python 2.7
-安装git以及下载源码123$ sudo apt-get update$ sudo apt-get install git$ sudo git clone https://git.coding.net/David_woo/rm-map-api.git rm_">
+本文并不是要说热力图生成的逻辑，只是说说整个服务的架构与配置实现。
+PS.本文主要用作自己记录，有兴趣的可以交流沟通，邮箱：xiao303178394@gmail.co">
+<meta property="og:image" content="http://pathmap-10048881.file.myqcloud.com/pathmap/v0/colorline/RM/a0085622f4a26b1cb5912d82e97763bb/map.jpg">
 <meta property="og:image" content="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-10-26-1.jpg">
-<meta property="og:updated_time" content="2016-10-26T01:07:06.000Z">
+<meta property="og:updated_time" content="2016-10-26T01:16:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大胃吴的闲话唠嗑">
-<meta name="twitter:description" content="从零搭建Flask+Celery+Redis后台任务服务器大体架构手残画了画
+<meta name="twitter:description" content="从零搭建Flask+Celery+Redis后台任务服务器需求记录运动轨迹，那么在记录上传服务器后，要根据轨迹生成几张所需要的轨迹热图，也就是根据传来的经纬度集合，抓取适合的瓦片图，在上面绘制轨迹以及加蒙版等， 生成的图片如下。
 
-搭建环境环境：Ubuntu 14.04 Python 2.7
-安装git以及下载源码123$ sudo apt-get update$ sudo apt-get install git$ sudo git clone https://git.coding.net/David_woo/rm-map-api.git rm_">
-<meta name="twitter:image" content="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-10-26-1.jpg">
+本文并不是要说热力图生成的逻辑，只是说说整个服务的架构与配置实现。
+PS.本文主要用作自己记录，有兴趣的可以交流沟通，邮箱：xiao303178394@gmail.co">
+<meta name="twitter:image" content="http://pathmap-10048881.file.myqcloud.com/pathmap/v0/colorline/RM/a0085622f4a26b1cb5912d82e97763bb/map.jpg">
 
 
 
@@ -249,7 +250,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2016-10-26T09:07:06+08:00" content="2016-10-26">
+            <time itemprop="dateCreated" datetime="2016-10-26T09:16:39+08:00" content="2016-10-26">
               2016-10-26
             </time>
           </span>
@@ -277,7 +278,11 @@
       
 
       
-        <h1 id="从零搭建Flask-Celery-Redis后台任务服务器"><a href="#从零搭建Flask-Celery-Redis后台任务服务器" class="headerlink" title="从零搭建Flask+Celery+Redis后台任务服务器"></a>从零搭建Flask+Celery+Redis后台任务服务器</h1><h2 id="大体架构"><a href="#大体架构" class="headerlink" title="大体架构"></a>大体架构</h2><p>手残画了画</p>
+        <h1 id="从零搭建Flask-Celery-Redis后台任务服务器"><a href="#从零搭建Flask-Celery-Redis后台任务服务器" class="headerlink" title="从零搭建Flask+Celery+Redis后台任务服务器"></a>从零搭建Flask+Celery+Redis后台任务服务器</h1><h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>记录运动轨迹，那么在记录上传服务器后，要根据轨迹生成几张所需要的轨迹热图，也就是根据传来的经纬度集合，抓取适合的瓦片图，在上面绘制轨迹以及加蒙版等， 生成的图片如下。</p>
+<p><img src="http://pathmap-10048881.file.myqcloud.com/pathmap/v0/colorline/RM/a0085622f4a26b1cb5912d82e97763bb/map.jpg" alt="热力图"></p>
+<p>本文并不是要说热力图生成的逻辑，只是说说整个服务的架构与配置实现。</p>
+<p><strong><em><font color="red">PS.本文主要用作自己记录，有兴趣的可以交流沟通，邮箱：xiao303178394@gmail.com</font></em></strong></p>
+<h2 id="大体架构"><a href="#大体架构" class="headerlink" title="大体架构"></a>大体架构</h2><p>手残画了画</p>
 <p><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-10-26-1.jpg" alt="1"></p>
 <h2 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h2><p>环境：Ubuntu 14.04 Python 2.7</p>
 <h3 id="安装git以及下载源码"><a href="#安装git以及下载源码" class="headerlink" title="安装git以及下载源码"></a>安装git以及下载源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install git</div><div class="line">$ sudo git clone https://git.coding.net/David_woo/rm-map-api.git rm_api</div></pre></td></tr></table></figure>
@@ -461,7 +466,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#从零搭建Flask-Celery-Redis后台任务服务器"><span class="nav-number">1.</span> <span class="nav-text">从零搭建Flask+Celery+Redis后台任务服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#大体架构"><span class="nav-number">1.1.</span> <span class="nav-text">大体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建环境"><span class="nav-number">1.2.</span> <span class="nav-text">搭建环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装git以及下载源码"><span class="nav-number">1.2.1.</span> <span class="nav-text">安装git以及下载源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Pillow的一些底层依赖"><span class="nav-number">1.2.2.</span> <span class="nav-text">安装Pillow的一些底层依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Python的一些依赖库"><span class="nav-number">1.2.3.</span> <span class="nav-text">安装Python的一些依赖库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装nginx"><span class="nav-number">1.2.4.</span> <span class="nav-text">安装nginx</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置后台服务"><span class="nav-number">1.3.</span> <span class="nav-text">配置后台服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gunicorn运行程序"><span class="nav-number">1.3.1.</span> <span class="nav-text">gunicorn运行程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过nginx作为服务器"><span class="nav-number">1.3.2.</span> <span class="nav-text">通过nginx作为服务器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis"><span class="nav-number">1.4.</span> <span class="nav-text">redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#消息队列的redis配置及woker的启动"><span class="nav-number">1.4.1.</span> <span class="nav-text">消息队列的redis配置及woker的启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#瓦片图的reids缓存"><span class="nav-number">1.4.2.</span> <span class="nav-text">瓦片图的reids缓存</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#从零搭建Flask-Celery-Redis后台任务服务器"><span class="nav-number">1.</span> <span class="nav-text">从零搭建Flask+Celery+Redis后台任务服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#需求"><span class="nav-number">1.1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大体架构"><span class="nav-number">1.2.</span> <span class="nav-text">大体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建环境"><span class="nav-number">1.3.</span> <span class="nav-text">搭建环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装git以及下载源码"><span class="nav-number">1.3.1.</span> <span class="nav-text">安装git以及下载源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Pillow的一些底层依赖"><span class="nav-number">1.3.2.</span> <span class="nav-text">安装Pillow的一些底层依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Python的一些依赖库"><span class="nav-number">1.3.3.</span> <span class="nav-text">安装Python的一些依赖库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装nginx"><span class="nav-number">1.3.4.</span> <span class="nav-text">安装nginx</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置后台服务"><span class="nav-number">1.4.</span> <span class="nav-text">配置后台服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gunicorn运行程序"><span class="nav-number">1.4.1.</span> <span class="nav-text">gunicorn运行程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过nginx作为服务器"><span class="nav-number">1.4.2.</span> <span class="nav-text">通过nginx作为服务器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis"><span class="nav-number">1.5.</span> <span class="nav-text">redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#消息队列的redis配置及woker的启动"><span class="nav-number">1.5.1.</span> <span class="nav-text">消息队列的redis配置及woker的启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#瓦片图的reids缓存"><span class="nav-number">1.5.2.</span> <span class="nav-text">瓦片图的reids缓存</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
         </section>
