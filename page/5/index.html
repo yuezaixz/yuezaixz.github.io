@@ -225,6 +225,177 @@
             
               
                 
+                <a class="post-title-link" href="/2014/09/03/2014-09-03-explore-the-browser-side-events-a-an-event-event-flow-profile-add-events/" itemprop="url">
+                  浏览器端的事件探秘（一）---事件事件流简介、事件添加方式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-09-03T13:17:00+08:00" content="2014-09-03">
+              2014-09-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/事件流/" itemprop="url" rel="index">
+                    <span itemprop="name">事件流</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/事件流/事件/" itemprop="url" rel="index">
+                    <span itemprop="name">事件</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/事件流/事件/事件冒泡/" itemprop="url" rel="index">
+                    <span itemprop="name">事件冒泡</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/事件流/事件/事件冒泡/添加事件方式/" itemprop="url" rel="index">
+                    <span itemprop="name">添加事件方式</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Javascript的事件"><a href="#Javascript的事件" class="headerlink" title="Javascript的事件"></a>Javascript的事件</h2><p>#1 事件冒泡</p>
+<h2 id="1-1-事件"><a href="#1-1-事件" class="headerlink" title="1.1 事件"></a>1.1 事件</h2><p>在IE4以后，浏览器的开发团队就开始给页面的每个部分都设定了特定的事件。多到鼠标点击，简单到鼠标滑过，甚至敲击键盘都会有特定的事件。</p>
+<h2 id="1-2-事件流"><a href="#1-2-事件流" class="headerlink" title="1.2 事件流"></a>1.2 事件流</h2><p>如下图，点击页面的一部分DIV3的时候，那么浏览器就认为你点击这按钮的同时，也点击了这个按钮所在的容器。这个过程就是一个事件流。<br><img src="http://chuantu.biz/t/50/1409750064x1822611033.jpg" alt=""><br>事件描述的是从页面接受事件的顺序。IE的事件流方式是事件冒泡流，网景公司用的是事件捕获流。</p>
+<h2 id="1-2-1-事件冒泡"><a href="#1-2-1-事件冒泡" class="headerlink" title="# 1.2.1 事件冒泡"></a># 1.2.1 事件冒泡</h2><p>即事件最开始有最具体的元素（文档中的嵌套层次最深的元素）接收，然后逐级上传到最不具体的元素（文档）。<br>比如下面这个程序，当你点按钮的时候，也会认为你点了div，然后在认为你点了body，然后又认为你点了html，然后在认为你点了document。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html;charset=utf-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>事件流<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">showMsg</span>(<span class="params">txt</span>)</span>&#123;</div><div class="line">            alert(txt)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"box"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"按钮"</span> <span class="attr">id</span>=<span class="string">"btn"</span> <span class="attr">onclick</span>=<span class="string">"showMsg('按钮')"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span></span></div></pre></td></tr></table></figure></p>
+<h2 id="1-2-2-事件捕获"><a href="#1-2-2-事件捕获" class="headerlink" title="# 1.2.2 事件捕获"></a># 1.2.2 事件捕获</h2><p>不太具体的应该更早的接受到事件，具体的应该是最后接受到的。上面例子，document就是最先接收，最后是按钮。</p>
+<h2 id="1-3-事件添加方法"><a href="#1-3-事件添加方法" class="headerlink" title="1.3 事件添加方法"></a>1.3 事件添加方法</h2><h2 id="1-3-1-html事件"><a href="#1-3-1-html事件" class="headerlink" title="# 1.3.1 html事件"></a># 1.3.1 html事件</h2><p>上述代码就是一个html事件，html事件会导致html代码和javascript代码连接过紧，如果修改javascript代码的函数名，那么也要同学修改html。</p>
+<h2 id="1-3-2-DOM0级事件处理程序"><a href="#1-3-2-DOM0级事件处理程序" class="headerlink" title="# 1.3.2 DOM0级事件处理程序"></a># 1.3.2 DOM0级事件处理程序</h2><p>好处：简单，跨浏览器。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html;charset=utf-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>事件流<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">init</span>(<span class="params"></span>)</span>&#123;</div><div class="line">            <span class="keyword">var</span> btn1 = <span class="built_in">document</span>.getElementById(<span class="string">"btn"</span>)</div><div class="line">            btn1.onclick=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">                showMsg(<span class="keyword">this</span>.getAttribute(<span class="string">"value"</span>))</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">var</span> btn2 = <span class="built_in">document</span>.getElementById(<span class="string">"btn2"</span>)</div><div class="line">            btn2.onclick=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">                showMsg(<span class="keyword">this</span>.getAttribute(<span class="string">"value"</span>))</div><div class="line">                btn2.onclick = <span class="literal">null</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">showMsg</span>(<span class="params">txt</span>)</span>&#123;</div><div class="line">            alert(txt)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">onload</span>=<span class="string">"init()"</span> &gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"box"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"按钮"</span> <span class="attr">id</span>=<span class="string">"btn"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"按钮2"</span> <span class="attr">id</span>=<span class="string">"btn2"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="1-3-3-DOM2级事件处理"><a href="#1-3-3-DOM2级事件处理" class="headerlink" title="# 1.3.3 DOM2级事件处理"></a># 1.3.3 DOM2级事件处理</h2><p>定义了2个方法，用于处理指定和删除事件处理程序的操作。分别为addEventListener()和removeEventListener()。接受3个参数：要处理的事件名、作为事件处理程序的函数和布尔值（true是事件捕获，false是事件冒泡）。<br>addEventListener添加的事件只能通过removeEventListener来删除，且参数一致。<br>详细参考如下代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta http-equiv="Content-Type" content="text/html;charset=utf-8"&gt;</div><div class="line">    &lt;title&gt;事件流&lt;/title&gt;</div><div class="line">    &lt;script type="text/javascript"&gt;</div><div class="line">        function init()&#123;</div><div class="line">            var btn1 = document.getElementById("btn")</div><div class="line">            btn1.addEventListener('click',clickBtn,false)</div><div class="line">            var btn2 = document.getElementById("btn2")</div><div class="line">            btn2.addEventListener('click',clickBtn,false)</div><div class="line">            btn2.addEventListener('click',function()&#123;</div><div class="line">                btn2.removeEventListener('click',clickBtn,false)</div><div class="line">            &#125;,false)</div><div class="line">        &#125;</div><div class="line">        function clickBtn()&#123;</div><div class="line">            showMsg(this.getAttribute("value"))</div><div class="line">        &#125;</div><div class="line">        function showMsg(txt)&#123;</div><div class="line">            alert(txt)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body onload="init()" &gt;</div><div class="line">    &lt;div id="box"&gt;</div><div class="line">        &lt;input type="button" value="按钮" id="btn"/&gt;</div><div class="line">        &lt;input type="button" value="按钮2" id="btn2"/&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
+<p>DOM2级还有一个好处就是可以给模块增加多个点击事件。如上btn2，就添加了多个click事件。</p>
+<h2 id="1-3-4-IE事件处理程序"><a href="#1-3-4-IE事件处理程序" class="headerlink" title="# 1.3.4 IE事件处理程序"></a># 1.3.4 IE事件处理程序</h2><p>定义了2个方法，用于处理指定和删除事件处理程序的操作。分别为attachEvent ()和detachEvent ()。接受2个参数：要处理的事件名、作为事件处理程序的函数，事件处理方式就是冒泡。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html;charset=utf-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>事件流<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">init</span>(<span class="params"></span>)</span>&#123;</div><div class="line">            <span class="keyword">var</span> btn1 = <span class="built_in">document</span>.getElementById(<span class="string">"btn"</span>)</div><div class="line">            btn1.attachEvent(<span class="string">'onclick'</span>,clickBtn)</div><div class="line">            <span class="keyword">var</span> btn2 = <span class="built_in">document</span>.getElementById(<span class="string">"btn2"</span>)</div><div class="line">            btn2.attachEvent(<span class="string">'onclick'</span>,clickBtn)</div><div class="line">            btn2.attachEvent(<span class="string">'onclick'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">                btn2.detachEvent(<span class="string">'onclick'</span>,clickBtn)</div><div class="line">            &#125;)</div><div class="line">        &#125;</div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">clickBtn</span>(<span class="params"></span>)</span>&#123;</div><div class="line">            showMsg(<span class="keyword">this</span>.value)</div><div class="line">            <span class="comment">//this.getAttribute("value")</span></div><div class="line">        &#125;</div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">showMsg</span>(<span class="params">txt</span>)</span>&#123;</div><div class="line">            alert(txt)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">onload</span>=<span class="string">"init()"</span> &gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"box"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"按钮"</span> <span class="attr">id</span>=<span class="string">"btn"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"按钮2"</span> <span class="attr">id</span>=<span class="string">"btn2"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="1-3-5-跨浏览器事件处理"><a href="#1-3-5-跨浏览器事件处理" class="headerlink" title="# 1.3.5 跨浏览器事件处理"></a># 1.3.5 跨浏览器事件处理</h2><p>那就要做能力处理判断，那最好把这种处理放在一个对象中。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html;charset=utf-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>事件流<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">EventUtil</span>(<span class="params"></span>)</span>&#123;</div><div class="line">        &#125;</div><div class="line">        EventUtil.prototype.addHandler = <span class="function"><span class="keyword">function</span>(<span class="params">element,type,handler</span>)</span>&#123;</div><div class="line">            <span class="keyword">if</span>(element.addEventListener)&#123;</div><div class="line">                element.addEventListener(type,handler,<span class="literal">false</span>);</div><div class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(element.attachEvent)&#123;</div><div class="line">                element.attachEvent(<span class="string">'on'</span>+type,handler);</div><div class="line">            &#125;<span class="keyword">else</span>&#123;</div><div class="line">                <span class="comment">//在javascript中，所有用点的地方都能用中刮号</span></div><div class="line">                element[<span class="string">'on'</span>+type] = handler;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        EventUtil.prototype.removeHandler = <span class="function"><span class="keyword">function</span>(<span class="params">element,type,handler</span>)</span>&#123;</div><div class="line">            <span class="keyword">if</span>(element.removeEventListener)&#123;</div><div class="line">                element.removeEventListener(type,handler,<span class="literal">false</span>);</div><div class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(element.detachEvent)&#123;</div><div class="line">                element.detachEvent(<span class="string">'on'</span>+type,handler);</div><div class="line">            &#125;<span class="keyword">else</span>&#123;</div><div class="line">                <span class="comment">//在javascript中，所有用点的地方都能用中刮号</span></div><div class="line">                element[<span class="string">'on'</span>+type] = <span class="literal">null</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">init</span>(<span class="params"></span>)</span>&#123;</div><div class="line">            <span class="keyword">var</span> eventUtil = <span class="keyword">new</span> EventUtil();</div><div class="line">            <span class="keyword">var</span> btn1 = <span class="built_in">document</span>.getElementById(<span class="string">"btn"</span>)</div><div class="line">            eventUtil.addHandler(btn1,<span class="string">'click'</span>,clickBtn)</div><div class="line">            <span class="keyword">var</span> btn2 = <span class="built_in">document</span>.getElementById(<span class="string">"btn2"</span>)</div><div class="line">            eventUtil.addHandler(btn2,<span class="string">'click'</span>,clickBtn)</div><div class="line">            eventUtil.addHandler(btn2,<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">                eventUtil.removeHandler(btn2,<span class="string">'click'</span>,clickBtn)</div><div class="line">            &#125;)</div><div class="line">        &#125;</div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">clickBtn</span>(<span class="params"></span>)</span>&#123;</div><div class="line">            <span class="keyword">if</span>(<span class="keyword">this</span>.value)&#123;</div><div class="line">                showMsg(<span class="keyword">this</span>.value)</div><div class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">this</span>.attributes)&#123;</div><div class="line">                showMsg(<span class="keyword">this</span>.attributes[<span class="string">"value"</span>])</div><div class="line">            &#125; <span class="keyword">else</span>&#123;</div><div class="line">                showMsg(<span class="string">"Hello World"</span>)</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">//this.getAttribute("value")</span></div><div class="line">        &#125;</div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">showMsg</span>(<span class="params">txt</span>)</span>&#123;</div><div class="line">            alert(txt)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">onload</span>=<span class="string">"init()"</span> &gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"box"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"按钮"</span> <span class="attr">id</span>=<span class="string">"btn"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"按钮2"</span> <span class="attr">id</span>=<span class="string">"btn2"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/09/02/2014-09-02-refactoring-code-example/" itemprop="url">
                   重构-代码示例
                 </a>
@@ -1868,191 +2039,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/05/18/2014-05-18-everythis-is-store-davidpotter-design/" itemprop="url">
-                  Everythis is store----DavidPotter的设计
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-05-18T12:29:00+08:00" content="2014-05-18">
-              2014-05-18
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/" itemprop="url" rel="index">
-                    <span itemprop="name">Amazon</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/bezos/" itemprop="url" rel="index">
-                    <span itemprop="name">bezos</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/bezos/设计/" itemprop="url" rel="index">
-                    <span itemprop="name">设计</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/bezos/设计/责任链/" itemprop="url" rel="index">
-                    <span itemprop="name">责任链</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/bezos/设计/责任链/KataPotter/" itemprop="url" rel="index">
-                    <span itemprop="name">KataPotter</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/bezos/设计/责任链/KataPotter/一网打尽/" itemprop="url" rel="index">
-                    <span itemprop="name">一网打尽</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一网打尽"><a href="#一网打尽" class="headerlink" title="一网打尽"></a>一网打尽</h2><h2 id="Bezos新看法"><a href="#Bezos新看法" class="headerlink" title="Bezos新看法"></a>Bezos新看法</h2><p>最近在看《Everything is store》这本书，暂时只看到Amazon新世纪前的艰难处境，这让我看到了Bezos的另一面：他吝啬，不给员工交保险；他主观，他认为员工就应该为了亚马逊的千秋万代不停的工作；他强势，他和乔布斯一样有不可思议的现实扭曲能力；他敏捷，他发现商机后往往是立马行动，不留下一点拖沓；他精明，善于在规则中发现漏洞，并钻这个空子；他谨慎，几乎没有人知道他的计划，包括他的合伙人和投资商；他无情，他让员工放弃家庭为他工作；他厚道，就算离开原有公司，也遵守着约定，并没有带走原公司的员工；他有感染力，他可以放开心的大笑；他是毒药，他的大笑让你失去防备。<br>一点载记，来自于《Everything is store》</p>
-<blockquote>
-<p>亚马逊当时还没有那么大的销售量，贝佐斯却为当初克服困难的勇气而津津乐道。他说：“我们发现了批发商订购规则的一个漏洞，他们的系统是这样设计的，你没有必要真买10本书，但你必须至少订10本书。我们发现有一本书，是描写‘地衣’的，系统里面有，但脱销了。我们开始订购1本我们想要的书，还有另外9本‘地衣’。然后他们会运来我们需要的那本书，并附上一张纸条，‘抱歉，我们的书脱销了。’”</p>
-<p>如果一位有潜力的应聘者想在工作和家庭之间寻找平衡，那他就大错特错了，贝索斯肯定会把他拒之门外。</p>
-<p>渐渐地，CEO向他的员工展示真是的自我，感染人的大笑、秃秃的头顶和神经质的举止。他异乎寻常的自信，比想象中还要固执。他近乎偏执地认为，员工都要不知疲倦得卖命，并且经常要大发豪言壮语。他一直雄心勃勃，但却行事谨慎，一些计划有时甚至连卡芬都蒙在鼓里。</p>
-<p>Bezos最终命令他们停止这样做，因为这（员工通过服务器查看订单的每日增长情况）给服务器增加了更多的压力。当亚马逊第一次突破单日5000美元的订单时，拉夫乔伊建议搞个聚会，Bezos也没答应。他说：“将来会有很多有意义的事情，我不想这样庆祝”。</p>
-<p>你可以超时工作、勤奋工作、动脑工作，但在亚马逊，你必须三选二。</p>
-<p>Bezos再一次强调紧迫性：领先的企业现在要保持这种紧迫的状态，只有保持领先地位才能为顾客停工最优质的服务。</p>
-<p>当然，这意味着亚马逊的每位员工都必须加倍努力。今后就没有任何公休日可言了，包括周末。在这里没人说你不能休周末，也没有人认为你可以休周末。</p>
-</blockquote>
-<h2 id="DavidPotter"><a href="#DavidPotter" class="headerlink" title="DavidPotter"></a>DavidPotter</h2><h2 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h2><p>上篇博文中已经说了题目的含义。但是后来设计的时候觉得，如果按那样设计，一个购物车，有x本书，用n种折扣处理，处理后可能会出现y（y根据剩余书系列类别书和n决定）种情况的新购物车，然后再回头开始，用n中折扣处理。<br>我觉得这样设计带来的时间复杂度提升太严重了。而且这种设计只是为了未来可能的扩展要求。因此，我用一种简单的方式实现，暂时之前只有最后两层出现5本书折扣和3本书折扣的时候会出现用2次四折处理会便宜0.4元，就对这个特殊情况，我用一个特殊的handler处理下就好了。之后如果折扣变更有新的需要，用责任链设计模式也可以很方便的热拔插进一个新的handler。</p>
-<h2 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h2><p><img src="http://i1.tietuku.com/13ad8e00f1cf9723s.png" alt=""><br>可以看出，设计都是面向抽象，而不是具体实现。计算器Calc依赖于计算策略、购物车、购物车工厂、处理器，购物车依赖于书的系列，系列再依赖于书。处理器使用责任链的方式组合。</p>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>这篇文章暂就介绍到这里，下篇再具体介绍代码。另外这次的代码实现还会用BDD的方式来完成。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2098,7 +2084,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">94</span>
+              <span class="site-state-item-count">95</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
@@ -2115,7 +2101,7 @@
           
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">Tags</span>
               
             </div>

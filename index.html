@@ -225,6 +225,108 @@
             
               
                 
+                <a class="post-title-link" href="/2016/10/26/终端通过Shadowsocks科学上网/" itemprop="url">
+                  终端通过Shadowsocks科学上网
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-10-26T21:09:12+08:00" content="2016-10-26">
+              2016-10-26
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="终端通过Shadowsocks科学上网"><a href="#终端通过Shadowsocks科学上网" class="headerlink" title="终端通过Shadowsocks科学上网"></a>终端通过Shadowsocks科学上网</h1><h2 id="安装polipo"><a href="#安装polipo" class="headerlink" title="安装polipo"></a>安装polipo</h2><p>polipo是一个轻量级的缓存web代理程序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo brew install polipo</div></pre></td></tr></table></figure>
+<h2 id="设置自动启动"><a href="#设置自动启动" class="headerlink" title="设置自动启动"></a>设置自动启动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ln -sfv /usr/local/opt/polipo/*.plist ~/Library/LaunchAgents</div><div class="line">/Users/David_Woo/Library/LaunchAgents/homebrew.mxcl.polipo.plist -&gt; /usr/local/opt/polipo/homebrew.mxcl.polipo.plist</div></pre></td></tr></table></figure>
+<h2 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$sudo vim /usr/local/opt/polipo/homebrew.mxcl.polipo.plist</div></pre></td></tr></table></figure>
+<p>增加一行\<string>socksParentProxy=localhost:1080\</string>,完全替换应该也是ok的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</div><div class="line">&lt;plist version=&quot;1.0&quot;&gt;</div><div class="line">  &lt;dict&gt;</div><div class="line">    &lt;key&gt;Label&lt;/key&gt;</div><div class="line">    &lt;string&gt;homebrew.mxcl.polipo&lt;/string&gt;</div><div class="line">    &lt;key&gt;RunAtLoad&lt;/key&gt;</div><div class="line">    &lt;true/&gt;</div><div class="line">    &lt;key&gt;KeepAlive&lt;/key&gt;</div><div class="line">    &lt;true/&gt;</div><div class="line">    &lt;key&gt;ProgramArguments&lt;/key&gt;</div><div class="line">    &lt;array&gt;</div><div class="line">        &lt;string&gt;/usr/local/opt/polipo/bin/polipo&lt;/string&gt;</div><div class="line">        &lt;string&gt;socksParentProxy=localhost:1080&lt;/string&gt;</div><div class="line">    &lt;/array&gt;</div><div class="line">    &lt;key&gt;SoftResourceLimits&lt;/key&gt;</div><div class="line">    &lt;dict&gt;</div><div class="line">      &lt;key&gt;NumberOfFiles&lt;/key&gt;</div><div class="line">      &lt;integer&gt;20480&lt;/integer&gt;</div><div class="line">    &lt;/dict&gt;</div><div class="line">  &lt;/dict&gt;</div><div class="line">&lt;/plist&gt;</div></pre></td></tr></table></figure>
+<h2 id="重启及启动"><a href="#重启及启动" class="headerlink" title="重启及启动"></a>重启及启动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.polipo.plist</div><div class="line">$ launchctl load ~/Library/LaunchAgents/homebrew.mxcl.polipo.plist</div></pre></td></tr></table></figure>
+<h2 id="验证是否成功"><a href="#验证是否成功" class="headerlink" title="验证是否成功"></a>验证是否成功</h2><p>之后命令都以 http_proxy=<a href="http://localhost:8123" target="_blank" rel="external">http://localhost:8123</a> 开头</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">wudiweideMacBook-Pro-2:~ David_Woo$ curl ip.gs</div><div class="line">当前 IP：27.152.75.207 来自：中国福建厦门 电信</div><div class="line">wudiweideMacBook-Pro-2:~ David_Woo$ http_proxy=http://localhost:8123 curl ip.gs</div><div class="line">当前 IP：23.83.239.21 来自：美国加利福尼亚州费利蒙</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/12/从零搭建Flask-Celery-Redis后台任务服务器/" itemprop="url">
                   从零搭建Flask+Celery+Redis后台任务服务器
                 </a>
@@ -1243,108 +1345,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/05/07/2015-05-07-2015-04-20-beginning-ios-pit-over-those-years-f/" itemprop="url">
-                  初学IOS那些年踩过的坑（七）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2015-05-07T14:21:16+08:00" content="2015-05-07">
-              2015-05-07
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="地图的View退到后台后导致闪退"><a href="#地图的View退到后台后导致闪退" class="headerlink" title="地图的View退到后台后导致闪退"></a>地图的View退到后台后导致闪退</h2><p>错误信息为gpus_ReturnNotPermittedKillClient</p>
-<h2 id="事因"><a href="#事因" class="headerlink" title="# 事因"></a># 事因</h2><p>情况大概是这样的，中间有个版本因为地图占用了内存，所以在4S上会有内存不足闪退的原因，然后做了一次修改就是进入后台的时候把地图销毁了，具体代码如下。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(applicationDidEnterBackgroundNotification:) name:RMApplicationDidEnterBackgroundNotification object:<span class="literal">nil</span>];</div><div class="line">[[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(applicationDidWillEnterForegroundNotification:) name:RMApplicationDidWillEnterForegroundNotification object:<span class="literal">nil</span>];</div></pre></td></tr></table></figure>
-<p>销毁代码如下</p>
-<figure class="highlight objc"><figcaption><span>RMMapView.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)applicationDidEnterBackgroundNotification:(<span class="built_in">NSNotification</span> *)notification &#123;</div><div class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span> viewController] == [<span class="keyword">self</span> topViewController]) &#123;</div><div class="line">        [<span class="keyword">self</span> setHiddenMap:<span class="literal">YES</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)applicationDidWillEnterForegroundNotification:(<span class="built_in">NSNotification</span> *)notification &#123;</div><div class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span> viewController] == [<span class="keyword">self</span> topViewController]) &#123;</div><div class="line">        [<span class="keyword">self</span> setHiddenMap:<span class="literal">NO</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)setHiddenMap:(<span class="built_in">BOOL</span>)hiddenMap &#123;</div><div class="line">    <span class="keyword">if</span> (hiddenMap == _hiddenMap) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">self</span>.hidden = hiddenMap;</div><div class="line">    _hiddenMap = hiddenMap;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (hiddenMap) &#123;</div><div class="line">        <span class="keyword">if</span> (_mapViewClient) &#123;</div><div class="line">            _latitudeDelta = [_mapViewClient getMapRegionLatitudeDelta];</div><div class="line">            _longitudeDelta = [_mapViewClient getMapRegionLatitudeDelta];</div><div class="line">            _coordinate = [_mapViewClient getMapCenterLocationCoordinate2D];</div><div class="line">            [_mapViewClient removeMapView];</div><div class="line">            _changedMapLevel = <span class="literal">NO</span>;</div><div class="line">            _mapViewClient = <span class="literal">nil</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">if</span> ([_mapViewClient getMapView] == <span class="literal">nil</span>) &#123;</div><div class="line"><span class="comment">//            [self performSelector:@selector(createMap) withObject:nil afterDelay:0.5];</span></div><div class="line">            _changedMapLevel = <span class="literal">NO</span>;</div><div class="line">            [<span class="keyword">self</span> createMap];</div><div class="line">            [<span class="keyword">self</span> drawLineForMapView];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight objc"><figcaption><span>MapViewClient.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)removeMapView &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="literal">nil</span> != mainMapView) &#123;</div><div class="line">        [mainMapView removeFromSuperview];</div><div class="line">    &#125;</div><div class="line">    mainMapView = <span class="literal">nil</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>然后就偶尔会出现退到后台会闪退的原因。Google了一些资料算是把自己误导了。<br>回答的意思基本上是销毁的方法不对（可能确实是销毁的有问题），但是回答也基本上都是设置成nil，要不就把delegate=nil，尝试了都没效果，还是一直会闪退。</p>
-<h2 id="解决"><a href="#解决" class="headerlink" title="# 解决"></a># 解决</h2><p>最后换了个思路，放弃销毁，把销毁的代码全部去了，只是在地图的代理方法里加判断，判断是否为Active，不是则不执行。暂时测试还未发现闪退问题</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ([<span class="built_in">UIApplication</span> sharedApplication].applicationState != <span class="built_in">UIApplicationStateActive</span>) &#123;</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1390,7 +1390,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">94</span>
+              <span class="site-state-item-count">95</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
@@ -1407,7 +1407,7 @@
           
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">Tags</span>
               
             </div>
