@@ -88,6 +88,7 @@
 <meta property="og:title" content="大胃吴的闲话唠嗑">
 <meta property="og:url" content="http://yoursite.com/page/10/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
+<meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大胃吴的闲话唠嗑">
 
@@ -225,6 +226,154 @@
             
               
                 
+                <a class="post-title-link" href="/2014/01/09/2014-01-09-unbelievably-volatile/" itemprop="url">
+                  不靠谱的volatile
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-01-09T11:00:00+08:00" content="2014-01-09">
+              2014-01-09
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/多线程/volatile/" itemprop="url" rel="index">
+                    <span itemprop="name">volatile</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#1 Volatile关键字的含义<br>在java线程并发处理时，用volatile修饰的变量，线程在每次使用变量的时候都会读取变量修改后的最新值。</p>
+<p>#2 与synchronized的对比<br>Synchronized对 对象的锁有两个特性：互斥性和可见性。</p>
+<h2 id="2-1-互斥性"><a href="#2-1-互斥性" class="headerlink" title="2.1 互斥性"></a>2.1 互斥性</h2><p>互斥锁就是当Synchronized描述的方法或块获取了对象锁，那其他再视图操作该对象锁的同步块或同步方法就会被阻塞，直到对象锁被释放。</p>
+<h2 id="2-2-可见性"><a href="#2-2-可见性" class="headerlink" title="2.2 可见性"></a>2.2 可见性</h2><p>可见性就是同步块或同步方法每次使用变量的时候都会读取变量修改后的最新值。</p>
+<h2 id="2-3-结论"><a href="#2-3-结论" class="headerlink" title="2.3 结论"></a>2.3 结论</h2><p>很明显，volatile只有具有可见性的特性。但是，他的可见性对于原子性操作又怎么个不靠谱法呢？</p>
+<p>#3 例子</p>
+<h2 id="3-1-程序"><a href="#3-1-程序" class="headerlink" title="3.1 程序"></a>3.1 程序</h2><figure class="highlight java"><figcaption><span>Counter.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">* <span class="doctag">@ClassName</span>: Counter</span></div><div class="line"><span class="comment">* <span class="doctag">@Description</span>: 测试volatile</span></div><div class="line"><span class="comment">* <span class="doctag">@author</span> David</span></div><div class="line"><span class="comment">* <span class="doctag">@date</span> 2014-1-9 下午04:37:36</span></div><div class="line"><span class="comment">* <span class="doctag">@version</span> 1.0</span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Counter</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * <span class="doctag">@Fields</span> count : 不用volatile修饰</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>;</div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">    * <span class="doctag">@Fields</span> count : 用volatile修饰</span></div><div class="line"><span class="comment">    */</span></div><div class="line"><span class="comment">//    public volatile static int count = 0;</span></div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     *</span></div><div class="line"><span class="comment">     * <span class="doctag">@Title</span>: inc</span></div><div class="line"><span class="comment">     * <span class="doctag">@Description</span>: &lt;b&gt;功能：&lt;/b&gt;自增长&lt;br</span></div><div class="line"><span class="comment">     * <span class="doctag">@return</span> void    返回类型</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">inc</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Thread.sleep(<span class="number">1</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">catch</span>(InterruptedException e) &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        count++;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     *</span></div><div class="line"><span class="comment">     * <span class="doctag">@Title</span>: main</span></div><div class="line"><span class="comment">     * <span class="doctag">@Description</span>: &lt;b&gt;功能：&lt;/b&gt;我是一个main&lt;br</span></div><div class="line"><span class="comment">     * <span class="doctag">@return</span> void    返回类型</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;</div><div class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    Counter.inc();</div><div class="line">                &#125;</div><div class="line">            &#125;).start();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Thread.sleep(<span class="number">3000</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">catch</span>(InterruptedException e) &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        System.out.println(<span class="string">"你猜，最后的结果会是多少呢？结果是"</span>+Counter.count);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="3-2-结果"><a href="#3-2-结果" class="headerlink" title="3.2 结果"></a>3.2 结果</h2><p>该函数输出的结果不固定，大概就是在990左右。<br>那如果给count变量加上volatile会怎么样呢？<br>结果还是在990多左右，可能会比没加volatile的情况更接近1000了。<br>但是为什么会出现这个情况呢，不是已经确保线程从内存中获取的count变量始终是最新的了吗。</p>
+<p>#4 原因<br>下图描述了JVM运行时刻的内存分配。右边的内存区域就是JVM虚拟机的堆内存，每一个线程运行时都有一个线程栈，线程栈保存了线程运行时候的变量信息。当线程访问某一个对象值的时候，首先通过对象的引用找到对应在堆内存中的变量值，然后把该变量的具体指加载到线程本地内存中，建立一个变量的副本，之后线程内存和主内存之间就没啥关系了。<br>知道线程退出之前，自动把线程变量副本写到对象在堆中的变量中。这时候堆中的对象值才发生变化。<br>因此，线程可见性的特性只保证了从堆中复制的值是最新的，而不能保证线程栈中的值是最新的。<br><img src="http://user-image.logdown.io/user/3769/blog/3827/post/175079/Git9mKXwT8yiboZ0JN9X_1.jpg" alt="1.jpg"></p>
+<p>#5 Volatile的适用场合<br>既然volatile这么不靠谱，那为什么还会有他呢？其实他还是有一些适用的场合的。</p>
+<h2 id="5-1-读操作远远大于写操作的时候"><a href="#5-1-读操作远远大于写操作的时候" class="headerlink" title="5.1 读操作远远大于写操作的时候"></a>5.1 读操作远远大于写操作的时候</h2><p>由于volatile的开销比synchronized小的多的多。所以，出于性能考虑，在读操作远远大于写操作的时候，还是适用volatile吧。</p>
+<h2 id="5-2-用作状态的时候"><a href="#5-2-用作状态的时候" class="headerlink" title="5.2 用作状态的时候"></a>5.2 用作状态的时候</h2><p>比如调度引擎表示是否启动状态的时候，执行调度方法的时候都需要判断状态是否为启动才继续。这种时候适合用volatile。<br>其实这种情况也就是2.1中的一种特殊情况。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/01/07/2014-01-07-lack-of-change-java-of-the-class-loader-works/" itemprop="url">
                   不足则改之---Java类装载器的工作原理
                 </a>
@@ -325,7 +474,7 @@
 <h2 id="1-3-3-单一性"><a href="#1-3-3-单一性" class="headerlink" title="# # 1.3.3 单一性"></a># # 1.3.3 单一性</h2><p>指一个类仅加载一次，该机制是通过委托机制确保子类加载器不会再次加载父类加载器加载过的类。</p>
 <h2 id="1-3-4-例子"><a href="#1-3-4-例子" class="headerlink" title="# # 1.3.4 例子"></a># # 1.3.4 例子</h2><p>通过后面章节介绍了各个类加载器及其工作原理后再结合例子介绍。</p>
 <h2 id="1-4-Bootstrap类加载器"><a href="#1-4-Bootstrap类加载器" class="headerlink" title="# 1.4 Bootstrap类加载器"></a># 1.4 Bootstrap类加载器</h2><h2 id="1-4-1-概念"><a href="#1-4-1-概念" class="headerlink" title="# # 1.4.1 概念"></a># # 1.4.1 概念</h2><p>该类加载器负责加载rt.jar中的JDK类文件，他是所有类加载器的父加载器。该类加载器没有父类加载器，如果你调用String.class.getClassLoader()，会返回null。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">System.out.println(String.class.getClassLoader());</div><div class="line">System.out.println(TestBootstrapCL.class.getClassLoader());</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">null</div><div class="line">sun.misc.Launcher$AppClassLoader@82ba41</div></pre></td></tr></table></figure>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">null</div><div class="line">sun.misc.Launcher$AppClassLoader@82ba41</div></pre></td></tr></table></figure>
 <p>因此，bootstrap类加载器被称为初始类加载器。</p>
 <h2 id="1-4-2-加载类文件的地方"><a href="#1-4-2-加载类文件的地方" class="headerlink" title="# # 1.4.2 加载类文件的地方"></a># # 1.4.2 加载类文件的地方</h2><p>JRE/lib/rt.jar</p>
 <h2 id="1-5-Extension类加载器"><a href="#1-5-Extension类加载器" class="headerlink" title="# 1.5 Extension类加载器"></a># 1.5 Extension类加载器</h2><h2 id="1-5-1-概念"><a href="#1-5-1-概念" class="headerlink" title="# # 1.5.1 概念"></a># # 1.5.1 概念</h2><p>Extension类加载器负责加载标准扩展目录下面的类。他加载类之前，会先委托他的父类加载器（Bootstrap）进行加载，没有加载到再从jre/lib/ext目录下或者java.ext.dirs系统属性定义的目录下加载类。<br>这样就可以使得编写程序变得简单，只需把JAR文件拷贝到扩展目录下面即可，类加载器会自动的在下面查找。<br>Extension加载器由sun.misc.Launcher$ExtClassLoader实现。</p>
@@ -335,7 +484,7 @@
 <h2 id="2-工作原理"><a href="#2-工作原理" class="headerlink" title="2 工作原理"></a>2 工作原理</h2><p>把三种类加载器说完了，现在补充下之前没说完的类加载器工作原理的三个机制。</p>
 <h2 id="2-1-委托机制"><a href="#2-1-委托机制" class="headerlink" title="# 2.1 委托机制"></a># 2.1 委托机制</h2><p>当一个类加载和初始化的时候，类尽在有需要加载的时候被加载。假设你有一个应用需要的类家Abc.class，首先加载这个类的请求由System类加载器委托给Extension类加载器，然后再委托给Bootstrap类加载器。Bootstrap会先看看rt.jar中有没有这个类，没有的话再把请求返回给extension类加载器，如果这个类被Extension类加载器找到了，那么他将被加载，而System不会加载这个类。如果没有找到，那么System就回去CLASSPATH中寻找。</p>
 <h2 id="2-2-可见性机制"><a href="#2-2-可见性机制" class="headerlink" title="# 2.2 可见性机制"></a># 2.2 可见性机制</h2><p>根据可见性机制，子类加载器可以看到父类加载器加载的类，而反之则不行。<br>看以下例子<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">            System.out.println(<span class="string">"TestBootstrapCL.class.getClassLoader():"</span>+TestBootstrapCL.class.getClassLoader());</div><div class="line">            System.out.println(<span class="string">"TestBootstrapCL.class.getClassLoader().getParent():"</span>+TestBootstrapCL.class.getClassLoader().getParent());</div><div class="line">            Class.forName(<span class="string">"com.dragonsoft.test.d140107"</span>, <span class="keyword">true</span>, TestBootstrapCL.class.getClassLoader().getParent());</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">catch</span>(ClassNotFoundException e) &#123;</div><div class="line">            Logger.getLogger(TestBootstrapCL.class.getName()).log(Level.SEVERE, e.toString());</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">TestBootstrapCL.class.getClassLoader():sun.misc.Launcher$AppClassLoader@82ba41</div><div class="line">TestBootstrapCL.class.getClassLoader().getParent():sun.misc.Launcher$ExtClassLoader@923e30</div><div class="line">2014-1-7 23:58:48 com.dragonsoft.test.d140107.TestBootstrapCL main</div><div class="line">严重: java.lang.ClassNotFoundException: com.dragonsoft.test.d140107</div></pre></td></tr></table></figure>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">TestBootstrapCL.class.getClassLoader():sun.misc.Launcher$AppClassLoader@82ba41</div><div class="line">TestBootstrapCL.class.getClassLoader().getParent():sun.misc.Launcher$ExtClassLoader@923e30</div><div class="line">2014-1-7 23:58:48 com.dragonsoft.test.d140107.TestBootstrapCL main</div><div class="line">严重: java.lang.ClassNotFoundException: com.dragonsoft.test.d140107</div></pre></td></tr></table></figure>
 <p>可以看出TestBootstrapCL的类加载器是SYSTEM类加载器。TestBootstrapCL类加载器的父类加载器是Extension。而Extension类加载器无法加载到TestBootstrapCL类，因为可见性原则限制父类加载器是无法加载子类加载器的。</p>
 <h2 id="2-3-单一性原则"><a href="#2-3-单一性原则" class="headerlink" title="# 2.3 单一性原则"></a># 2.3 单一性原则</h2><p>根据该机制，父类加载器加载过的类不能被子类加载器加载第二次。</p>
 <h2 id="3-显示类加载"><a href="#3-显示类加载" class="headerlink" title="3 显示类加载"></a>3 显示类加载</h2><p>Class.forName(className)和 Class.forName(className,initialized,classloader)。在JAVA创建JDBC连接的时候，都会要显示的加载数据库驱动类。<br>类加载是通过调用CLassLoader的loadClass()方法，loadClass()再调用findClass()。如果最后都没找到该类，那就会报错。找到的话就调用defineClass()将字节码转化成类实例，然后返回。</p>
@@ -994,7 +1143,7 @@
 </ul>
 <p>而且由于功能的增多，尽量让规则存在routes中的文件中。所以app.js需要改造下。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">//新的代码</div><div class="line">routes(app);</div><div class="line"></div><div class="line">//注释掉旧的方法，这些东西都被搬到routes/index.js中</div><div class="line">//app.get(&apos;/&apos;, routes.index);</div><div class="line">//app.get(&apos;/hello&apos;, routes.hello);</div><div class="line">//app.all(&apos;/user/:username&apos;, function(req, res,next) &#123;</div><div class="line">//console.log(&apos;all methods captured&apos;);</div><div class="line">//next();</div><div class="line">//&#125;);</div></pre></td></tr></table></figure>
-<p>Index.js中添加规则，但是可以先把实现放空<br><figure class="highlight javascript"><figcaption><span>routes/index.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">exports.index = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">res.render(<span class="string">'index'</span>, &#123; title: <span class="string">'Express'</span> &#125;);</div><div class="line">&#125;;</div><div class="line">exports.user = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line">exports.post = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line">exports.reg = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line">exports.doReg = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line">exports.login = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line">exports.doLogin = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line">exports.logout = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>Index.js中添加规则，但是可以先把实现放空<br><figure class="highlight javascript"><figcaption><span>routes/index.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">exports.index = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">res.render(<span class="string">'index'</span>, &#123; <span class="attr">title</span>: <span class="string">'Express'</span> &#125;);</div><div class="line">&#125;;</div><div class="line">exports.user = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line">exports.post = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line">exports.reg = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line">exports.doReg = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line">exports.login = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line">exports.doLogin = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line">exports.logout = <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
 <h2 id="3-2-界面设计"><a href="#3-2-界面设计" class="headerlink" title="3.2 界面设计"></a>3.2 界面设计</h2><p>这里直接使用Twitter Bootstrap，谁让我们要善哉Twitter。可以登录<a href="http://twitter.github.io/bootstrap/" target="_blank" rel="external">这个网站</a>进行下载，但是我记得下载那一步好像是要翻墙的，自己想办法吧^.^，朋友，祝你好运。<br>将以下文件放到工程中相应的位置：<br>bootstrap-responsive.min.css<br>bootstrap.min.css<br>glyphicons-halflings-white.png<br>glyphicons-halflings.png<br>bootstrap.min.js</p>
 <p>然后修改layout.js，实现一个拥有顶部工具栏、内容、页脚三大块的简单的Bootstrap风格的首页。</p>
 <h2 id="3-3-数据库MongoDB"><a href="#3-3-数据库MongoDB" class="headerlink" title="3.3 数据库MongoDB"></a>3.3 数据库MongoDB</h2><p>MongoDb是一种NOSQL，不是不要sql，而是not only sql。适合使用在查询较多，事务性不是很强大数据库操作中。<br>MongoDb使用BSON格式文件的形式存储数据的。<br>具体怎么安装参考 <a href="http://www.cnblogs.com/zhoulf/archive/2013/01/31/2887439.html" target="_blank" rel="external">centos6.3安装使用MongoDb</a>。<br>具体说明是NoSql，什么是MongoDb，什么是BSON，请自己百度谷歌洗刷刷哈。<br>项目的依赖需要加入MongoDb的依赖，另外，需要会话支持，所以也需要自己添加connect-mongo，具体代码如下：<br><figure class="highlight json"><figcaption><span>package.json</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"david's microblog"</span>,</div><div class="line">  <span class="attr">"version"</span>: <span class="string">"0.0.1"</span>,</div><div class="line">  <span class="attr">"private"</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">"scripts"</span>: &#123;</div><div class="line">    <span class="attr">"start"</span>: <span class="string">"node app.js"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"dependencies"</span>: &#123;</div><div class="line">    <span class="attr">"express"</span>: <span class="string">"3.4.7"</span>,</div><div class="line">    <span class="attr">"ejs"</span>: <span class="string">"*"</span>,</div><div class="line">    <span class="attr">"connect-mongo"</span>: <span class="string">"&gt;= 0.1.7"</span>,</div><div class="line">    <span class="attr">"mongodb"</span>:<span class="string">"&gt;= 0.9.9"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
@@ -1079,7 +1228,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">95</span>
+              <span class="site-state-item-count">96</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
@@ -1133,7 +1282,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

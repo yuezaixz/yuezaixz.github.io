@@ -84,19 +84,17 @@
 
 
 
-<meta name="description" content="#背景接昨天的文章，继续深入探索ConcurrentHashMap是如何进行分段加锁的。今天的代码比较多，也不是那么理解，只当自己的源码试读记录。
-#桶分割看下面这段代码，是ConcurrentHashMap的一些默认值，定义了默认桶的个数，索引位移数（segmentShift，如桶为16个，即2的4次方，那么该值为32-4=28），桶数组等12345static final int DEFAUL">
+<meta name="description" content="#背景接昨天的文章，继续深入探索ConcurrentHashMap是如何进行分段加锁的。今天的代码比较多，也不是那么理解，只当自己的源码试读记录。 #桶分割看下面这段代码，是ConcurrentHashMap的一些默认值，定义了默认桶的个数，索引位移数（segmentShift，如桶为16个，即2的4次方，那么该值为32-4=28），桶数组等12345static final int DEFAUL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ConcurrentHashMap源码试读">
 <meta property="og:url" content="http://yoursite.com/2014/11/27/2014-11-27-concurrenthashmap-source-on-probation/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
-<meta property="og:description" content="#背景接昨天的文章，继续深入探索ConcurrentHashMap是如何进行分段加锁的。今天的代码比较多，也不是那么理解，只当自己的源码试读记录。
-#桶分割看下面这段代码，是ConcurrentHashMap的一些默认值，定义了默认桶的个数，索引位移数（segmentShift，如桶为16个，即2的4次方，那么该值为32-4=28），桶数组等12345static final int DEFAUL">
+<meta property="og:description" content="#背景接昨天的文章，继续深入探索ConcurrentHashMap是如何进行分段加锁的。今天的代码比较多，也不是那么理解，只当自己的源码试读记录。 #桶分割看下面这段代码，是ConcurrentHashMap的一些默认值，定义了默认桶的个数，索引位移数（segmentShift，如桶为16个，即2的4次方，那么该值为32-4=28），桶数组等12345static final int DEFAUL">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2015-05-04T06:05:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ConcurrentHashMap源码试读">
-<meta name="twitter:description" content="#背景接昨天的文章，继续深入探索ConcurrentHashMap是如何进行分段加锁的。今天的代码比较多，也不是那么理解，只当自己的源码试读记录。
-#桶分割看下面这段代码，是ConcurrentHashMap的一些默认值，定义了默认桶的个数，索引位移数（segmentShift，如桶为16个，即2的4次方，那么该值为32-4=28），桶数组等12345static final int DEFAUL">
+<meta name="twitter:description" content="#背景接昨天的文章，继续深入探索ConcurrentHashMap是如何进行分段加锁的。今天的代码比较多，也不是那么理解，只当自己的源码试读记录。 #桶分割看下面这段代码，是ConcurrentHashMap的一些默认值，定义了默认桶的个数，索引位移数（segmentShift，如桶为16个，即2的4次方，那么该值为32-4=28），桶数组等12345static final int DEFAUL">
 
 
 
@@ -446,7 +444,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">95</span>
+              <span class="site-state-item-count">96</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
@@ -511,7 +509,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

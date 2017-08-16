@@ -90,6 +90,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/06/07/2016-06-07-dockercong-0dao-1de-bi-ji/index.html">
 <meta property="og:site_name" content="大胃吴的闲话唠嗑">
 <meta property="og:description" content="Docker从0到1的笔记安装https支持及GPG key添加123$ sudo apt-get update$ sudo apt-get install apt-transport-https ca-certificates$ sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2016-08-30T06:42:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker从0到1的笔记">
@@ -284,7 +285,7 @@
 <h3 id="开始案例吧，创建一个mysql的容器"><a href="#开始案例吧，创建一个mysql的容器" class="headerlink" title="开始案例吧，创建一个mysql的容器"></a>开始案例吧，创建一个mysql的容器</h3><p>创建一个文件夹test_database，文件夹结构为</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">test_database\setup.sql</div><div class="line">test_database\start.sh</div><div class="line">test_database\stop.sh</div></pre></td></tr></table></figure>
 <p>start.sh</p>
-<figure class="highlight bash"><figcaption><span>start.sh</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line"><span class="comment"># Run the MySQL container, with a database named 'users' and credentials</span></div><div class="line"><span class="comment"># for a users-service user which can access it.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Starting DB..."</span></div><div class="line">docker run --name db <span class="_">-d</span> \</div><div class="line"> <span class="_">-e</span> MYSQL_ROOT_PASSWORD=123 \</div><div class="line"> <span class="_">-e</span> MYSQL_DATABASE=users <span class="_">-e</span> MYSQL_USER=users_service <span class="_">-e</span> MYSQL_PASSWORD=123 \</div><div class="line"> -p 3306:3306 mysql:latest</div><div class="line"></div><div class="line"><span class="comment"># Wait for the database service to start up.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Waiting for DB to start up..."</span></div><div class="line">docker <span class="built_in">exec</span> db mysqladmin --silent --wait=30 -uusers_service -p123 ping || <span class="built_in">exit</span> 1</div><div class="line"></div><div class="line"><span class="comment"># Run the setup script.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Setting up initial data..."</span></div><div class="line">docker <span class="built_in">exec</span> -i db mysql -uusers_service -p123 users &lt; setup.sql</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>start.sh</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line"><span class="comment"># Run the MySQL container, with a database named 'users' and credentials</span></div><div class="line"><span class="comment"># for a users-service user which can access it.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Starting DB..."</span></div><div class="line">docker run --name db -d \</div><div class="line"> -e MYSQL_ROOT_PASSWORD=123 \</div><div class="line"> -e MYSQL_DATABASE=users -e MYSQL_USER=users_service -e MYSQL_PASSWORD=123 \</div><div class="line"> -p 3306:3306 mysql:latest</div><div class="line"></div><div class="line"><span class="comment"># Wait for the database service to start up.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Waiting for DB to start up..."</span></div><div class="line">docker <span class="built_in">exec</span> db mysqladmin --silent --<span class="built_in">wait</span>=30 -uusers_service -p123 ping || <span class="built_in">exit</span> 1</div><div class="line"></div><div class="line"><span class="comment"># Run the setup script.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Setting up initial data..."</span></div><div class="line">docker <span class="built_in">exec</span> -i db mysql -uusers_service -p123 users &lt; setup.sql</div></pre></td></tr></table></figure>
 <ul>
 <li>–name db 给容器命名</li>
 <li>-d 在后台运行</li>
@@ -448,7 +449,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">95</span>
+              <span class="site-state-item-count">96</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
@@ -513,7 +514,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
