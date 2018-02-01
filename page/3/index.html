@@ -226,6 +226,103 @@
             
               
                 
+                <a class="post-title-link" href="/2015/02/01/2015-02-01-ios-beginner-pit-over-those-years-b/" itemprop="url">
+                  初学IOS那些年踩过的坑(二)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-02-01T10:02:00+08:00" content="2015-02-01">
+              2015-02-01
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#结论：<br>在ViewController的自定义viewDidLayoutSubviews方法中，调用viewDidLayoutSubviews方法后进行了addSubview操作后，需要调用[self.view layoutSubviews]来触发子视图布局，否则否导致子视图不知道如何布局而应用崩溃。</p>
+<p>#坑描述：<br>为了给IPHONE做适配，实现了ViewController的 viewDidLayoutSubviews方法，该方法是在试图控制器对试图进行auto layout的时候调用其来触发子视图的auto layout的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">- (void)viewDidLayoutSubviews &#123;</div><div class="line">    [super viewDidLayoutSubviews];</div><div class="line">    NSString *deviceInfo = [CommonUtils getDeviceInfo];</div><div class="line">    int mapHeight = ROUTE_MAP_SCREEN_MAP_HEIGHT_5;</div><div class="line">    if ([deviceInfo isEqualToString:@&quot;iPhone 4S&quot;] || [deviceInfo isEqualToString:@&quot;iPhone 4&quot;]) &#123;</div><div class="line">        mapHeight = ROUTE_MAP_SCREEN_MAP_HEIGHT_4S;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    self.downNavBar.frame = CGRectMake(0, mapHeight, self.view.bounds.size.width, 95);</div><div class="line">    [self.view addSubview:self.downNavBar];</div><div class="line"></div><div class="line">    [self.menuView setHidden:YES];</div><div class="line">    [self.view addSubview:self.menuView];</div><div class="line">    [self.view bringSubviewToFront:self.menuView];</div><div class="line"></div><div class="line">    self.menuView.frame = CGRectMake(38, mapHeight - 110, 80, 110);</div><div class="line">    [self.mapBed setFrame:CGRectMake(0, 0, self.view.bounds.size.width, mapHeight)];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>但是，调用该视图的时候应用崩溃了，后台报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&apos;NSInternalInconsistencyException&apos;, reason: &apos;Auto Layout still required after sending -viewDidLayoutSubviews to the view controller. RouteMapViewController&apos;s implementation needs to send -layoutSubviews to the view to invoke auto layout.&apos;</div></pre></td></tr></table></figure></p>
+<p>#坑解释<br>自动布局的方式为自上而下，也就是从父视图向子视图，调用了[super viewDidLayoutSubviews]就是为了触发子视图的布局，但是之后又增加了2个子视图，那么这两个子视图的布局就没有触发。所以，需要在该方法最后增加一行代码来触发子视图的布局。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (void)viewDidLayoutSubviews &#123;</div><div class="line">    ...</div><div class="line">    [self.mapBed setFrame:CGRectMake(0, 0, self.view.bounds.size.width, mapHeight)];</div><div class="line">    [self.view layoutSubviews];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/01/30/2015-01-30-beginning-ios-stepped-on-the-pits-for-years-a/" itemprop="url">
                   初学IOS那些年踩过的坑(一)
                 </a>
@@ -1517,147 +1614,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/12/01/2014-12-01-wonderful-programming/" itemprop="url">
-                  编程的奇妙
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-12-01T02:01:00+08:00" content="2014-12-01">
-              2014-12-01
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Python/bit/" itemprop="url" rel="index">
-                    <span itemprop="name">bit</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Python/bit/singlenum2/" itemprop="url" rel="index">
-                    <span itemprop="name">singlenum2</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#背景<br>编程真是一个很奇妙的事情，感觉有点像研究数学，一些问题很奇妙，对于解法毫无眉毛。但是当你深入钻研下去，摸索出思路，渐渐将思路成型验证，最后在纸上解答出来，看到成果通过被验证的那一刻的感觉，真是谁试谁知道。<br>每天一题leetcode还在进行中，上周五做的一题，百思不得其解，自己只能用很愚蠢的方式完成，然后便网上搜索别人的解法，发现这思路真棒，但是有这思路还要能用程序去实现，也有一定难度，总之就是狠天高啊，自己怎么就想不到。</p>
-<p>#题目<br>Given an array of integers, every element appears three times except for one. Find that single one.</p>
-<p>#思考<br>这题之前还有道题是每个数出现两次，除了有一个出现一次，找到他。那题相对容易，第一反应就是用位运算，相同的数异或后一定是0，那全部数都异或一次，结果就是那个不同的数了。<br>但是，现在这题是两次，思考良久用位运算好像没什么办法，就只能用一个pc去计数，这样的时间复杂度是O(2n),用了一个dict的额外空间，但是结果accept了。<br>不放弃，还是想看看是否有聪明的解法，谷歌之。发现，这高人的思路真是奇妙啊。</p>
-<p>#解法<br>之前被限制无法用位运算是因为2进制，1+1就进1了，其实leetcode已经给你提示了，按这思路往下思考。那么为什么不用3进制运算了，1+1+1那么就是0了啊。<br>比如：3331222转换成二进制为：11 11 11 01 10 10 10。在第1位上，1出现了4次。第2位上，1出现了6次。那么第一位上3个一进位后就剩1，第二位上6个1结果就是0。那么合起来就是01，那结果就是1了。<br>但是，编程语言提供的数字类型只有二进制、八进制、十进制、十六进制，怎么实现3进制呢？<br>解题者思维方式真是不同寻常，他用2个位来实现进制。比如8这个数，3进制就应该是22，那么每位用两个二进制表示就是10 10。那么，高位合起来就是11，低位合起来就是00，那么高位即为3，低位为0。</p>
-<p>#代码<br>但是还是不知道怎么用程序实现啊，那么具体来看代码吧，也看看代码中的注释。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></div><div class="line">    <span class="comment"># @param A, a list of integer</span></div><div class="line">    <span class="comment"># @return an integer</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">singleNumber</span><span class="params">(self, A)</span>:</span></div><div class="line">        one = <span class="number">0</span>; two = <span class="number">0</span>; three = <span class="number">0</span></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(A)):</div><div class="line">            <span class="comment">#和低位与操作，结果为进位结果。如果都为1则进位结果为1，否则进位结果不为0</span></div><div class="line">            <span class="comment">#然后当two为1时，不管进位结果为什么，two都为1。如果two为0，则进位为1则为1</span></div><div class="line">            two |= A[i] &amp; one</div><div class="line">            <span class="comment">#异或操作，都是1就进位，低位one则清0</span></div><div class="line">            one = A[i] ^ one</div><div class="line">            <span class="comment">#以下三步的意思是：如果one和two都为1时，就清0，反之则保持原来状态。</span></div><div class="line">            three = ~(one &amp; two)</div><div class="line">            one &amp;= three</div><div class="line">            two &amp;= three</div><div class="line">        <span class="keyword">return</span> one</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1703,7 +1659,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">96</span>
+              <span class="site-state-item-count">97</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
@@ -1757,7 +1713,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

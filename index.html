@@ -226,6 +226,243 @@
             
               
                 
+                <a class="post-title-link" href="/2018/02/01/iOS低功耗蓝牙开发指西-译/" itemprop="url">
+                  iOS低功耗蓝牙开发指西[译]
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2018-02-01T11:05:20+08:00" content="2018-02-01">
+              2018-02-01
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="iOS低功耗蓝牙开发指西-译"><a href="#iOS低功耗蓝牙开发指西-译" class="headerlink" title="iOS低功耗蓝牙开发指西[译]"></a>iOS低功耗蓝牙开发指西[译]</h1><h2 id="译文"><a href="#译文" class="headerlink" title="译文"></a>译文</h2><p>链接：<a href="https://codeburst.io/getting-started-with-bluetooth-low-energy-on-ios-ada3090fc9cc" target="_blank" rel="external">Getting started with Bluetooth Low Energy on iOS</a><br>作者：<a href="https://codeburst.io/@yostane?source=post_header_lockup" target="_blank" rel="external">Yassine benabbas</a></p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>低功耗蓝牙(BLE)是蓝牙4.0最重要的特性之一。使用BLE进行设备间通信的功耗对比传统蓝牙大大的降低了。另一个重大的进步就是用户用系统设置取代了手动配对。这篇文章的核心内容为快速介绍BLE及展示从零开始创建iOS应用去连接一个BLE外设。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>低功耗蓝牙缩写为BLE。首先要澄清，蓝牙4.0定义了包括经典蓝牙协议、高速蓝牙协议和低功耗蓝牙协议在内的一系列的技术规范，所以请仔细检查外设对于BLE的兼容性。</p>
+<p>要识别一个外设是否为BLE外设，可以检查它是否带有『Bluetooth smart』、『Bluetooth Low Energy』或『BLE』标识。</p>
+<p>现在我们有了一些BLE外设，我们将在下一节看到它们如何通信。</p>
+<h2 id="中心设备和外设的BLE通信"><a href="#中心设备和外设的BLE通信" class="headerlink" title="中心设备和外设的BLE通信"></a>中心设备和外设的BLE通信</h2><p>在BLE世界有两种设备：外设和中心设备。</p>
+<p>外设是一个设备暴露出一些服务，提供数据的读写。</p>
+<p>中心设备是一个设备可以连接多个外设并与他们进行数据的读写。通信的连接是由中心设备来发起并初始化的。</p>
+<p>在一个C/S架构模型中，中心设备可以认为是客户端，外设可以看做是服务端。</p>
+<p>一些设备可以同时作为中心设备和外设存在，比如iOS和Mac设备。</p>
+<p>外设/中心设备例子：</p>
+<ul>
+<li>像小米手环这类型智能手环就是一个外设</li>
+<li>iPhone手机连接了一个只能手环，就扮演了中心设备的角色</li>
+</ul>
+<p><img src="media/15173847248426/15173883632616.png" alt=""></p>
+<div align="center"><font color="blue" size="2" face="verdana">源自:<a href="https://learn.adafruit.com/introduction-to-bluetooth-low-energy/gatt" target="_blank" rel="external">https://learn.adafruit.com/introduction-to-bluetooth-low-energy/gatt</a></font></div>
+
+<p>在下一章节，我们将介绍BLE中存在的通信方式。</p>
+<h2 id="BLE通信方式"><a href="#BLE通信方式" class="headerlink" title="BLE通信方式"></a>BLE通信方式</h2><p>有两种通信方式：</p>
+<ul>
+<li>广播通信模式(Advertising mode)：外设定时的广播附带一些信息，周围可能发现广播的中心设备都可以接收这些信息。这种模式允许一个外设被中心设备发现，因此把他叫做广告（advertising）。在这种模式下，可以直接通过GAP广播进行交换简单的信息。从外设角度看，这是一个外设对应多个中心设备的模式。</li>
+<li>连接模式(Connected mode)：允许一个中心设备和外设交换复杂的数据。GATT协议描述了这种模式是如何创建会话进行通信的。从外设角度说，这是种一对一的模式。</li>
+</ul>
+<p>但有一些规则：</p>
+<ul>
+<li>一个中心设备不能连接另一个中心设备，一个外设不能连接另一个外设</li>
+<li>一个外设同时时间只能连接一个中心设备</li>
+</ul>
+<p>在下一章节，我们降更深入的钻研连接模式通信的细节。</p>
+<h2 id="BLE在连接模式的通信"><a href="#BLE在连接模式的通信" class="headerlink" title="BLE在连接模式的通信"></a>BLE在连接模式的通信</h2><h3 id="服务与特征"><a href="#服务与特征" class="headerlink" title="服务与特征"></a>服务与特征</h3><p>GATT协议定义了中心设备如何与可连接的外设通信。首先数据的结构是这样定义的：</p>
+<ul>
+<li>外设暴露中心设备可进行读、写与被通知的属性。这些属性每一个都被称作为特征(characteristic)。一个特征也伴随着一个描述符(descriptor)来解释它；</li>
+<li>特征被分组为服务(service)；</li>
+<li>我们也可以将服务分组成一个配置文件(profile)。</li>
+</ul>
+<p>让我们举一个例子：心率监测器是一个BLE外设，他有一个心率配置文件，该配置文件有两个服务（心率服务及设备信息服务）。心率服务定义了一个读特征可以提供测量的心率结果。它也定义了一个写特征用于告诉外设它现在处于身体的什么位置。然后设备信息服务包含关于模型、固件版本等设备信息。</p>
+<p>每个特征和服务都被定义了唯一标识，这个唯一标识被称作UUID。有一些预定义好的标准服务与特征的UUID，如果你有兴趣，可以在该<a href="https://www.bluetooth.com/specifications/gatt/services and https://www.bluetooth.com/specifications/gatt/characteristics" target="_blank" rel="external">链接</a>中延伸阅读。当然，你可以为你自己的服务和特征定义UUID。你也没有义务去回避预定义的UUID。标准的UUID是16位的，自定义的则是128位的，他们一般用十六进制表示。例如心率服务的UUID是16位的：0x180D，而自定义可以是:6E400001-B5A3-F393-E0A9-E50E24DCCA9E。<br><img src="media/15173847248426/15173911787186.png" alt=""></p>
+<p>下一章节我们将介绍典型的BLE使用案例。</p>
+<h2 id="典型的蓝牙使用案例"><a href="#典型的蓝牙使用案例" class="headerlink" title="典型的蓝牙使用案例"></a>典型的蓝牙使用案例</h2><p>该章节我们将介绍典型的BLE使用案例。有非常多可能的BLE使用场景，但我们将描述最常见的这种。</p>
+<p>BLE搜索APP：他的用途为在你想要发现并测试BLE的位置发现周围蓝牙设备的情况，具体为以下功能：</p>
+<ul>
+<li>发现外设的广播服务</li>
+<li>中心设备发现这些广播服务并把它们显示给用户</li>
+<li>用户从列表中选择一个外设</li>
+<li>中心设备连接选中的外设并把该外设所有的服务展现给用户</li>
+<li>用户可以选择一个服务</li>
+<li>中心设备询问外设当前选择的服务有哪些特征并展示给用户</li>
+<li>用户可以选择一项特征并执行一些允许的操作(比如读，或者写，又或者被通知)</li>
+</ul>
+<p>这类型的应用有BlueCap和LightBlue，可以从AppStore中下载。</p>
+<p>还有很多经典的使用案例，比如：</p>
+<ul>
+<li>APP可以扫描一些特定的广播服务的设备</li>
+<li>APP可以连接特定的设备，比如智能手环</li>
+<li>APP接着可以通过特定的特征和决定好的服务来获取一些信息，比如步数</li>
+<li>APP可以断开外设的连接，下一次可以立即重连上</li>
+</ul>
+<p>这种类型的应用使用起来更加简易上手，只需要用户进行了第一次连接，之后就可以自动的快速连接上，当前很多智能设备的交互都遵循该思路，有的甚至更加简易。 例如，小米手环的官方应用，我们也将在本文末尾开发遵循该规范的小米手环应用程序</p>
+<p>下一章节，我们将检查我们的苹果设备是否支持BLE。</p>
+<h2 id="BLE与Apple"><a href="#BLE与Apple" class="headerlink" title="BLE与Apple"></a>BLE与Apple</h2><p>苹果很早的就在他们的软硬件中支持BLE了，这里有一些回顾</p>
+<ul>
+<li>iOS5的SDK引入了蓝牙核心(Core Bluetooth)框架，该框架允许BLE设备作为中央设备或外设进行交互</li>
+<li>从iPhone 4S开始，所有的iOS设备都支持BLE</li>
+<li>如果你的Mac支持BLE，那么你的iOS模拟器也支持。</li>
+</ul>
+<p>支持BLE的首批Mac电脑有</p>
+<ul>
+<li>2011年中的MacBook Air</li>
+<li>2011年年中的Mac mini</li>
+<li>2012年中期视网膜(retina)及非视网膜版本的MacBook Pro</li>
+<li>2012年底的iMacs</li>
+</ul>
+<p>了解了这点，并且您目前拥有Mac、iPhone或iPad，那么就可以开始编写一些BLE应用程序。</p>
+<h2 id="在iOS上开发蓝牙应用程序"><a href="#在iOS上开发蓝牙应用程序" class="headerlink" title="在iOS上开发蓝牙应用程序"></a>在iOS上开发蓝牙应用程序</h2><p>当你要开发一款通过BLE与其他硬件交互的应用程序，你需要先问自己三个问题：</p>
+<ul>
+<li>我是要与中心设备交互，还是与外设交互？</li>
+<li>配置文件是什么？也就是外设有哪些服务和特征？</li>
+<li>我将使用到哪个框架或库？</li>
+</ul>
+<p>首先，第一个问题的答案决定了应用程序将实现那种类型的BLE设备。如果我们想要交互的设备是一个中心设备，那么APP将扮演的就是外设的角色。反之，如果我们想与一个外设通信，那么我们的APP就将是一个中心设备。</p>
+<p>其次，实现明确好服务与特征可以让应用程序与BLE设备很快的无缝对接。否则将不知道如何进行通信。</p>
+<p>最后，开发BLE应用，选择一个最适合的框架是非常的重要。对我来说，这是最重要的原因有两个，第一个是在开始传递数据前由很多的异步任务，第二个是这个过程可能会因为很多原因失败，那么，选择一个简化这些任务的框架就是非常重要的了。</p>
+<p>以我的经历来说，我选择过两种框架：</p>
+<ul>
+<li>Core Bluetooth，他是苹果开发的BLE框架，从iOS5开始就包含在iOS SDK中。这个框架严重依赖于代理(delegate)，并且他有丰富而完善的文档及示例代码。唯一不足的就是这个框架有些时间长了，不够新颖。</li>
+<li>BlueCap，它是一个在Core Bluetooth之上的swift软件包。他支持iOS9以上的系统，需要Xcode 8.2来开发。他依赖于Future而不是Delegate，如果你不是很熟悉Future，那么这将花费你一些时间去熟悉它，但相信我，这些是值得的，比起delegate，这将让你感到更自然。</li>
+</ul>
+<p>由于我们将要开发的这个项目支持iOS11，并且用Swift4编写，我毫无犹豫的选择了BlueCap ：）。在下一节中，我将要创建一个简单的中心设备应用，他将与一个Mac上通过Bleno模拟的外设进行通信。</p>
+<h2 id="实现中心设备的iOS应用"><a href="#实现中心设备的iOS应用" class="headerlink" title="实现中心设备的iOS应用"></a>实现中心设备的iOS应用</h2><p>首先，我们将通过Mac模拟一个外设，如果你有你也可以使用自己的外设。</p>
+<h3 id="通过Mac模拟一个外设"><a href="#通过Mac模拟一个外设" class="headerlink" title="通过Mac模拟一个外设"></a>通过Mac模拟一个外设</h3><p>有很多不同的技术可以通过Mac模拟一个BLE外设。第一个闪现在我脑子里的想法就是创建一个基于Core Bluetooth的Mac APP来扮演外设的角色。这也有个叫<a href="https://github.com/sandeepmistry/bleno" target="_blank" rel="external">bleno</a> 的node.js模块，他可以很快的实现一个BLE外设。本文中我们将使用bleno。这里我介绍下快速启用它的过程：</p>
+<ul>
+<li>安装Xcode</li>
+<li>安装node.js</li>
+<li>打开一个终端，通过 <figure class="highlight plain"><figcaption><span>install bleno``` 命令来安装bleno模块</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"> * 下载bleno的github仓库(https://github.com/sandeepmistry/bleno)[https://github.com/sandeepmistry/bleno]</div><div class="line"> * 打开一个终端并进入 examples/echo 文件夹</div><div class="line"> * 运行 ```node main.js``` 。如果你遇到“missing module”的错误提示，你需要使用npm安装“module”，然后再试一次</div><div class="line"></div><div class="line">整个过程的命令如下：</div><div class="line"></div><div class="line"> ```bash</div><div class="line"> $git clone https://github.com/sandeepmistry/bleno bleno</div><div class="line"> $cd bleno</div><div class="line"> $npm install bleno</div><div class="line"> $cd examples/echo</div><div class="line"> # $npm install module</div><div class="line"> $ node main.js</div><div class="line">bleno - echo</div><div class="line">on -&gt; stateChange: poweredOn</div><div class="line">on -&gt; advertisingStart: success</div></pre></td></tr></table></figure></li>
+</ul>
+<p>如果你看到最后的输出，说明你成功了。<br>你已经在你的电脑上模拟了一个Local Name为『echo』的BLE外设，广播服务的UUID为EC00，你可以查看main.js文件看看他是如何运行的。<br>当我们连接上，可以发现一个UUID为 “ec0e” 的特征可用于读、写和通知。这些都定义在characteristics.js中，文件中还定义了如何处理读、写和通知。</p>
+<p>现在我们有了一个功能完整的外设，那让我们开始开发一个微型的iOS应用与这个外设进行交互吧。</p>
+<h3 id="iOS中心设备应用"><a href="#iOS中心设备应用" class="headerlink" title="iOS中心设备应用"></a>iOS中心设备应用</h3><p>这中心设备APP将非常简洁。他搜索广播为echo的设备，第一个发现的就直接连上。接着，APP让我们从ec0e特征读写数据。我们可以通过以下步骤来初始化工程：</p>
+<ul>
+<li>创建一个简单的应用</li>
+</ul>
+<p><img src="media/15173847248426/15174493294792.jpg" alt=""></p>
+<ul>
+<li>给你的应用命名为SimpleBleCentral，并且选择Swift</li>
+</ul>
+<p><img src="media/15173847248426/15174494036052.jpg" alt=""></p>
+<p>现在，工程已经创建好了，我们将添加BlueCap框架(<a href="https://github.com/troystribling/BlueCap)[https://github.com/troystribling/BlueCap]。有很多不同的方法添加，比如Cocoapods、Carthage，这里用Cocoapods方式导入，这里不详细介绍如何使用Cocoapods导入第三方库。" target="_blank" rel="external">https://github.com/troystribling/BlueCap)[https://github.com/troystribling/BlueCap]。有很多不同的方法添加，比如Cocoapods、Carthage，这里用Cocoapods方式导入，这里不详细介绍如何使用Cocoapods导入第三方库。</a></p>
+<p>我们也要添加CoreBluetooth框架到项目中，因为BlueCap是依赖于CoreBluetoothde。<br><img src="media/15173847248426/15174508768320.jpg" alt=""></p>
+<p>下一步是在项目的属性中添加中心设备功能。要做的就是运行后台模式并检查Bluetooth LE的可访问性。</p>
+<p><img src="media/15173847248426/15174511314563.jpg" alt=""></p>
+<p>我们的storyboard包含了一个ViewController，他可以在扫描我们想要使用特征的时候展示一个等待指示器。当我们发现了特征，ViewController则展现出一个可交互的视图供读写该特征。</p>
+<p><img src="media/15173847248426/15174520548884.jpg" alt=""></p>
+<p>我们的view controller要完成以下任务：</p>
+<ul>
+<li>初始化CentralManager，他是BlueCapKit的一个中心设备类，可用来扫描外设</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//初始化并定义一个标识的Key，这个Key之后可以用来重用该Manage类</span></div><div class="line"><span class="keyword">let</span> manager = <span class="type">CentralManager</span>(options: [<span class="type">CBCentralManagerOptionRestoreIdentifierKey</span> : <span class="string">"CentralMangerKey"</span> <span class="keyword">as</span> <span class="type">NSString</span>])</div><div class="line"></div><div class="line"><span class="comment">//一个feture流，当该管理类状态发生变化的时候，他会通知我们</span></div><div class="line"><span class="keyword">let</span> stateChangeFuture = manager.whenStateChanges()</div></pre></td></tr></table></figure>
+<ul>
+<li>扫描广播包含ec00服务的外设</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//如果蓝牙是开启的，那么就可以扫描</span></div><div class="line"><span class="keyword">let</span> scanFuture = stateChangeFuture.flatMap &#123; state -&gt; <span class="type">FutureStream</span>&lt;<span class="type">Peripheral</span>&gt; <span class="keyword">in</span></div><div class="line">    <span class="keyword">switch</span> state &#123;</div><div class="line">    <span class="keyword">case</span> .poweredOn:</div><div class="line">        <span class="type">DispatchQueue</span>.main.async &#123;</div><div class="line">            <span class="keyword">self</span>.connectionStatusLabel.text = <span class="string">"start scanning"</span></div><div class="line">            <span class="built_in">print</span>(<span class="keyword">self</span>.connectionStatusLabel.text!)</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//扫描广播了服务为ec00的设备</span></div><div class="line">        <span class="keyword">return</span> manager.startScanning(forServiceUUIDs: [serviceUUID])</div><div class="line">    <span class="keyword">case</span> .poweredOff:</div><div class="line">        <span class="keyword">throw</span> <span class="type">AppError</span>.poweredOff</div><div class="line">    <span class="keyword">case</span> .unauthorized, .unsupported:</div><div class="line">        <span class="keyword">throw</span> <span class="type">AppError</span>.invalidState</div><div class="line">    <span class="keyword">case</span> .resetting:</div><div class="line">        <span class="keyword">throw</span> <span class="type">AppError</span>.resetting</div><div class="line">    <span class="keyword">case</span> .unknown:</div><div class="line">        <span class="keyword">throw</span> <span class="type">AppError</span>.unknown</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>第一个找到有该服务的类，我们连接他</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//连接第一个找到的设备</span></div><div class="line"><span class="keyword">let</span> connectionFuture = scanFuture.flatMap &#123; peripheral -&gt; <span class="type">FutureStream</span>&lt;<span class="type">Peripheral</span>&gt; <span class="keyword">in</span></div><div class="line">    <span class="comment">//找到了立即停止扫描</span></div><div class="line">    manager.stopScanning()</div><div class="line">    <span class="type">DispatchQueue</span>.main.async &#123;</div><div class="line">        <span class="keyword">self</span>.connectionStatusLabel.text = <span class="string">"Found peripheral \(peripheral.identifier.uuidString). Trying to connect"</span></div><div class="line">        <span class="built_in">print</span>(<span class="keyword">self</span>.connectionStatusLabel.text!)</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//连接</span></div><div class="line">    <span class="keyword">return</span> peripheral.connect(connectionTimeout: <span class="number">10</span>, capacity: <span class="number">5</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>接着，我们寻找为“ec00”的服务，这步有点像重复了上一步，但是实例化服务对象是非常重要的，它将帮我们找到需要的特征</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//找到"ec00"的服务，并访问他的特征</span></div><div class="line"><span class="keyword">let</span> discoveryFuture = connectionFuture.flatMap &#123; peripheral -&gt; <span class="type">Future</span>&lt;<span class="type">Peripheral</span>&gt; <span class="keyword">in</span></div><div class="line">    <span class="keyword">return</span> peripheral.discoverServices([serviceUUID])</div><div class="line">    &#125;.flatMap &#123; discoveredPeripheral -&gt; <span class="type">Future</span>&lt;<span class="type">Service</span>&gt; <span class="keyword">in</span></div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> service = discoveredPeripheral.service(serviceUUID) <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="type">AppError</span>.serviceNotFound</div><div class="line">        &#125;</div><div class="line">        peripheral = discoveredPeripheral</div><div class="line">        <span class="type">DispatchQueue</span>.main.async &#123;</div><div class="line">            <span class="keyword">self</span>.connectionStatusLabel.text = <span class="string">"Discovered service \(service.uuid.uuidString). Trying to discover characteristics"</span></div><div class="line">            <span class="built_in">print</span>(<span class="keyword">self</span>.connectionStatusLabel.text!)</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//开始检查找到的服务，寻找为"ec0e"的特征</span></div><div class="line">        <span class="keyword">return</span> service.discoverCharacteristics([dateCharacteristicUUID])</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>找到”ec0e”的特征，然后注册通知</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> 1- 检查这特征是否被找到</span></div><div class="line"><span class="comment"> 2- 注册通知</span></div><div class="line"><span class="comment">*/</span></div><div class="line"><span class="keyword">let</span> dataFuture = discoveryFuture.flatMap &#123; service -&gt; <span class="type">Future</span>&lt;<span class="type">Characteristic</span>&gt; <span class="keyword">in</span></div><div class="line">    <span class="keyword">guard</span> <span class="keyword">let</span> dataCharacteristic = service.characteristic(dateCharacteristicUUID) <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="type">AppError</span>.dataCharactertisticNotFound</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">self</span>.dataCharacteristic = dataCharacteristic</div><div class="line">    <span class="type">DispatchQueue</span>.main.async &#123;</div><div class="line">        <span class="keyword">self</span>.connectionStatusLabel.text = <span class="string">"Discovered characteristic \(dataCharacteristic.uuid.uuidString). COOL :)"</span></div><div class="line">        <span class="built_in">print</span>(<span class="keyword">self</span>.connectionStatusLabel.text!)</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//当我们找到了该特征，我们可以展示特征交互视图</span></div><div class="line">    <span class="type">DispatchQueue</span>.main.async &#123;</div><div class="line">        <span class="keyword">self</span>.loadingView.isHidden = <span class="literal">true</span></div><div class="line">        <span class="keyword">self</span>.characteristicView.isHidden = <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">    <span class="comment">//从特征读取数据</span></div><div class="line">    <span class="keyword">self</span>.read()</div><div class="line">    <span class="comment">//告诉特征开启值变化的通知</span></div><div class="line">    <span class="keyword">return</span> dataCharacteristic.startNotifying()</div><div class="line">    &#125;.flatMap &#123; characteristic -&gt; <span class="type">FutureStream</span>&lt;(characteristic: <span class="type">Characteristic</span>, data: <span class="type">Data</span>?)&gt; <span class="keyword">in</span></div><div class="line">        <span class="comment">//注册接收值变化通知</span></div><div class="line">        <span class="keyword">return</span> characteristic.receiveNotificationUpdates(capacity: <span class="number">10</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//每当值变化，都会调用该闭包</span></div><div class="line">dataFuture.onSuccess &#123; (<span class="number">_</span>, data) <span class="keyword">in</span></div><div class="line">    <span class="keyword">let</span> s = <span class="type">String</span>(data:data!, encoding: .utf8)</div><div class="line">    <span class="type">DispatchQueue</span>.main.async &#123;</div><div class="line">        <span class="keyword">self</span>.notifiedValueLabel.text = <span class="string">"notified value is \(s)"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>也可以使用一个简单的函数链来完成以上所有步骤。<br>获得了特征对象，我们就能对它读写数据了。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">read</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="comment">//read a value from the characteristic</span></div><div class="line">    <span class="keyword">let</span> readFuture = <span class="keyword">self</span>.dataCharacteristic?.read(timeout: <span class="number">5</span>)</div><div class="line">    readFuture?.onSuccess &#123; (<span class="number">_</span>) <span class="keyword">in</span></div><div class="line">        <span class="comment">//the value is in the dataValue property</span></div><div class="line">        <span class="keyword">let</span> s = <span class="type">String</span>(data:(<span class="keyword">self</span>.dataCharacteristic?.dataValue)!, encoding: .utf8)</div><div class="line">        <span class="type">DispatchQueue</span>.main.async &#123;</div><div class="line">            <span class="keyword">self</span>.valueLabel.text = <span class="string">"Read value is \(s)"</span></div><div class="line">            <span class="built_in">print</span>(<span class="keyword">self</span>.valueLabel.text!)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    readFuture?.onFailure &#123; (<span class="number">_</span>) <span class="keyword">in</span></div><div class="line">        <span class="keyword">self</span>.valueLabel.text = <span class="string">"read error"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">write</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">self</span>.valueToWriteTextField.resignFirstResponder()</div><div class="line">    <span class="keyword">guard</span> <span class="keyword">let</span> text = <span class="keyword">self</span>.valueToWriteTextField.text <span class="keyword">else</span>&#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//write a value to the characteristic</span></div><div class="line">    <span class="keyword">let</span> writeFuture = <span class="keyword">self</span>.dataCharacteristic?.write(data:text.data(using: .utf8)!)</div><div class="line">    writeFuture?.onSuccess(completion: &#123; (<span class="number">_</span>) <span class="keyword">in</span></div><div class="line">        <span class="built_in">print</span>(<span class="string">"write succes"</span>)</div><div class="line">    &#125;)</div><div class="line">    writeFuture?.onFailure(completion: &#123; (e) <span class="keyword">in</span></div><div class="line">        <span class="built_in">print</span>(<span class="string">"write failed"</span>)</div><div class="line">    &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本文是对蓝牙低功耗的粗浅的学习。BLE是一个蓝牙标准，允许无需在系统设置中进行配对的进行连接通信以降低通信的功耗。我们再iOS上实现了一个蓝牙中心设备，它连接到了Mac上模拟的外设。<br>我们可以使用BLE做很多的事情。例如我们可以在智能手环上编写我们自己的应用程序。又例如，我们也可以在Arduino主板上安装BLE芯片，通过他实现很多有趣的应用。译者接触过的很多个智能产品的项目，核心芯片都是Nordic。</p>
+<p>该项目的源码可以在GitHub上看到，(<a href="https://github.com/yostane/iOS-BlueCap-Example)[https://github.com/yostane/iOS-BlueCap-Example]。" target="_blank" rel="external">https://github.com/yostane/iOS-BlueCap-Example)[https://github.com/yostane/iOS-BlueCap-Example]。</a></p>
+<p>赶紧动手实现下才是最快乐的事情:)。</p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p><a href="https://oleb.net/blog/2013/04/starting-bluetooth-low-energy-development-ios/" target="_blank" rel="external">https://oleb.net/blog/2013/04/starting-bluetooth-low-energy-development-ios/</a></p>
+<p><a href="https://docs.mbed.com/docs/ble-intros/en/latest/Introduction/BLEInDepth/" target="_blank" rel="external">https://docs.mbed.com/docs/ble-intros/en/latest/Introduction/BLEInDepth/</a></p>
+<p><a href="https://stackoverflow.com/questions/17732321/peripheral-and-central-at-the-same-time-on-ios" target="_blank" rel="external">https://stackoverflow.com/questions/17732321/peripheral-and-central-at-the-same-time-on-ios</a></p>
+<p><a href="https://learn.adafruit.com/introduction-to-bluetooth-low-energy/gatt" target="_blank" rel="external">https://learn.adafruit.com/introduction-to-bluetooth-low-energy/gatt</a></p>
+<p><a href="https://www.bluetooth.com/specifications/generic-attributes-overvie" target="_blank" rel="external">https://www.bluetooth.com/specifications/generic-attributes-overvie</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/08/16/Xcode-9-0-beta5-编辑Storyboard时闪退问题/" itemprop="url">
                   Xcode 9.0 beta5,编辑Storyboard时闪退问题
                 </a>
@@ -1260,108 +1497,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/05/13/2015-05-13-beginning-ios-pit-over-those-years-g/" itemprop="url">
-                  初学IOS那些年踩过的坑（八）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2015-05-13T11:25:59+08:00" content="2015-05-13">
-              2015-05-13
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="毛玻璃效果实现"><a href="#毛玻璃效果实现" class="headerlink" title="毛玻璃效果实现"></a>毛玻璃效果实现</h2><p>不管是用FXBlurView还是用GPUImage实现，都会有卡顿的问题，所以在追求流畅度的时候可以考虑用一下代码替换。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">UIVisualEffectView</span> *visualEffectView = [[<span class="built_in">UIVisualEffectView</span> alloc] initWithEffect:[<span class="built_in">UIBlurEffect</span> effectWithStyle:<span class="built_in">UIBlurEffectStyleLight</span>]];</div><div class="line">visualEffectView.frame = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, _mapView.frame.size.height - <span class="keyword">self</span>.dataBed.frame.size.height, <span class="keyword">self</span>.dataBed.frame.size.width, <span class="keyword">self</span>.dataBed.frame.size.height);</div><div class="line">visualEffectView.alpha = <span class="number">0.92</span>;</div><div class="line">[_mapView addSubview:visualEffectView];</div><div class="line"></div><div class="line"><span class="comment">//注释掉的为旧代码</span></div><div class="line"><span class="comment">// if (nil == self.blurView) &#123;</span></div><div class="line"><span class="comment">// self.blurView = [[FXBlurView alloc]initWithFrame:CGRectMake(0, _mapView.frame.size.height - self.dataBed.frame.size.height, self.dataBed.frame.size.width, self.dataBed.frame.size.height)];</span></div><div class="line"><span class="comment">// [self.blurView setDynamic:YES];</span></div><div class="line"><span class="comment">// self.blurView.blurEnabled = YES;</span></div><div class="line"><span class="comment">// self.blurView.blurRadius = 5.0;</span></div><div class="line"><span class="comment">// self.blurView.tintColor = [UIColor clearColor];</span></div><div class="line"><span class="comment">// [_mapView addSubview:self.blurView];</span></div><div class="line"><span class="comment">// UIView *grayLine = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.blurView.frame.size.width, 1)];</span></div><div class="line"><span class="comment">// grayLine.backgroundColor = RUNMOVE_DARK_GRAY ;</span></div><div class="line"><span class="comment">// [self.blurView addSubview:grayLine];</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">// &#125;</span></div></pre></td></tr></table></figure>
-<h2 id="NSTimer结束一定要释放"><a href="#NSTimer结束一定要释放" class="headerlink" title="NSTimer结束一定要释放"></a>NSTimer结束一定要释放</h2><p>因为NSTImer的创建会让你的ViewController计数加1，那么你的VC就不会释放，所以记得创建就一定要结束。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//创建</span></div><div class="line">heartrateTime = [<span class="built_in">NSTimer</span> scheduledTimerWithTimeInterval:HEARTRATE_TIME_INTERVAL target:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(insertHeartrate) userInfo:<span class="literal">nil</span> repeats:<span class="literal">YES</span>];</div><div class="line"></div><div class="line"><span class="comment">//释放</span></div><div class="line"><span class="keyword">if</span> (heartrateTime) &#123;</div><div class="line">[heartrateTime invalidate];</div><div class="line">&#125;</div><div class="line">heartrateTime = <span class="literal">nil</span>;</div></pre></td></tr></table></figure>
-<h2 id="CocoaPods的问题"><a href="#CocoaPods的问题" class="headerlink" title="CocoaPods的问题"></a>CocoaPods的问题</h2><p>CocoaPods的问题颇多，竟然会遇到Apple Mach-O Linker Error相关的问题，多看看错误日志进行相应的解决，大多数都是找不到目录，找不到头文件的原因，也有找不到控件.o文件的时候（原因为模拟器是i386架构，所以相应Pods的Building Setting中设置）。<br>在一切办法都无法解决时候可以试试把Pods文件（除了podfile）都删了，重新进行pod install。</p>
-<h2 id="pod-install的问题"><a href="#pod-install的问题" class="headerlink" title="pod install的问题"></a>pod install的问题</h2><p>pod install后，编译出一堆问题，再删再装还是有问题，无法解决。可能是因为CocoaPods的控件缓存造成。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">rm -rf ~/Library/Caches/CocoaPods</div><div class="line">pod install</div></pre></td></tr></table></figure>
-<p>就ok了</p>
-<h2 id="用宏提速NSCoding"><a href="#用宏提速NSCoding" class="headerlink" title="用宏提速NSCoding"></a>用宏提速NSCoding</h2><p><a href="http://stablekernel.com/blog/speeding-up-nscoding-with-macros/" target="_blank" rel="external">http://stablekernel.com/blog/speeding-up-nscoding-with-macros/</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1407,7 +1542,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">96</span>
+              <span class="site-state-item-count">97</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
@@ -1461,7 +1596,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

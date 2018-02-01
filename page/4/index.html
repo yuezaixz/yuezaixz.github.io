@@ -226,6 +226,147 @@
             
               
                 
+                <a class="post-title-link" href="/2014/12/01/2014-12-01-wonderful-programming/" itemprop="url">
+                  编程的奇妙
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-12-01T02:01:00+08:00" content="2014-12-01">
+              2014-12-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/bit/" itemprop="url" rel="index">
+                    <span itemprop="name">bit</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/bit/singlenum2/" itemprop="url" rel="index">
+                    <span itemprop="name">singlenum2</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#背景<br>编程真是一个很奇妙的事情，感觉有点像研究数学，一些问题很奇妙，对于解法毫无眉毛。但是当你深入钻研下去，摸索出思路，渐渐将思路成型验证，最后在纸上解答出来，看到成果通过被验证的那一刻的感觉，真是谁试谁知道。<br>每天一题leetcode还在进行中，上周五做的一题，百思不得其解，自己只能用很愚蠢的方式完成，然后便网上搜索别人的解法，发现这思路真棒，但是有这思路还要能用程序去实现，也有一定难度，总之就是狠天高啊，自己怎么就想不到。</p>
+<p>#题目<br>Given an array of integers, every element appears three times except for one. Find that single one.</p>
+<p>#思考<br>这题之前还有道题是每个数出现两次，除了有一个出现一次，找到他。那题相对容易，第一反应就是用位运算，相同的数异或后一定是0，那全部数都异或一次，结果就是那个不同的数了。<br>但是，现在这题是两次，思考良久用位运算好像没什么办法，就只能用一个pc去计数，这样的时间复杂度是O(2n),用了一个dict的额外空间，但是结果accept了。<br>不放弃，还是想看看是否有聪明的解法，谷歌之。发现，这高人的思路真是奇妙啊。</p>
+<p>#解法<br>之前被限制无法用位运算是因为2进制，1+1就进1了，其实leetcode已经给你提示了，按这思路往下思考。那么为什么不用3进制运算了，1+1+1那么就是0了啊。<br>比如：3331222转换成二进制为：11 11 11 01 10 10 10。在第1位上，1出现了4次。第2位上，1出现了6次。那么第一位上3个一进位后就剩1，第二位上6个1结果就是0。那么合起来就是01，那结果就是1了。<br>但是，编程语言提供的数字类型只有二进制、八进制、十进制、十六进制，怎么实现3进制呢？<br>解题者思维方式真是不同寻常，他用2个位来实现进制。比如8这个数，3进制就应该是22，那么每位用两个二进制表示就是10 10。那么，高位合起来就是11，低位合起来就是00，那么高位即为3，低位为0。</p>
+<p>#代码<br>但是还是不知道怎么用程序实现啊，那么具体来看代码吧，也看看代码中的注释。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></div><div class="line">    <span class="comment"># @param A, a list of integer</span></div><div class="line">    <span class="comment"># @return an integer</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">singleNumber</span><span class="params">(self, A)</span>:</span></div><div class="line">        one = <span class="number">0</span>; two = <span class="number">0</span>; three = <span class="number">0</span></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(A)):</div><div class="line">            <span class="comment">#和低位与操作，结果为进位结果。如果都为1则进位结果为1，否则进位结果不为0</span></div><div class="line">            <span class="comment">#然后当two为1时，不管进位结果为什么，two都为1。如果two为0，则进位为1则为1</span></div><div class="line">            two |= A[i] &amp; one</div><div class="line">            <span class="comment">#异或操作，都是1就进位，低位one则清0</span></div><div class="line">            one = A[i] ^ one</div><div class="line">            <span class="comment">#以下三步的意思是：如果one和two都为1时，就清0，反之则保持原来状态。</span></div><div class="line">            three = ~(one &amp; two)</div><div class="line">            one &amp;= three</div><div class="line">            two &amp;= three</div><div class="line">        <span class="keyword">return</span> one</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/11/28/2014-11-28-represented-by-pictures-of-sql-join/" itemprop="url">
                   用几张图片表示Sql的join
                 </a>
@@ -1471,185 +1612,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/10/26/2014-10-26-use-one-month-after-sublime-skill-of-using-some-of-the-summary/" itemprop="url">
-                  使用Sublime一个月后的一些使用技巧总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-10-26T01:45:00+08:00" content="2014-10-26">
-              2014-10-26
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Sublime/" itemprop="url" rel="index">
-                    <span itemprop="name">Sublime</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Sublime/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Sublime/工具/编辑器/" itemprop="url" rel="index">
-                    <span itemprop="name">编辑器</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Sublime/工具/编辑器/提升工作效率/" itemprop="url" rel="index">
-                    <span itemprop="name">提升工作效率</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#废话<br>这个月开始从VIM转向使用Sublime，可能很多Sublime脑残粉会说，这工具你现在才开始用啊，也可能很多Vim脑残粉会说，Vim是最高级的编辑器，你竟然自我退化。确实Vim太高级了，我用不好，Sublime至少一个月内让我把IntelliJ的前端功能都摒弃了（以前html、css、JavaScript基本用他操作）。</p>
-<p>#Feature<br>那就来说说我感受到的他的优点</p>
-<h2 id="强大的命令模式"><a href="#强大的命令模式" class="headerlink" title="强大的命令模式"></a>强大的命令模式</h2><p>在编辑窗口按ctrl+shift+p就可以进入命令模式，命令模式即为在编辑窗口上方弹出了一个输入框，可以输入Sublime内置和插件所扩展的命令功能，而且支持模糊匹配。比如：</p>
-<ul>
-<li>set synax javascript 命令可以设置当前语法为javascript</li>
-<li>安装Package Control后可以用Package Install命令来安装插件</li>
-<li>minimap 可以关闭打开编辑器迷你图</li>
-<li>等等等等</li>
-</ul>
-<h2 id="强大的Goto功能"><a href="#强大的Goto功能" class="headerlink" title="强大的Goto功能"></a>强大的Goto功能</h2><p>在编辑窗口输入ctrl+p就可以进入goto命令，与命令模式一样，在编辑窗口上方会弹出了一个输入框，可以输入goto的命令，可以是文件跳转，也可以是文件跳转行，也可以跳转到某个元素（函数、选择器等），也可以在页面中查找。</p>
-<ul>
-<li>@可以快速定位元素，比如js的函数，CSS文件的选择器，支持模糊匹配</li>
-<li>#可以定位到页面内的内容，支持模糊匹配</li>
-<li>：+行数 跳转到行</li>
-</ul>
-<h2 id="模糊匹配功能"><a href="#模糊匹配功能" class="headerlink" title="模糊匹配功能"></a>模糊匹配功能</h2><p>我认为的模糊分两种，一种是模糊缩写自动补全，一种是搜索的时候的模糊匹配，如下：</p>
-<ul>
-<li>模糊补全：在CSS文件中输入bgc按tab键就是自动键入background-color</li>
-<li>模糊匹配：比如在命令模式输入ssjs，就会模糊匹配上 <strong>s</strong>et <strong>s</strong>ynax <strong>j</strong>ava <strong>s</strong>cript，粗体的字符为模糊匹配的字段；</li>
-</ul>
-<h2 id="强大的插件功能"><a href="#强大的插件功能" class="headerlink" title="强大的插件功能"></a>强大的插件功能</h2><p>基本上所有的语法都能找到很好的插件，比如对于Html就有Emmet，他极大的提升了前端开发的工作效率，这里就不一一细说该插件，有兴趣的可以Google下，这里稍微举个例子来看看。<br>ctrl+n创建个页面后，输入 !+[tab]，就可以自动生成html5的标准文档，如果需要HTML4的标准，就输入html:4s+[tab]。之后会自动生成如下代码。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>然后在任意位置输入元素名字后按tab都能生成相应名字的元素，比如输入script+[tab]，就会生成script标签。如果输入div.className就会生成<figure class="highlight plain"><figcaption><span>class="className">``` ，是不是很神奇。更神奇的是，输入ul>.item$*5+[tab]（ *这里注意，>代表子元素，+代表并列。子元素的情况下默认子元素为div，但是ul的默认为li，tr的默认为td等* ），会自动生成以下代码：</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">```html</div><div class="line">&lt;ul&gt;</div><div class="line">        &lt;li class=&quot;item1&quot;&gt;&lt;/li&gt;</div><div class="line">        &lt;li class=&quot;item2&quot;&gt;&lt;/li&gt;</div><div class="line">        &lt;li class=&quot;item3&quot;&gt;&lt;/li&gt;</div><div class="line">        &lt;li class=&quot;item4&quot;&gt;&lt;/li&gt;</div><div class="line">        &lt;li class=&quot;item5&quot;&gt;&lt;/li&gt;</div><div class="line">&lt;/ul&gt;</div></pre></td></tr></table></figure></p>
-<h2 id="多行编辑功能"><a href="#多行编辑功能" class="headerlink" title="多行编辑功能"></a>多行编辑功能</h2><p>就在上列html代码中，如果要同时编辑li元素中的内容，那么正常情况需要先编辑完一个后复制粘贴4次。Subilme的多行编辑功能很好的帮我们简化了这个操作（编码+鼠标+键盘+再鼠标+再键盘……），提升了我们的编码速率。<br>进入多行编辑模式有几种方式，如下：</p>
-<ul>
-<li>选中&gt;&lt;按alt+f3可以多行光标模式（这里输入的内容为需要匹配的共同点），这样做的坏处是共同点与其他页面元素相同时候不方便匹配，比较不灵活</li>
-<li>争对上面的问题就有另一个办法，可以把鼠标放在&gt;&lt;之间按住shift用右键往下拖来就可以进行多行编辑，这样做的坏处是，如果需要多行编辑的元素不在一个垂直线并且不是末尾元素，将无法进行</li>
-<li>再争对以上问题就又有一个办法，可以选中&gt;&lt;后用ctrl+d 和ctrl+k来选择跳过选中，这样的缺点就是太慢，尽可能还是在相同点按alt+f3吧</li>
-</ul>
-<p>多行选择后可以p{This is content}+[tab]来生成以下代码<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item1 "</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is content<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item2 "</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is content<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item3 "</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is content<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item4 "</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is content<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item5 "</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is content<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<h2 id="其他快捷键"><a href="#其他快捷键" class="headerlink" title="其他快捷键"></a>其他快捷键</h2><p>其中粗体的内容为我认为可以大幅度增加工作效率的功能，而且其他浏览器可能没有的（不是绝对没有，请勿喷）。<br>ctrl+tab切换正在编辑的文件（ctrl+shift+tab可以相反方向）<br>ctrl+H当前文件查找替换模式（类型其他编辑器的替换查找）<br>ctrl+f所有文件查找内容(使用完后按esc退出，之前一直不知道这个。。。)<br>ctrl+shift+f所有文件替换内容<br>ctrl+shift+d 复制当前或者复制选中内容<br>ctrl+shift+k 删除当前行<br>alt+. 闭合标签<br><strong>shift+f11</strong> 进入无干扰模式<br><strong>ctrl+enter</strong> 在下一行插入并移动光标到那<br><strong>ctrl+shift+enter</strong> 在上一行插入并移动光标到那<br><strong>ctrl+shift+v</strong> 带自动缩进的粘贴（正常复制后格式会乱，这种方式粘贴后省略了人工排版的问题）</p>
-<p>#总结<br>好用，谁用谁知道！</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1695,7 +1657,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">96</span>
+              <span class="site-state-item-count">97</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
@@ -1749,7 +1711,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
