@@ -285,7 +285,7 @@
 <li>像小米手环这类型智能手环就是一个外设</li>
 <li>iPhone手机连接了一个只能手环，就扮演了中心设备的角色</li>
 </ul>
-<p><img src="media/15173847248426/15173883632616.png" alt=""></p>
+<p><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2018-02-01-15173883632616.png" alt=""></p>
 <div align="center"><font color="blue" size="2" face="verdana">源自:<a href="https://learn.adafruit.com/introduction-to-bluetooth-low-energy/gatt" target="_blank" rel="external">https://learn.adafruit.com/introduction-to-bluetooth-low-energy/gatt</a></font></div>
 
 <p>在下一章节，我们将介绍BLE中存在的通信方式。</p>
@@ -307,7 +307,7 @@
 <li>我们也可以将服务分组成一个配置文件(profile)。</li>
 </ul>
 <p>让我们举一个例子：心率监测器是一个BLE外设，他有一个心率配置文件，该配置文件有两个服务（心率服务及设备信息服务）。心率服务定义了一个读特征可以提供测量的心率结果。它也定义了一个写特征用于告诉外设它现在处于身体的什么位置。然后设备信息服务包含关于模型、固件版本等设备信息。</p>
-<p>每个特征和服务都被定义了唯一标识，这个唯一标识被称作UUID。有一些预定义好的标准服务与特征的UUID，如果你有兴趣，可以在该<a href="https://www.bluetooth.com/specifications/gatt/services and https://www.bluetooth.com/specifications/gatt/characteristics" target="_blank" rel="external">链接</a>中延伸阅读。当然，你可以为你自己的服务和特征定义UUID。你也没有义务去回避预定义的UUID。标准的UUID是16位的，自定义的则是128位的，他们一般用十六进制表示。例如心率服务的UUID是16位的：0x180D，而自定义可以是:6E400001-B5A3-F393-E0A9-E50E24DCCA9E。<br><img src="media/15173847248426/15173911787186.png" alt=""></p>
+<p>每个特征和服务都被定义了唯一标识，这个唯一标识被称作UUID。有一些预定义好的标准服务与特征的UUID，如果你有兴趣，可以在该<a href="https://www.bluetooth.com/specifications/gatt/services and https://www.bluetooth.com/specifications/gatt/characteristics" target="_blank" rel="external">链接</a>中延伸阅读。当然，你可以为你自己的服务和特征定义UUID。你也没有义务去回避预定义的UUID。标准的UUID是16位的，自定义的则是128位的，他们一般用十六进制表示。例如心率服务的UUID是16位的：0x180D，而自定义可以是:6E400001-B5A3-F393-E0A9-E50E24DCCA9E。<br><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2018-02-01-15173911787186.png" alt=""></p>
 <p>下一章节我们将介绍典型的BLE使用案例。</p>
 <h2 id="典型的蓝牙使用案例"><a href="#典型的蓝牙使用案例" class="headerlink" title="典型的蓝牙使用案例"></a>典型的蓝牙使用案例</h2><p>该章节我们将介绍典型的BLE使用案例。有非常多可能的BLE使用场景，但我们将描述最常见的这种。</p>
 <p>BLE搜索APP：他的用途为在你想要发现并测试BLE的位置发现周围蓝牙设备的情况，具体为以下功能：</p>
@@ -372,17 +372,17 @@
 <ul>
 <li>创建一个简单的应用</li>
 </ul>
-<p><img src="media/15173847248426/15174493294792.jpg" alt=""></p>
+<p><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2018-02-01-15174493294792.jpg" alt=""></p>
 <ul>
 <li>给你的应用命名为SimpleBleCentral，并且选择Swift</li>
 </ul>
-<p><img src="media/15173847248426/15174494036052.jpg" alt=""></p>
+<p><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2018-02-01-15174494036052.jpg" alt=""></p>
 <p>现在，工程已经创建好了，我们将添加BlueCap框架(<a href="https://github.com/troystribling/BlueCap)[https://github.com/troystribling/BlueCap]。有很多不同的方法添加，比如Cocoapods、Carthage，这里用Cocoapods方式导入，这里不详细介绍如何使用Cocoapods导入第三方库。" target="_blank" rel="external">https://github.com/troystribling/BlueCap)[https://github.com/troystribling/BlueCap]。有很多不同的方法添加，比如Cocoapods、Carthage，这里用Cocoapods方式导入，这里不详细介绍如何使用Cocoapods导入第三方库。</a></p>
-<p>我们也要添加CoreBluetooth框架到项目中，因为BlueCap是依赖于CoreBluetoothde。<br><img src="media/15173847248426/15174508768320.jpg" alt=""></p>
+<p>我们也要添加CoreBluetooth框架到项目中，因为BlueCap是依赖于CoreBluetoothde。<br><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2018-02-01-15174508768320.jpg" alt=""></p>
 <p>下一步是在项目的属性中添加中心设备功能。要做的就是运行后台模式并检查Bluetooth LE的可访问性。</p>
-<p><img src="media/15173847248426/15174511314563.jpg" alt=""></p>
+<p><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2018-02-01-15174511314563.jpg" alt=""></p>
 <p>我们的storyboard包含了一个ViewController，他可以在扫描我们想要使用特征的时候展示一个等待指示器。当我们发现了特征，ViewController则展现出一个可交互的视图供读写该特征。</p>
-<p><img src="media/15173847248426/15174520548884.jpg" alt=""></p>
+<p><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2018-02-01-15174520548884.jpg" alt=""></p>
 <p>我们的view controller要完成以下任务：</p>
 <ul>
 <li>初始化CentralManager，他是BlueCapKit的一个中心设备类，可用来扫描外设</li>
