@@ -226,6 +226,442 @@
             
               
                 
+                <a class="post-title-link" href="/2014/02/03/2014-02-03-regular-expressions-in-javascript-a-the-basics/" itemprop="url">
+                  javascript中的正则表达式（一）---基础知识
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-02-03T13:11:00+08:00" content="2014-02-03">
+              2014-02-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/javascript/Regexp/" itemprop="url" rel="index">
+                    <span itemprop="name">Regexp</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/javascript/Regexp/码年/" itemprop="url" rel="index">
+                    <span itemprop="name">码年</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/javascript/Regexp/码年/正则表达式/" itemprop="url" rel="index">
+                    <span itemprop="name">正则表达式</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#码年快乐<br>过年可以算是玩疯了，初一到初三，就没咋闲着。不过，可以确定的是，过年也不能得瑟啊，除夕一朋友打麻将输了1000个字，我信誓旦旦的说，我这辈子打麻将都没输过1000个字。然后，初一下午我就输了1030个字= =满脸黑线，这绝对是诅咒，没想到小伙伴你还会诅咒啊。<br>过年还有个比较快乐的事情就是和好基友打DOTA各种虐菜，我们这些无耻的人，就在大过年把自己的快乐建立在别人的悲催纸上，海牙红毛、小精灵红猫、跳刀AA和跳刀军团，游走的飞起。<br>然后还玩了游乐场，而且还做了旋转木马，可以说，下巴差点笑脱臼，脸部肌肉已经笑抽筋了。<br>顺便还去看了电影，爸爸去哪儿，还是挺有笑料的，哈哈哈。<br>其他开心的事情还做了很多，就不一一晒出来了。<br>初四了，该稍微收一收心了，今天去外婆家住3天，陪陪老人家，也顺便调整下状态。今天除了教外婆用我新买个外婆的智能机以外，就是学习了。最近觉得javascript的正则有些薄弱，就好好的补课了下。接下来的两篇博文就写正则吧。第一篇为基础知识篇，第二篇我会整理写项目中用到的正则来说明下。</p>
+<p>#1 基本知识<br>是对字符串执行模式匹配的强大工具。使用正则表达式有两种方法：RegExp对象和直接量语法，如果觉得自己基本知识都OK，那跳过这段别看吧，很多东西我也就是从官方文档搬的。</p>
+<h2 id="1-1-RegExp对象"><a href="#1-1-RegExp对象" class="headerlink" title="1.1 RegExp对象"></a>1.1 RegExp对象</h2><p>创建RegExp对象语法：new RegExp(pattern, attributes)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span>  reg=<span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">"[0-9]"</span>,<span class="string">"g"</span>);</div><div class="line"><span class="keyword">var</span> str=<span class="string">"abd1afa4sdf"</span>;</div><div class="line">str.replace(reg,<span class="string">"num"</span>);</div><div class="line"><span class="string">'abdnumafanumsdf'</span></div></pre></td></tr></table></figure>
+<p>Regexp对象有test(是否匹配)、exec（查找下一个匹配）这两个方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">reg = <span class="regexp">/\d/g</span></div><div class="line">reg.test(str)</div><div class="line">reg.exec(str)</div><div class="line"><span class="comment">//[ '4',  index: 7,  input: 'abd1afa4sdf' ]</span></div><div class="line">reg = <span class="regexp">/\d/</span></div><div class="line">reg.exec(str)</div><div class="line"><span class="comment">//[ '1',  index: 3,  input: 'abd1afa4sdf' ]</span></div><div class="line">reg.exec(str)</div><div class="line"><span class="comment">//[ '1',  index: 3,  input: 'abd1afa4sdf' ]</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">reg</div><div class="line">/&lt;%([^%&gt;]+)?%&gt;/g</div><div class="line">str = 'This is &lt;%a%test &lt;%template%&gt;'</div><div class="line">'This is &lt;%a%test &lt;%template%&gt;'</div><div class="line">reg.exec(str)</div><div class="line">[ '&lt;%a%&gt;',</div><div class="line">  'a',</div><div class="line">  index: 8,</div><div class="line">  input: 'This is &lt;%a%test &lt;%template%&gt;' ]</div><div class="line">reg.exec(str)</div><div class="line">[ '&lt;%template%&gt;',</div><div class="line">  'template',</div><div class="line">  index: 19,</div><div class="line">  input: 'This is &lt;%a%test &lt;%template%&gt;' ]</div></pre></td></tr></table></figure>
+<h2 id="1-2-String对象的正则方法"><a href="#1-2-String对象的正则方法" class="headerlink" title="1.2 String对象的正则方法"></a>1.2 String对象的正则方法</h2><table>
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align:center">方法</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col1</td>
+<td style="text-align:center">search</td>
+<td style="text-align:center">检索与正则表达式相匹配的值</td>
+</tr>
+<tr>
+<td>col2</td>
+<td style="text-align:center">match</td>
+<td style="text-align:center">找到一个或多个正则表达式的匹配</td>
+</tr>
+<tr>
+<td>col3</td>
+<td style="text-align:center">replace</td>
+<td style="text-align:center">替换与正则表达式匹配的子串</td>
+</tr>
+<tr>
+<td>col4</td>
+<td style="text-align:center">split</td>
+<td style="text-align:center">把字符串分割为字符串数组</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">str</div><div class="line"><span class="string">'abd1afa4sdf'</span></div><div class="line">reg</div><div class="line">/\d/g</div><div class="line">str.search(reg)</div><div class="line"><span class="number">3</span></div><div class="line">str.match(reg)</div><div class="line">[ <span class="string">'1'</span>, <span class="string">'4'</span> ]</div><div class="line">str.split(reg)</div><div class="line">[ <span class="string">'abd'</span>, <span class="string">'afa'</span>, <span class="string">'sdf'</span> ]</div><div class="line">str.replace(reg,<span class="string">'num'</span>)</div><div class="line"><span class="string">'abdnumafanumsdf'</span></div></pre></td></tr></table></figure>
+<h2 id="1-3-直接量语法"><a href="#1-3-直接量语法" class="headerlink" title="1.3 直接量语法"></a>1.3 直接量语法</h2><p>直接量语法：/pattern/attributes<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span>  reg = <span class="regexp">/[0-9]/g</span></div><div class="line"><span class="keyword">var</span> str=<span class="string">"abd1afa4sdf"</span>;</div><div class="line">str.replace(reg,<span class="string">"num"</span>);</div><div class="line"><span class="string">'abdnumafanumsdf'</span></div></pre></td></tr></table></figure></p>
+<h2 id="1-4-参数说明"><a href="#1-4-参数说明" class="headerlink" title="1.4 参数说明"></a>1.4 参数说明</h2><ul>
+<li>参数 pattern 是一个字符串，指定了正则表达式的模式或其他正则表达式。</li>
+<li>参数 attributes 是一个可选的字符串，包含属性 “g”、”i” 和 “m”，分别用于指定全局匹配、区分大小写的匹配和多行匹配。ECMAScript 标准化之前，不支持 m 属性。如果 pattern 是正则表达式，而不是字符串，则必须省略该参数。</li>
+</ul>
+<h2 id="1-5-Attributes修饰符"><a href="#1-5-Attributes修饰符" class="headerlink" title="1.5 Attributes修饰符"></a>1.5 Attributes修饰符</h2><table>
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align:center">修饰符</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col1</td>
+<td style="text-align:center">i</td>
+<td style="text-align:center">执行对大小写不敏感的匹配。</td>
+</tr>
+<tr>
+<td>col2</td>
+<td style="text-align:center">g</td>
+<td style="text-align:center">执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。</td>
+</tr>
+<tr>
+<td>col3</td>
+<td style="text-align:center">m</td>
+<td style="text-align:center">执行多行匹配。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-6-方刮号"><a href="#1-6-方刮号" class="headerlink" title="1.6 方刮号"></a>1.6 方刮号</h2><table>
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align:center">表达式</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col1</td>
+<td style="text-align:center">[abc]</td>
+<td style="text-align:center">查找方括号之间的任何字符。</td>
+</tr>
+<tr>
+<td>col2</td>
+<td style="text-align:center">[^abc]</td>
+<td style="text-align:center">查找任何不在方括号之间的字符。</td>
+</tr>
+<tr>
+<td>col3</td>
+<td style="text-align:center">[0-9]</td>
+<td style="text-align:center">查找任何从 0 至 9 的数字。</td>
+</tr>
+<tr>
+<td>col4</td>
+<td style="text-align:center">[a-z]</td>
+<td style="text-align:center">查找任何从小写 a 到小写 z 的字符。</td>
+</tr>
+<tr>
+<td>col5</td>
+<td style="text-align:center">[A-Z]</td>
+<td style="text-align:center">查找任何从大写 A 到大写 Z 的字符。</td>
+</tr>
+<tr>
+<td>col6</td>
+<td style="text-align:center">[A-z]</td>
+<td style="text-align:center">查找任何从大写 A 到小写 z 的字符。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">reg = <span class="regexp">/[0-9]/g</span></div><div class="line"><span class="keyword">var</span> str=<span class="string">"abd1afa4sdf"</span>;</div><div class="line">str.match(reg)</div><div class="line">[ <span class="string">'1'</span>, <span class="string">'4'</span> ]</div><div class="line">reg = <span class="regexp">/[^1-9]/g</span></div><div class="line">/[^<span class="number">1</span><span class="number">-9</span>]/g</div><div class="line">str.match(reg)</div><div class="line">[ <span class="string">'a'</span>,  <span class="string">'b'</span>,  <span class="string">'d'</span>,  <span class="string">'a'</span>,  <span class="string">'f'</span>,  <span class="string">'a'</span>,  <span class="string">'s'</span>,  <span class="string">'d'</span>,  <span class="string">'f'</span> ]</div></pre></td></tr></table></figure>
+<h2 id="1-7-元字符"><a href="#1-7-元字符" class="headerlink" title="1.7 元字符"></a>1.7 元字符</h2><table>
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align:center">元字符</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col1</td>
+<td style="text-align:center">.</td>
+<td style="text-align:center">查找单个字符，除了换行和行结束符。</td>
+</tr>
+<tr>
+<td>col2</td>
+<td style="text-align:center">\w</td>
+<td style="text-align:center">查找单词字符。</td>
+</tr>
+<tr>
+<td>col3</td>
+<td style="text-align:center">\W</td>
+<td style="text-align:center">查找非单词字符。</td>
+</tr>
+<tr>
+<td>col4</td>
+<td style="text-align:center">\d</td>
+<td style="text-align:center">查找数字。</td>
+</tr>
+<tr>
+<td>col5</td>
+<td style="text-align:center">\D</td>
+<td style="text-align:center">查找非数字字符。</td>
+</tr>
+<tr>
+<td>col6</td>
+<td style="text-align:center">\s</td>
+<td style="text-align:center">查找空白字符。</td>
+</tr>
+<tr>
+<td>col7</td>
+<td style="text-align:center">\S</td>
+<td style="text-align:center">查找非空白字符。</td>
+</tr>
+<tr>
+<td>col8</td>
+<td style="text-align:center">\b</td>
+<td style="text-align:center">匹配单词边界。</td>
+</tr>
+<tr>
+<td>col9</td>
+<td style="text-align:center">\B</td>
+<td style="text-align:center">匹配非单词边界。</td>
+</tr>
+<tr>
+<td>col10</td>
+<td style="text-align:center">\0</td>
+<td style="text-align:center">查找 NUL 字符。</td>
+</tr>
+<tr>
+<td>col11</td>
+<td style="text-align:center">\n</td>
+<td style="text-align:center">查找换行符。</td>
+</tr>
+<tr>
+<td>col12</td>
+<td style="text-align:center">\f</td>
+<td style="text-align:center">查找换页符。</td>
+</tr>
+<tr>
+<td>col13</td>
+<td style="text-align:center">\r</td>
+<td style="text-align:center">查找回车符。</td>
+</tr>
+<tr>
+<td>col14</td>
+<td style="text-align:center">\t</td>
+<td style="text-align:center">查找制表符。</td>
+</tr>
+<tr>
+<td>col15</td>
+<td style="text-align:center">\v</td>
+<td style="text-align:center">查找垂直制表符。</td>
+</tr>
+<tr>
+<td>col16</td>
+<td style="text-align:center">\xxx</td>
+<td style="text-align:center">查找以八进制数 xxx 规定的字符。</td>
+</tr>
+<tr>
+<td>col17</td>
+<td style="text-align:center">\xdd</td>
+<td style="text-align:center">查找以十六进制数 dd 规定的字符。</td>
+</tr>
+<tr>
+<td>col18</td>
+<td style="text-align:center">\uxxxx</td>
+<td style="text-align:center">查找以十六进制数 xxxx 规定的 Unicode 字符。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">reg = <span class="regexp">/./g</span></div><div class="line">/./g</div><div class="line">str.match(reg)</div><div class="line">[ <span class="string">'a'</span>,  <span class="string">'b'</span>,  <span class="string">'d'</span>,  <span class="string">'1'</span>,  <span class="string">'a'</span>,  <span class="string">'f'</span>,  <span class="string">'a'</span>,  <span class="string">'4'</span>,  <span class="string">'s'</span>,  <span class="string">'d'</span>,  <span class="string">'f'</span> ]</div><div class="line">reg = <span class="regexp">/\d/g</span></div><div class="line">/\d/g</div><div class="line">str.match(reg)</div><div class="line">[ <span class="string">'1'</span>, <span class="string">'4'</span> ]</div><div class="line">reg = <span class="regexp">/\D/g</span></div><div class="line">/\D/g</div><div class="line">str.match(reg)</div><div class="line">[ <span class="string">'a'</span>,  <span class="string">'b'</span>,  <span class="string">'d'</span>,  <span class="string">'a'</span>,  <span class="string">'f'</span>,  <span class="string">'a'</span>,  <span class="string">'s'</span>,  <span class="string">'d'</span>,  <span class="string">'f'</span> ]</div><div class="line">reg = <span class="regexp">/\w/g</span></div><div class="line">/\w/g</div><div class="line">str.match(reg)</div><div class="line">[ <span class="string">'a'</span>,  <span class="string">'b'</span>,  <span class="string">'d'</span>,  <span class="string">'1'</span>,  <span class="string">'a'</span>,  <span class="string">'f'</span>,  <span class="string">'a'</span>,  <span class="string">'4'</span>,  <span class="string">'s'</span>,  <span class="string">'d'</span>,  <span class="string">'f'</span> ]</div><div class="line">reg = <span class="regexp">/\W/g</span></div><div class="line">/\W/g</div><div class="line">str.match(reg)</div><div class="line"><span class="literal">null</span></div></pre></td></tr></table></figure>
+<h2 id="1-8-量词"><a href="#1-8-量词" class="headerlink" title="1.8 量词"></a>1.8 量词</h2><table>
+<thead>
+<tr>
+<th>Tables        量词</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col1</td>
+<td style="text-align:center">n+</td>
+<td style="text-align:center">匹配任何包含至少一个 n 的字符串。</td>
+</tr>
+<tr>
+<td>col2</td>
+<td style="text-align:center">n*</td>
+<td style="text-align:center">匹配任何包含零个或多个 n 的字符串。</td>
+</tr>
+<tr>
+<td>col3</td>
+<td style="text-align:center">n?</td>
+<td style="text-align:center">匹配任何包含零个或一个 n 的字符串。</td>
+</tr>
+<tr>
+<td>col4</td>
+<td style="text-align:center">n{X}</td>
+<td style="text-align:center">匹配包含 X 个 n 的序列的字符串。</td>
+</tr>
+<tr>
+<td>col5</td>
+<td style="text-align:center">n{X,Y}</td>
+<td style="text-align:center">匹配包含 X 或 Y 个 n 的序列的字符串。</td>
+</tr>
+<tr>
+<td>col6</td>
+<td style="text-align:center">n{X,}</td>
+<td style="text-align:center">匹配包含至少 X 个 n 的序列的字符串。</td>
+</tr>
+<tr>
+<td>col7</td>
+<td style="text-align:center">n$</td>
+<td style="text-align:center">匹配任何结尾为 n 的字符串。</td>
+</tr>
+<tr>
+<td>col8</td>
+<td style="text-align:center">^n</td>
+<td style="text-align:center">匹配任何开头为 n 的字符串。</td>
+</tr>
+<tr>
+<td>col9</td>
+<td style="text-align:center">?=n</td>
+<td style="text-align:center">匹配任何其后紧接指定字符串 n 的字符串。</td>
+</tr>
+<tr>
+<td>col10</td>
+<td style="text-align:center">?!n</td>
+<td style="text-align:center">匹配任何其后没有紧接指定字符串 n 的字符串。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">str.match(reg)</div><div class="line">[ <span class="string">'abd'</span>, <span class="string">'afa'</span>, <span class="string">'sdf'</span> ]</div><div class="line">str</div><div class="line"><span class="string">'abd1afa4sdf'</span></div><div class="line">reg = <span class="regexp">/(\D+)/g</span></div><div class="line">/(\D+)/g</div><div class="line">str.match(reg)</div><div class="line">[ <span class="string">'abd'</span>, <span class="string">'afa'</span>, <span class="string">'sdf'</span> ]</div></pre></td></tr></table></figure>
+<p>测试邮箱<br><figure class="highlight javascript"><figcaption><span>testMail</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mailstr = <span class="string">'xiao303178384@gmail.com'</span></div><div class="line"><span class="literal">undefined</span></div><div class="line">reg = <span class="regexp">/(\w+)@(\w+)\.com/g</span></div><div class="line">/(\w+)@(\w+)\.com/g</div><div class="line">reg.test(mailstr)</div><div class="line"><span class="literal">true</span></div><div class="line">mailstr = <span class="string">'xiao303178384@gmail.co'</span></div><div class="line"><span class="string">'xiao303178384@gmail.co'</span></div><div class="line">reg.test(mailstr)</div><div class="line"><span class="literal">false</span></div><div class="line">mailstr = <span class="string">'xiao303178384@gmailcom'</span></div><div class="line"><span class="string">'xiao303178384@gmailcom'</span></div><div class="line">reg.test(mailstr)</div><div class="line"><span class="literal">false</span></div><div class="line">mailstr = <span class="string">'xiao303178384@qq.com'</span></div><div class="line"><span class="string">'xiao303178384@qq.com'</span></div><div class="line">reg.test(mailstr)</div><div class="line"><span class="literal">true</span></div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/01/30/2014-01-30-yards-to-succeed-dont-run-red-envelopes-from-the-year-end-was/" itemprop="url">
                   码到成功----不发红包年终就是流氓
                 </a>
@@ -239,7 +675,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-01-30T03:41:00+08:00" content="2014-01-30">
               2014-01-30
             </time>
@@ -251,7 +687,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/个人随笔/" itemprop="url" rel="index">
@@ -261,7 +697,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -273,7 +709,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -376,7 +812,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-01-29T07:10:00+08:00" content="2014-01-29">
               2014-01-29
             </time>
@@ -388,7 +824,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -398,7 +834,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -410,7 +846,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -422,7 +858,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -434,7 +870,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -446,7 +882,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -458,7 +894,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -570,7 +1006,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-01-29T03:53:00+08:00" content="2014-01-29">
               2014-01-29
             </time>
@@ -582,7 +1018,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -592,7 +1028,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -604,7 +1040,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -616,7 +1052,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -628,7 +1064,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -640,7 +1076,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -763,7 +1199,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-01-26T04:18:00+08:00" content="2014-01-26">
               2014-01-26
             </time>
@@ -775,7 +1211,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -785,7 +1221,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -797,7 +1233,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -809,7 +1245,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -821,7 +1257,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -833,7 +1269,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -977,7 +1413,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-01-23T13:05:00+08:00" content="2014-01-23">
               2014-01-23
             </time>
@@ -989,7 +1425,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/个人随笔/" itemprop="url" rel="index">
@@ -999,7 +1435,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1121,7 +1557,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-01-22T13:18:00+08:00" content="2014-01-22">
               2014-01-22
             </time>
@@ -1222,7 +1658,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-01-21T10:59:00+08:00" content="2014-01-21">
               2014-01-21
             </time>
@@ -1234,7 +1670,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/学习/" itemprop="url" rel="index">
@@ -1244,7 +1680,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1351,7 +1787,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-01-20T12:40:00+08:00" content="2014-01-20">
               2014-01-20
             </time>
@@ -1363,7 +1799,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -1373,7 +1809,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1385,7 +1821,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1397,7 +1833,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1409,7 +1845,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1421,7 +1857,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1433,7 +1869,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1564,7 +2000,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-01-13T14:23:00+08:00" content="2014-01-13">
               2014-01-13
             </time>
@@ -1576,7 +2012,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -1586,7 +2022,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1598,7 +2034,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1686,172 +2122,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/01/11/2014-01-11-how-to-use-google/" itemprop="url">
-                  How to use 谷歌
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-01-11T02:28:00+08:00" content="2014-01-11">
-              2014-01-11
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/工具/谷歌/" itemprop="url" rel="index">
-                    <span itemprop="name">谷歌</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/工具/谷歌/搜索/" itemprop="url" rel="index">
-                    <span itemprop="name">搜索</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/工具/谷歌/搜索/个人心得/" itemprop="url" rel="index">
-                    <span itemprop="name">个人心得</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>本来今早是要写博文的，然后起床弹了会吉他然后就停不下来了。这种时候写一篇技术博文是很不负责的，那就侃一侃如何正确的使用谷妹吧，哦不，是谷歌！本文其实在公司已经做过分享，这里稍微把当时的PPT整理成md格式吧。歹势啊，写完还想玩吉他呢，就不做太大更正了。<br>这里我只介绍下我用谷歌搜索的一些命令的心得，针对的方面也就是程序猿可能经常需要用到的。</p>
-<p>#搜索引擎的命令大全：</p>
-<h2 id="1、-双引号"><a href="#1、-双引号" class="headerlink" title="1、    双引号"></a>1、    双引号</h2><p>这个最基本的，把搜索词放在双引号中，代表完全匹配搜索，也就是说搜索结果返回的页面包含双引号中出现的所有的词，连顺序也必须完全匹配。比如百度”spring mvc”,比较简单，就不做多余的介绍了；</p>
-<p><img src="http://user-image.logdown.io/user/3769/blog/3827/post/175283/cUDcqjTiQlM9kySWCoT3_1.jpg" alt="1.jpg"></p>
-<h2 id="2、-减号"><a href="#2、-减号" class="headerlink" title="2、    减号"></a>2、    减号</h2><p>减号代表搜索不包含减号后面的词的页面。使用这个指令时减号前面必须是空格，减号后面没有空格，紧跟着需要排除的词。如下图，就去掉博客专栏的相关搜索结果。<br><img src="http://user-image.logdown.io/user/3769/blog/3827/post/175283/6PUK5KArSyC7DqykIV7X_2.jpg" alt="2.jpg"></p>
-<h2 id="3、-星号"><a href="#3、-星号" class="headerlink" title="3、    星号"></a>3、    星号</h2><p>这个也很基础，缩略若干字，也就是通配符的意思。如下图，任然可以搜索出springmvc的结果。<br><img src="http://user-image.logdown.io/user/3769/blog/3827/post/175283/jY6jZbBToa2zGtCbPhRw_3.jpg" alt="3.jpg"></p>
-<h2 id="4、-Inurl"><a href="#4、-Inurl" class="headerlink" title="4、    Inurl"></a>4、    Inurl</h2><p>inurl: 指令用于搜索查询词出现在url 中的页面。如下图<br><img src="http://user-image.logdown.io/user/3769/blog/3827/post/175283/va07aLy0QCagB4F82GWZ_4.jpg" alt="4.jpg"></p>
-<h2 id="5、-同理-，allinurl-pig-yang，如图，不多解释"><a href="#5、-同理-，allinurl-pig-yang，如图，不多解释" class="headerlink" title="5、    同理 ，allinurl:pig+yang，如图，不多解释"></a>5、    同理 ，allinurl:pig+yang，如图，不多解释</h2><p><img src="http://user-image.logdown.io/user/3769/blog/3827/post/175283/plPlFgsRNqURymRRKNcq_5.jpg" alt="5.jpg"></p>
-<h2 id="6、-Inanchor-与-allinanchor"><a href="#6、-Inanchor-与-allinanchor" class="headerlink" title="6、    Inanchor 与 allinanchor"></a>6、    Inanchor 与 allinanchor</h2><p>使用方法与inurl类似，只是返回的结果是导入链接锚文字中包含搜索词的页面，我用的不多，不介绍。</p>
-<h2 id="7、-Intitle与-allintitle"><a href="#7、-Intitle与-allintitle" class="headerlink" title="7、    Intitle与 allintitle"></a>7、    Intitle与 allintitle</h2><p>使用方法与inurl类似，只是指令返回的是页面title 中包含关键词的页面。</p>
-<p><img src="http://user-image.logdown.io/user/3769/blog/3827/post/175283/qAphtsQCTuSB4tcCkDJj_7.jpg" alt="7.jpg"></p>
-<h2 id="8、-Filetype"><a href="#8、-Filetype" class="headerlink" title="8、    Filetype"></a>8、    Filetype</h2><p>这个下载的时候特别有用，直接指定连接的格式，如下图<br><img src="http://user-image.logdown.io/user/3769/blog/3827/post/175283/7stmIkCQCe3rE5iKPfOg_8.jpg" alt="8.jpg"></p>
-<h2 id="9、-Site"><a href="#9、-Site" class="headerlink" title="9、    Site"></a>9、    Site</h2><p>指定是那个站点的，也很有用，如下图，在CSDN站点搜索相关内容<br><img src="http://user-image.logdown.io/user/3769/blog/3827/post/175283/LglyGdMlQXUJXINmFh6I_9.jpg" alt="9.jpg"></p>
-<h2 id="10、-Related"><a href="#10、-Related" class="headerlink" title="10、    Related"></a>10、    Related</h2><p>这个用的不是很理解，我觉得是搜索有共同外部链接的网站，就是比如下图，巨龙的首页有的外部链接与下列搜索结果页面有相同的外部链接指向。这个对程序猿作用不大，个人就是有兴趣就试了下。我觉得用于搜索潜在客户比较有用.<br><img src="http://user-image.logdown.io/user/3769/blog/3827/post/175283/HXAZmjfdTieEe34f8moL_10.jpg" alt="10.jpg"></p>
-<h2 id="11、-组合搜索"><a href="#11、-组合搜索" class="headerlink" title="11、    组合搜索"></a>11、    组合搜索</h2><p>随便上几张图举几个栗子吧<br><img src="http://user-image.logdown.io/user/3769/blog/3827/post/175283/E7vpa9wSUuyrP8i6DJLp_11.jpg" alt="11.jpg"></p>
-<p>后缀是.csdn.net，内容又springmvc，类型是pdf的链接。<br><img src="http://user-image.logdown.io/user/3769/blog/3827/post/175283/k2eM1rERzanNcB9TAvAj_11-2.jpg" alt="11-2.jpg"></p>
-<p>#其他<br>掌握命令以后还要积累关键字。每个专业领域内都有一些专业术语，而这些术语出现在媒体或口语中都是俗称，要想查到高质量的结果，就要有把术语和俗称进行转换的能力。另外，经过长期检验，有一些专家和记者非常靠谱，在搜索问题时同时加入他们的名字，得到的结果质量会高很多。掌握了工具和关键字后，要知道二者如何配合使用。比如需要查找一份政府文件，如果知道准确的文件名，就可以加半角引号进行精确检索；但如果不知道准确名 称，就可以用site语法只在政府网站内用相关关键字查询，而不是在全网大海捞针。什么时候需要扩大搜索范围，什么时候需要缩小搜索范围，是使用具体语 法，还是减少或增加关键字，都需要经验的积累。如果每次搜索时都有意识的、层层推进的而不是盲目的，分析问题的能力也会有提高。</p>
-<p>#再见<br>玩吉他去了，明天应该要陪女朋友一整天，不会写博文，后天是周一会挺忙的。估计要空两天了。so ,goodbye~</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1897,8 +2167,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">97</span>
-              <span class="site-state-item-name">Artikel</span>
+              <span class="site-state-item-count">98</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
@@ -1906,7 +2176,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">Kategorien</span>
+                <span class="site-state-item-name">categories</span>
               
             </div>
           
@@ -1914,8 +2184,8 @@
           
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">4</span>
-                <span class="site-state-item-name">Tags</span>
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">tags</span>
               
             </div>
           
@@ -1959,7 +2229,7 @@
 </div>
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
