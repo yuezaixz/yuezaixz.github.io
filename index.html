@@ -226,6 +226,108 @@
             
               
                 
+                <a class="post-title-link" href="/2018/03/26/React-Native-Animated-划重点：两个细节排查两个小时/" itemprop="url">
+                  React-Native Animated 划重点：两个细节排查两个小时
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2018-03-26T01:08:24+08:00" content="2018-03-26">
+              2018-03-26
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>其实就是React-Native Animated两个细节引发的问题，但查的好辛苦，记录下。</p>
+<h1 id="表现"><a href="#表现" class="headerlink" title="表现"></a>表现</h1><ul>
+<li>start函数里的结束回调不运行</li>
+<li>页面不刷新去渲染</li>
+<li>强行setState会发现 value.__getValue()是undefined或NaN</li>
+</ul>
+<h2 id="原因：toValue是number类型"><a href="#原因：toValue是number类型" class="headerlink" title="原因：toValue是number类型"></a>原因：toValue是number类型</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Animated.timing(_value1, &#123;</div><div class="line">    duration: <span class="number">100</span>,</div><div class="line">    toValue: point1 <span class="comment">//划重点：toValue 是number，不要用Animated.Value对象了</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="原因：start后记得要setState"><a href="#原因：start后记得要setState" class="headerlink" title="原因：start后记得要setState"></a>原因：start后记得要setState</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Animated.parallel([</div><div class="line"><span class="comment">//...</span></div><div class="line">]).start();</div><div class="line"></div><div class="line"><span class="keyword">this</span>.setState(<span class="keyword">this</span>.state);<span class="comment">//划重点：这个必须设置，否则动画不会触发setState</span></div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总之还是React-Native步数，Animated更不熟，多记录，多学习RN怎么排查问题。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/03/21/在React-Native应用中通过React-Art实现点击礼花效果/" itemprop="url">
                   在React-Native应用中通过React-Art实现点击礼花效果
                 </a>
@@ -239,7 +341,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2018-03-21T14:15:52+08:00" content="2018-03-21">
               2018-03-21
             </time>
@@ -417,7 +519,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2018-02-01T11:05:20+08:00" content="2018-02-01">
               2018-02-01
             </time>
@@ -654,7 +756,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2017-08-16T10:37:01+08:00" content="2017-08-16">
               2017-08-16
             </time>
@@ -771,7 +873,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-10-26T21:09:12+08:00" content="2016-10-26">
               2016-10-26
             </time>
@@ -860,121 +962,6 @@
             
               
                 
-                <a class="post-title-link" href="/2016/09/12/Core-Plot针对设计的一些应用/" itemprop="url">
-                  Core Plot针对设计的一些应用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-09-12T11:27:16+08:00" content="2016-09-12">
-              2016-09-12
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Core-Plot针对设计的一些应用"><a href="#Core-Plot针对设计的一些应用" class="headerlink" title="Core Plot针对设计的一些应用"></a>Core Plot针对设计的一些应用</h1><h2 id="设计样式"><a href="#设计样式" class="headerlink" title="设计样式"></a>设计样式</h2><p>这次APP结果页界面改版，收到了这个图表样式的设计，之前图表使用的库，一部分用Core Plot，一部分用自己实现的一个轻量级曲线图（只支持画曲线和一些曲线动画效果），由于时间比较紧，没有打算在自己实现的曲线图上增加如此多的自定义功能，所以把Core Plot研究了下，了解下这些设计要如何自定义。<br><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-09-12-1.png" alt="1"></p>
-<h2 id="拆分细节"><a href="#拆分细节" class="headerlink" title="拆分细节"></a>拆分细节</h2><p>先要分析下，这个图表有哪些东西需要自定义</p>
-<ul>
-<li>曲线需要打点，打点的图形是两个圆叠加出来的，而且打的点有4种样式：处于阈值范围内点（小白绿点），超出阈值范围点（小白红点），当前点处于阈值范围内点（大白绿点），当期点超出阈值范围点（大白红点）</li>
-<li>x轴label（当前点label颜色不一样）和点上方的label实现</li>
-<li>曲线的范围不固定，曲线的阈值范围是大于等于某值或小于等于某值，所以绿和红的是不固定的</li>
-<li>y轴label分2种颜色，majorTickLine也分两种颜色</li>
-</ul>
-<p>预期外问题</p>
-<ul>
-<li>x轴和y轴的label，会超出范围，就是在图表范围外了，所以不显示出来</li>
-</ul>
-<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><h3 id="两个圆叠加的打点"><a href="#两个圆叠加的打点" class="headerlink" title="两个圆叠加的打点"></a>两个圆叠加的打点</h3><p>这个其实就是普通的打点画圆，但是远外层line的宽度设置大一点，就可以实现这个效果了，代码如下：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">CPTScatterPlot *rightScatterPlot_ = [[CPTScatterPlot alloc] init];</div><div class="line">rightScatterPlot_.identifier = <span class="string">@"rightScatterPlot"</span>;</div><div class="line">rightScatterPlot_.interpolation = CPTScatterPlotInterpolationCurved;</div><div class="line"><span class="comment">// 注意：这里为什么成nil，后面一节就说到</span></div><div class="line">rightScatterPlot_.dataLineStyle = <span class="literal">nil</span>;</div><div class="line">rightScatterPlot_.dataSource    = <span class="keyword">self</span>;</div><div class="line">rightScatterPlot_.areaBaseValue = CPTDecimalFromString ( <span class="string">@"0.0"</span> );</div><div class="line"></div><div class="line"><span class="comment">// Add plot symbols: 表示数值的符号的形状</span></div><div class="line">CPTMutableLineStyle * symbolLineStyle = [CPTMutableLineStyle lineStyle];</div><div class="line">symbolLineStyle.lineColor = [CPTColor whiteColor];</div><div class="line">symbolLineStyle.lineWidth = <span class="number">3.0</span>;<span class="comment">//白色范围宽度3</span></div><div class="line"></div><div class="line">CPTPlotSymbol * plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];</div><div class="line">plotSymbol.fill          = [CPTFill fillWithColor:[CPTColor colorWithComponentRed:<span class="number">65.0</span>/<span class="number">255.0</span> green:<span class="number">117.0</span>/<span class="number">255.0</span> blue:<span class="number">5.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>]];<span class="comment">//绿色</span></div><div class="line">plotSymbol.lineStyle     = symbolLineStyle;</div><div class="line">plotSymbol.size          = <span class="built_in">CGSizeMake</span>(<span class="number">10.0</span>, <span class="number">10.0</span>);<span class="comment">//整个圆的大小，大绿点就把这个圆大一些，line的宽度也大一些</span></div><div class="line">rightScatterPlot_.plotSymbol = plotSymbol;</div><div class="line"></div><div class="line">[graph_ addPlot:rightScatterPlot_];</div></pre></td></tr></table></figure>
-<h3 id="多种打点的样式"><a href="#多种打点的样式" class="headerlink" title="多种打点的样式"></a>多种打点的样式</h3><p>这里Core Plot并不支持，为了实现该设计，用了一个方法，就是这种图表，其实我画了4个CPTScatterPlot来实现，也就是上一节『rightScatterPlot_.dataLineStyle = nil;』的原因，因为我只为了打点，不画曲线。<br>然后在datasource的代理方法中根据identifier来返回数据，返回的是nil就是该点在该x值上不画，如下代码</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ([plot.identifier isEqual:<span class="string">@"dataScatterPlot"</span>]) &#123;<span class="comment">//画曲线</span></div><div class="line">    <span class="keyword">return</span> [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_];</div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ([plot.identifier isEqual:<span class="string">@"rightScatterPlot"</span>]) &#123;<span class="comment">//画阈值范围内点</span></div><div class="line">    <span class="keyword">if</span> (index == [datas_ count] - <span class="number">1</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (isMore_) &#123;<span class="comment">//isMore_为初始化参数，规定阈值的比较是大于等于还是小于等于</span></div><div class="line">        <span class="keyword">return</span> [[[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] floatValue] &lt;= threshold_ ? [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] : <span class="literal">nil</span> ;<span class="comment">//不是阈值范围内的点，就不画小绿点了</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> [[[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] floatValue] &gt;= threshold_ ? [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] : <span class="literal">nil</span> ;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ([plot.identifier isEqual:<span class="string">@"errorScatterPlot"</span>]) &#123;<span class="comment">//画阈值范围外的点</span></div><div class="line">    <span class="keyword">if</span> (index == [datas_ count] - <span class="number">1</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (isMore_) &#123;</div><div class="line">        <span class="keyword">return</span> [[[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] floatValue] &gt;= threshold_ ? [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] : <span class="literal">nil</span> ;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> [[[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] floatValue] &lt;= threshold_ ? [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] : <span class="literal">nil</span> ;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ([plot.identifier isEqual:<span class="string">@"currentScatterPlot"</span>]) &#123;<span class="comment">//画当前点</span></div><div class="line">    <span class="keyword">if</span> (index == [datas_ count] - <span class="number">1</span>) &#123;<span class="comment">//是当前点才画</span></div><div class="line">        <span class="keyword">return</span> [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="点上方的label的实现"><a href="#点上方的label的实现" class="headerlink" title="点上方的label的实现"></a>点上方的label的实现</h3><p> 就在当前点的CPTScatterPlot上实现就好了</p>
- <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//字体样式</span></div><div class="line">CPTMutableTextStyle *currentTextStyle = [CPTMutableTextStyle textStyle];</div><div class="line">currentTextStyle.color     = [CPTColor colorWithComponentRed:<span class="number">208.0</span>/<span class="number">255.0</span> green:<span class="number">2.0</span>/<span class="number">255.0</span> blue:<span class="number">27.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>];</div><div class="line">currentTextStyle.fontSize = <span class="number">13</span>;</div><div class="line"></div><div class="line"><span class="comment">//打点的样式</span></div><div class="line">CPTPlotSymbol * plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];</div><div class="line">plotSymbol.fill          = [CPTFill fillWithColor:[CPTColor colorWithComponentRed:<span class="number">208.0</span>/<span class="number">255.0</span> green:<span class="number">2.0</span>/<span class="number">255.0</span> blue:<span class="number">27.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>]];</div><div class="line"></div><div class="line"><span class="comment">//颜色控制</span></div><div class="line"><span class="keyword">if</span> ( ( isMore_ &amp;&amp; [[[datas_ firstObject] objectForKey:key_] floatValue] &lt;= threshold_ ) || (!isMore_ &amp;&amp; [[[datas_ firstObject] objectForKey:key_] floatValue] &gt;= threshold_)) &#123;</div><div class="line">    currentTextStyle.color     = [CPTColor colorWithComponentRed:<span class="number">65.0</span>/<span class="number">255.0</span> green:<span class="number">117.0</span>/<span class="number">255.0</span> blue:<span class="number">5.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>];</div><div class="line">    plotSymbol.fill          = [CPTFill fillWithColor:[CPTColor colorWithComponentRed:<span class="number">65.0</span>/<span class="number">255.0</span> green:<span class="number">117.0</span>/<span class="number">255.0</span> blue:<span class="number">5.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>]];</div><div class="line">&#125;</div><div class="line">plotSymbol.lineStyle     = symbolLineStyle;</div><div class="line">plotSymbol.size          = <span class="built_in">CGSizeMake</span>(<span class="number">15.0</span>, <span class="number">15.0</span>);</div><div class="line">currentScatterPlot_.plotSymbol = plotSymbol;</div><div class="line"><span class="comment">//label位置偏移量，正数为向上偏移</span></div><div class="line">currentScatterPlot_.labelOffset = <span class="number">10</span>;</div><div class="line">currentScatterPlot_.labelTextStyle = currentTextStyle;</div></pre></td></tr></table></figure>
-<h3 id="y轴label的实现"><a href="#y轴label的实现" class="headerlink" title="y轴label的实现"></a>y轴label的实现</h3><p>y轴上多个label，在MAX和MIN相差过大情况下画出来不好看，和设计商量后改用只画阈值线的方式</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">-(<span class="built_in">BOOL</span>)axis:(CPTAxis *)axis shouldUpdateAxisLabelsAtLocations:(<span class="built_in">NSSet</span> *)locations</div><div class="line">&#123;</div><div class="line">    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)graph_.axisSet;</div><div class="line">    <span class="keyword">if</span> (axis == axisSet.xAxis) &#123;</div><div class="line">        <span class="comment">//……比较简单，返回日期的label即可，不做说明</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">//y轴实现</span></div><div class="line">        <span class="built_in">NSNumberFormatter</span> *formatter = [[<span class="built_in">NSNumberFormatter</span> alloc] init];</div><div class="line">        formatter.numberStyle = <span class="built_in">NSNumberFormatterRoundCeiling</span>;</div><div class="line">        <span class="built_in">CGFloat</span> labelOffset             = axis.labelOffset;</div><div class="line">        CPTMutableTextStyle * newStyle = [axis.labelTextStyle mutableCopy];</div><div class="line">        newStyle.color = [CPTColor colorWithComponentRed:<span class="number">233.0</span>/<span class="number">255.0</span> green:<span class="number">85.0</span>/<span class="number">255.0</span> blue:<span class="number">19.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>];<span class="comment">//橙色</span></div><div class="line">        CPTTextStyle *theLabelTextStyle = newStyle;</div><div class="line">        CPTTextLayer * newLabelLayer= [[CPTTextLayer alloc] initWithText:threshold_ &gt; <span class="number">50</span> ?[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%ld"</span>,(<span class="keyword">long</span>)threshold_] : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%.1f"</span>,threshold_] style:theLabelTextStyle];<span class="comment">//这里写比较死，因为图表分两种，步频的曲线就不用显示小数点了</span></div><div class="line">        CPTAxisLabel * newLabel     = [[CPTAxisLabel alloc] initWithContentLayer:newLabelLayer];</div><div class="line">        newLabel.tickLocation       = [<span class="built_in">NSDecimalNumber</span> numberWithDouble:threshold_].decimalValue;</div><div class="line">        newLabel.offset             = labelOffset;</div><div class="line">        </div><div class="line">        axis.majorTickLocations = [<span class="built_in">NSSet</span> setWithObjects:[<span class="built_in">NSDecimalNumber</span> numberWithDouble:threshold_], <span class="literal">nil</span>];</div><div class="line">        axis.axisLabels = [<span class="built_in">NSSet</span> setWithObjects:newLabel,<span class="literal">nil</span>];<span class="comment">//这里label多创建几个，就能实现多个label和majorTickLine的效果，样式不一致只要不同label用不同样式的ContentLayer就好了</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="keyword">return</span> <span class="literal">NO</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="label超出范围被遮盖的问题"><a href="#label超出范围被遮盖的问题" class="headerlink" title="label超出范围被遮盖的问题"></a>label超出范围被遮盖的问题</h3><p>由于gragh范围限制了，图表值域范围也确定了（x：0~7，y：0~max），x轴label居左，y轴label居下的话，就超出gragh的范围了<br>那么解决办法其实就是把值域范围设置大一些，然后设置坐标轴原点在（0，0）处即可。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)graph_.defaultPlotSpace;</div><div class="line">    </div><div class="line">    <span class="comment">// x y 轴</span></div><div class="line">    CPTMutableLineStyle *majorGridLineStyle = [CPTMutableLineStyle lineStyle];</div><div class="line">    majorGridLineStyle.lineWidth = <span class="number">1.0</span>;</div><div class="line">    majorGridLineStyle.lineColor = [CPTColor colorWithComponentRed:<span class="number">233.0</span>/<span class="number">255.0</span> green:<span class="number">85.0</span>/<span class="number">255.0</span> blue:<span class="number">19.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>];</div><div class="line">    </div><div class="line">    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)graph_.axisSet;</div><div class="line">    CPTXYAxis *x          = axisSet.xAxis;</div><div class="line">    &#123;</div><div class="line">        x.axisLineStyle               = <span class="literal">nil</span>;</div><div class="line">        x.majorTickLineStyle          = <span class="literal">nil</span>;</div><div class="line">        x.minorTickLineStyle          = <span class="literal">nil</span>;</div><div class="line">        x.majorIntervalLength         = CPTDecimalFromDouble(<span class="number">1</span>);</div><div class="line">        <span class="keyword">if</span> (min_ &gt; <span class="number">0</span>) &#123;</div><div class="line">            x.orthogonalCoordinateDecimal = CPTDecimalFromDouble(min_ + (max_ - min_)/<span class="number">8</span>);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            x.orthogonalCoordinateDecimal = CPTDecimalFromDouble(<span class="number">0.0</span>);</div><div class="line">        &#125;</div><div class="line">        x.minorTicksPerInterval       = <span class="number">1.0</span>;</div><div class="line">        x.tickDirection = CPTSignNegative; <span class="comment">//CPTSignNegative  左  CPTSignPositive  右</span></div><div class="line"><span class="comment">//        x.labelingPolicy = CPTAxisLabelingPolicyNone;</span></div><div class="line">        x.plotSpace = plotSpace;</div><div class="line">        </div><div class="line">        x.delegate = <span class="keyword">self</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    CPTXYAxis *y = axisSet.yAxis;</div><div class="line">    &#123;</div><div class="line">        y.orthogonalCoordinateDecimal = CPTDecimalFromDouble(<span class="number">-0.1</span>);</div><div class="line">        y.majorGridLineStyle          = <span class="literal">nil</span>;</div><div class="line">        y.axisLineStyle               = <span class="literal">nil</span>;</div><div class="line">        y.minorTickLineStyle          = <span class="literal">nil</span>;</div><div class="line">        y.majorTickLineStyle          = majorGridLineStyle;</div><div class="line">        y.tickDirection = CPTSignPositive; <span class="comment">//CPTSignNegative  左  CPTSignPositive  右</span></div><div class="line">        y.labelOffset = <span class="number">-25.5</span>;</div><div class="line">        y.majorTickLength = <span class="keyword">self</span>.frame.size.width<span class="number">-35</span>;</div><div class="line">        y.majorTickLocations = [<span class="built_in">NSSet</span> setWithObjects:[<span class="built_in">NSDecimalNumber</span> numberWithDouble:<span class="number">3.3</span>], <span class="literal">nil</span>];</div><div class="line">        </div><div class="line">        y.delegate = <span class="keyword">self</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">//初始化范围</span></div><div class="line">    plotSpace.momentumAnimationCurve = CPTAnimationCurveCubicIn;</div><div class="line">    plotSpace.bounceAnimationCurve = CPTAnimationCurveBackIn;</div><div class="line">    plotSpace.momentumAcceleration = <span class="number">20000.0</span>;</div><div class="line">    </div><div class="line">    </div><div class="line">    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromDouble(<span class="number">-0.9</span>) length:CPTDecimalFromDouble(<span class="number">8</span>)];</div><div class="line">    </div><div class="line">    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromDouble(min_) length:CPTDecimalFromDouble(max_-min_)];</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/09/12/从零搭建Flask-Celery-Redis后台任务服务器/" itemprop="url">
                   从零搭建Flask+Celery+Redis后台任务服务器
                 </a>
@@ -988,7 +975,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-09-12T11:27:16+08:00" content="2016-09-12">
               2016-09-12
             </time>
@@ -1111,6 +1098,121 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/12/Core-Plot针对设计的一些应用/" itemprop="url">
+                  Core Plot针对设计的一些应用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-09-12T11:27:16+08:00" content="2016-09-12">
+              2016-09-12
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Core-Plot针对设计的一些应用"><a href="#Core-Plot针对设计的一些应用" class="headerlink" title="Core Plot针对设计的一些应用"></a>Core Plot针对设计的一些应用</h1><h2 id="设计样式"><a href="#设计样式" class="headerlink" title="设计样式"></a>设计样式</h2><p>这次APP结果页界面改版，收到了这个图表样式的设计，之前图表使用的库，一部分用Core Plot，一部分用自己实现的一个轻量级曲线图（只支持画曲线和一些曲线动画效果），由于时间比较紧，没有打算在自己实现的曲线图上增加如此多的自定义功能，所以把Core Plot研究了下，了解下这些设计要如何自定义。<br><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-09-12-1.png" alt="1"></p>
+<h2 id="拆分细节"><a href="#拆分细节" class="headerlink" title="拆分细节"></a>拆分细节</h2><p>先要分析下，这个图表有哪些东西需要自定义</p>
+<ul>
+<li>曲线需要打点，打点的图形是两个圆叠加出来的，而且打的点有4种样式：处于阈值范围内点（小白绿点），超出阈值范围点（小白红点），当前点处于阈值范围内点（大白绿点），当期点超出阈值范围点（大白红点）</li>
+<li>x轴label（当前点label颜色不一样）和点上方的label实现</li>
+<li>曲线的范围不固定，曲线的阈值范围是大于等于某值或小于等于某值，所以绿和红的是不固定的</li>
+<li>y轴label分2种颜色，majorTickLine也分两种颜色</li>
+</ul>
+<p>预期外问题</p>
+<ul>
+<li>x轴和y轴的label，会超出范围，就是在图表范围外了，所以不显示出来</li>
+</ul>
+<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><h3 id="两个圆叠加的打点"><a href="#两个圆叠加的打点" class="headerlink" title="两个圆叠加的打点"></a>两个圆叠加的打点</h3><p>这个其实就是普通的打点画圆，但是远外层line的宽度设置大一点，就可以实现这个效果了，代码如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">CPTScatterPlot *rightScatterPlot_ = [[CPTScatterPlot alloc] init];</div><div class="line">rightScatterPlot_.identifier = <span class="string">@"rightScatterPlot"</span>;</div><div class="line">rightScatterPlot_.interpolation = CPTScatterPlotInterpolationCurved;</div><div class="line"><span class="comment">// 注意：这里为什么成nil，后面一节就说到</span></div><div class="line">rightScatterPlot_.dataLineStyle = <span class="literal">nil</span>;</div><div class="line">rightScatterPlot_.dataSource    = <span class="keyword">self</span>;</div><div class="line">rightScatterPlot_.areaBaseValue = CPTDecimalFromString ( <span class="string">@"0.0"</span> );</div><div class="line"></div><div class="line"><span class="comment">// Add plot symbols: 表示数值的符号的形状</span></div><div class="line">CPTMutableLineStyle * symbolLineStyle = [CPTMutableLineStyle lineStyle];</div><div class="line">symbolLineStyle.lineColor = [CPTColor whiteColor];</div><div class="line">symbolLineStyle.lineWidth = <span class="number">3.0</span>;<span class="comment">//白色范围宽度3</span></div><div class="line"></div><div class="line">CPTPlotSymbol * plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];</div><div class="line">plotSymbol.fill          = [CPTFill fillWithColor:[CPTColor colorWithComponentRed:<span class="number">65.0</span>/<span class="number">255.0</span> green:<span class="number">117.0</span>/<span class="number">255.0</span> blue:<span class="number">5.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>]];<span class="comment">//绿色</span></div><div class="line">plotSymbol.lineStyle     = symbolLineStyle;</div><div class="line">plotSymbol.size          = <span class="built_in">CGSizeMake</span>(<span class="number">10.0</span>, <span class="number">10.0</span>);<span class="comment">//整个圆的大小，大绿点就把这个圆大一些，line的宽度也大一些</span></div><div class="line">rightScatterPlot_.plotSymbol = plotSymbol;</div><div class="line"></div><div class="line">[graph_ addPlot:rightScatterPlot_];</div></pre></td></tr></table></figure>
+<h3 id="多种打点的样式"><a href="#多种打点的样式" class="headerlink" title="多种打点的样式"></a>多种打点的样式</h3><p>这里Core Plot并不支持，为了实现该设计，用了一个方法，就是这种图表，其实我画了4个CPTScatterPlot来实现，也就是上一节『rightScatterPlot_.dataLineStyle = nil;』的原因，因为我只为了打点，不画曲线。<br>然后在datasource的代理方法中根据identifier来返回数据，返回的是nil就是该点在该x值上不画，如下代码</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ([plot.identifier isEqual:<span class="string">@"dataScatterPlot"</span>]) &#123;<span class="comment">//画曲线</span></div><div class="line">    <span class="keyword">return</span> [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_];</div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ([plot.identifier isEqual:<span class="string">@"rightScatterPlot"</span>]) &#123;<span class="comment">//画阈值范围内点</span></div><div class="line">    <span class="keyword">if</span> (index == [datas_ count] - <span class="number">1</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (isMore_) &#123;<span class="comment">//isMore_为初始化参数，规定阈值的比较是大于等于还是小于等于</span></div><div class="line">        <span class="keyword">return</span> [[[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] floatValue] &lt;= threshold_ ? [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] : <span class="literal">nil</span> ;<span class="comment">//不是阈值范围内的点，就不画小绿点了</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> [[[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] floatValue] &gt;= threshold_ ? [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] : <span class="literal">nil</span> ;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ([plot.identifier isEqual:<span class="string">@"errorScatterPlot"</span>]) &#123;<span class="comment">//画阈值范围外的点</span></div><div class="line">    <span class="keyword">if</span> (index == [datas_ count] - <span class="number">1</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (isMore_) &#123;</div><div class="line">        <span class="keyword">return</span> [[[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] floatValue] &gt;= threshold_ ? [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] : <span class="literal">nil</span> ;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> [[[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] floatValue] &lt;= threshold_ ? [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_] : <span class="literal">nil</span> ;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> ([plot.identifier isEqual:<span class="string">@"currentScatterPlot"</span>]) &#123;<span class="comment">//画当前点</span></div><div class="line">    <span class="keyword">if</span> (index == [datas_ count] - <span class="number">1</span>) &#123;<span class="comment">//是当前点才画</span></div><div class="line">        <span class="keyword">return</span> [[datas_ objectAtIndex:[datas_ count] - index<span class="number">-1</span>] valueForKey:key_];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="literal">nil</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="点上方的label的实现"><a href="#点上方的label的实现" class="headerlink" title="点上方的label的实现"></a>点上方的label的实现</h3><p> 就在当前点的CPTScatterPlot上实现就好了</p>
+ <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//字体样式</span></div><div class="line">CPTMutableTextStyle *currentTextStyle = [CPTMutableTextStyle textStyle];</div><div class="line">currentTextStyle.color     = [CPTColor colorWithComponentRed:<span class="number">208.0</span>/<span class="number">255.0</span> green:<span class="number">2.0</span>/<span class="number">255.0</span> blue:<span class="number">27.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>];</div><div class="line">currentTextStyle.fontSize = <span class="number">13</span>;</div><div class="line"></div><div class="line"><span class="comment">//打点的样式</span></div><div class="line">CPTPlotSymbol * plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];</div><div class="line">plotSymbol.fill          = [CPTFill fillWithColor:[CPTColor colorWithComponentRed:<span class="number">208.0</span>/<span class="number">255.0</span> green:<span class="number">2.0</span>/<span class="number">255.0</span> blue:<span class="number">27.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>]];</div><div class="line"></div><div class="line"><span class="comment">//颜色控制</span></div><div class="line"><span class="keyword">if</span> ( ( isMore_ &amp;&amp; [[[datas_ firstObject] objectForKey:key_] floatValue] &lt;= threshold_ ) || (!isMore_ &amp;&amp; [[[datas_ firstObject] objectForKey:key_] floatValue] &gt;= threshold_)) &#123;</div><div class="line">    currentTextStyle.color     = [CPTColor colorWithComponentRed:<span class="number">65.0</span>/<span class="number">255.0</span> green:<span class="number">117.0</span>/<span class="number">255.0</span> blue:<span class="number">5.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>];</div><div class="line">    plotSymbol.fill          = [CPTFill fillWithColor:[CPTColor colorWithComponentRed:<span class="number">65.0</span>/<span class="number">255.0</span> green:<span class="number">117.0</span>/<span class="number">255.0</span> blue:<span class="number">5.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>]];</div><div class="line">&#125;</div><div class="line">plotSymbol.lineStyle     = symbolLineStyle;</div><div class="line">plotSymbol.size          = <span class="built_in">CGSizeMake</span>(<span class="number">15.0</span>, <span class="number">15.0</span>);</div><div class="line">currentScatterPlot_.plotSymbol = plotSymbol;</div><div class="line"><span class="comment">//label位置偏移量，正数为向上偏移</span></div><div class="line">currentScatterPlot_.labelOffset = <span class="number">10</span>;</div><div class="line">currentScatterPlot_.labelTextStyle = currentTextStyle;</div></pre></td></tr></table></figure>
+<h3 id="y轴label的实现"><a href="#y轴label的实现" class="headerlink" title="y轴label的实现"></a>y轴label的实现</h3><p>y轴上多个label，在MAX和MIN相差过大情况下画出来不好看，和设计商量后改用只画阈值线的方式</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">-(<span class="built_in">BOOL</span>)axis:(CPTAxis *)axis shouldUpdateAxisLabelsAtLocations:(<span class="built_in">NSSet</span> *)locations</div><div class="line">&#123;</div><div class="line">    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)graph_.axisSet;</div><div class="line">    <span class="keyword">if</span> (axis == axisSet.xAxis) &#123;</div><div class="line">        <span class="comment">//……比较简单，返回日期的label即可，不做说明</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">//y轴实现</span></div><div class="line">        <span class="built_in">NSNumberFormatter</span> *formatter = [[<span class="built_in">NSNumberFormatter</span> alloc] init];</div><div class="line">        formatter.numberStyle = <span class="built_in">NSNumberFormatterRoundCeiling</span>;</div><div class="line">        <span class="built_in">CGFloat</span> labelOffset             = axis.labelOffset;</div><div class="line">        CPTMutableTextStyle * newStyle = [axis.labelTextStyle mutableCopy];</div><div class="line">        newStyle.color = [CPTColor colorWithComponentRed:<span class="number">233.0</span>/<span class="number">255.0</span> green:<span class="number">85.0</span>/<span class="number">255.0</span> blue:<span class="number">19.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>];<span class="comment">//橙色</span></div><div class="line">        CPTTextStyle *theLabelTextStyle = newStyle;</div><div class="line">        CPTTextLayer * newLabelLayer= [[CPTTextLayer alloc] initWithText:threshold_ &gt; <span class="number">50</span> ?[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%ld"</span>,(<span class="keyword">long</span>)threshold_] : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%.1f"</span>,threshold_] style:theLabelTextStyle];<span class="comment">//这里写比较死，因为图表分两种，步频的曲线就不用显示小数点了</span></div><div class="line">        CPTAxisLabel * newLabel     = [[CPTAxisLabel alloc] initWithContentLayer:newLabelLayer];</div><div class="line">        newLabel.tickLocation       = [<span class="built_in">NSDecimalNumber</span> numberWithDouble:threshold_].decimalValue;</div><div class="line">        newLabel.offset             = labelOffset;</div><div class="line">        </div><div class="line">        axis.majorTickLocations = [<span class="built_in">NSSet</span> setWithObjects:[<span class="built_in">NSDecimalNumber</span> numberWithDouble:threshold_], <span class="literal">nil</span>];</div><div class="line">        axis.axisLabels = [<span class="built_in">NSSet</span> setWithObjects:newLabel,<span class="literal">nil</span>];<span class="comment">//这里label多创建几个，就能实现多个label和majorTickLine的效果，样式不一致只要不同label用不同样式的ContentLayer就好了</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="keyword">return</span> <span class="literal">NO</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="label超出范围被遮盖的问题"><a href="#label超出范围被遮盖的问题" class="headerlink" title="label超出范围被遮盖的问题"></a>label超出范围被遮盖的问题</h3><p>由于gragh范围限制了，图表值域范围也确定了（x：0~7，y：0~max），x轴label居左，y轴label居下的话，就超出gragh的范围了<br>那么解决办法其实就是把值域范围设置大一些，然后设置坐标轴原点在（0，0）处即可。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)graph_.defaultPlotSpace;</div><div class="line">    </div><div class="line">    <span class="comment">// x y 轴</span></div><div class="line">    CPTMutableLineStyle *majorGridLineStyle = [CPTMutableLineStyle lineStyle];</div><div class="line">    majorGridLineStyle.lineWidth = <span class="number">1.0</span>;</div><div class="line">    majorGridLineStyle.lineColor = [CPTColor colorWithComponentRed:<span class="number">233.0</span>/<span class="number">255.0</span> green:<span class="number">85.0</span>/<span class="number">255.0</span> blue:<span class="number">19.0</span>/<span class="number">255.0</span> alpha:<span class="number">1.0</span>];</div><div class="line">    </div><div class="line">    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)graph_.axisSet;</div><div class="line">    CPTXYAxis *x          = axisSet.xAxis;</div><div class="line">    &#123;</div><div class="line">        x.axisLineStyle               = <span class="literal">nil</span>;</div><div class="line">        x.majorTickLineStyle          = <span class="literal">nil</span>;</div><div class="line">        x.minorTickLineStyle          = <span class="literal">nil</span>;</div><div class="line">        x.majorIntervalLength         = CPTDecimalFromDouble(<span class="number">1</span>);</div><div class="line">        <span class="keyword">if</span> (min_ &gt; <span class="number">0</span>) &#123;</div><div class="line">            x.orthogonalCoordinateDecimal = CPTDecimalFromDouble(min_ + (max_ - min_)/<span class="number">8</span>);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            x.orthogonalCoordinateDecimal = CPTDecimalFromDouble(<span class="number">0.0</span>);</div><div class="line">        &#125;</div><div class="line">        x.minorTicksPerInterval       = <span class="number">1.0</span>;</div><div class="line">        x.tickDirection = CPTSignNegative; <span class="comment">//CPTSignNegative  左  CPTSignPositive  右</span></div><div class="line"><span class="comment">//        x.labelingPolicy = CPTAxisLabelingPolicyNone;</span></div><div class="line">        x.plotSpace = plotSpace;</div><div class="line">        </div><div class="line">        x.delegate = <span class="keyword">self</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    CPTXYAxis *y = axisSet.yAxis;</div><div class="line">    &#123;</div><div class="line">        y.orthogonalCoordinateDecimal = CPTDecimalFromDouble(<span class="number">-0.1</span>);</div><div class="line">        y.majorGridLineStyle          = <span class="literal">nil</span>;</div><div class="line">        y.axisLineStyle               = <span class="literal">nil</span>;</div><div class="line">        y.minorTickLineStyle          = <span class="literal">nil</span>;</div><div class="line">        y.majorTickLineStyle          = majorGridLineStyle;</div><div class="line">        y.tickDirection = CPTSignPositive; <span class="comment">//CPTSignNegative  左  CPTSignPositive  右</span></div><div class="line">        y.labelOffset = <span class="number">-25.5</span>;</div><div class="line">        y.majorTickLength = <span class="keyword">self</span>.frame.size.width<span class="number">-35</span>;</div><div class="line">        y.majorTickLocations = [<span class="built_in">NSSet</span> setWithObjects:[<span class="built_in">NSDecimalNumber</span> numberWithDouble:<span class="number">3.3</span>], <span class="literal">nil</span>];</div><div class="line">        </div><div class="line">        y.delegate = <span class="keyword">self</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">//初始化范围</span></div><div class="line">    plotSpace.momentumAnimationCurve = CPTAnimationCurveCubicIn;</div><div class="line">    plotSpace.bounceAnimationCurve = CPTAnimationCurveBackIn;</div><div class="line">    plotSpace.momentumAcceleration = <span class="number">20000.0</span>;</div><div class="line">    </div><div class="line">    </div><div class="line">    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromDouble(<span class="number">-0.9</span>) length:CPTDecimalFromDouble(<span class="number">8</span>)];</div><div class="line">    </div><div class="line">    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromDouble(min_) length:CPTDecimalFromDouble(max_-min_)];</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/30/安卓蓝牙模块踩坑集合/" itemprop="url">
                   安卓蓝牙模块踩坑集合
                 </a>
@@ -1124,7 +1226,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-08-30T14:31:40+08:00" content="2016-08-30">
               2016-08-30
             </time>
@@ -1231,7 +1333,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2016-06-07T14:25:06+08:00" content="2016-06-07">
               2016-06-07
             </time>
@@ -1403,7 +1505,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-07-13T16:01:53+08:00" content="2015-07-13">
               2015-07-13
             </time>
@@ -1438,107 +1540,6 @@
 <p>结果IndexViewController的ViewWillAppear会弹出个UIAlertView，其逻辑会造成影响，在IOS8情况下UIAlertView不会弹出（应该是弹出后立马跳到了RunResultViewController），而IOS7情况下到RunResultViewController才弹出该UIAlertView。</p>
 <p>该问题很简单，该逻辑其实放错位置了，应该放在ViewDidLoad中，但是从UIAlertView造成的错误逻辑去排查到该问题比较麻烦。</p>
 <h2 id="TableView的load时机"><a href="#TableView的load时机" class="headerlink" title="TableView的load时机"></a>TableView的load时机</h2><p>问题描述：在使用FXForm做表单时候，在viewDidLoad中进行了初始化，但是初始化内容无效（同样也是排查比较麻烦，开始没怀疑这个问题）。IOS8是在ViewWillAppear之后（除非你调用了tableView.tableFooterView = … 之类方法，调用后）再进行loadView的操作，而IOS7则是在[super viewDidLoad]之后。最安全的做法就是在ViewWillAppear之后重新调用一次 [tableView reloadData];</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/06/29/2015-06-29-beginning-ios-pit-over-those-years-h/" itemprop="url">
-                  初学IOS那些年踩过的坑（九）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2015-06-29T11:25:10+08:00" content="2015-06-29">
-              2015-06-29
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="如何让小图片按钮的点击区域变大"><a href="#如何让小图片按钮的点击区域变大" class="headerlink" title="如何让小图片按钮的点击区域变大"></a>如何让小图片按钮的点击区域变大</h2><p>之前经常做的事情就是，用个imageView来放图片，然后用一个更大透明UIButton盖住他，这样有个问题就是，一旦按钮需要有点击高亮效果，就会很麻烦的（各种点击和释放的回调，然后去修改imageView的图片）。</p>
-<p>最近发现了个方法，可以用setContentEdgeInsets来设置Button内容的区域。注意，top、bottom等，都是与其距离，比如bottom，就是与底部距离。开始我以为是从(left,top)到(right,bottom)这两个点的范围做图片的位置，然后导致无法得到想要的效果。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//[self.runBtn setContentEdgeInsets:UIEdgeInsetsMake(&lt;#CGFloat top#&gt;, &lt;#CGFloat left#&gt;, &lt;#CGFloat bottom#&gt;, &lt;#CGFloat right#&gt;)];</span></div><div class="line">[<span class="keyword">self</span>.runBtn setContentEdgeInsets:<span class="built_in">UIEdgeInsetsMake</span>(<span class="number">8</span>, <span class="number">18</span>, <span class="number">8</span>, <span class="number">18</span>)];</div></pre></td></tr></table></figure>
-<h2 id="view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制"><a href="#view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制" class="headerlink" title="view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制"></a>view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect&#123;</div><div class="line"><span class="comment">//….</span></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)touchesMoved:(<span class="built_in">NSSet</span> *)touches withEvent:(<span class="built_in">UIEvent</span> *)event&#123;</div><div class="line"><span class="comment">//….</span></div><div class="line">[<span class="keyword">self</span> setNeedsDisplay];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这时候drawRect中的内容会重复绘制，只要设置backgroundColor就不会重复绘制了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lineChartView.backgroundColor = [<span class="built_in">UIColor</span> whiteColor];</div></pre></td></tr></table></figure></p>
-<h2 id="ore-Data升级后导致数据升级失败"><a href="#ore-Data升级后导致数据升级失败" class="headerlink" title="ore-Data升级后导致数据升级失败"></a>ore-Data升级后导致数据升级失败</h2><p>用的是MagicRecord，AppDelegate代码中有初始化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:SQLITE_NAME];</div><div class="line">[MagicalRecord shouldAutoCreateDefaultPersistentStoreCoordinator];</div><div class="line">[MagicalRecord setShouldDeleteStoreOnModelMismatch:<span class="literal">YES</span>];</div><div class="line">[MagicalRecord setupAutoMigratingCoreDataStack];<span class="comment">//这里报错</span></div></pre></td></tr></table></figure></p>
-<p>报错内容为Can’t find or automatically infer mapping model for migration。</p>
-<p>在SOF上找到了下文，具体原因不明，可能是添加版本时候有错误操作，这时候只要把版本先退回到上一个版本，然后删除新的版本，提交代码（不先提交SVN可能会出问题哦）。然后重新添加一次再提交就OK了。<br><a href="http://stackoverflow.com/questions/7708392/how-to-delete-an-old-unused-data-model-version-in-xcode-4" target="_blank" rel="external">参考</a></p>
 
           
         
@@ -1612,8 +1613,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">98</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-count">99</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
@@ -1621,7 +1622,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">categories</span>
+                <span class="site-state-item-name">Kategorien</span>
               
             </div>
           
@@ -1630,7 +1631,7 @@
             <div class="site-state-item site-state-tags">
               
                 <span class="site-state-item-count">5</span>
-                <span class="site-state-item-name">tags</span>
+                <span class="site-state-item-name">Tags</span>
               
             </div>
           
@@ -1674,7 +1675,7 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

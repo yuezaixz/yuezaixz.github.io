@@ -226,6 +226,107 @@
             
               
                 
+                <a class="post-title-link" href="/2015/06/29/2015-06-29-beginning-ios-pit-over-those-years-h/" itemprop="url">
+                  初学IOS那些年踩过的坑（九）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-06-29T11:25:10+08:00" content="2015-06-29">
+              2015-06-29
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="如何让小图片按钮的点击区域变大"><a href="#如何让小图片按钮的点击区域变大" class="headerlink" title="如何让小图片按钮的点击区域变大"></a>如何让小图片按钮的点击区域变大</h2><p>之前经常做的事情就是，用个imageView来放图片，然后用一个更大透明UIButton盖住他，这样有个问题就是，一旦按钮需要有点击高亮效果，就会很麻烦的（各种点击和释放的回调，然后去修改imageView的图片）。</p>
+<p>最近发现了个方法，可以用setContentEdgeInsets来设置Button内容的区域。注意，top、bottom等，都是与其距离，比如bottom，就是与底部距离。开始我以为是从(left,top)到(right,bottom)这两个点的范围做图片的位置，然后导致无法得到想要的效果。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//[self.runBtn setContentEdgeInsets:UIEdgeInsetsMake(&lt;#CGFloat top#&gt;, &lt;#CGFloat left#&gt;, &lt;#CGFloat bottom#&gt;, &lt;#CGFloat right#&gt;)];</span></div><div class="line">[<span class="keyword">self</span>.runBtn setContentEdgeInsets:<span class="built_in">UIEdgeInsetsMake</span>(<span class="number">8</span>, <span class="number">18</span>, <span class="number">8</span>, <span class="number">18</span>)];</div></pre></td></tr></table></figure>
+<h2 id="view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制"><a href="#view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制" class="headerlink" title="view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制"></a>view没有设置backgroundColor，setNeedsDisplay后触发drawRect，会导致重复绘制</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect&#123;</div><div class="line"><span class="comment">//….</span></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)touchesMoved:(<span class="built_in">NSSet</span> *)touches withEvent:(<span class="built_in">UIEvent</span> *)event&#123;</div><div class="line"><span class="comment">//….</span></div><div class="line">[<span class="keyword">self</span> setNeedsDisplay];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这时候drawRect中的内容会重复绘制，只要设置backgroundColor就不会重复绘制了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lineChartView.backgroundColor = [<span class="built_in">UIColor</span> whiteColor];</div></pre></td></tr></table></figure></p>
+<h2 id="ore-Data升级后导致数据升级失败"><a href="#ore-Data升级后导致数据升级失败" class="headerlink" title="ore-Data升级后导致数据升级失败"></a>ore-Data升级后导致数据升级失败</h2><p>用的是MagicRecord，AppDelegate代码中有初始化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[MagicalRecord setupCoreDataStackWithAutoMigratingSqliteStoreNamed:SQLITE_NAME];</div><div class="line">[MagicalRecord shouldAutoCreateDefaultPersistentStoreCoordinator];</div><div class="line">[MagicalRecord setShouldDeleteStoreOnModelMismatch:<span class="literal">YES</span>];</div><div class="line">[MagicalRecord setupAutoMigratingCoreDataStack];<span class="comment">//这里报错</span></div></pre></td></tr></table></figure></p>
+<p>报错内容为Can’t find or automatically infer mapping model for migration。</p>
+<p>在SOF上找到了下文，具体原因不明，可能是添加版本时候有错误操作，这时候只要把版本先退回到上一个版本，然后删除新的版本，提交代码（不先提交SVN可能会出问题哦）。然后重新添加一次再提交就OK了。<br><a href="http://stackoverflow.com/questions/7708392/how-to-delete-an-old-unused-data-model-version-in-xcode-4" target="_blank" rel="external">参考</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/05/13/2015-05-13-running-and-being-reading-notes-a/" itemprop="url">
                   跑步圣经读书笔记（一）
                 </a>
@@ -239,7 +340,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-05-13T11:30:45+08:00" content="2015-05-13">
               2015-05-13
             </time>
@@ -347,7 +448,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-05-13T11:25:59+08:00" content="2015-05-13">
               2015-05-13
             </time>
@@ -449,7 +550,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-05-07T22:11:52+08:00" content="2015-05-07">
               2015-05-07
             </time>
@@ -550,7 +651,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-05-07T14:21:16+08:00" content="2015-05-07">
               2015-05-07
             </time>
@@ -652,7 +753,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-05-06T15:56:08+08:00" content="2015-05-06">
               2015-05-06
             </time>
@@ -764,7 +865,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-04-20T08:54:00+08:00" content="2015-04-20">
               2015-04-20
             </time>
@@ -868,7 +969,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-03-07T06:33:00+08:00" content="2015-03-07">
               2015-03-07
             </time>
@@ -976,7 +1077,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-02-28T02:51:00+08:00" content="2015-02-28">
               2015-02-28
             </time>
@@ -1070,7 +1171,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2015-02-28T02:47:00+08:00" content="2015-02-28">
               2015-02-28
             </time>
@@ -1108,150 +1209,6 @@
 <p>#navigationbar的左滑返回<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    <span class="keyword">self</span>.navigationItem.leftBarButtonItem = [[<span class="built_in">UIBarButtonItem</span> alloc]</div><div class="line">                                         initWithImage:img</div><div class="line">                                         style:<span class="built_in">UIBarButtonItemStylePlain</span></div><div class="line">                                         target:<span class="keyword">self</span></div><div class="line">                                         action:<span class="keyword">@selector</span>(onBack:)];</div><div class="line"><span class="keyword">self</span>.navigationController.interactivePopGestureRecognizer.delegate = (<span class="keyword">id</span>)<span class="keyword">self</span>;</div></pre></td></tr></table></figure></p>
 <p>#autolayout的nib和手写并用的实践<br>使用nib做界面，但是layoutAttribute有些又需要根据适配来适配，nib+手写混写好烦恼啊，感觉睡不着觉了<br>其实错了，混写其实很简单的，可以像拉button一样的拉你的约束.nslayoutattribute也是可以拉线的，这样一切都太平了</p>
 <p>#画面不流畅<br>画面不流畅可能是因为一些透明视图影响了fps，可以去掉这些透明视图<br>方法：Product-&gt;Profile-&gt;Core Animation-&gt;右下第二个选项卡中勾上Color Blended Layers<br>然后看到红色的就都是透明的视图，不需要透明效果的可以去掉透明</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/02/05/2015-02-05-sql-table-from-the-record-by-the-time-to-calculate-the-continuous-days/" itemprop="url">
-                  用SQL从记录表中根据时间算出连击天数
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2015-02-05T05:05:00+08:00" content="2015-02-05">
-              2015-02-05
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/蛋疼/" itemprop="url" rel="index">
-                    <span itemprop="name">蛋疼</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/蛋疼/折腾/" itemprop="url" rel="index">
-                    <span itemprop="name">折腾</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/蛋疼/折腾/作死/" itemprop="url" rel="index">
-                    <span itemprop="name">作死</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#概述<br>这是一个蛋疼的折腾，just for fun。<br>问题是这样的，有一张表A，有user_id,create_time这两个属性，要用sql查询，查询的结果是user_id,continue_days。</p>
-<p>#首先<br>数据库是mysql，没有oracle那么强大的函数集，连row_num都是要自己实现的，也没有什么好用的聚合函数，逻辑控制函数，用sql做这个操作是很蛋疼，不如用代码去查询，但是，俺本着just for fun的精神折腾了下。<br>然后想了下要怎么操作，就想到了一个法子。<br>我的思路是这样的：先根据时间去group by，把同一天内相同的数据合并，然后排序并编号，那么这张表自身内联下，t1.create_date - t2.create_date = t1.row_num - t2.row_num 的记录，取他的t1.create_date - t2.create_date结果，那就是连续的天数。</p>
-<p>#问题<br>实现过程碰到两个问题，一个是t1.create_date - t2.create_date的结果要加上1，这才是正确的结果，否则就忽略了起始日。<br>另一个问题是开始直接用yyyymmdd形式，忽略了跨月，所以后来改成了TO_DAYS函数做转化。</p>
-<p>#实现<br>实现就看几个sql把。<br><figure class="highlight sql"><figcaption><span>view_route</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span></div><div class="line">    ALGORITHM = UNDEFINED</div><div class="line">    DEFINER = <span class="string">`team_xm`</span>@<span class="string">`%`</span></div><div class="line">    <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> DEFINER</div><div class="line"><span class="keyword">VIEW</span> <span class="string">`view_route`</span> <span class="keyword">AS</span></div><div class="line">    <span class="keyword">SELECT</span></div><div class="line">        (<span class="keyword">TO_DAYS</span>(<span class="string">`t`</span>.<span class="string">`create_date`</span>) - <span class="keyword">TO_DAYS</span>(<span class="string">'2000-01-01'</span>)) <span class="keyword">AS</span> <span class="string">`r_timestamp`</span>,</div><div class="line">        <span class="string">`t`</span>.<span class="string">`user_id`</span> <span class="keyword">AS</span> <span class="string">`user_id`</span></div><div class="line">    <span class="keyword">FROM</span></div><div class="line">        <span class="string">`route`</span> <span class="string">`t`</span></div><div class="line">    <span class="keyword">WHERE</span></div><div class="line">        (<span class="string">`t`</span>.<span class="string">`user_id`</span> <span class="keyword">IN</span> (<span class="string">'3'</span> , <span class="string">'7'</span>, <span class="string">'17'</span>, <span class="string">'1'</span>))</div></pre></td></tr></table></figure></p>
-<p><img src="http://chuantu.biz/t/65/1423113571x1822611171.jpg" alt=""><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">CREATE</span></div><div class="line">    ALGORITHM = UNDEFINED</div><div class="line">    DEFINER = <span class="string">`team_xm`</span>@<span class="string">`%`</span></div><div class="line">    <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> DEFINER</div><div class="line"><span class="keyword">VIEW</span> <span class="string">`view_route_bydate`</span> <span class="keyword">AS</span></div><div class="line">    <span class="keyword">SELECT</span></div><div class="line">        <span class="string">`t`</span>.<span class="string">`r_timestamp`</span> <span class="keyword">AS</span> <span class="string">`r_timestamp`</span>,</div><div class="line">        <span class="string">`t`</span>.<span class="string">`user_id`</span> <span class="keyword">AS</span> <span class="string">`user_id`</span></div><div class="line">    <span class="keyword">FROM</span></div><div class="line">        <span class="string">`view_route`</span> <span class="string">`t`</span></div><div class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="string">`t`</span>.<span class="string">`r_timestamp`</span> , <span class="string">`t`</span>.<span class="string">`user_id`</span></div><div class="line">    <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="string">`t`</span>.<span class="string">`r_timestamp`</span></div></pre></td></tr></table></figure></p>
-<p><img src="http://chuantu.biz/t/65/1423113597x1822611171.jpg" alt=""><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">CREATE</span></div><div class="line">    ALGORITHM = UNDEFINED</div><div class="line">    DEFINER = <span class="string">`team_xm`</span>@<span class="string">`%`</span></div><div class="line">    <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> DEFINER</div><div class="line"><span class="keyword">VIEW</span> <span class="string">`view_route_bydate_withnum`</span> <span class="keyword">AS</span></div><div class="line">    <span class="keyword">SELECT</span></div><div class="line">        <span class="string">`t`</span>.<span class="string">`r_timestamp`</span> <span class="keyword">AS</span> <span class="string">`r_timestamp`</span>,</div><div class="line">        <span class="string">`t`</span>.<span class="string">`user_id`</span> <span class="keyword">AS</span> <span class="string">`user_id`</span>,</div><div class="line">        (<span class="keyword">SELECT</span></div><div class="line">                (<span class="keyword">COUNT</span>(<span class="number">0</span>) + <span class="number">1</span>) <span class="keyword">AS</span> <span class="string">`row_num`</span></div><div class="line">            <span class="keyword">FROM</span></div><div class="line">                <span class="string">`view_route_bydate`</span> <span class="string">`t2`</span></div><div class="line">            <span class="keyword">WHERE</span></div><div class="line">                ((<span class="string">`t2`</span>.<span class="string">`r_timestamp`</span> &lt; <span class="string">`t`</span>.<span class="string">`r_timestamp`</span>)</div><div class="line">                    <span class="keyword">AND</span> (<span class="string">`t2`</span>.<span class="string">`user_id`</span> = <span class="string">`t`</span>.<span class="string">`user_id`</span>))) <span class="keyword">AS</span> <span class="string">`row_num`</span></div><div class="line">    <span class="keyword">FROM</span></div><div class="line">        <span class="string">`view_route_bydate`</span> <span class="string">`t`</span></div></pre></td></tr></table></figure></p>
-<p><img src="http://chuantu.biz/t/65/1423113616x1822611171.jpg" alt=""><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">CREATE</span></div><div class="line">    ALGORITHM = UNDEFINED</div><div class="line">    DEFINER = <span class="string">`team_xm`</span>@<span class="string">`%`</span></div><div class="line">    <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> DEFINER</div><div class="line"><span class="keyword">VIEW</span> <span class="string">`view_user_riding_day_count`</span> <span class="keyword">AS</span></div><div class="line">    <span class="keyword">SELECT</span></div><div class="line">        <span class="string">`t1`</span>.<span class="string">`user_id`</span> <span class="keyword">AS</span> <span class="string">`user_id`</span>,</div><div class="line">        (<span class="keyword">MAX</span>((<span class="string">`t1`</span>.<span class="string">`row_num`</span> - <span class="string">`t2`</span>.<span class="string">`row_num`</span>)) + <span class="number">1</span>) <span class="keyword">AS</span> <span class="string">`count`</span></div><div class="line">    <span class="keyword">FROM</span></div><div class="line">        (<span class="string">`view_route_bydate_withnum`</span> <span class="string">`t1`</span></div><div class="line">        <span class="keyword">JOIN</span> <span class="string">`view_route_bydate_withnum`</span> <span class="string">`t2`</span>)</div><div class="line">    <span class="keyword">WHERE</span></div><div class="line">        (((<span class="string">`t1`</span>.<span class="string">`r_timestamp`</span> - <span class="string">`t2`</span>.<span class="string">`r_timestamp`</span>) = (<span class="string">`t1`</span>.<span class="string">`row_num`</span> - <span class="string">`t2`</span>.<span class="string">`row_num`</span>))</div><div class="line">            <span class="keyword">AND</span> (<span class="string">`t1`</span>.<span class="string">`user_id`</span> = <span class="string">`t2`</span>.<span class="string">`user_id`</span>))</div><div class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="string">`t1`</span>.<span class="string">`user_id`</span></div></pre></td></tr></table></figure></p>
-<p><img src="http://chuantu.biz/t/65/1423113634x1822611171.jpg" alt=""></p>
 
           
         
@@ -1325,8 +1282,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">98</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-count">99</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
@@ -1334,7 +1291,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">categories</span>
+                <span class="site-state-item-name">Kategorien</span>
               
             </div>
           
@@ -1343,7 +1300,7 @@
             <div class="site-state-item site-state-tags">
               
                 <span class="site-state-item-count">5</span>
-                <span class="site-state-item-name">tags</span>
+                <span class="site-state-item-name">Tags</span>
               
             </div>
           
@@ -1387,7 +1344,7 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

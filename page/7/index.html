@@ -226,6 +226,223 @@
             
               
                 
+                <a class="post-title-link" href="/2014/05/05/2014-05-05-java-version-fizzbuzzwhizz/" itemprop="url">
+                  Java版FizzBuzzWhizz
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-05-05T15:26:00+08:00" content="2014-05-05">
+              2014-05-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/maven/" itemprop="url" rel="index">
+                    <span itemprop="name">maven</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/maven/TDD/" itemprop="url" rel="index">
+                    <span itemprop="name">TDD</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/maven/TDD/fizzbuzzwhizz/" itemprop="url" rel="index">
+                    <span itemprop="name">fizzbuzzwhizz</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/" itemprop="url" rel="index">
+                    <span itemprop="name">责任链</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/" itemprop="url" rel="index">
+                    <span itemprop="name">模板方法</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/maven/TDD/fizzbuzzwhizz/责任链/模板方法/设计模式/趣味编程/" itemprop="url" rel="index">
+                    <span itemprop="name">趣味编程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#个人近况<br>最近忙着替媳妇写论文，还忙招聘，忙写jQuery插件，忙写python，忙这忙那，今天赶紧利用晚上的1个多小时把五一期间做好的Java版本FizzBuzzWhizz博文也写了。有空还把Node.js的也贴上来，不过和Python差不多，到时候就大概贴代码了，不详细说明。</p>
+<p>#Java版FizzBuzzWhizz</p>
+<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><p>上个系列博文已经讲述了Python版本的FizzBuzzWhizz的思考、设计和实现思路。那么Java版本的肯定不是在做一个C2C（copy to clipboard）的事情。</p>
+<h2 id="2-问题"><a href="#2-问题" class="headerlink" title="2 问题"></a>2 问题</h2><h2 id="2-1-开闭原则"><a href="#2-1-开闭原则" class="headerlink" title="# 2.1 开闭原则"></a># 2.1 开闭原则</h2><p>一个软件实体如类、模块和函数应该对扩展开放，对修改关闭。<br>那么在python中虽然已经把规则的逻辑条理分的很细了，但是所有的规则还是集中在一个函数里面，如果新增加一个规则那么就必然要修改到原来已经实现的代码。那么这样的设计是有风险的，任何的新规则很可能会影响到老规则的逻辑。</p>
+<h2 id="2-2-封装"><a href="#2-2-封装" class="headerlink" title="# 2.2 封装"></a># 2.2 封装</h2><p>可以将信息封装为需要的数据对象，将数据与操作分离所带来的种种问题消除，提高了程序的可复用性和可维护性。</p>
+<h2 id="2-3-自动构建"><a href="#2-3-自动构建" class="headerlink" title="# 2.3 自动构建"></a># 2.3 自动构建</h2><p>Python版本中并没有对项目进行自动的构建，Java版本中引入Maven来做项目构建管理。</p>
+<h2 id="3-设计"><a href="#3-设计" class="headerlink" title="3 设计"></a>3 设计</h2><p>在构思了下，用责任链模式、模板模式、工厂模式来完成这个设计。类设计图如下：<br> <img src="http://i1.tietuku.com/698717c0da7c4af0.jpg" alt=""></p>
+<p>其中，IHandler是项目中的核心接口，其只有一个方法handler，是提供给外部的调用的处理方法。在python文章已经介绍，该游戏的规则分为“或”和“与”两种，所以设计中也定义了两种实现功能，其中wordHandler是为接口实现了“或”的特性，而UnitHandler则是实现了“与”的特性。<br>“或”的特性是通过责任链路的模式去实现的，了解servlet的人都知道，filter的filterChain.doFilter(request, response)方法可以将一个请求在一系列的处理类中传递request。本项目中的请求就是报数的数字i。</p>
+<h2 id="4-代码"><a href="#4-代码" class="headerlink" title="4 代码"></a>4 代码</h2><p>先看看核心接口IHandler。<br><figure class="highlight java"><figcaption><span>IHandler.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IHandler</span> </span>&#123;</div><div class="line"> 	   <span class="function"><span class="keyword">public</span> Word <span class="title">handle</span><span class="params">(<span class="keyword">int</span> number)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>通过这个接口，很好的体现了面对对象多态的特性。<br>在看看两个核心的实现类。<br><figure class="highlight java"><figcaption><span>WordHandler.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * User: David</span></div><div class="line"><span class="comment"> * Date: 14-04-18</span></div><div class="line"><span class="comment"> * Time: 下午7:03</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">WordHandler</span> <span class="keyword">implements</span> <span class="title">IHandler</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> IHandler wordHandler;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WordHandler</span><span class="params">(IHandler wordHandler)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.wordHandler = wordHandler;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Word <span class="title">handle</span><span class="params">(<span class="keyword">int</span> number)</span></span>&#123;</div><div class="line">        String result = run(number);</div><div class="line">        Word resultWord = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">if</span>(result == <span class="keyword">null</span> || <span class="string">""</span>.equals(result))&#123;</div><div class="line">            resultWord = wordHandler.handle(number);</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            resultWord = Word.getWord(result);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> resultWord;</div><div class="line">    &#125;</div><div class="line">	<span class="comment">//钩子方法，类似Thread中的run方法</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> String <span class="title">run</span><span class="params">(<span class="keyword">int</span> number)</span></span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">protected</span> IHandler <span class="title">getWordHandler</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> wordHandler;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><figcaption><span>UnitHandler.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * User: David Date: 14-05-2 Time: 上午9:42</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UnitHandler</span> <span class="keyword">extends</span> <span class="title">WordHandler</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> IHandler[] unitHandlers;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnitHandler</span><span class="params">(IHandler wordHandler,IHandler ... unitHandlers)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(wordHandler);</div><div class="line">        <span class="keyword">this</span>.unitHandlers = unitHandlers;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">protected</span> IHandler[] getUnitHandlers() &#123;</div><div class="line">        <span class="keyword">return</span> unitHandlers;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> String <span class="title">run</span><span class="params">(<span class="keyword">int</span> number)</span> </span>&#123;</div><div class="line">        StringBuilder result = <span class="keyword">new</span> StringBuilder();</div><div class="line">        <span class="keyword">for</span> (IHandler handler : getUnitHandlers()) &#123;</div><div class="line">            <span class="keyword">if</span>(handler <span class="keyword">instanceof</span> WordHandler)&#123;</div><div class="line">                result.append(((WordHandler) handler).run(number));</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> result.toString();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>个人不是很爱写注释，力求把代码写的简单易懂。WordHandler这个类就是通过在handler方法中调用run这个模板方法，而run方法在子类中去实现，当前handler如果没有结果，则会通过责任链将请求转发给下一个handler。<br>而UnitHandler则是构造函数运行传入任意数量个WordHandler，UnitHandler的run方法则是组合每个子handler的run方法来组合“与”规则，来达到与的效果。<br>具体的handler就不具体举例了，实现方法很简单。直接来看看如何调用吧。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">translate</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</div><div class="line">        <span class="comment">//这里还可以用单例工厂模式就创建，这里就不画蛇添足了</span></div><div class="line">        IHandler commonNumberHandler = <span class="keyword">new</span> CommonNumberHandler();</div><div class="line">        IHandler fizzHandler = <span class="keyword">new</span> FizzHandler(<span class="keyword">null</span>);</div><div class="line">        IHandler buzzHandler = <span class="keyword">new</span> BuzzHandler(<span class="keyword">null</span>);</div><div class="line">        IHandler whizzHandler = <span class="keyword">new</span> WhizzHandler(<span class="keyword">null</span>);</div><div class="line">        IHandler fizzBuzzWhizzHandler = <span class="keyword">new</span> UnitHandler(</div><div class="line">                commonNumberHandler, fizzHandler, buzzHandler, whizzHandler);</div><div class="line">        IHandler containOneNumHandler = <span class="keyword">new</span> ContainOneNumHandler(</div><div class="line">                fizzBuzzWhizzHandler);</div><div class="line"></div><div class="line">        Word word = containOneNumHandler.handle(i);</div><div class="line">        <span class="keyword">return</span> word.say();</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>这个静态接口方法中通过组装需要的handler完成题目中所需要实现的游戏规则。handler的创建可以使用工厂模式，这里就不实现了，本次编码的重心并不在滥用设计模式上。</p>
+<h2 id="5-测试"><a href="#5-测试" class="headerlink" title="5 测试"></a>5 测试</h2><p>本项目用Junit4来做单元测试，单元测试没什么新意，和Python中差不多。但是代码经过了很多次重构，重构后直接运行单元测试就明确知道代码没有问题，足以体现单元测试在敏捷开发中的重要性，就算不是敏捷开发，单元测试也对提高工作效率减少测试工作量监测返工有很大的作用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * User: David</span></div><div class="line"><span class="comment"> * Date: 14-04-18</span></div><div class="line"><span class="comment"> * Time: 下午1:30</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="meta">@RunWith</span>(JUnit4.class)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FizzBuzzTest</span> </span>&#123;</div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_One_SHOULD_SayOne</span><span class="params">()</span> </span>&#123;</div><div class="line">        assertEquals(<span class="string">"Failure - 1 should be 1"</span>, <span class="string">"1"</span>, WordMaker.translate(<span class="number">1</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_Three_SHOULD_SayFizz</span><span class="params">()</span> </span>&#123;</div><div class="line">        assertEquals(<span class="string">"Failure - 3 should be Fizz"</span>, Constants.WORD1, WordMaker.translate(<span class="number">3</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_Five_SHOULD_SayBuzz</span><span class="params">()</span> </span>&#123;</div><div class="line">        assertEquals(<span class="string">"Failure - 5 should be Buzz"</span>, Constants.WORD2, WordMaker.translate(<span class="number">5</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_Fifteen_SHOULD_SayFizzBuzz</span><span class="params">()</span> </span>&#123;</div><div class="line">        assertEquals(<span class="string">"Failure - 15 should be FizzBuzz"</span>, Constants.WORD1+Constants.WORD2, WordMaker.translate(<span class="number">15</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_Thirty_SHOULD_SayFizzBuzz</span><span class="params">()</span> </span>&#123;</div><div class="line">        assertEquals(<span class="string">"Failure - 30 should be FizzBuzz"</span>, Constants.WORD1, WordMaker.translate(<span class="number">30</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_Seven_SHOULD_SayWhizz</span><span class="params">()</span> </span>&#123;</div><div class="line">        assertEquals(<span class="string">"Failure - 7 should be Whizz"</span>, Constants.WORD3, WordMaker.translate(<span class="number">7</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_TwentyThree_SHOULD_SayFizz</span><span class="params">()</span> </span>&#123;</div><div class="line">        assertEquals(<span class="string">"Failure - 23 should be Fizz"</span>, Constants.WORD1, WordMaker.translate(<span class="number">23</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GIVEN_HundredFive_SHOULD_SayFizzBuzzWhizz</span><span class="params">()</span> </span>&#123;</div><div class="line">        assertEquals(<span class="string">"Failure - 105 should be FizzBuzzWhizz"</span>, Constants.WORD1+Constants.WORD2+Constants.WORD3, WordMaker.translate(<span class="number">105</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="6-构建"><a href="#6-构建" class="headerlink" title="6 构建"></a>6 构建</h2><p>完成以后直接用mvn clean test package就好了，构建完成就可以在输入目录找到FizzBuzzWhizz-0.0.1-SNAPSHOT.jar，本文中就不介绍Maven的使用，详细可以参考之前写过的Maven系列博文（可能没有从Iteye迁移到LogDown上），控制台输出日志如下：</p>
+<p>[INFO] Scanning for projects…<br>[INFO]<br>[INFO] ————————————————————————<br>[INFO] Building FizzBuzzWhizz 0.0.1-SNAPSHOT<br>[INFO] ————————————————————————<br>[INFO]<br>[INFO] — maven-resources-plugin:2.5:resources (default-resources) @ FizzBuzzWhizz —<br>[debug] execute contextualize<br>[INFO] Using ‘UTF-8’ encoding to copy filtered resources.<br>[INFO] skip non existing resourceDirectory D:\backup\wudw\code_temp_workspace\FizzBuzzWhizz\src\main\resources<br>[INFO]<br>[INFO] — maven-compiler-plugin:2.3.2:compile (default-compile) @ FizzBuzzWhizz —<br>[INFO] Nothing to compile - all classes are up to date<br>[INFO]<br>[INFO] — maven-resources-plugin:2.5:testResources (default-testResources) @ FizzBuzzWhizz —<br>[debug] execute contextualize<br>[INFO] Using ‘UTF-8’ encoding to copy filtered resources.<br>[INFO] skip non existing resourceDirectory D:\backup\wudw\code_temp_workspace\FizzBuzzWhizz\src\test\resources<br>[INFO]<br>[INFO] — maven-compiler-plugin:2.3.2:testCompile (default-testCompile) @ FizzBuzzWhizz —<br>[INFO] Nothing to compile - all classes are up to date<br>[INFO]<br>[INFO] — maven-surefire-plugin:2.10:test (default-test) @ FizzBuzzWhizz —<br>[INFO] Surefire report directory: D:\backup\wudw\code_temp_workspace\FizzBuzzWhizz\target\surefire-reports</p>
+<hr>
+<h2 id="T-E-S-T-S"><a href="#T-E-S-T-S" class="headerlink" title=" T E S T S"></a> T E S T S</h2><p>Running com.dragonsoft.fbw.FizzBuzzTest<br>Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.132 sec</p>
+<p>Results :</p>
+<p>Tests run: 8, Failures: 0, Errors: 0, Skipped: 0</p>
+<p>[INFO]<br>[INFO] — maven-jar-plugin:2.3.2:jar (default-jar) @ FizzBuzzWhizz —<br>[INFO] Building jar: D:\backup\wudw\code_temp_workspace\FizzBuzzWhizz\target\FizzBuzzWhizz-0.0.1-SNAPSHOT.jar<br>[INFO] ————————————————————————<br>[INFO] BUILD SUCCESS<br>[INFO] ————————————————————————<br>[INFO] Total time: 4.128s<br>[INFO] Finished at: Mon May 05 23:21:47 CST 2014<br>[INFO] Final Memory: 3M/7M<br>[INFO] ————————————————————————</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/05/02/2014-05-02-python-version-of-fizzbuzzwhizz-b-reconstruction/" itemprop="url">
                   Python版FizzBuzzWhizz(二)--重构
                 </a>
@@ -239,7 +456,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-05-02T14:21:00+08:00" content="2014-05-02">
               2014-05-02
             </time>
@@ -251,7 +468,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Python/" itemprop="url" rel="index">
@@ -261,7 +478,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -273,7 +490,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -385,7 +602,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-05-02T13:35:00+08:00" content="2014-05-02">
               2014-05-02
             </time>
@@ -397,7 +614,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Python/" itemprop="url" rel="index">
@@ -407,7 +624,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -419,7 +636,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -551,7 +768,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-05-01T15:39:00+08:00" content="2014-05-01">
               2014-05-01
             </time>
@@ -563,7 +780,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -573,7 +790,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -585,7 +802,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -597,7 +814,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -609,7 +826,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -621,7 +838,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -726,7 +943,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-05-01T15:37:00+08:00" content="2014-05-01">
               2014-05-01
             </time>
@@ -738,7 +955,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -748,7 +965,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -760,7 +977,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -772,7 +989,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -784,7 +1001,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -796,7 +1013,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -903,7 +1120,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-05-01T15:32:00+08:00" content="2014-05-01">
               2014-05-01
             </time>
@@ -915,7 +1132,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -925,7 +1142,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -937,7 +1154,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -949,7 +1166,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -961,7 +1178,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -973,7 +1190,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1091,7 +1308,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-05-01T15:29:00+08:00" content="2014-05-01">
               2014-05-01
             </time>
@@ -1103,7 +1320,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -1113,7 +1330,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1125,7 +1342,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1137,7 +1354,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1246,7 +1463,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-05-01T15:19:00+08:00" content="2014-05-01">
               2014-05-01
             </time>
@@ -1258,7 +1475,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -1268,7 +1485,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1280,7 +1497,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1292,7 +1509,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1304,7 +1521,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1316,7 +1533,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1434,7 +1651,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-03-28T10:42:00+08:00" content="2014-03-28">
               2014-03-28
             </time>
@@ -1446,7 +1663,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -1456,7 +1673,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1468,7 +1685,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1480,7 +1697,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1492,7 +1709,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1606,7 +1823,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-03-24T14:29:00+08:00" content="2014-03-24">
               2014-03-24
             </time>
@@ -1618,7 +1835,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/人性/" itemprop="url" rel="index">
@@ -1628,7 +1845,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1640,7 +1857,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1652,7 +1869,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1664,7 +1881,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1705,163 +1922,6 @@
         
           
             <p>应该也有一周没写博文了，Deadline和坑爹的队友就像两座大山，压的我快窒息了。还好周末来了，加班一天，带着我家小妞出去瞎晃一天半，心情是好多了。唯一有点美中不足的就是，不管是忠仑公园，还是十里蓝山，总是有很多游客践踏花草，掰着花朵、躺在花朵上拍照，还有刻字到此一游的。<br>《代码整洁之道》这本书里面我最喜欢一句话，就是请保证你离开的时候，比你进来的时候更加干净。我觉得这思想可以延伸的很广，也就是我想说的，下个人思维。这也是罗胖子早上发的微信的标题，他的文章给了我很多感悟，老样子，斜体部分是转载。<br><img src="http://case.ntu.edu.tw/hs/wordpress/wp-content/uploads/2011/08/76%E7%BE%A4%E9%AB%94%E5%8B%95%E7%89%A9%E7%9A%84%E5%88%A9%E4%BB%96%E8%A1%8C%E7%82%BA.jpg" alt="thinkother.jpg"><br>什么是下个人思维，用通俗的话来说，就是做一个事情的时候，可以为下个人考虑。网上经常看到很多人抱怨，老外存在偏见，总是看不起中国人，比如去国外旅游，我们经常被当做是很没素质的群体，在外国人眼里，我们就是Touch Then Leave，自己仔细想想，是不是自己出去玩，看到东西就有一股想要去摸的冲动，我承认，我有。而作为我们的邻居，作为我们仇恨的对象，日本人在这点上我觉得做的就很好。如果你觉得我在贬低自己民族，抬高猪狗不如的小日本，那么请别看下去了吧，我只抵制蠢货不抵制日货的。<br>我觉得日本人之所以能一次又一次的崛起，无外乎两点，一个是靠着勤奋和汗水可以实现梦想的日本梦，另一个就是协作能力，也就是下个人思维。<br>日本的很多厕所都写着这么一句话“为了下一位使用者，请保持干净”。每个人在自家的厕所，很自然的会保持干净，因为下一个人可能是你的妻子、儿子、父母，但是，这是公共厕所啊，下一个人我又不认识，我干嘛要辛苦保持干净呢？但是，如果我们这么想，我们也是上一个使用厕所的人眼里的下一个人，如果他不保持干净，那我们就没法使用到干净的厕所。如果我不保持干净，那么这必定会造成恶心循环，整个卫生就变脏了。以我旅游的经验，国内大多数城市旅游景区的厕所都很不干净。厦门可能算是国内比较干净的了，江西、云南的厕所，有的甚至让人作呕。有一些比较干净的，也是建立在厕所维护人员辛勤工作的基础上的。<br>日本人的下个人思维不仅仅是在这么一张小小的提示语上的，日本人对孩子的教育也是非常注重这些人性美的品质上，日本有一个童话故事，讲的是 <em>一只小熊，拿了一筐橡子赶路。他走着走着走累了，刚巧看到一把椅子，椅背上 写着“dozo（您请）”，于是他就在椅子上坐下，想休息一会，谁知不知不觉睡着了。这时来了一只小兔，小兔很饿，他看到了橡子和“dozo”，就吃了起 来。吃完了他想，呀，我把这橡子吃了，筐就空了，那下一个来的人咋办？于是他就去采了很多葡萄，放在筐里，高高兴兴的走了。这时来了一只小狗，小狗也饿了，看到葡萄和“dozo”很高兴，坐下来把葡萄吃了。吃完了也想，呀，那下一个人咋办？于是他就去采了蘑菇放在筐里。儿童的故事嘛，这种循环往复的桥段有点多，最后一个好像是小象，他采了栗子放在筐里。然后小熊睡醒了，他惊讶的发现：吚？我的橡子变栗子了！然后高高兴兴的走了。</em><br><strong>在儿童的教育中种下这种“下一个人”的概念的日本民族很了不起。这是一种为他人着想的善意，而且，也许会经历很长很久，但为善的，终究善会回来自己身上，这种观念实则也是利己主义。</strong><br>而我们从小的教育都是血淋淋的，比如我们“美好”的生活都是革命先辈们用血和肉堆积起来的，和孩子讲这样的故事，我觉得是完全偏离的人性的基本要素。虽然我今天写下个人思维，但是我自己就不是一个很有下个人思维的人，此文最根本目的也就是警示自己而已。<br>今天扯这个“高大上”的话题，难免陷入空洞说教的泥坑，所以我也赶紧把话题收了吧。其实，我一直有一个疑问，既然自私是人类的天性，为什么全世界的历朝历代，人类又在宣扬无私和利他，为什么要跟自己较劲？为什么制造出“高尚”“道德”这样 的概念来折磨自己？搞得好，我们也相信世界上的确存在典范和楷模，搞不好，不就是虚伪是绑架是卫道士么？为什么不能像动物一样直白的丛林法则？难道这不更顺应天性符合规律吗？ <strong>难道达尔文适者生存的进化论都是胡扯的吗？</strong><br>说一个历史事件，达尔文死后，1925年英国发生了法律史上著名的猴子审判，有大量的宗教人士推动立法，比如说1925年田纳西州就立了这么一个巴特勒法案，这个法案规定，不许在课堂上讲授一个字的进化论，否则就是犯法。这个事情不细说，就说说他们对进化论证伪的其中一个依据就是，动物有很多你观察到现象，用进化论是没法解释的，比如说互惠行为，吸血蝙蝠吸一口血，然后一看旁边的小伙伴没吃着，哎我喂你一口，发生这个事。有的鸟看见有天敌来了，它率先报警，要知道它报警会危害它自己的生命，但是它就愿意干这个事。在蜜蜂里面有一种叫工蜂，工蜂是没有后代的，但是它就是辛勤地哺乳，所有活都是它干，它没有任何进化上的利益。<br>但是，从我今天的主题来看，就是下个人思维，也就是利他。其实进化的单位不是物种，不是单个的生命，是一种叫基因的东西，基因是潜藏在每个生物体内部的，整个生物演化过程是基因的一个阴谋，它就一个目的，把我这玩意儿传下去。所谓的生物体不过是它搭的一辆公共汽车而已，只是它达到目的的手段。地球上的生物所有的协作行为，最后都导致该生物的基因可以更好的传下去。<br>从这点上可以明白，原来，利他，从而长久的利己，才是人类的本质。<br>所以啊，请你下次做事情的时候，请想一下下一个人，利他，从你我做起！</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/03/13/2014-03-13-linux-shell-programming-study-notes-d-process-variables/" itemprop="url">
-                  Linux Shell编程学习笔记（五）-进程变量
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-03-13T00:02:00+08:00" content="2014-03-13">
-              2014-03-13
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/bash/" itemprop="url" rel="index">
-                    <span itemprop="name">bash</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/bash/Shell/" itemprop="url" rel="index">
-                    <span itemprop="name">Shell</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/bash/Shell/进程变量/" itemprop="url" rel="index">
-                    <span itemprop="name">进程变量</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="进程变量"><a href="#进程变量" class="headerlink" title="进程变量"></a>进程变量</h1><h2 id="获得当前shell的PID"><a href="#获得当前shell的PID" class="headerlink" title="$$ 获得当前shell的PID"></a>$$ 获得当前shell的PID</h2><figure class="highlight bash"><figcaption><span>$$查看当前shell</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[David@localhost study]$ ps</div><div class="line">  PID TTY          TIME CMD</div><div class="line"> 4410 pts/7    00:00:00 ps</div><div class="line">27865 pts/7    00:00:00 bash</div><div class="line">[David@localhost study]$ <span class="built_in">echo</span> $$</div><div class="line">27865</div></pre></td></tr></table></figure>
-<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>运行个脚本，把PID写到一个文件中去。然后不让改脚本结束，打开另一个窗口查看PID是否正确。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[David@localhost study]$ cat m.sh</div><div class="line"><span class="built_in">echo</span> <span class="string">"$$"</span> &gt;m.pid</div><div class="line"><span class="keyword">while</span> <span class="literal">true</span></div><div class="line"><span class="keyword">do</span></div><div class="line">    sleep 1</div><div class="line"><span class="keyword">done</span></div><div class="line">[David@localhost study]$ sh m.sh</div></pre></td></tr></table></figure></p>
-<p>再打开一个窗口输入命令查看是否正确<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[David@localhost study]$ cat m.pid</div><div class="line">6022</div><div class="line">[David@localhost study]$ ps -ef|grep m.sh</div><div class="line">David     6022  4430  0 23:07 pts/9    00:00:00 sh m.sh</div><div class="line">David     6128 29747  0 23:08 pts/8    00:00:00 grep m.sh</div></pre></td></tr></table></figure></p>
-<h2 id="获取执行上一个指令的返回值（0为成功，非0为失败）"><a href="#获取执行上一个指令的返回值（0为成功，非0为失败）" class="headerlink" title="$? 获取执行上一个指令的返回值（0为成功，非0为失败）"></a>$? 获取执行上一个指令的返回值（0为成功，非0为失败）</h2><figure class="highlight bash"><figcaption><span>$?查看上一指令的结果</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">[David@localhost study]$ cat testPrevResult.sh</div><div class="line"><span class="comment">#/bin/sh</span></div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span></div><div class="line">    success)</div><div class="line">        <span class="built_in">exit</span> 0</div><div class="line">        ;;</div><div class="line">    *)</div><div class="line">        <span class="built_in">exit</span> 1</div><div class="line">        ;;</div><div class="line"><span class="keyword">esac</span></div><div class="line">[David@localhost study]$ sh testPrevResult.sh success</div><div class="line">[David@localhost study]$ <span class="built_in">echo</span> $?</div><div class="line">0</div><div class="line">[David@localhost study]$ <span class="built_in">echo</span> $?</div><div class="line">0</div><div class="line">[David@localhost study]$ sh testPrevResult.sh erro</div><div class="line">[David@localhost study]$ <span class="built_in">echo</span> $?</div><div class="line">1</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[David@localhost study]$ hahha</div><div class="line">bash: hahha: command not found</div><div class="line">[David@localhost study]$ echo $?</div><div class="line">127</div><div class="line">[David@localhost study]$ pwd</div><div class="line">/home/David/shellwork/study</div><div class="line">[David@localhost study]$ echo $?</div><div class="line">0</div></pre></td></tr></table></figure>
-<h2 id="常见返回码"><a href="#常见返回码" class="headerlink" title="常见返回码"></a>常见返回码</h2><p>0 成功<br>2 权限拒绝<br>1-125 表示运行失败，脚本命令、系统命令错误或参数错误<br>126 找到该命令但是无法执行<br>127 未找到要运行的命令<br>128 命令被系统强制结束</p>
-<h2 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h2><p>压缩当前文件夹，如果成功则提示。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[David@localhost study]$ cat zipCurr.sh</div><div class="line"><span class="comment">#/bin/bash</span></div><div class="line"><span class="built_in">cd</span> ..</div><div class="line">tar zcf studyShell.tar.gz ./study</div><div class="line"><span class="keyword">if</span> [ $? -eq 0 ];<span class="keyword">then</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"tar success"</span></div><div class="line"><span class="keyword">else</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"tar erro"</span></div><div class="line"><span class="keyword">fi</span></div><div class="line">[David@localhost study]$ sh zipCurr.sh</div><div class="line">tar success</div><div class="line">[David@localhost study]$ <span class="built_in">cd</span> ..</div><div class="line">[David@localhost shellwork]$ ls</div><div class="line">study  studyShell.tar.gz</div></pre></td></tr></table></figure></p>
-<h2 id="上一个进程的PID"><a href="#上一个进程的PID" class="headerlink" title="#!上一个进程的PID"></a>#!上一个进程的PID</h2><p>不常用，不细说。</p>
-<h2 id="上一个进程的最后一个参数"><a href="#上一个进程的最后一个参数" class="headerlink" title="#_上一个进程的最后一个参数"></a>#_上一个进程的最后一个参数</h2><p>也不常用，举个栗子带过。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[David@localhost study]$ sh m.sh</div><div class="line">已杀死</div><div class="line">[David@localhost study]$ echo $_</div><div class="line">m.sh</div></pre></td></tr></table></figure></p>
 
           
         
@@ -1935,8 +1995,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">98</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-count">99</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
@@ -1944,7 +2004,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">categories</span>
+                <span class="site-state-item-name">Kategorien</span>
               
             </div>
           
@@ -1953,7 +2013,7 @@
             <div class="site-state-item site-state-tags">
               
                 <span class="site-state-item-count">5</span>
-                <span class="site-state-item-name">tags</span>
+                <span class="site-state-item-name">Tags</span>
               
             </div>
           
@@ -1997,7 +2057,7 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

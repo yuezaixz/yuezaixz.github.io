@@ -226,6 +226,162 @@
             
               
                 
+                <a class="post-title-link" href="/2014/01/13/2014-01-13-nodejs-solution-on-vertxjvm/" itemprop="url">
+                  vert.x,JVM上的Node.js解决方案
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-01-13T14:23:00+08:00" content="2014-01-13">
+              2014-01-13
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/jvm/" itemprop="url" rel="index">
+                    <span itemprop="name">jvm</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/jvm/vertx/" itemprop="url" rel="index">
+                    <span itemprop="name">vertx</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近忙的已经要混乱了。项目赶的死，主持人排练赶的死，各种红包炸弹赶的死，女朋友也还是要陪的，恨不出变出几个我来帮我去做这些事情，我就躺在被窝睡觉好了。今天的博文就分享下我用坐班车上班的时间看的一篇文章吧，说的主要是Node.js在JVM上的替代者，原文请戳这里<a href="http://www.infoq.com/cn/news/2012/05/vertx" target="_blank" rel="external">vert.x——JVM上的Node.js替代者</a>.<br><strong>PS.本文斜体部分为引用原文。</strong></p>
+<h2 id="其他参考资料"><a href="#其他参考资料" class="headerlink" title="# # 其他参考资料:"></a># # 其他参考资料:</h2><p><a href="http://vertx.io/" target="_blank" rel="external">vert.x官网</a><br><a href="http://en.wikipedia.org/wiki/Vert.x" target="_blank" rel="external">维基</a></p>
+<p>#什么是Vert.x</p>
+<h2 id="官网解释"><a href="#官网解释" class="headerlink" title="官网解释"></a>官网解释</h2><p>Vert.x is a lightweight, high performance application platform for the JVM that’s designed for modern mobile, web, and enterprise applications.</p>
+<h2 id="渣翻译"><a href="#渣翻译" class="headerlink" title="渣翻译"></a>渣翻译</h2><p>Vert.x是一个为智能手机、WEB、企业级应用设计的运行于JVM的轻量级高性能的应用平台。</p>
+<h2 id="原文解释"><a href="#原文解释" class="headerlink" title="原文解释"></a>原文解释</h2><p>Vert.x是一个用于下一代异步、可伸缩、并发应用的框架，旨在为JVM提供一个Node.js的替代方案。开发者可以通过它使用JavaScript、Ruby、Groovy、Java、甚至是混合语言来编写应用。</p>
+<p>#相比Node.js<br>首先，他的开发流程与node.js是非常类似的。但是，vert.x的性能与可伸缩性都远远超越了node.js。同样是基于EDA事件驱动编程，Vert.x.竟然比Node.js快。<a href="http://architects.dzone.com/articles/inside-vertx-comparison-javascript" target="_blank" rel="external">Inside Vert.x. Comparison with Node.js. | Architects Zone</a>一文测试如下：<br><img src="http://www.cubrid.org/files/attach/images/220547/772/629/vertx_javascript_performance_comparison_200_ok.png" alt=""></p>
+<p>#为什么Vert.x如此快</p>
+<h2 id="事件驱动编程模型"><a href="#事件驱动编程模型" class="headerlink" title="事件驱动编程模型"></a>事件驱动编程模型</h2><p>和Node.js一样，Vert.x提供一个事件驱动编程模型，使用Vert.x作为服务器时，程序员只要编写事件处理器event handler即可。当TCP socket有数据时，event handler立即被创建调用，另外它还可以在以下几种情况激活： ‘当事件总线Event Bus接受到消息时,’ ‘当接收到HTTP消息时,’ 当一个连接断开时’,’ ‘当计时器超时时.’</p>
+<h2 id="事件循环"><a href="#事件循环" class="headerlink" title="事件循环"></a>事件循环</h2><p><em>一个vert.x实例会管理着一个小的线程集合，每个线程针对服务器上的一个可用内核。基本上每个线程都实现了一个事件循环。当部署一个vert.x应用实例（又叫做verticle）时，服务器会选择一个事件循环分配给该实例。接下来针对该实例的任务都会通过该线程进行分配。由于在某一时刻可能会有成千上万个verticle在运行，因此在同一时刻会将单个事件循环指定给多个verticle。</em><br>Vert.x 内部有一个线程池. Vert.x会根据CPU核数匹配线程池的数目。<br>每个线程执行一个Event Loop。Event Loop能确保事件在循环中轮回。例如，它会确证socket是否有数据可读事件，如果有， Vert.x 将调用相应的event handler。</p>
+<h2 id="消息传递"><a href="#消息传递" class="headerlink" title="消息传递"></a>消息传递</h2><p><em>Verticle可与运行在相同或不同vert.x实例中的其他verticle进行通信，这是通过消息事件总线实现的，它类似于Erlang的actor模型。消息传递旨在让系统能够在多个可用核心上进行扩展而无需以多线程的方式来执行verticle代码。<br>事件总线是分布式的，并不只会跨越服务器，还会渗透进客户端的JavaScript以处理“实时”的Web应用。</em><br>一个Vert.x中有很多Verticles， Verticles之间使用事件总线Event Bus联系. Verticle类似Erlang/scala中的actor模型（actor模型大概解释就是一个用于消息传递和共享数据的模型，具体我也不是很懂）。</p>
+<h2 id="共享数据"><a href="#共享数据" class="headerlink" title="共享数据"></a>共享数据</h2><p>消息传递当然有用，但是它并不总是并发环境最好的，缓存受到普遍使用， Vert.x提供一个分享的缓存Map。而node.js中则需要通过消息传递来在进程间交换数据。</p>
+<p>#其他特性</p>
+<ul>
+<li>TCP/SSL服务器与客户端</li>
+<li>HTTP/HTTPS服务器与客户端</li>
+<li>WebSockets/SockJS支持</li>
+</ul>
+<p>#代码<br>如下代码展示了Web服务器是如何通过vert.x来处理静态文件的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">// JavaScript</div><div class="line">load(&apos;vertx.js&apos;)</div><div class="line">vertx.createHttpServer().requestHandler(function(req) &#123;</div><div class="line">  var file = req.path === &apos;/&apos; ? &apos;index.html&apos; : req.path;</div><div class="line">  req.response.sendFile(&apos;webroot/&apos; + file);</div><div class="line">&#125;).listen(8080)</div><div class="line"></div><div class="line"># Ruby</div><div class="line">require &quot;vertx&quot;</div><div class="line">Vertx::HttpServer.new.request_handler do |req|</div><div class="line">  file = req.uri == &quot;/&quot; ? &quot;index.html&quot; : req.uri</div><div class="line">  req.response.send_file &quot;webroot/#&#123;file&#125;&quot;</div><div class="line">end.listen(8080)</div><div class="line"></div><div class="line">// Groovy</div><div class="line">vertx.createHttpServer().requestHandler &#123; req -&gt;</div><div class="line">  def file = req.uri == &quot;/&quot; ? &quot;index.html&quot; : req.uri</div><div class="line">  req.response.sendFile &quot;webroot/$file&quot;</div><div class="line">&#125;.listen(8080)</div><div class="line"></div><div class="line">// Java</div><div class="line">import org.vertx.java.core.Handler;</div><div class="line">import org.vertx.java.core.http.HttpServerRequest;</div><div class="line">import org.vertx.java.deploy.Verticle;</div><div class="line">public class Server extends Verticle &#123;</div><div class="line">  public void start() &#123;</div><div class="line">    vertx.createHttpServer().requestHandler(new Handler() &#123;</div><div class="line">      public void handle(HttpServerRequest req) &#123;</div><div class="line">        String file = req.path.equals(&quot;/&quot;) ? &quot;index.html&quot; : req.path;</div><div class="line">        req.response.sendFile(&quot;webroot/&quot; + file);</div><div class="line">      &#125;</div><div class="line">    &#125;).listen(8080);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#再见<br>先写到这里吧，困了睡觉去了。最近几天有空就写写博文吧。Z.Z zzzZZZ</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/01/11/2014-01-11-how-to-use-google/" itemprop="url">
                   How to use 谷歌
                 </a>
@@ -239,7 +395,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-11T02:28:00+08:00" content="2014-01-11">
               2014-01-11
             </time>
@@ -251,7 +407,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/工具/" itemprop="url" rel="index">
@@ -261,7 +417,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -273,7 +429,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -285,7 +441,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -405,7 +561,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-09T23:12:00+08:00" content="2014-01-09">
               2014-01-09
             </time>
@@ -417,7 +573,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -427,7 +583,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -439,7 +595,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -451,7 +607,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -463,7 +619,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -599,7 +755,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-09T11:00:00+08:00" content="2014-01-09">
               2014-01-09
             </time>
@@ -611,7 +767,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -621,7 +777,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -633,7 +789,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -747,7 +903,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-07T16:14:00+08:00" content="2014-01-07">
               2014-01-07
             </time>
@@ -759,7 +915,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -769,7 +925,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -781,7 +937,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -912,7 +1068,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-05T02:09:00+08:00" content="2014-01-05">
               2014-01-05
             </time>
@@ -924,7 +1080,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/scrum/" itemprop="url" rel="index">
@@ -934,7 +1090,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -946,7 +1102,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -958,7 +1114,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1150,7 +1306,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-04T00:38:00+08:00" content="2014-01-04">
               2014-01-04
             </time>
@@ -1162,7 +1318,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/个人随笔/" itemprop="url" rel="index">
@@ -1172,7 +1328,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1291,7 +1447,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-02T23:44:00+08:00" content="2014-01-02">
               2014-01-02
             </time>
@@ -1390,7 +1546,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Posted on</span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
             <time itemprop="dateCreated" datetime="2014-01-02T13:46:00+08:00" content="2014-01-02">
               2014-01-02
             </time>
@@ -1402,7 +1558,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -1412,7 +1568,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1424,7 +1580,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1436,7 +1592,7 @@
 
                 
                 
-                  , 
+                  . 
                 
 
               
@@ -1588,8 +1744,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">98</span>
-              <span class="site-state-item-name">posts</span>
+              <span class="site-state-item-count">99</span>
+              <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
 
@@ -1597,7 +1753,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">categories</span>
+                <span class="site-state-item-name">Kategorien</span>
               
             </div>
           
@@ -1606,7 +1762,7 @@
             <div class="site-state-item site-state-tags">
               
                 <span class="site-state-item-count">5</span>
-                <span class="site-state-item-name">tags</span>
+                <span class="site-state-item-name">Tags</span>
               
             </div>
           
@@ -1650,7 +1806,7 @@
 </div>
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
