@@ -226,6 +226,156 @@
             
               
                 
+                <a class="post-title-link" href="/2014/05/07/2014-05-07-open-nodejs-fizzbuzzwhizz/" itemprop="url">
+                  百家争鸣（一）---Node.js版FizzBuzzWhizz
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-05-07T13:34:00+08:00" content="2014-05-07">
+              2014-05-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/fizzbuzzwhizz/" itemprop="url" rel="index">
+                    <span itemprop="name">fizzbuzzwhizz</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/fizzbuzzwhizz/易中天/" itemprop="url" rel="index">
+                    <span itemprop="name">易中天</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/fizzbuzzwhizz/易中天/百家争鸣/" itemprop="url" rel="index">
+                    <span itemprop="name">百家争鸣</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="百家争鸣-读书感记事（一）"><a href="#百家争鸣-读书感记事（一）" class="headerlink" title="百家争鸣-读书感记事（一）"></a>百家争鸣-读书感记事（一）</h2><p>这本书是我在亚马逊Kindle特价上淘来的，看这本书之前我看过易中天老师两本书，一本是品三国，没有全看就是随便翻阅下，精彩是很精彩，但是没有太大感悟，另一本则是我觉得很有感悟的一本书，书名有好几个版本，书名我是忘了，《美国宪法的诞生和我们的反思》是我百度出来的，大概说的就是美国1785年（时间我也不确定了，大概这个时间吧）的立宪会议。这本书讲述了美国从被统治到独立后的一段混沌的时代，从这本书中不仅提到了麦迪逊、华盛顿的美国开国元勋们制定宪法的会议记录，如果只是这样，我也就不崇拜易中天老师了，他通过联邦、邦联、民主、共和、人民、公民等词来叙述了这个过程，由于本文主题不是这个，所以不细说。<br>这本书是我看的第三本易中天老师的书，也是通过白话的方式叙述了中国古代的圣人们的救世之道。从孔子孟子仁爱的儒家，到墨子博爱的墨家，到杨朱、庄子、老子一毛不拔的到家，最后到君权至上的法家，易老师从各种视角剖析，可以说精彩有余而感悟甚深。其中我最喜欢庄子，庄子就像禅宗，是不能说的，一说便错。<br>接下来会陆续的把这本书的读书感发出来。<br>抄袭庄子的一句话做本文的开头吧。<br>我：媳妇，你看庄子他真是而自由，就像那浪里白条的鲦鱼一样，在水里尽情的游弋，他其实就是享受着天地之间尽情游弋的“鱼”的快乐啊！<br>媳妇：你又不是庄子，你怎么知道庄子的快乐呢？<br>我：你又不是我，你怎么知道我不知道庄子的快乐呢？</p>
+<h2 id="Node-js版FizzBuzzWhizz"><a href="#Node-js版FizzBuzzWhizz" class="headerlink" title="Node.js版FizzBuzzWhizz"></a>Node.js版FizzBuzzWhizz</h2><p>和python版本比较，该版本只是把一些方法抽成了函数，并无太大改善。主要是在python版本和java版本花了一些心思设计，不罗嗦，直接上代码，有兴趣的研究下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 获得用户输入                                                                  </span></div><div class="line"><span class="keyword">var</span> nums = process.argv[<span class="number">2</span>];</div><div class="line"><span class="keyword">if</span> (!nums) die(<span class="string">'please enter three numbers. example: 3,5,7'</span>);</div><div class="line">nums = nums.split(<span class="string">','</span>);</div><div class="line"><span class="keyword">if</span> (nums.length !== <span class="number">3</span>) die(<span class="string">'please enter three numbers. example: 3,5,7'</span>);</div><div class="line">nums.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">n</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!(n <span class="number">0</span> &amp;&amp; n &lt; <span class="number">10</span>)) die(n + <span class="string">' is not an valid number. must be greater than 0 and less than 10'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">die</span> (<span class="params">msg</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(msg);</div><div class="line">  process.exit(<span class="number">-1</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">print</span> (<span class="params">msg</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(msg);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">var</span> a = nums[<span class="number">0</span>], b = nums[<span class="number">1</span>], c = nums[<span class="number">2</span>];</div><div class="line"><span class="keyword">var</span> A = <span class="string">'Fizz'</span>, B = <span class="string">'Buzz'</span>, C = <span class="string">'Whizz'</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">isIn</span> (<span class="params">i, n, s</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> (i.toString().indexOf(n) !== <span class="number">-1</span>)?s:<span class="string">''</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">isTimes</span> (<span class="params">i, n, s</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> (i % n === <span class="number">0</span>) ? s : <span class="string">''</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">numberOff</span>(<span class="params">currNum</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> isIn(currNum,a,A) || isTimes(currNum, a, A) + isTimes(currNum, b, B) + isTimes(currNum, c, C) || currNum;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 计算</span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span>; i++) &#123;</div><div class="line">  print(numberOff(i));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/05/05/2014-05-05-java-version-fizzbuzzwhizz/" itemprop="url">
                   Java版FizzBuzzWhizz
                 </a>
@@ -239,7 +389,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-05-05T15:26:00+08:00" content="2014-05-05">
               2014-05-05
             </time>
@@ -251,7 +401,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -261,7 +411,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -273,7 +423,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -285,7 +435,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -297,7 +447,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -309,7 +459,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -321,7 +471,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -333,7 +483,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -456,7 +606,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-05-02T14:21:00+08:00" content="2014-05-02">
               2014-05-02
             </time>
@@ -468,7 +618,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Python/" itemprop="url" rel="index">
@@ -478,7 +628,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -490,7 +640,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -602,7 +752,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-05-02T13:35:00+08:00" content="2014-05-02">
               2014-05-02
             </time>
@@ -614,7 +764,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Python/" itemprop="url" rel="index">
@@ -624,7 +774,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -636,7 +786,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -768,7 +918,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-05-01T15:39:00+08:00" content="2014-05-01">
               2014-05-01
             </time>
@@ -780,7 +930,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -790,7 +940,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -802,7 +952,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -814,7 +964,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -826,7 +976,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -838,7 +988,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -943,7 +1093,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-05-01T15:37:00+08:00" content="2014-05-01">
               2014-05-01
             </time>
@@ -955,7 +1105,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -965,7 +1115,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -977,7 +1127,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -989,7 +1139,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1001,7 +1151,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1013,7 +1163,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1120,7 +1270,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-05-01T15:32:00+08:00" content="2014-05-01">
               2014-05-01
             </time>
@@ -1132,7 +1282,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -1142,7 +1292,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1154,7 +1304,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1166,7 +1316,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1178,7 +1328,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1190,7 +1340,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1308,7 +1458,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-05-01T15:29:00+08:00" content="2014-05-01">
               2014-05-01
             </time>
@@ -1320,7 +1470,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -1330,7 +1480,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1342,7 +1492,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1354,7 +1504,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1463,7 +1613,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-05-01T15:19:00+08:00" content="2014-05-01">
               2014-05-01
             </time>
@@ -1475,7 +1625,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -1485,7 +1635,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1497,7 +1647,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1509,7 +1659,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1521,7 +1671,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1533,7 +1683,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1651,7 +1801,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-03-28T10:42:00+08:00" content="2014-03-28">
               2014-03-28
             </time>
@@ -1663,7 +1813,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -1673,7 +1823,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1685,7 +1835,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1697,7 +1847,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1709,7 +1859,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1789,167 +1939,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/03/24/2014-03-24-individual-thinking/" itemprop="url">
-                  “下个人”思维
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-03-24T14:29:00+08:00" content="2014-03-24">
-              2014-03-24
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/人性/" itemprop="url" rel="index">
-                    <span itemprop="name">人性</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/人性/总结/" itemprop="url" rel="index">
-                    <span itemprop="name">总结</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/人性/总结/利他/" itemprop="url" rel="index">
-                    <span itemprop="name">利他</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/人性/总结/利他/下个人思维/" itemprop="url" rel="index">
-                    <span itemprop="name">下个人思维</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/人性/总结/利他/下个人思维/高大上/" itemprop="url" rel="index">
-                    <span itemprop="name">高大上</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>应该也有一周没写博文了，Deadline和坑爹的队友就像两座大山，压的我快窒息了。还好周末来了，加班一天，带着我家小妞出去瞎晃一天半，心情是好多了。唯一有点美中不足的就是，不管是忠仑公园，还是十里蓝山，总是有很多游客践踏花草，掰着花朵、躺在花朵上拍照，还有刻字到此一游的。<br>《代码整洁之道》这本书里面我最喜欢一句话，就是请保证你离开的时候，比你进来的时候更加干净。我觉得这思想可以延伸的很广，也就是我想说的，下个人思维。这也是罗胖子早上发的微信的标题，他的文章给了我很多感悟，老样子，斜体部分是转载。<br><img src="http://case.ntu.edu.tw/hs/wordpress/wp-content/uploads/2011/08/76%E7%BE%A4%E9%AB%94%E5%8B%95%E7%89%A9%E7%9A%84%E5%88%A9%E4%BB%96%E8%A1%8C%E7%82%BA.jpg" alt="thinkother.jpg"><br>什么是下个人思维，用通俗的话来说，就是做一个事情的时候，可以为下个人考虑。网上经常看到很多人抱怨，老外存在偏见，总是看不起中国人，比如去国外旅游，我们经常被当做是很没素质的群体，在外国人眼里，我们就是Touch Then Leave，自己仔细想想，是不是自己出去玩，看到东西就有一股想要去摸的冲动，我承认，我有。而作为我们的邻居，作为我们仇恨的对象，日本人在这点上我觉得做的就很好。如果你觉得我在贬低自己民族，抬高猪狗不如的小日本，那么请别看下去了吧，我只抵制蠢货不抵制日货的。<br>我觉得日本人之所以能一次又一次的崛起，无外乎两点，一个是靠着勤奋和汗水可以实现梦想的日本梦，另一个就是协作能力，也就是下个人思维。<br>日本的很多厕所都写着这么一句话“为了下一位使用者，请保持干净”。每个人在自家的厕所，很自然的会保持干净，因为下一个人可能是你的妻子、儿子、父母，但是，这是公共厕所啊，下一个人我又不认识，我干嘛要辛苦保持干净呢？但是，如果我们这么想，我们也是上一个使用厕所的人眼里的下一个人，如果他不保持干净，那我们就没法使用到干净的厕所。如果我不保持干净，那么这必定会造成恶心循环，整个卫生就变脏了。以我旅游的经验，国内大多数城市旅游景区的厕所都很不干净。厦门可能算是国内比较干净的了，江西、云南的厕所，有的甚至让人作呕。有一些比较干净的，也是建立在厕所维护人员辛勤工作的基础上的。<br>日本人的下个人思维不仅仅是在这么一张小小的提示语上的，日本人对孩子的教育也是非常注重这些人性美的品质上，日本有一个童话故事，讲的是 <em>一只小熊，拿了一筐橡子赶路。他走着走着走累了，刚巧看到一把椅子，椅背上 写着“dozo（您请）”，于是他就在椅子上坐下，想休息一会，谁知不知不觉睡着了。这时来了一只小兔，小兔很饿，他看到了橡子和“dozo”，就吃了起 来。吃完了他想，呀，我把这橡子吃了，筐就空了，那下一个来的人咋办？于是他就去采了很多葡萄，放在筐里，高高兴兴的走了。这时来了一只小狗，小狗也饿了，看到葡萄和“dozo”很高兴，坐下来把葡萄吃了。吃完了也想，呀，那下一个人咋办？于是他就去采了蘑菇放在筐里。儿童的故事嘛，这种循环往复的桥段有点多，最后一个好像是小象，他采了栗子放在筐里。然后小熊睡醒了，他惊讶的发现：吚？我的橡子变栗子了！然后高高兴兴的走了。</em><br><strong>在儿童的教育中种下这种“下一个人”的概念的日本民族很了不起。这是一种为他人着想的善意，而且，也许会经历很长很久，但为善的，终究善会回来自己身上，这种观念实则也是利己主义。</strong><br>而我们从小的教育都是血淋淋的，比如我们“美好”的生活都是革命先辈们用血和肉堆积起来的，和孩子讲这样的故事，我觉得是完全偏离的人性的基本要素。虽然我今天写下个人思维，但是我自己就不是一个很有下个人思维的人，此文最根本目的也就是警示自己而已。<br>今天扯这个“高大上”的话题，难免陷入空洞说教的泥坑，所以我也赶紧把话题收了吧。其实，我一直有一个疑问，既然自私是人类的天性，为什么全世界的历朝历代，人类又在宣扬无私和利他，为什么要跟自己较劲？为什么制造出“高尚”“道德”这样 的概念来折磨自己？搞得好，我们也相信世界上的确存在典范和楷模，搞不好，不就是虚伪是绑架是卫道士么？为什么不能像动物一样直白的丛林法则？难道这不更顺应天性符合规律吗？ <strong>难道达尔文适者生存的进化论都是胡扯的吗？</strong><br>说一个历史事件，达尔文死后，1925年英国发生了法律史上著名的猴子审判，有大量的宗教人士推动立法，比如说1925年田纳西州就立了这么一个巴特勒法案，这个法案规定，不许在课堂上讲授一个字的进化论，否则就是犯法。这个事情不细说，就说说他们对进化论证伪的其中一个依据就是，动物有很多你观察到现象，用进化论是没法解释的，比如说互惠行为，吸血蝙蝠吸一口血，然后一看旁边的小伙伴没吃着，哎我喂你一口，发生这个事。有的鸟看见有天敌来了，它率先报警，要知道它报警会危害它自己的生命，但是它就愿意干这个事。在蜜蜂里面有一种叫工蜂，工蜂是没有后代的，但是它就是辛勤地哺乳，所有活都是它干，它没有任何进化上的利益。<br>但是，从我今天的主题来看，就是下个人思维，也就是利他。其实进化的单位不是物种，不是单个的生命，是一种叫基因的东西，基因是潜藏在每个生物体内部的，整个生物演化过程是基因的一个阴谋，它就一个目的，把我这玩意儿传下去。所谓的生物体不过是它搭的一辆公共汽车而已，只是它达到目的的手段。地球上的生物所有的协作行为，最后都导致该生物的基因可以更好的传下去。<br>从这点上可以明白，原来，利他，从而长久的利己，才是人类的本质。<br>所以啊，请你下次做事情的时候，请想一下下一个人，利他，从你我做起！</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1995,8 +1984,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">99</span>
-              <span class="site-state-item-name">Artikel</span>
+              <span class="site-state-item-count">100</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
@@ -2004,7 +1993,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">Kategorien</span>
+                <span class="site-state-item-name">categories</span>
               
             </div>
           
@@ -2013,7 +2002,7 @@
             <div class="site-state-item site-state-tags">
               
                 <span class="site-state-item-count">5</span>
-                <span class="site-state-item-name">Tags</span>
+                <span class="site-state-item-name">tags</span>
               
             </div>
           
@@ -2049,7 +2038,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -2057,7 +2046,7 @@
 </div>
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
