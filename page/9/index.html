@@ -226,6 +226,272 @@
             
               
                 
+                <a class="post-title-link" href="/2014/02/15/2014-02-15-linux-is-not-a-window-just-a-dirty-shutdown/" itemprop="url">
+                  Linux不是window，关机须谨慎
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-02-15T10:47:00+08:00" content="2014-02-15">
+              2014-02-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近饱受感冒和咳嗽的折磨，结果今天又被我的centos折磨了一番。估计是昨天异常关机导致扇区受损，还好没伤害到根目录，还能恢复，不过得长记性了，千万别像操作window那样随意。今天也就把linux关机前要注意的写一写。</p>
+<p>#1 为什么要正确的关机<br>Linux系统不像window系统那样是单用户、假多任务的情况。在linux中，由于每个程序都是在后台执行的，因此在你看不到的背后，其实可能有很多人同时在你的主机上工作。<br>还有个问题就是，若不能正常关机，后台的程序来不及将数据写回到文件中，有些服务的文件就会有问题，就可能造成文件系统的损坏。</p>
+<p>#2 关机要注意什么</p>
+<h2 id="2-1-观察系统的使用状态"><a href="#2-1-观察系统的使用状态" class="headerlink" title="2.1 观察系统的使用状态"></a>2.1 观察系统的使用状态</h2><p>首先可以用who命令查查谁在线，可以发出who命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ who</div><div class="line">David    tty1         2014-01-06 21:28 (:0)</div><div class="line">David    pts/1        2014-01-06 21:46 (:0.0)</div><div class="line">David    pts/12       2014-02-15 14:53 (:0.0)</div></pre></td></tr></table></figure></p>
+<p>然后要看看网络的联机状态<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ netstat -a</div><div class="line">Active Internet connections (servers and established)</div><div class="line">Proto Recv-Q Send-Q Local Address               Foreign Address             State</div><div class="line">tcp        0      0 *:sunrpc                    *:*                         LISTEN</div><div class="line">tcp        0      0 *:28017                     *:*                         LISTEN</div><div class="line">//省略1万字</div></pre></td></tr></table></figure></p>
+<p>最后在看看后台的进程状态ps –aux。</p>
+<h2 id="2-2-将数据写入磁盘"><a href="#2-2-将数据写入磁盘" class="headerlink" title="2.2 将数据写入磁盘"></a>2.2 将数据写入磁盘</h2><p>Linux系统为了加快数据的读取速度，默认情况下某些数据将不会直接写入磁盘，而是先暂存在内存中。但是万一异常关机，这些数据将不能写入磁盘机，造成数据更新不正常，因此，关机前最好执行几次sync命令来写入磁盘。当然shutdown/reboot/halt命令都会调用sync，但是最好也还是要执行几次。</p>
+<h2 id="2-3-使用正确的关机命令"><a href="#2-3-使用正确的关机命令" class="headerlink" title="2.3 使用正确的关机命令"></a>2.3 使用正确的关机命令</h2><p>关机（Shutdown）、重启（reboot\halt\poweroff）。</p>
+<h2 id="2-3-1-Shutdown"><a href="#2-3-1-Shutdown" class="headerlink" title="# 2.3.1 Shutdown"></a># 2.3.1 Shutdown</h2><p>这是最常用的关机命令，该命令会通知系统内的各个进程，并且通知系统中运行级别内的一些服务来关闭。该命令只能有root用户来操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ shutdown -k now &apos;abcd&apos;</div><div class="line">shutdown: Need to be root</div></pre></td></tr></table></figure></p>
+<p>可以用man shutdown命令，这个命令当然不是用来“找男人”的，而是用来查看帮助文档的。下面稍微对比较有用的信息翻译了下。<br>命令的格式为：shutdown [OPTION]…  TIME [MESSAGE]<br>-r     将系统服务停了后就重新启动.<br>-h     将系统服务停了后就立即关机.<br>-H     将系统服务停了后就立即挂起.<br>-P     将系统服务停了后就立即切断电源.<br>-c     取消关机，该命令不需要指定时间，第一个参数就是通知信息。<br>-k     只是发送关机提示信息，并不真的关机.<br>例子：<br>Shutdown –h now 立即关机<br>Shutdown –h 20:25 不解释干嘛的<br>Shutdown –h +10 系统字啊管10分钟后自动关机<br>Shutdown –r now “我要重启了” 立即重启，并发送通知。</p>
+<h2 id="2-3-2-Reboot"><a href="#2-3-2-Reboot" class="headerlink" title="# 2.3.2 Reboot"></a># 2.3.2 Reboot</h2><p>该命令基本和Shutdown –r now效果一样。最好这样执行sync;sync;sync;reboot;</p>
+<p>#3 扇区错乱问题修复<br>该问题就是因为异常关机导致，如果根目录没有损坏，那么再提示press root pass word or ctrl+D，这时输入root的口令登入系统进行单人单机的维护，输入fsck /dev/hda7(/dev/hda7为坏的磁盘块，按实际输入)。最后再询问clear?的时候输入Y就好了。修复完毕后reboot。<br>如果根目录坏了，那就麻烦了。
+ </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/02/11/2014-02-11-problem-in-the-agile-transformation/" itemprop="url">
+                  敏捷转型中的问题-WH
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-02-11T13:56:00+08:00" content="2014-02-11">
+              2014-02-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/scrum/" itemprop="url" rel="index">
+                    <span itemprop="name">scrum</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/scrum/敏捷/" itemprop="url" rel="index">
+                    <span itemprop="name">敏捷</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#1 What?敏捷转型可以带来什么</p>
+<h2 id="1-1-公司-团队-协作"><a href="#1-1-公司-团队-协作" class="headerlink" title="1.1 公司-团队-协作"></a>1.1 公司-团队-协作</h2><p>首先，公司通过敏捷转型对团队有什么期望呢？我觉得是协作！</p>
+<h2 id="1-1-1-团队有清晰的目标"><a href="#1-1-1-团队有清晰的目标" class="headerlink" title="# 1.1.1 团队有清晰的目标"></a># 1.1.1 团队有清晰的目标</h2><p>团队要有自己清晰的目标，并且这个目标是为整体目标服务的，且有准确的价值体现。<br>传统的项目型组织可能他的目标比较明确，但是有可能出现的情况就是来了一个业务，会导致有的抢破头的去做，导致资源浪费。有的业务落下来了，却没人愿意接。职能型组织可能会好一些，但是这对项目经理来说无权无资源会导致项目彻底崩坏。而矩阵型组织又会出现多重领导的局面。<br>在敏捷中，scrum master（后称SM）不在是一个职位，而就是一个角色，作用在于领导和鼓舞团队成员。在后面关于人的地方会详细说明。而product owner（后称PO）也是一个角色，则是为团队指明方向，团队成员依然在职能经理的管理下，不会出现多重领导的作用。然而又有明确的目标，该目标是为整体目标服务的，因为PO可能是为多个团队服务的，很容易协调各团队的目标。<br>在敏捷中，SM不在是一个职位，而就是一个角色。在教材中可能提倡SM全职，但是我认为SM在转型前期是可以全职，因为前期的引导、鼓舞团队工作比较需要，而等团队彻底磨合，完全可以让小组中某个成员来负责这个角色，甚至有的团队可以使用轮流的方式来做。当SM不仅可以培养一个人的分享意识，还能促进它的主动沟通能力。</p>
+<h2 id="1-1-2-打破传统的团队边界"><a href="#1-1-2-打破传统的团队边界" class="headerlink" title="# 1.1.2 打破传统的团队边界"></a># 1.1.2 打破传统的团队边界</h2><p>前面也提到了，PO可能是负责多个团队的，SM同样也可能是为多个团队服务的，这样可以很好的打破传统的文化边界。而且别忘了，还有敏捷教练这一角色，该角色平时不出现，只是在团队需要敏捷指导的时候出现。这样多个团队可能经常一起进行培训、开发，很好的打破了多个团队的边界。<br>传统打破团队边界的方法很多，比如我所知道的一个就是公司鼓励不同团队的人一起聚餐活动，每个月都一定的活动经费可以报销。这样做即死板，又加大了开销。<br>敏捷很重要的一个原则就是沟通和分享，那么我们在协作的时候，我们如果需要另一个团队的协作，而他又有别的事情无法协作，如果我们能down到他们的代码，然后修改接口，最后把修改的代码踢回给他们，这样可以大大的提高了协作的效率。</p>
+<h2 id="1-2-团队-人-高效"><a href="#1-2-团队-人-高效" class="headerlink" title="1.2 团队-人-高效"></a>1.2 团队-人-高效</h2><p>一个好的PO，可以让敏捷团队相当的高效。</p>
+<h2 id="1-2-1-目标分解、故事拆解"><a href="#1-2-1-目标分解、故事拆解" class="headerlink" title="# 1.2.1 目标分解、故事拆解"></a># 1.2.1 目标分解、故事拆解</h2><p>这部分体现的是PO的价值。一个好的PO不一定说明团队一定强，但是一个差的PO，那说明这个团队一定弱。因为目标都不明确，更何谈高效，因为方向都错了。<br>PO一定要为团队确定明确的目标，然后将目标分解，设定优先级，然后带领团队对故事进行分解。</p>
+<h2 id="1-2-2-讲述价值"><a href="#1-2-2-讲述价值" class="headerlink" title="# 1.2.2 讲述价值"></a># 1.2.2 讲述价值</h2><p>然后PO对于目标、故事的价值如果能讲解的比较清楚，那么团队就会有更强的ownership。因为每个人都清楚的知道要做的事情，就产生人主人公的感觉，主动的对任务进行分解、领取、设计、实现、测试。<br>如果PO无法很好的描述故事的价值，那么开发人员都不了解一个故事有什么用，那么久而久之就失去热情和积极性。然后就随意按照需求去任务的描述去开发吧。然后做出来的不是实际需要的，导致返工，久而久之就关系决裂了。</p>
+<h2 id="1-2-3-Scrum让需求质量和实施质量变高"><a href="#1-2-3-Scrum让需求质量和实施质量变高" class="headerlink" title="# 1.2.3 Scrum让需求质量和实施质量变高"></a># 1.2.3 Scrum让需求质量和实施质量变高</h2><p>PO用讲解、沟通、答疑的方式，逼着每个成员把需求理清楚，大大的提高了需求的质量，远远比需求文档来的作用要大得多。<br>然后通过单元测试、CI、结对编程、代码评审、验收会议等，提高了需求实施的质量。并不是敏捷讲究搞笑就忽略了质量问题。</p>
+<h2 id="1-3-公司-人-发展"><a href="#1-3-公司-人-发展" class="headerlink" title="1.3 公司-人-发展"></a>1.3 公司-人-发展</h2><h2 id="1-3-1-T型人才发展模式"><a href="#1-3-1-T型人才发展模式" class="headerlink" title="# 1.3.1 T型人才发展模式"></a># 1.3.1 T型人才发展模式</h2><p>T的意义在于 一代表的是广，|代表的是深。在敏捷团队中，一个人可能要做需求，做设计，做前端开发，做后端开发，做测试，做QA，涉及的面非常的广。用流行的话来说就是全栈工程师。而每个人有可以根据自己的兴趣，找到自己适合的地方深入。</p>
+<h2 id="1-3-2-改变管理人才发展模式"><a href="#1-3-2-改变管理人才发展模式" class="headerlink" title="# 1.3.2 改变管理人才发展模式"></a># 1.3.2 改变管理人才发展模式</h2><p>命令型的管理模式很适合敏捷。因为敏捷讲究的是发挥人的主动性，让沟通代替工具。敏捷希望的应该是辅导型组织，他帮人竖立目标，鼓舞你去实现。他知道你在这方面是不足的，帮助你去改进。</p>
+<h2 id="1-3-3-需要长期稳定的高效"><a href="#1-3-3-需要长期稳定的高效" class="headerlink" title="# 1.3.3 需要长期稳定的高效"></a># 1.3.3 需要长期稳定的高效</h2><p>通过敏捷，让人实现长期稳定的高效，而不是短期的高效。敏捷不鼓励加班，鼓励用充足的休息让工作变得高效。用20%的时间可以80%的效率高效的完成的工作，而不是用80%的时间用20%的低效率来完成工作。<br>IT行业没有加班是不可能的，但是要让人知道为什么加班，而且知道要加班到什么时候。比如一个sprint中，燃尽图明显滞后了，那就需要加班。又比如用户故事中有比较多的高优先级故事，不尽快完成就很难和竞争对手竞争，那么也需要加班。</p>
+<p>#2 How?如何转型，怎么做</p>
+<h2 id="2-1-小白鼠"><a href="#2-1-小白鼠" class="headerlink" title="2.1 小白鼠"></a>2.1 小白鼠</h2><p>公司可以先让几个小团队找中等规模的项目先实践。小团队中用新人比较容易接受敏捷，中等规模项目是让大家可以发现更多敏捷中的问题。前期先实践，然后将实践的问题在团队内不断的总结，然后结合外部教练的引导。让小团队先进入团队的发挥期，最后通过这写小团队带动整体进行转型。<br>2.2 侏罗纪公园<br>该方法比较适合让一个人学会敏捷。也就是等小团队已经成型了，这时候丢入一个没接触过敏捷却有浓厚兴趣的人，在敏捷的环境中，他很快就能跟上节奏，学会敏捷。</p>
+<h2 id="2-3-培养内部教练"><a href="#2-3-培养内部教练" class="headerlink" title="2.3 培养内部教练"></a>2.3 培养内部教练</h2><p>通过小团队的实践和外部教练的知道，让团队中一些感兴趣的人承担起内部教练的作用，通过外部教练的不断辅导，让团队在后期能够摆脱外部教练。</p>
+<h2 id="2-4-轻敏捷，逐步完善"><a href="#2-4-轻敏捷，逐步完善" class="headerlink" title="2.4 轻敏捷，逐步完善"></a>2.4 轻敏捷，逐步完善</h2><p>敏捷没有固定形态，如果不适合，硬套敏捷的最佳实践，那反而更不敏捷了。敏捷就是最适合团队的形式。用Scrum只是说明Scrum的大多数原则和实践比较适合我们当前的小型团队。<br>而且我们开展敏捷也不是完全照搬。我们是一点一点的引入一些敏捷的实践。当我们发现问题的时候我们才会思考我们缺少什么。所以我们需要总结会，而且坚决把总结会的结论落地。</p>
+<h2 id="2-5-自上而下和自下而上"><a href="#2-5-自上而下和自下而上" class="headerlink" title="2.5 自上而下和自下而上"></a>2.5 自上而下和自下而上</h2><p>敏捷的转型必须是由上头发起，由每个成员相应。缺少任何一个都可能导致敏捷转型工程烂尾。</p>
+<h2 id="2-6-制造适合的环境"><a href="#2-6-制造适合的环境" class="headerlink" title="2.6 制造适合的环境"></a>2.6 制造适合的环境</h2><p>如何环境能改变，那最好制造适合的环境。如何不允许，那么就轻敏捷，在允许的条件上做到尽可能的敏捷、高效。<br>可能环境上问题很多，像传统的研发必须要做详细的计划，而敏捷并没有这么详细的计划。又比如传统的开发中可能有很多的文档，就像我们行业，由于监理的存在，文档也是硬性的审核标准。所以必须有。前者我们就可以改变，大体上指定目标，研发过程中根据实际情况变更计划。而后者只能在具备完整的情况下尽可能的实行敏捷。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/02/10/2014-02-10-if-you-are-well-sunny-please-have-faith-in-their-beliefs/" itemprop="url">
                   你若安好，便是晴天------请对自己的信念充满信心
                 </a>
@@ -1850,241 +2116,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/01/22/2014-01-22-web-age-of-venture-nodejs-util-module-a/" itemprop="url">
-                  互联网时代如何创业----Node.js的Util模块（一）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-01-22T13:18:00+08:00" content="2014-01-22">
-              2014-01-22
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>最近打车应用的斗争已经从群雄逐鹿，到现在快的和滴滴打车双雄争霸的市场格局了。但是，两家创业公司的斗争实际并没有那么简单，他们背后是“财付通VS支付宝”，“微信VS来往”，“理财通VS余额包”，最幕后的黑手就是“腾讯VS阿里巴巴”。<br>本文不想过多篇幅来写两家巨头是如何烧钱大战的，不过他们把补贴做到了一种极端上，靠着疯狂砸广告、大力补贴司机、变态似的补贴用户等行为，可以说把整个市场都占据了。打车软件作为最容易被市场接受的LBS服务之一，是巨头们测试其O2O能力和渗透率的绝佳工具，也为未来更多O2O业务提供接口，所以才这么的疯狂。<br>因此，对于两家初创公司，都靠着背后的干爹烧着钱，让别的创业公司基本上没活路，但是别忘了黄花梨做的椅子终究是要让人坐在屁股底下的。也预示着大多数创业公司的最终结果——被收购。<br>那么，在巨头们垄断式的市场里，如何脱颖而出呢？以下的内容基本上是读KK（凯文凯利）的文章的个人理解，理解有误的话请见谅。<br>KK说了，最具有破坏力的竞争来自于边缘而非中心。边缘是不被看好的市场。赢利低、不稳定、未经验证、市场狭小、风险系数极高。小公司不得不进入这样的市场。<br>就像上篇博文中提到的，蒸汽船开始时候故障多、昂贵等等原因都一度是他成为了摆设，但是经过几十年的改造，他把原来的造船行业全部打败了。60年代底特律的第一代汽车被一个叫本田的日本人用自动化的汽车打败了。IBM作为电脑公司也被微软这样做软件的公司不断蚕食，而微软如今又不得不面对一个做搜索引擎的公司（谷歌）的竞争。这些边缘公司却可以逐步打败那些老家伙，都是因为他们没有从正面进行较量，而是从老家伙们没有涉足的边缘进行发展（因为老家伙们需要完善现有产品，强化现有优势）。<br>作为一个赛车游戏的忠实粉丝，我深刻的知道想要超车必须从弯道，所有追赶都是没用的（除非你用外挂，你的车比别人快的多，也就是你有干爹的意思）。微创新这会，就是大公司用来扼杀小公司的手段，一定不是小公司用来颠覆大公司的武器。<br>360是从瑞星看不上眼的免费杀毒市场起家的，苹果是从IBM看不上眼的PC机起家的，微软也是从IBM看不上眼的操作系统起家，谷歌是从微软看不上眼的网络服务起家。但是现在的大公司都聪明了，像打车市场一出现点苗头，就被他们盯上了，所以，在这个时代想要从巨头们的眼皮底下做出点雷声大雨点更大的事情，就是一个字，难！<br>03年有几家闷声做大事的互联网公司是有起色，不过那真的就是巨头们不愿意涉及的边缘行业。谁能扎到下一个缝隙，爬到巨头们的头上呢？2014，让我们拭目以待。<br>————————–分割线—————————</p>
-<h1 id="常用工具Util"><a href="#常用工具Util" class="headerlink" title="常用工具Util"></a>常用工具Util</h1><p>util 是一个 Node.js 核心模块，提供常用函数的集合，用于弥补核心 JavaScript 的功能过于精简的不足。Util模块的函数比较多，今天先说两个。</p>
-<h2 id="1-util-inherits"><a href="#1-util-inherits" class="headerlink" title="1 util.inherits"></a>1 util.inherits</h2><p>util.inherits(constructor, superConstructor)是一个实现对象间原型继承的原型复制函数。JavaScript 的面向对象特性是基于原型的，与常见的基于类的不同。不像Java中的对面对象特性是基于类的，可以用extends来实现继承，Javascript中需要通过原型复制来实现。这个问题可能要牵扯到javascript的原型概念，下次专门写一篇博文介绍javascript的原型。<br>先简单的打个比方，类就相当于一个模具，通过模具产生对象。而原型就好比达芬奇的蒙娜丽莎，其他艺术家通过高超的技艺复杂成一个一个对象。<br>看下面继承的例子：<br><figure class="highlight javascript"><figcaption><span>testInherits.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Base</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">this</span>.name = <span class="string">'base'</span>;</div><div class="line"><span class="keyword">this</span>.base = <span class="number">1991</span>;</div><div class="line"><span class="keyword">this</span>.sayHello = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Hello '</span> + <span class="keyword">this</span>.name);</div><div class="line">&#125;;</div><div class="line">&#125;</div><div class="line">Base.prototype.showName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Sub</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">this</span>.name = <span class="string">'sub'</span>;</div><div class="line">&#125;</div><div class="line">util.inherits(Sub, Base);</div><div class="line"><span class="keyword">var</span> objBase = <span class="keyword">new</span> Base();</div><div class="line">objBase.showName();</div><div class="line">objBase.sayHello();</div><div class="line"><span class="built_in">console</span>.log(objBase);</div><div class="line"><span class="keyword">var</span> objSub = <span class="keyword">new</span> Sub();</div><div class="line">objSub.showName();</div><div class="line"><span class="comment">//objSub.sayHello();</span></div><div class="line"><span class="built_in">console</span>.log(objSub);</div></pre></td></tr></table></figure></p>
-<figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[David@localhost javascriptStudy]$ node testInherits.js</div><div class="line">base</div><div class="line">Hello base</div><div class="line">&#123; name: 'base', base: 1991, sayHello: [Function] &#125;</div><div class="line">sub</div><div class="line">&#123; name: 'sub' &#125;</div></pre></td></tr></table></figure>
-<p>Javascript的对象分三种：原型对象、构造对象、实例对象。<br>objSub是实例对象，如果//objSub.sayHello();不注释则会报错，因为只能继承Base原型的属性，不能继承Base构造对象的属性。<br>具体关于原型，还是请看之后写的关于原型的博文吧，想简单的解释实在太绕了。</p>
-<h2 id="2-util-inspect"><a href="#2-util-inspect" class="headerlink" title="2 util.inspect"></a>2 util.inspect</h2><p>util.inspect(object,[showHidden],[depth],[colors])是一个将任意对象转换为字符串的方法，通常用于调试和错误输出。它至少接受一个参数 object，即要转换的对象。<br>showHidden 是一个可选参数，如果值为 true，将会输出更多隐藏信息。<br>depth 表示最大递归的层数，如果对象很复杂，你可以指定层数以控制输出信息的多少。如果不指定depth，默认会递归2层，指定为 null 表示将不限递归层数完整遍历对象。<br>如果color 值为 true，输出格式将会以 ANSI 颜色编码，通常用于在终端显示更漂亮的效果。<br>从下面例子可以看出，就算有toString方法，也不会直接调用他来转换对象。<br><figure class="highlight javascript"><figcaption><span>testInspect.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">this</span>.name = <span class="string">'byvoid'</span>;</div><div class="line"><span class="keyword">this</span>.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">return</span> <span class="keyword">this</span>.name;</div><div class="line">&#125;;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> Person();</div><div class="line"><span class="built_in">console</span>.log(util.inspect(obj));</div><div class="line"><span class="built_in">console</span>.log(util.inspect(obj, <span class="literal">true</span>));</div></pre></td></tr></table></figure></p>
-<figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[David@localhost javascriptStudy]$ node testInspect.js</div><div class="line">&#123; name: 'byvoid', toString: [Function] &#125;</div><div class="line">&#123; toString:</div><div class="line">   &#123; [Function]</div><div class="line">     [caller]: null,</div><div class="line">     [arguments]: null,</div><div class="line">     [length]: 0,</div><div class="line">     [prototype]: &#123; [constructor]: [Circular] &#125;,</div><div class="line">     [name]: '' &#125;,</div><div class="line">  name: 'byvoid' &#125;</div></pre></td></tr></table></figure>
-<h2 id="3-其他"><a href="#3-其他" class="headerlink" title="3 其他"></a>3 其他</h2><p>util还提供了util.isArray()、util.isRegExp()、util.isDate()、util.isError() 四个类型测试工具，以及 util.format()、util.debug() 等工具。有兴趣的读者可以访问 <a href="http://javascript.org/api/util.html" target="_blank" rel="external">API</a>了解详细内容。有空我也会把util这个工具继续写下去。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/01/21/2014-01-21-a-message-reply-department-manager/" itemprop="url">
-                  一封回复部门经理的邮件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-01-21T10:59:00+08:00" content="2014-01-21">
-              2014-01-21
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/学习/" itemprop="url" rel="index">
-                    <span itemprop="name">学习</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/学习/个人随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">个人随笔</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>今早部门经理发了一封邮件，意在督促大家在2014年多学习新的技术。然后作为一个话痨，我就花了半个小时时间回复了该邮件，就像跟随党中央号召似的，响应了部门经理的号召。下面就大概把这篇邮件贴出来把（有部分内容删除）。</p>
-<p>#邮件内容<br>大家好：<br>这是一个长篇大论，我敲了半个小时吧，忙的人选择性忽略吧。错别字请见谅，没有校审。<br>郭经理推荐的几个技术是不错了。所谓8小时内求生存，8小时外求发展。大家是该多学习学习新的东西，逃离舒适区。300年前蒸汽船诞生，但是当时他贵而且容易发生故障，所有的帆船产商基本都对这庞然大物不敢兴趣，但是仅仅50年，经过蒸汽船的不断改善，所有帆船产生都没市场了。再说的近一点，上世纪60年代，第一代汽车使底特律的汽车工人都算社会的中上层人士，而后来一个叫本田的日本人用自动化汽车让底特律破产了。再说我们身边一点，不说basic等语言了，就说delphi啊，10年前delphi可谓是工资最高的程序员，java5年前也很不错，但是如今最吸金的程序员莫过于objective-c（这里有位童鞋就站出来反驳了，说不能太看重金钱。其实我举吸金这个例子不是说明哪种语言好，只是说明下时代变更有多块，现在不用5年就会发生一次大变更了）。说这么多废话只是想说，别像米缸里的老鼠一样，吃光了米缸里的米后才发现，已经无法跳出米缸了。<br>不过我觉得这些都太大了，特别是云这国内真很难有人能真正接触到，Hadoop学习和生产环境的差别也非常大，我觉得容易着手去学习的，应该是一些比较具体的东西。<br>比如郭飞刚刚也提到的NoSQL，MongoDB伴随着Node.js的兴起，很多网络服务商都开始使用了。并且他是一个开源的NoSql数据库，相比传统关系型数据库，文档性数据库轻巧、灵活，非常适合在数据规模很大、事务性不强的场合下使用。MongoDb这种对象库，没有表、行的概念，也没有固定的模式和结构，MongoDb的文档结构为Json串，用Node.js查询数据甚至没有数据转换的时间。<br>JAVA8今年3月也要发布了，Java从7开始也一直在努力摆脱静态强类型编译型语言的束缚，JAVA8的LAMDA表达式能做到什么程度还不而为知，但是我觉得现在的JVM是越来越强大了，JDK6U23以后用HOTSPOT替代了JIT后，运行速度更快了。而且JVM毕竟可以能运行JAVA，还能运行Ruby、Python、Groovy，甚至半年前新冒头的Vert.x，让node.js可以运行在JVM上了，真是让我和我的小伙伴们的吓傻了。<br>然后说说动态元编程语言（元数据是描述数据的数据，元编程就是可以在运行时改变其特性的语言，java也努力通过代理、反射的方式在实现这种功能）。麦卡锡在上世纪50年代的一篇论文可以说是里程碑式的，因为该论文中提到的很多特性都在JAVA中有很好的体现，但是唯独缺少了宏。Lisp语言就在这方面有很好的实现。现在Ruby、python、javascript可以算当前最好的元编程语言。所以我很建议去学学这几门语言。Java程序员可能比较适合学习scala，因为他也运行在JVM上，而且可以和JAVA有很好的兼容。</p>
-<p>此致<br>敬礼</p>
-<hr>
-<p>2014-01-21<br>吴迪玮<br>厦门市巨龙信息科技有限公司  研发五部</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2125,7 +2161,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">100</span>
+              <span class="site-state-item-count">102</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

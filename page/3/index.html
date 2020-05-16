@@ -226,6 +226,208 @@
             
               
                 
+                <a class="post-title-link" href="/2015/03/07/2015-03-07-beginning-ios-pit-over-those-years-d/" itemprop="url">
+                  初学IOS那些年踩过的坑(五)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-03-07T06:33:00+08:00" content="2015-03-07">
+              2015-03-07
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#集成友盟后报错<br>LOG：<br>15-02-12 09:26:47.206 Runmove[2532:13249] NSScanner: nil string argument<br>2015-02-12 09:26:47.206 Runmove[2532:13249] Umeng: Read binary image info failed!</p>
+<p>其实不是友盟问题，是自己程序中有了个错误，只是打开了友盟的调试开关，所以报了友盟错误。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//    [MobClick setLogEnabled:YES];</span></div></pre></td></tr></table></figure></p>
+<p>注释该行代码后可以正常报告出程序中的异常</p>
+<p>#tableview下方空白处的seprator line去除<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.tableView.tableFooterView = [<span class="built_in">UIView</span> new];</div></pre></td></tr></table></figure></p>
+<p>#navigationbar的左滑返回<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    <span class="keyword">self</span>.navigationItem.leftBarButtonItem = [[<span class="built_in">UIBarButtonItem</span> alloc]</div><div class="line">                                         initWithImage:img</div><div class="line">                                         style:<span class="built_in">UIBarButtonItemStylePlain</span></div><div class="line">                                         target:<span class="keyword">self</span></div><div class="line">                                         action:<span class="keyword">@selector</span>(onBack:)];</div><div class="line"><span class="keyword">self</span>.navigationController.interactivePopGestureRecognizer.delegate = (<span class="keyword">id</span>)<span class="keyword">self</span>;</div></pre></td></tr></table></figure></p>
+<p>#使用nib做界面，但是layoutAttribute有些又需要根据适配来适配，nib+手写混写好烦恼啊，感觉睡不着觉了<br>其实错了，混写其实很简单的，可以像拉button一样的拉你的约束.nslayoutattribute也是可以拉线的，这样一切都太平了</p>
+<p>#画面不流畅可能是因为一些透明视图影响了fps，可以去掉这些透明视图<br>方法：Product-&gt;Profile-&gt;Core Animation-&gt;右下第二个选项卡中勾上Color Blended Layers<br>然后看到红色的就都是透明的视图，不需要透明效果的可以去掉透明</p>
+<p>#UITableView拉倒底部最后行只显示一半问题<br>原因：计算UITableView高度的时候按整个屏幕来计算了，NavigationBar的高度被忽略。所以就少算了NavigationBar高度。</p>
+<p>#UILongPressGestureRecognizer会触发两次，分别是开始和结束<br>所以如果只想触发一次，就需要加个判断了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)longPress:(<span class="built_in">UILongPressGestureRecognizer</span> *)sender</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (sender.state == <span class="built_in">UIGestureRecognizerStateBegan</span>) &#123;</div><div class="line">        [<span class="keyword">self</span> yourMethod];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#简单实现下拉到底刷新数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView</div><div class="line">&#123;</div><div class="line">    if([_photos count] &gt;= LOAD_COUNT_DEFAULT*(_loadPage+1) &amp;&amp; scrollView.contentOffset.y + (scrollView.frame.size.height) &gt; scrollView.contentSize.height*0.8)&#123;</div><div class="line">        [[RunService sharedInstance] loadPhotosWithPage:(_loadPage+1) count:LOAD_COUNT_DEFAULT complete:^(NSArray *photos) &#123;</div><div class="line">            _loadPage++;</div><div class="line">            [_photos addObjectsFromArray:photos];</div><div class="line">            [self loadPhoto];</div><div class="line">        &#125;                                         fail:^(NSString *msg) &#123;</div><div class="line">            </div><div class="line">        &#125;];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>#数据持久化到NSUserDefaults<br>需要数据持久化的对象必须实现NSCoding<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">"NSObject+NSCoding.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ServerPhoto</span> : <span class="title">NSObject</span> &lt;<span class="title">NSCoding</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>实现文件中还要重写2个方法<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)encodeWithCoder:(<span class="built_in">NSCoder</span> *)coder &#123;</div><div class="line">    [<span class="keyword">self</span> autoEncodeWithCoder:coder];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">id</span>)initWithCoder:(<span class="built_in">NSCoder</span> *)coder &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span> = [<span class="keyword">super</span> init]) &#123;</div><div class="line">        [<span class="keyword">self</span> autoDecode:coder];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>持久化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSUserDefaults</span> *udf = [<span class="built_in">NSUserDefaults</span> standardUserDefaults];</div><div class="line"><span class="built_in">NSData</span> *photosData = [<span class="built_in">NSKeyedArchiver</span> archivedDataWithRootObject:_photos];</div><div class="line">[udf setObject:photosData forKey:_dataCacheName];</div><div class="line">[udf synchronize];</div></pre></td></tr></table></figure></p>
+<p>反持久化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSUserDefaults</span> *udf = [<span class="built_in">NSUserDefaults</span> standardUserDefaults];</div><div class="line"><span class="built_in">NSData</span> *data = [udf objectForKey:_dataCacheName];</div><div class="line"><span class="built_in">NSMutableArray</span> *photoData = [<span class="built_in">NSKeyedUnarchiver</span> unarchiveObjectWithData:data];</div><div class="line"><span class="keyword">if</span> (photoData &amp;&amp; photoData.count &gt; <span class="number">0</span>) &#123;</div><div class="line">    _photos = photoData;</div><div class="line">    [_photoTableView reloadData];</div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span> &#123;</div><div class="line">    [SVProgressHUD showWithStatus:<span class="string">@"加载数据中"</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>10、SDWebImage<br>options用SDWebImageHighPriority，优先级高的话，会及时写入到磁盘<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[leftImageView sd_setImageWithURL:[<span class="built_in">NSURL</span> URLWithString:leftPhotoUrl] placeholderImage:[<span class="built_in">UIImage</span> new] options:SDWebImageHighPriority];</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/02/28/2015-02-28-ios-common-library/" itemprop="url">
+                  IOS常用库
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-02-28T02:51:00+08:00" content="2015-02-28">
+              2015-02-28
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>CoreData :MagicRecord<br>网络请求：AFNetworking<br>JSON处理：jsonKit<br>文件监控：UMAnalytics<br>网络图片加载和缓存：SDWebImage<br>扁平化风格按钮：FlatPillButton<br>协助调试：iconsole<br>加载等待框：SVProgressHUD<br>高德地图：AMap<br>地图轨迹绘制：GradientPolyline<br>图表绘制：CorePlot<br>圆环进度指示：DACircularProgress<br>网络状态监测：Reachability<br>快速集成下拉刷新：MJRefresh  </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/02/28/2015-02-28-beginning-ios-pit-over-those-years-d/" itemprop="url">
                   初学IOS那些年踩过的坑(四)
                 </a>
@@ -1171,314 +1373,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/12/22/2014-12-22-obj-c-deficiency/" itemprop="url">
-                  OBJ-C的不足
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-12-22T05:03:00+08:00" content="2014-12-22">
-              2014-12-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/总结/" itemprop="url" rel="index">
-                    <span itemprop="name">总结</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/总结/obj-c/" itemprop="url" rel="index">
-                    <span itemprop="name">obj-c</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/总结/obj-c/不足/" itemprop="url" rel="index">
-                    <span itemprop="name">不足</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#概述<br>用Obj-c编程一周了，很 <strong>不（昨天打错了，忘了写不）</strong> 负责任的总结一下自己对于Obj-c不足的看法。</p>
-<p>#吐槽</p>
-<ul>
-<li>无GC，程序员的一大部分精力在内存管理上。但是有了ARC，这一劣势反而变成了优势，编译时自动加上retain和release，运行时函数变量栈的自动释放，让应用丝毫不减速情况下又让程序员的精力在业务逻辑上；</li>
-<li>无命名空间问题，和javascript一样的问题，所以最好都给类加上前缀来规避这问题；</li>
-<li>无法多继承问题，和Java一样的问题，java主要通过接口和组合来规避。而Obj-c也差不多，通过类别和协议，在加上组合来规避该问题。程序中比较多的例子就是代理模式，比如ViewController还会是很多View的delegate，他实现了各种委托的协议来实现委托。除了上面说的这几个还有就是id这个类型（鸭子类型），通过该类型来完成多态；</li>
-<li>语义不怎么够简洁，这只能依靠XCODE的强大功能来弥补了。</li>
-</ul>
-<p>#总结<br>总之，每种编程语言都会有许多不足，如Java就非常不足，设计模式就是一种比较通用的实践方式来解决这些不足，套用设计模式后让程序员的经历不被这些不足束缚，可以痛快的变成，just for fun , no fun no zuo !</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/12/15/2014-12-15-ios-gcd-method-from-scratch-introduction/" itemprop="url">
-                  IOS从头开始之GCD基本方法介绍
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-12-15T09:04:00+08:00" content="2014-12-15">
-              2014-12-15
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS/GCD/" itemprop="url" rel="index">
-                    <span itemprop="name">GCD</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS/GCD/obj-c/" itemprop="url" rel="index">
-                    <span itemprop="name">obj-c</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#概述<br>任务支持函数和块，GCD比NSOperation更底层，可以是并发的或串行的。他是纯C语言编写，性能很好，而是是对象化的，内存也是通过计数管理。</p>
-<p>#队列类型</p>
-<ul>
-<li>主线程队列：提交到该队列的任务会在主线程中执行。可以调用dispatch_get_main_queue()来获得。因为main queue是与主线程相关的，所以这是一个串行队列</li>
-<li><p>全局队列：是并发队列，并由整个进程共享。存在4个全局队列：高（DISPATCH_QUEUE_PRIORITY_HIGH ）、中（默认，DISPATCH_QUEUE_PRIORITY_DEFAULT ）、低（DISPATCH_QUEUE_PRIORITY_LOW ）、后台（DISPATCH_QUEUE_PRIORITY_BACKGROUND ）四个优先级队列。可以调用dispatch_get_global_queue函数传入优先级来访问队列。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);</div></pre></td></tr></table></figure>
-</li>
-<li><p>自创建队列：该队列是用函数 dispatch_queue_create 创建的队列，提交到队列中的任务是串行的，各个队列间是串行的。dispatch_queue_create 函数的第一个参数是一个标签，是提供唯一标示方便调试。官方建议我倒置包名来命名队列，比如“com.dragonsoft.subsystem.task”。这些名字会在崩溃日志中被显示出来，也可以被调试器调用，这在调试中会很有用。第二个参数是queue的类型，设为NULL时默认是DISPATCH_QUEUE_SERIAL，将创建串行队列，在必要情况下，你可以将其设置为DISPATCH_QUEUE_CONCURRENT来创建自定义并行队列。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> firstSerialQueue = dispatch_queue_create(<span class="string">"com.pixolity.GCD.serialQueue1"</span>, <span class="number">0</span>);</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>注意：全局的队列，不用retain或release，自创建通过ARC进行，也不需要，如果想保留，就需要。</p>
-<p>#dispatch_async<br>将任务推到子线程中异步执行，注册的任务完成时间是随机不确定的。该函数会立即返回，任务会在后台异步执行。<br>该方法使用场景按我理解类似做Web前端开发时候，可能会有一个操作需要去后台请求数据，然后再对主页面进行局部刷新。在Web开发可以利用Ajax和Javascript的事件循环异步机制来轻松实现回调而在IOS程序中，这就意味着需要将数据的获取交给子线程去做，数据返回后再把任务推回到主线程来执行一些代码。使用GCD的dispatch_async可以简单地完成这个任务。使用嵌套的dispatch，在外层中执行后台任务，在内层中将任务dispatch到main queue，以下代码为网上拔来的示例。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_async</span>(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>), ^&#123;</div><div class="line">    <span class="built_in">NSURL</span> * url = [<span class="built_in">NSURL</span> URLWithString:<span class="string">@"http://avatar.csdn.net/2/C/D/1_totogo2010.jpg"</span>];</div><div class="line">    <span class="built_in">NSData</span> * data = [[<span class="built_in">NSData</span> alloc]initWithContentsOfURL:url];</div><div class="line">    <span class="built_in">UIImage</span> *image = [[<span class="built_in">UIImage</span> alloc]initWithData:data];</div><div class="line">    <span class="keyword">if</span> (data != <span class="literal">nil</span>) &#123;</div><div class="line">        <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;</div><div class="line">            <span class="keyword">self</span>.imageView.image = image;</div><div class="line">         &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>还有一个场景他的应用会比较有效，比如要计算1000以内的素数，那就要循环1000次，每次都是同步执行的，性能很差。可以应用如下代码，doSomethingIntensiveWith:obj改为判断当前循环到的数字是否为素数，是就添加到一个集合中。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);</div><div class="line"><span class="keyword">for</span>(<span class="keyword">id</span> obj <span class="keyword">in</span> array)</div><div class="line">    <span class="built_in">dispatch_async</span>(queue,^&#123;[<span class="keyword">self</span> doSomethingIntensiveWith:obj];&#125;);</div></pre></td></tr></table></figure></p>
-<p>#dispatch_sync<br>该函数干的事和dispatch<em>async相同，差异就是它不会立即返回，它会等待传入的block中的代码执行完成并返回。结合\</em>_block类型修饰符，可以用来从执行中的block获取一个值。例如，你可能有一段代码在后台执行，而它需要从界面控制层获取一个值。那么你可以使用dispatch_sync简单办到。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">__block <span class="built_in">NSString</span> *stringValue;</div><div class="line"><span class="built_in">dispatch_sync</span>(dispatch_get_main_queue(), ^&#123;</div><div class="line">        stringValue = [[textField stringValue] <span class="keyword">copy</span>];</div><div class="line">&#125;);</div><div class="line">[stringValue autorelease];</div><div class="line"><span class="comment">// 操作stringValue</span></div></pre></td></tr></table></figure></p>
-<p>有一个使用的例子就是替换锁。以下代码为something属性的getter&amp;setter，具体可以看程序中的注释。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">id</span>)something</div><div class="line">&#123;</div><div class="line">    __block <span class="keyword">id</span> localSomething;</div><div class="line">    <span class="comment">//会等待传入的block执行完后才返回，但是由于自定义队列是FIFO执行的，所以如果前面有多个setter操作，那么现在就在等待中。</span></div><div class="line">    <span class="built_in">dispatch_sync</span>(queue, ^&#123;</div><div class="line">        localSomething = [something <span class="keyword">retain</span>];</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> [localSomething autorelease];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)setSomething:(<span class="keyword">id</span>)newSomething</div><div class="line">&#123;</div><div class="line">      <span class="comment">//直接返回，把任务添加到队列中执行。</span></div><div class="line">    <span class="built_in">dispatch_async</span>(queue, ^&#123;</div><div class="line">        <span class="keyword">if</span>(newSomething != something)</div><div class="line">        &#123;</div><div class="line">            [something release];</div><div class="line">            something = [newSomething <span class="keyword">retain</span>];</div><div class="line">           <span class="comment">//修改缓存可能非常耗时间，所以立即返回完全不影响性能</span></div><div class="line">            [<span class="keyword">self</span> updateSomethingCaches];</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>不过这里要注意，小心有代码会造成互斥锁，导致getter中的dispatch_sync一直无法返回。</p>
-<p>#dispatch_group_async<br>它可以实现监听一组任务是否完成，完成后得到通知执行其他的操作。<br>可以想象这么一个场景，比如你执行10下载任务，然后程序将每个下载任务又分成了2步操作，第二步合并必须在第一步完成后才能进行，那么前面dispatch_async的那个循环的例子就不管用了。看以下代码<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_qeueue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);</div><div class="line">dispatch_group_t group = dispatch_group_create();</div><div class="line"><span class="keyword">for</span>(<span class="keyword">id</span> obj <span class="keyword">in</span> array)&#123;</div><div class="line">  dispatch_group_async(group,queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadIntensiveWith:obj];</div><div class="line">  &#125;);</div><div class="line">   <span class="comment">//group中的任务都结束了，就会去通知该block中的任务去执行</span></div><div class="line">  dispatch_group_notify(group,queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadCombaineWith:obj];</div><div class="line">  &#125;);</div><div class="line">  <span class="comment">//IOS 6.0后不需要自己去释放，函数的变量栈在函数退出时候会自己释放。这个释放不同于ARC，他是在运行时</span></div><div class="line">  dispatch_release(group);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
-<p>#dispatch_barrier_async<br>在前面的任务执行结束后它才执行，而且它后面的任务等它执行完成之后才会执行<br>还是前面那个场景，比如下载必须等前面的任务完成后才进行合并操作，合并结束后才进行提示操作，那么dispatch_group_async又不是很好用了，看以下代码</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_queue_create(<span class="string">"com.dragonsoft.queue1"</span>, DISPATCH_QUEUE_CONCURRENT);</div><div class="line"><span class="keyword">for</span>(<span class="keyword">id</span> obj <span class="keyword">in</span> array)&#123;</div><div class="line"><span class="built_in">dispatch_async</span>(queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadIntensiveWith:obj];</div><div class="line">&#125;);</div><div class="line"><span class="built_in">dispatch_async</span>(queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownload2IntensiveWith:obj];</div><div class="line">&#125;);</div><div class="line">dispatch_barrier_async(queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadCombaineWith:obj];</div><div class="line">&#125;);</div><div class="line"><span class="built_in">dispatch_async</span>(queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doNoticeWith:obj];</div><div class="line">&#125;);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p>#dispatch_apply<br>执行某个代码片段N<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dispatch_apply(<span class="number">5</span>, globalQ, ^(size_t index) &#123;</div><div class="line">    <span class="comment">// 执行5次</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<p>使用场景还是刚刚那个下载，这下连循环都省了<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_qeueue(DISPATCH_QUEUE_PRIORITY_DEFAULT,  <span class="number">0</span>);</div><div class="line"><span class="comment">//推到后台去</span></div><div class="line"><span class="built_in">dispatch_async</span>(queue,^&#123;</div><div class="line">  dispatch_apply([array count], queue, ^(size_t index)&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadIntensiveWith:obj];</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1519,7 +1418,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">100</span>
+              <span class="site-state-item-count">102</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

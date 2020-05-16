@@ -226,6 +226,253 @@
             
               
                 
+                <a class="post-title-link" href="/2020/05/17/stupid-man-s-linear-dp/" itemprop="url">
+                  学渣的线性动规
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-05-17T00:20:33+08:00" content="2020-05-17">
+              2020-05-17
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="学渣的线性动规"><a href="#学渣的线性动规" class="headerlink" title="学渣的线性动规"></a>学渣的线性动规</h1><p>线性DP比较好的例子就是 三角形最小路径和，LIS，LCS问题了。</p>
+<h2 id="LIS"><a href="#LIS" class="headerlink" title="LIS"></a>LIS</h2><p>给定一个无序的整数数组，找到其中最长上升子序列的长度。</p>
+<p><a href="https://leetcode-cn.com/problems/longest-increasing-subsequence/" target="_blank" rel="external">直达链接</a></p>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>给定n个整数A1,A2,A3…An。按照从左往右的顺序选择尽可能多的整数，组成一个上升子序列，其中相邻元素不能相等</p>
+<h3 id="转移方程"><a href="#转移方程" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[i]=max&#123;1+dp[j]&#125;(0&lt;=j&lt;i,s[j]&lt;s[i])</div></pre></td></tr></table></figure>
+<h3 id="边界"><a href="#边界" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[0] = 1</div></pre></td></tr></table></figure>
+<h3 id="状态标识"><a href="#状态标识" class="headerlink" title="状态标识"></a>状态标识</h3><p>s 为输入数列<br>dp[i]表示以s[i]为结尾的“最大上升子序列长度”</p>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>max{dp[i]}(0&lt;=i&lt;n)</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">lis</span><span class="params">(<span class="number">_</span> s: [Int])</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="number">1</span>, <span class="built_in">count</span>: s.<span class="built_in">count</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> result = <span class="number">0</span></div><div class="line">        </div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span> ..&lt; dp.<span class="built_in">count</span> &#123;</div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">0</span> ..&lt; i &#123;</div><div class="line">                <span class="keyword">if</span> s[j] &lt; s[i] &#123;</div><div class="line">                    dp[i] = <span class="built_in">max</span>(dp[i], dp[j] + <span class="number">1</span>)</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            result = <span class="built_in">max</span>(dp[i], result)</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> result</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="LCS解1，二位数组"><a href="#LCS解1，二位数组" class="headerlink" title="LCS解1，二位数组"></a>LCS解1，二位数组</h2><p>给定两个字符串 text1 和 text2，返回这两个字符串的最长公共子序列的长度。</p>
+<p><a href="https://leetcode-cn.com/problems/longest-common-subsequence/" target="_blank" rel="external">直达链接</a></p>
+<h3 id="问题描述-1"><a href="#问题描述-1" class="headerlink" title="问题描述"></a>问题描述</h3><p>给定两个长度分别为n,m的字符串a,b,求既是a的子序列，又是b的子序列的字符串的长度最长是多少</p>
+<h3 id="转移方程-1"><a href="#转移方程-1" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">if a[i] == b[j]:</div><div class="line">	dp[i][j] = dp[i - 1][j - 1] + 1</div><div class="line">else:</div><div class="line">	dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])</div></pre></td></tr></table></figure>
+<h3 id="边界-1"><a href="#边界-1" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[i][0] = 0</div><div class="line">dp[0][j] = 0</div></pre></td></tr></table></figure>
+<h3 id="状态标识-1"><a href="#状态标识-1" class="headerlink" title="状态标识"></a>状态标识</h3><p>a,b 为输入字符串<br>n,m 为a,b的长度</p>
+<p>dp[i][j]表示a[0 ..&lt; i]与b[0 ..&lt; j]的最长公共子序列的长度</p>
+<h3 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h3><p>dp[n][m]</p>
+<h3 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">longestCommonSubsequence</span><span class="params">(<span class="number">_</span> a: String, <span class="number">_</span> b: String)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">let</span> m = a.<span class="built_in">count</span></div><div class="line">        <span class="keyword">let</span> n = b.<span class="built_in">count</span></div><div class="line">        <span class="keyword">if</span> m == <span class="number">0</span> || n == <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="type">Array</span>(repeating: <span class="number">0</span>, <span class="built_in">count</span>: n + <span class="number">1</span>), <span class="built_in">count</span>: m + <span class="number">1</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span> ... m &#123;</div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">1</span> ... n &#123;</div><div class="line">                <span class="keyword">if</span> a[a.index(a.startIndex, offsetBy: i - <span class="number">1</span>)] == b[b.index(b.startIndex, offsetBy: j - <span class="number">1</span>)] &#123;</div><div class="line">                    dp[i][j] = dp[i - <span class="number">1</span>][j - <span class="number">1</span>] + <span class="number">1</span></div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    dp[i][j] = <span class="built_in">max</span>(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>])</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> dp[m][n]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>但是用二位数组，时间复杂度在leetcode上过不了关，所以得考虑其他动态方案的方式。</p>
+<h2 id="LCS解2，一维数组"><a href="#LCS解2，一维数组" class="headerlink" title="LCS解2，一维数组"></a>LCS解2，一维数组</h2><p>几个优化的点</p>
+<ul>
+<li>一个是用一维数组</li>
+<li>二是不用String而是一开始就把String转成Array<character>，加快查询和修改的效率</character></li>
+</ul>
+<h3 id="转移方程-2"><a href="#转移方程-2" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// a.count &gt; b.count</div><div class="line"></div><div class="line">if a[j] == b[i]:</div><div class="line">	dp[j] = dp[j - 1] + 1</div><div class="line">else:</div><div class="line">	dp[j] = max(dp[j - 1], dp[j])</div></pre></td></tr></table></figure>
+<h3 id="边界-2"><a href="#边界-2" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[0] = 0</div></pre></td></tr></table></figure>
+<h3 id="状态标识-2"><a href="#状态标识-2" class="headerlink" title="状态标识"></a>状态标识</h3><p>a,b 为输入字符串转换的数组<br>m, n 为a,b的长度， m &gt;= n</p>
+<p>dp[j]表示a[0 ..&lt; j]与b的最长公共子序列的长度</p>
+<h3 id="目标-2"><a href="#目标-2" class="headerlink" title="目标"></a>目标</h3><p>dp[m]</p>
+<h3 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">longestCommonSubsequence</span><span class="params">(<span class="number">_</span> text1: String, <span class="number">_</span> text2: String)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">var</span> a = text1</div><div class="line">        <span class="keyword">var</span> b = text2</div><div class="line">        <span class="keyword">var</span> m = a.<span class="built_in">count</span></div><div class="line">        <span class="keyword">var</span> n = b.<span class="built_in">count</span></div><div class="line">        </div><div class="line">        <span class="keyword">if</span> m == <span class="number">0</span> || n == <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> m &lt; n &#123;</div><div class="line">            <span class="keyword">let</span> temp = m</div><div class="line">            m = n</div><div class="line">            n = temp</div><div class="line">            a = text2</div><div class="line">            b = text1</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="number">0</span>, <span class="built_in">count</span>: m + <span class="number">1</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span> ... n &#123;</div><div class="line">            <span class="keyword">var</span> cur = <span class="number">0</span></div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">1</span> ... m &#123;</div><div class="line">                <span class="keyword">let</span> leftTop = cur</div><div class="line">                cur = dp[j]</div><div class="line">                <span class="keyword">if</span> a[a.index(a.startIndex, offsetBy: j - <span class="number">1</span>)] == b[b.index(b.startIndex, offsetBy: i - <span class="number">1</span>)] &#123;</div><div class="line">                    dp[j] = leftTop + <span class="number">1</span></div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    dp[j] = <span class="built_in">max</span>(dp[j - <span class="number">1</span>], dp[j])</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">            </div><div class="line">        <span class="keyword">return</span> dp[m]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="double-100"><a href="#double-100" class="headerlink" title="double 100%"></a>double 100%</h3><p><img src="http://image.runmaf.com/2020-05-17-15896421497757.jpg" alt=""></p>
+<h2 id="三角形最小路径和"><a href="#三角形最小路径和" class="headerlink" title="三角形最小路径和"></a>三角形最小路径和</h2><p>给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。</p>
+<p>相邻的结点 在这里指的是 下标 与 上一层结点下标 相同或者等于 上一层结点下标 + 1 的两个结点。</p>
+<p><a href="https://leetcode-cn.com/problems/triangle" target="_blank" rel="external">直达链接</a></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>题目有表示用空间复杂度为O(n)有加分，那么肯定要考虑用一位数组来动态规划了。</p>
+<h3 id="转移方程-3"><a href="#转移方程-3" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[j] = triangle[i][j] + min(dp[j], dp[i])</div></pre></td></tr></table></figure>
+<h3 id="边界-3"><a href="#边界-3" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[0] = triangle[0][0]</div></pre></td></tr></table></figure>
+<h3 id="状态标识-3"><a href="#状态标识-3" class="headerlink" title="状态标识"></a>状态标识</h3><p>triangle 为三角形的二维数组<br>m为行数，n为最后一行列数<br>i为行索引，j为列索引</p>
+<h3 id="目标-3"><a href="#目标-3" class="headerlink" title="目标"></a>目标</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">min&#123;dp[0 ..&lt; n]&#125;</div></pre></td></tr></table></figure>
+<h3 id="实现-3"><a href="#实现-3" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">minimumTotal</span><span class="params">(<span class="number">_</span> triangle: [[Int]])</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">let</span> columnCount = triangle.<span class="built_in">count</span></div><div class="line">        </div><div class="line">        <span class="keyword">if</span> columnCount &lt;= <span class="number">1</span> &#123;</div><div class="line">            <span class="keyword">return</span> triangle.first?.first ?? <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="type">Int</span>.<span class="built_in">max</span>, <span class="built_in">count</span>: triangle.last?.<span class="built_in">count</span> ?? <span class="number">0</span>)</div><div class="line">        dp[<span class="number">0</span>] = triangle.first?.first ?? <span class="number">0</span></div><div class="line">        </div><div class="line">        <span class="keyword">for</span> columnIndex <span class="keyword">in</span> <span class="number">1</span> ..&lt; columnCount &#123;</div><div class="line">            <span class="keyword">let</span> row = triangle[columnIndex]</div><div class="line">            <span class="keyword">let</span> rowCount = row.<span class="built_in">count</span></div><div class="line">            </div><div class="line">            <span class="keyword">var</span> lastLeft = <span class="type">Int</span>.<span class="built_in">max</span></div><div class="line">            </div><div class="line">            <span class="keyword">for</span> rowIndex <span class="keyword">in</span> <span class="number">0</span> ..&lt; rowCount &#123;</div><div class="line">                <span class="keyword">let</span> temp = lastLeft</div><div class="line">                lastLeft = dp[rowIndex]</div><div class="line">                dp[rowIndex] = row[rowIndex] + <span class="built_in">min</span>(temp, dp[rowIndex])</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp.<span class="built_in">min</span>() ?? <span class="number">0</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">assert</span>(<span class="type">Solution</span>().minimumTotal([[<span class="number">2</span>],[<span class="number">3</span>, <span class="number">4</span>],[<span class="number">6</span>, <span class="number">5</span>, <span class="number">7</span>],[<span class="number">4</span>,<span class="number">1</span>,<span class="number">8</span>,<span class="number">3</span>]]) == <span class="number">11</span>)</div></pre></td></tr></table></figure>
+<h3 id="double-100-1"><a href="#double-100-1" class="headerlink" title="double 100%"></a>double 100%</h3><p><img src="http://image.runmaf.com/2020-05-17-15896455723167.jpg" alt=""></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/05/16/stupid-man-s-dp/" itemprop="url">
+                  学渣的DP动态规划算法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-05-16T00:19:18+08:00" content="2020-05-16">
+              2020-05-16
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="学渣的DP动态规划算法"><a href="#学渣的DP动态规划算法" class="headerlink" title="学渣的DP动态规划算法"></a>学渣的DP动态规划算法</h1><h2 id="什么是DP"><a href="#什么是DP" class="headerlink" title="什么是DP"></a>什么是DP</h2><p>对于非算法专业的渣渣，看各种专业的解释有点脑壳疼。不过悟出了点自己的感觉，记录下。</p>
+<p>其实拿递归来理解会比较好理解，毕竟递归大家大学都学过，很容易懂。</p>
+<font color="red">递归是从上往下方式，而DP则是从下往上的。</font>
+
+<p>算法其实都是计算机的穷举，只是怎么更聪明更高效更节省空间的穷举。拿斐波列次数列来理解是最好不过的了。</p>
+<h3 id="斐波列次的递归Swift实现"><a href="#斐波列次的递归Swift实现" class="headerlink" title="斐波列次的递归Swift实现"></a>斐波列次的递归Swift实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">fibonacci</span><span class="params">(<span class="number">_</span> n: Int)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">if</span> n == <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span> <span class="comment">// 987次</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> n == <span class="number">1</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">1</span>  <span class="comment">// 1597次</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> fibonacci(n - <span class="number">1</span>) + fibonacci(n - <span class="number">2</span>)  <span class="comment">// 2583次</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">assert</span>(<span class="type">Solution</span>().fibonacci(<span class="number">17</span>) == <span class="number">1597</span>)</div></pre></td></tr></table></figure>
+<p>怎么样，是不是很恐怖，看似优雅的递归方式，执行次数竟然这么多，效率如此低，要是大点的数就完全算不出来了。</p>
+<h3 id="斐波列次的DP算法Swift实现"><a href="#斐波列次的DP算法Swift实现" class="headerlink" title="斐波列次的DP算法Swift实现"></a>斐波列次的DP算法Swift实现</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">class Solution &#123;</div><div class="line">    func dpFibonacci(_ n: Int) -&gt; Int &#123;</div><div class="line">        var dp = Array.init(repeating: 0, count: n + 1)</div><div class="line">        dp[0] = 0</div><div class="line">        dp[1] = 1</div><div class="line">        for i in 2 ..&lt; dp.count &#123;</div><div class="line">            dp[i] = dp[i - 1] + dp[i - 2] // 16次</div><div class="line">        &#125;</div><div class="line">        return dp[n]</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">assert(Solution().dpFibonacci(17) == 1597)</div></pre></td></tr></table></figure>
+<p>怎么样，是不是觉得效果更高了。<br>我们直接从最底下，最简单，问题规模最小的 f(1) 和 f(2) 开始往上推，直到推到我们想要的答案 f(20)。</p>
+<h2 id="状态转移方程"><a href="#状态转移方程" class="headerlink" title="状态转移方程"></a>状态转移方程</h2><p>状态转移方程是解决DP问题的核心,其实也就代表着暴力破解的方式,但不要小看暴力破解.</p>
+<p>比如斐波列次数列的状态转移方式就是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[i] = dp[i-1] + dp[i-2]</div></pre></td></tr></table></figure>
+<p>这算比较简单的，复杂实例前，先让了解下几种动态规划的类型：</p>
+<ul>
+<li>线性动规</li>
+<li>区域动规</li>
+<li>树形动规</li>
+<li>背包动规</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>下篇文章树下线性动规划</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2020/04/05/native-app-flutter-hybrid-in-flutter-boost/" itemprop="url">
                   移动端的flutter_boost混编实现
                 </a>
@@ -1346,290 +1593,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/30/安卓蓝牙模块踩坑集合/" itemprop="url">
-                  安卓蓝牙模块踩坑集合
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2016-08-30T14:31:40+08:00" content="2016-08-30">
-              2016-08-30
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="安卓蓝牙模块踩坑集合"><a href="#安卓蓝牙模块踩坑集合" class="headerlink" title="安卓蓝牙模块踩坑集合"></a>安卓蓝牙模块踩坑集合</h1><h2 id="对特定的设备进行搜索"><a href="#对特定的设备进行搜索" class="headerlink" title="对特定的设备进行搜索"></a>对特定的设备进行搜索</h2><p>API <figure class="highlight plain"><figcaption><span>BluetoothAdapter.LeScanCallback) ```是安卓系统特地提供出来对特定的设备进行搜索的，官方API说明</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">``` If you want to scan for only specific types of peripherals, you can instead call startLeScan(UUID[], BluetoothAdapter.LeScanCallback), providing an array of UUID objects that specify the GATT services your app supports.</div></pre></td></tr></table></figure></p>
-<p>故事听起来都是美好的，实际上，人生很艰难</p>
-<ul>
-<li>先是这个API设计的很有问题，他 <code>UUID[]</code>是并集而不是合集，就是说，我只能搜一个设备同时兼备两个UUID，而不是这两个UUID的设备都进行搜索，这点iOS API设计就合理很多了。</li>
-<li>然后是，这个API在安卓4.3 4.4压根不支持，这就是最坑爹的人，折腾了半天，最后不支持！</li>
-</ul>
-<h2 id="搜索的回调"><a href="#搜索的回调" class="headerlink" title="搜索的回调"></a>搜索的回调</h2><p>这点倒不算坑，就是要注意的地方<code>BluetoothAdapter.LeScanCallback.onLeScan()</code> 为搜索结果的回调，该方法尽可能尽快把负责的过滤、判断抛到其他线程去做，尽快将回调调用返回了。</p>
-<h2 id="同时只能对一个设备进行连接"><a href="#同时只能对一个设备进行连接" class="headerlink" title="同时只能对一个设备进行连接"></a>同时只能对一个设备进行连接</h2><p><code>BluetoothDevice.connectGatt()</code>方法要控制好，不能同时对多个设备进行连接，这点也就不能像iOS那样，进行预连接的根源坑。</p>
-<p>如果连接失败了（例如出错，或者连接超时失败），要马上调用 BluetoothGatt.disconnect() 来释放建立连接请求，然后处理下一个设备连接请求，否则就等133出现！</p>
-<h2 id="对于属性的操作，同时只能有一个"><a href="#对于属性的操作，同时只能有一个" class="headerlink" title="对于属性的操作，同时只能有一个"></a>对于属性的操作，同时只能有一个</h2><p>不管是<code>writeCharacteristic()</code>写数据，还是设置notify，都是异步的，同时只能有一个，否则可能串线，或者丢失。所以，一定要在上一个写成功的回调后才能进行下一个操作，就这样，还有可能会出现该问题，所以在一些有可能要同时操作的地方，我是等收到了数据才进行下一个操作。比如连接上Podoon鞋垫后要进行时间校正、读版本号、读批次号、读协议栈，就是在前一个notify数据后，才执行下一个，另外特地做了一个Timer循环的去检查。</p>
-<h2 id="搜索、连接、断开连接最好放在主线程"><a href="#搜索、连接、断开连接最好放在主线程" class="headerlink" title="搜索、连接、断开连接最好放在主线程"></a>搜索、连接、断开连接最好放在主线程</h2><p>这点看文档看到的，具体有没有效果不清楚，SDK是创建一个 <code>new Handler(context.getMainLooper());</code> ，把消息发送到这个 Handler 中。</p>
-<h2 id="连接过程很耗电，尽量时间短"><a href="#连接过程很耗电，尽量时间短" class="headerlink" title="连接过程很耗电，尽量时间短"></a>连接过程很耗电，尽量时间短</h2><p>对BLE设备连接，连接过程要尽量短，如果连接不上，不要盲目进行重连，否这你的电池会很快被消耗掉</p>
-<h2 id="作为中心设备，最多只能同时连6（不是非常确定，但是是有限的）个BLE设备"><a href="#作为中心设备，最多只能同时连6（不是非常确定，但是是有限的）个BLE设备" class="headerlink" title="作为中心设备，最多只能同时连6（不是非常确定，但是是有限的）个BLE设备"></a>作为中心设备，最多只能同时连6（不是非常确定，但是是有限的）个BLE设备</h2><p>超过了就很可能会连接失败。如果连接后资源未被释放，也会记做连接的设备进行计算。</p>
-<h2 id="资源未被释放导致133问题"><a href="#资源未被释放导致133问题" class="headerlink" title="资源未被释放导致133问题"></a>资源未被释放导致133问题</h2><p>连接蓝牙设备后，在断开时候尽可能对其进行close操作，否则就有可能因为资源未释放干净又连接同一个设备出现133的错误</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/07/2016-06-07-dockercong-0dao-1de-bi-ji/" itemprop="url">
-                  Docker从0到1的笔记
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2016-06-07T14:25:06+08:00" content="2016-06-07">
-              2016-06-07
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Docker从0到1的笔记"><a href="#Docker从0到1的笔记" class="headerlink" title="Docker从0到1的笔记"></a>Docker从0到1的笔记</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="https支持及GPG-key添加"><a href="#https支持及GPG-key添加" class="headerlink" title="https支持及GPG key添加"></a>https支持及GPG key添加</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install apt-transport-https ca-certificates</div><div class="line">$ sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D</div></pre></td></tr></table></figure>
-<h3 id="设置docker镜像源"><a href="#设置docker镜像源" class="headerlink" title="设置docker镜像源"></a>设置docker镜像源</h3><p>编辑<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
-<p>deb <a href="https://apt.dockerproject.org/repo" target="_blank" rel="external">https://apt.dockerproject.org/repo</a> ubuntu-trusty main<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">### 旧版本的清理及验证</div><div class="line"></div><div class="line">```bash</div><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get purge lxc-docker</div><div class="line">$ apt-cache policy docker-engine</div></pre></td></tr></table></figure></p>
-<h3 id="添加内核包"><a href="#添加内核包" class="headerlink" title="添加内核包"></a>添加内核包</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install linux-image-extra-$(uname -r)</div><div class="line">$ sudo apt-get install apparmor</div></pre></td></tr></table></figure>
-<h3 id="安装并启动docker"><a href="#安装并启动docker" class="headerlink" title="安装并启动docker"></a>安装并启动docker</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install docker-engine</div><div class="line">$ sudo service docker start</div></pre></td></tr></table></figure>
-<h3 id="验证docker已启动"><a href="#验证docker已启动" class="headerlink" title="验证docker已启动"></a>验证docker已启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo docker run hello-world</div></pre></td></tr></table></figure>
-<h3 id="其他docker可选配置"><a href="#其他docker可选配置" class="headerlink" title="其他docker可选配置"></a>其他docker可选配置</h3><p>还一些docker配置，比如group这里就没做测试，只是单机上测试下简单的功能。</p>
-<h2 id="使用案例nodejs-mysql"><a href="#使用案例nodejs-mysql" class="headerlink" title="使用案例nodejs+mysql"></a>使用案例nodejs+mysql</h2><h3 id="创建一个容器测试下"><a href="#创建一个容器测试下" class="headerlink" title="创建一个容器测试下"></a>创建一个容器测试下</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker run -it ubuntu</div></pre></td></tr></table></figure>
-<ul>
-<li>run创建容器</li>
-<li>-it创建后会直接给生成的容器创建一个终端</li>
-<li>ubuntu创建容器所使用的镜像</li>
-</ul>
-<p>可以在容器的终端上运行一下命令，查看容器的信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">root@719059da250d:/# lsb_release -a</div><div class="line">No LSB modules are available.</div><div class="line">Distributor ID:    Ubuntu</div><div class="line">Description:    Ubuntu 14.04.4 LTS</div><div class="line">Release:    14.04</div><div class="line">Codename:    trusty</div><div class="line">root@719059da250d:/# exit</div></pre></td></tr></table></figure>
-<h3 id="开始案例吧，创建一个mysql的容器"><a href="#开始案例吧，创建一个mysql的容器" class="headerlink" title="开始案例吧，创建一个mysql的容器"></a>开始案例吧，创建一个mysql的容器</h3><p>创建一个文件夹test_database，文件夹结构为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">test_database\setup.sql</div><div class="line">test_database\start.sh</div><div class="line">test_database\stop.sh</div></pre></td></tr></table></figure>
-<p>start.sh</p>
-<figure class="highlight bash"><figcaption><span>start.sh</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line"><span class="comment"># Run the MySQL container, with a database named 'users' and credentials</span></div><div class="line"><span class="comment"># for a users-service user which can access it.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Starting DB..."</span></div><div class="line">docker run --name db -d \</div><div class="line"> -e MYSQL_ROOT_PASSWORD=123 \</div><div class="line"> -e MYSQL_DATABASE=users -e MYSQL_USER=users_service -e MYSQL_PASSWORD=123 \</div><div class="line"> -p 3306:3306 mysql:latest</div><div class="line"></div><div class="line"><span class="comment"># Wait for the database service to start up.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Waiting for DB to start up..."</span></div><div class="line">docker <span class="built_in">exec</span> db mysqladmin --silent --<span class="built_in">wait</span>=30 -uusers_service -p123 ping || <span class="built_in">exit</span> 1</div><div class="line"></div><div class="line"><span class="comment"># Run the setup script.</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Setting up initial data..."</span></div><div class="line">docker <span class="built_in">exec</span> -i db mysql -uusers_service -p123 users &lt; setup.sql</div></pre></td></tr></table></figure>
-<ul>
-<li>–name db 给容器命名</li>
-<li>-d 在后台运行</li>
-<li>-e 环境变量</li>
-<li>-p 端口映射，即宿主机上的3306端口会映射到容器的3306端口上</li>
-<li>mysql:latest 最新版本的mysql</li>
-</ul>
-<p>stop.sh</p>
-<figure class="highlight bash"><figcaption><span>stop.sh</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line"><span class="comment"># Stop the db and remove the container.</span></div><div class="line">docker stop db &amp;&amp; docker rm db</div></pre></td></tr></table></figure>
-<ul>
-<li>stop 停止容器</li>
-<li>rm 删除容器</li>
-</ul>
-<p>setup.sql</p>
-<figure class="highlight sql"><figcaption><span>setup.sql</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">directory</span> (user_id <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT PRIMARY <span class="keyword">KEY</span>, email <span class="built_in">TEXT</span>, phone_number <span class="built_in">TEXT</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">directory</span> (email, phone_number) <span class="keyword">values</span> (<span class="string">'homer@thesimpsons.com'</span>, <span class="string">'+1 888 123 1111'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">directory</span> (email, phone_number) <span class="keyword">values</span> (<span class="string">'marge@thesimpsons.com'</span>, <span class="string">'+1 888 123 1112'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">directory</span> (email, phone_number) <span class="keyword">values</span> (<span class="string">'maggie@thesimpsons.com'</span>, <span class="string">'+1 888 123 1113'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">directory</span> (email, phone_number) <span class="keyword">values</span> (<span class="string">'lisa@thesimpsons.com'</span>, <span class="string">'+1 888 123 1114'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">directory</span> (email, phone_number) <span class="keyword">values</span> (<span class="string">'bart@thesimpsons.com'</span>, <span class="string">'+1 888 123 1115'</span>);</div></pre></td></tr></table></figure>
-<p>然后直接执行start.sh即可，不用的时候直接执行stop.sh。</p>
-<h3 id="构建nodejs-服务端代码"><a href="#构建nodejs-服务端代码" class="headerlink" title="构建nodejs 服务端代码"></a>构建nodejs 服务端代码</h3><p>创建文件夹users-service，然后 <figure class="highlight plain"><figcaption><span>clone</span><a href="https://github.com/yuezaixz/nodejs-in-docker.git```" target="_blank" rel="external">link</a></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">可以先执行```npm start```来测试是否可以运行，如果在浏览器中可以正常访问```localhost:8123/users```，那么就说明代码没问题了。</div><div class="line"></div><div class="line">### 项目中的docker容器配置文件</div><div class="line">在users-service目录中已经有了一个文件Dockerfile,内容为</div></pre></td></tr></table></figure></p>
-<h1 id="Use-Node-v4-as-the-base-image"><a href="#Use-Node-v4-as-the-base-image" class="headerlink" title="Use Node v4 as the base image."></a>Use Node v4 as the base image.</h1><p>FROM node:4</p>
-<h1 id="Add-everything-in-the-current-directory-to-our-image-in-the-‘app’-folder"><a href="#Add-everything-in-the-current-directory-to-our-image-in-the-‘app’-folder" class="headerlink" title="Add everything in the current directory to our image, in the ‘app’ folder."></a>Add everything in the current directory to our image, in the ‘app’ folder.</h1><p>ADD . /app</p>
-<h1 id="Install-dependencies"><a href="#Install-dependencies" class="headerlink" title="Install dependencies"></a>Install dependencies</h1><p>RUN cd /app; \<br>    npm install –production</p>
-<h1 id="Expose-our-server-port"><a href="#Expose-our-server-port" class="headerlink" title="Expose our server port."></a>Expose our server port.</h1><p>EXPOSE 8123</p>
-<h1 id="Run-our-app"><a href="#Run-our-app" class="headerlink" title="Run our app."></a>Run our app.</h1><p>CMD [“node”, “/app/index.js”]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">* FROM node:4 用node4作为容器的景象</div><div class="line">* ADD . /app 把当前目录的所有文件都映射为容器中/app文件夹下的内容</div><div class="line">* RUN cd /app; npm install --production 运行容器时候，执行命令，添加项目所需要的依赖</div><div class="line">* EXPOSE 8123 输出端口</div><div class="line">* CMD [&quot;node&quot;, &quot;/app/index.js&quot;] 应用启动命令</div><div class="line"></div><div class="line">### 运行nodejs的docker容器</div><div class="line">在users-service路径下运行以下命令来启动容器</div><div class="line"></div><div class="line">```bash</div><div class="line">$ docker build -t users-service .</div><div class="line">$ docker run -it -p 8123:8123 users-service</div></pre></td></tr></table></figure></p>
-<ul>
-<li>docker build -t users-service .  根据当前目录的Dockerfile文件在创建容器users-service</li>
-</ul>
-<h3 id="容器与容器的依赖"><a href="#容器与容器的依赖" class="headerlink" title="容器与容器的依赖"></a>容器与容器的依赖</h3><p>运行上一段命令后会报错，因为当前容器依赖了宿主机上另一个mysql容器，nodejs容器访问容器种的3306端口无法访问到另一台容器的mysql容器。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">--- Customer Service---</div><div class="line">Connecting to customer repository...</div><div class="line">Connected. Starting server...</div><div class="line">Server started successfully, running on port 8123.</div><div class="line">GET /users 500 23.958 ms - 582</div><div class="line">Error: An error occured getting the users: Error: connect ECONNREFUSED 127.0.0.1:3306</div><div class="line">    at Query._callback (/app/repository/repository.js:21:25)</div><div class="line">    at Query.Sequence.end (/app/node_modules/mysql/lib/protocol/sequences/Sequence.js:96:24)</div><div class="line">    at /app/node_modules/mysql/lib/protocol/Protocol.js:399:18</div><div class="line">    at Array.forEach (native)</div><div class="line">    at /app/node_modules/mysql/lib/protocol/Protocol.js:398:13</div><div class="line">    at nextTickCallbackWith0Args (node.js:420:9)</div><div class="line">    at process._tickCallback (node.js:349:13)</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</div><div class="line">ebcae11742af        users-service       &quot;node /app/index.js&quot;     2 days ago          Up 2 days           0.0.0.0:8123-&gt;8123/tcp   fervent_hopper</div><div class="line">0e6e2bacafa2        mysql:latest        &quot;docker-entrypoint.sh&quot;   2 days ago          Up 2 days           0.0.0.0:3306-&gt;3306/tcp   db</div></pre></td></tr></table></figure>
-<p>那么就需要让nodejs容器依赖mysql容器。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it -p 8123:8123 --link db:db -e DATABASE_HOST=DB users-service</div></pre></td></tr></table></figure>
-<ul>
-<li>link db:db 连接到容器名为db的容器，把他引用为db</li>
-<li>-e DATABASE_HOST=db 设置环境变量</li>
-</ul>
-<p>查看config.js的代码可以发现，服务端代码配置数据源的方式是 <figure class="highlight plain"><figcaption><span>|| '127.0.0.1'```存在环境变量DATABASE_HOST的时候使用该环境变量</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
-<p>//  config.js<br>//<br>//  Simple application configuration. Extend as needed.<br>module.exports = {<br>    port: process.env.PORT || 8123,<br>  db: {<br>    host: process.env.DATABASE_HOST || ‘127.0.0.1’,<br>    database: ‘users’,<br>    user: ‘users_service’,<br>    password: ‘123’,<br>    port: 3306<br>  }<br>};</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">从下面可以看出，存在一个172.17.0.2，名为db的依赖。</div></pre></td></tr></table></figure>
-<p>ubuntu@VM-79-113-ubuntu:~/users-service$ sudo docker exec fervent_hopper cat /etc/hosts<br>127.0.0.1    localhost<br>::1    localhost ip6-localhost ip6-loopback<br>fe00::0    ip6-localnet<br>ff00::0    ip6-mcastprefix<br>ff02::1    ip6-allnodes<br>ff02::2    ip6-allrouters<br>172.17.0.2    db 0e6e2bacafa2<br>172.17.0.3    ebcae11742af<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">再从下面可以看出，DATABASE_HOST指向的就是这个名为db的依赖</div></pre></td></tr></table></figure></p>
-<p>ubuntu@VM-79-113-ubuntu:~/users-service$ sudo docker exec fervent_hopper printenv | grep DB<br>DB_PORT=tcp://172.17.0.2:3306<br>DB_PORT_3306_TCP=tcp://172.17.0.2:3306<br>DB_PORT_3306_TCP_ADDR=172.17.0.2<br>DB_PORT_3306_TCP_PORT=3306<br>DB_PORT_3306_TCP_PROTO=tcp<br>DB_NAME=/fervent_hopper/db<br>DB_ENV_MYSQL_ROOT_PASSWORD=123<br>DB_ENV_MYSQL_DATABASE=users<br>DB_ENV_MYSQL_USER=users_service<br>DB_ENV_MYSQL_PASSWORD=123<br>DB_ENV_GOSU_VERSION=1.7<br>DB_ENV_MYSQL_MAJOR=5.7<br>DB_ENV_MYSQL_VERSION=5.7.12-1debian8<br>DATABASE_HOST=DB<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">现在可以在浏览器中试试可以不可以正常访问```localhost:8123/users```，可以的话说明配置没问题了。</div><div class="line"></div><div class="line">## python flask框架的案例</div><div class="line">由于依赖的是外部数据库，所以很简单，只要定义好Docker文件即可。</div></pre></td></tr></table></figure></p>
-<p>FROM ubuntu:latest<br>MAINTAINER David Woo “xiao303178394@gmail.com”<br>RUN apt-get update -y<br>RUN apt-get install -y python-pip python-dev build-essential<br>COPY . /app<br>WORKDIR /app<br>RUN pip install -r etc/reqs-dev.txt<br>ENTRYPOINT [“python”]<br>CMD [“manager.py”,”runserver”]</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">构建镜像</div></pre></td></tr></table></figure>
-<p>sudo docker build -t paodong-mng:latest .<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">运行容器</div></pre></td></tr></table></figure></p>
-<p>sudo docker run -d -p 80:8558 paodong-mng<br>```</p>
-<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><ul>
-<li>run创建容器</li>
-<li>-it创建后会直接给生成的容器创建一个终端</li>
-<li>–name db 给容器命名</li>
-<li>-d 在后台运行</li>
-<li>-e 环境变量</li>
-<li>-t mysql 创建tag为mysql的容器</li>
-<li>-p 端口映射，即宿主机上的3306端口会映射到容器的3306端口上</li>
-<li>mysql:latest 最新版本的mysql</li>
-<li>ps 查看所有容器</li>
-<li>docker exec -it db /bin/bash 在容器db上执行终端，用bash执行</li>
-</ul>
-<h2 id="参阅"><a href="#参阅" class="headerlink" title="参阅"></a>参阅</h2><ul>
-<li><a href="http://www.dwmkerr.com/learn-docker-by-building-a-microservice/" target="_blank" rel="external">Learn Docker by building a Microservice</a></li>
-<li><a href="https://docs.docker.com/engine/installation/linux/ubuntulinux/" target="_blank" rel="external">Installation on ubuntu</a></li>
-<li><a href="http://containertutorials.com/docker-compose/flask-simple-app.html" target="_blank" rel="external">Dockerize Simple Flask App</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1670,7 +1638,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">100</span>
+              <span class="site-state-item-count">102</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

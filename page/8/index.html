@@ -226,6 +226,366 @@
             
               
                 
+                <a class="post-title-link" href="/2014/05/01/2014-05-01-spring-framework-core-source-code-analysis-a-spring-the-overall-structure-and-the-overall-ioc-container-design-introduction/" itemprop="url">
+                  Spring Framework的核心源码解读（一）-Spring整体结构以及IoC容器设计整体介绍
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-05-01T15:19:00+08:00" content="2014-05-01">
+              2014-05-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/application/" itemprop="url" rel="index">
+                    <span itemprop="name">application</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/application/IoC/" itemprop="url" rel="index">
+                    <span itemprop="name">IoC</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/application/IoC/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/application/IoC/源码分析/beanfactory/" itemprop="url" rel="index">
+                    <span itemprop="name">beanfactory</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#前言<br>这么久没写博客？我干嘛去了呢？最主要还是项目比较忙，没有大段的时间来看书、研究、写成博文。仅有的时间也只能翻阅下书籍或者技术文章，而自己又不想天天写些心灵鸡汤类的东西。那么就只好罢工这么久了咯。终于遇到五一有空了，安静下来看看书，写写博文。最近一段时间都是Spring 源码相关的，该系列文章内容大多为《Spring技术内幕》这本书的笔记，这本书很不错，推荐阅读。也会发一段Thoughtwork的那个代码招聘的FizzBuzzWhizz相关的内容。<br>敬请期待！</p>
+<p>#1 概述</p>
+<h2 id="1-1-Spring的整体架构"><a href="#1-1-Spring的整体架构" class="headerlink" title="1.1 Spring的整体架构"></a>1.1 Spring的整体架构</h2><p>Spring 总共有十几个组件，其中核心组件只有三个：Core、Context 和 Beans。AOP、Web等都属于核心上层的特性功能。本文将对Spring核心内容的设计进行分析。<br><img src="http://i1.tietuku.com/154191d85dc03b0c.jpg" alt=""></p>
+<p>#2 IoC容器的实现</p>
+<h2 id="2-1-控制反转（IOC）"><a href="#2-1-控制反转（IOC）" class="headerlink" title="2.1 控制反转（IOC）"></a>2.1 控制反转（IOC）</h2><p>实际应用的程序基本上都是由多个类彼此合作来实现业务逻辑，这使得每个对象都需要与其合作的对象的引用。但是这样的控制就导致了程序的耦合度非常大，不易于复用，更不易于做单元测试。<br>Martin Flowler 提出了“那些方面的控制被反转了？”这个问题。他得出的结论是：依赖对象的获得被反转了。基于这个结论，他为控制反转创造了一个更好的名字：依赖注入。<br>依赖倒置也是设计模式六大原则之一。在Spring中IoC容器就是这个模式的载体，它可以通过容器对对象进行管理，在对象生成或初始化时直接将数据注入到需要其依赖的对象中。这也是Spring的核心。</p>
+<h2 id="2-2-BeanFactory和ApplicationContext的区别"><a href="#2-2-BeanFactory和ApplicationContext的区别" class="headerlink" title="2.2 BeanFactory和ApplicationContext的区别"></a>2.2 BeanFactory和ApplicationContext的区别</h2><p>Spring中容器要分两类，一类是实现BeanFactory接口的简单容器系列，这类容器只实现了容器的最基本功能；另一个是ApplicationContext应用上下文，也就是我们最常用的，项目中的配置文件大多数都是ApplicationContext-xxx.xml，它作为容器的高级形态而存在。<br>用生活中的容器水杯举例，BeanFactory就定义了可以作为水桶的基本功能（装水）。从下图可以看出，Spring容器的基本功能就是获取bean、判断bean是否存在、是否为单例、是否为原型、类型是否匹配、获取bean的类型、获取bean的别名。因此BeanFactory就是Spring的基本接口。<br> <img src="http://i1.tietuku.com/75daf2c913bddbdd.jpg" alt=""><br>那么BeanFactory是杯子，那么BeanDefinition就是水。BeanDefinition是用来管理基于Spring的应用中的各种对象以及它们之间的相互依赖关系，就Spring中Bean的主要数据结构，是设计出来水的抽象。如下代码。<br><figure class="highlight java"><figcaption><span>DefaultListableBeanFactory.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/** Map of bean definition objects, keyed by bean name */</span></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, BeanDefinitionbeanDefinitionMap = <span class="keyword">new</span> ConcurrentHashMap&lt;String, BeanDefinition&gt;();</div><div class="line"></div><div class="line">	<span class="comment">/** List of bean definition names, in registration order */</span></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> List&lt;StringbeanDefinitionNames = <span class="keyword">new</span> ArrayList&lt;String&gt;();</div></pre></td></tr></table></figure></p>
+<p>而ApplicationContext则提供了很多特殊的特性，从下图ApplicationContext接口的继承关系可以看出，它除了容器所需的基本特性外，还有其他许多附加特性，比如国际化的消息访问、资源访问、事件传播、载入多个上下文等。<br> <img src="http://i1.tietuku.com/84eaba13257e4c38.jpg" alt=""></p>
+<h2 id="2-3-IoC容器的接口设计"><a href="#2-3-IoC容器的接口设计" class="headerlink" title="2.3 IoC容器的接口设计"></a>2.3 IoC容器的接口设计</h2><p>下图描述了IoC容器中的主要接口设计（图片拍自Spring技术内幕一书）。<br> <img src="http://i1.tietuku.com/8f45e01439fe6212.jpg" alt=""></p>
+<h2 id="2-3-1-BeanFactory-HierarchicalBeanFactory-ConfigurableBeanFactory"><a href="#2-3-1-BeanFactory-HierarchicalBeanFactory-ConfigurableBeanFactory" class="headerlink" title="# 2.3.1 BeanFactory-HierarchicalBeanFactory-ConfigurableBeanFactory"></a># 2.3.1 BeanFactory-HierarchicalBeanFactory-ConfigurableBeanFactory</h2><p>在这条设计路径中，HierarchicalBeanFactory增加了getParentBeanFactory()的功能，是BeanFactory具备了双亲IoC容器的管理功能，在ConfigurableBeanFactory中主要定义了一些对BeanFactory的配置功能，比如通过setParentBeanFactory()设置双亲IoC容器，通过addBeanPostProcessor()定义了Bean后置处理器等。</p>
+<h2 id="2-3-2-ApplicationContext路线"><a href="#2-3-2-ApplicationContext路线" class="headerlink" title="# 2.3.2 ApplicationContext路线"></a># 2.3.2 ApplicationContext路线</h2><p>该设计路线以ApplicationContext应用上下文接口为核心的接口设计，这里涉及的主要接口设计有，从BeanFactory到ListableBeanFactory，再到ApplicationContext，再到我们常用的WebApplicationContext或者ConfigurableApplicationContext接口。<br>在这个接口体系中，ListableBeanFactory和HierarchicalBeanFactory两个接口，连接BeanFactory接口定义和ApplicationConext应用上下文的接口定义。在ListableBeanFactory接口中，细化了许多BeanFactory的接口功能，比如定义了getBeanDefinitionNames()接口方法；对于HierarchicalBeanFactory接口，我们在前文中已经提到过；对于ApplicationContext接口，它通过继承MessageSource、ResourceLoader、ApplicationEventPublisher接口，在BeanFactory简单IoC容器的基础上添加了许多对高级容器的特性的支持，这些特性我们之前也都提到过了。<br>总体来说 ApplicationContext 必须要完成以下几件事：</p>
+<ul>
+<li>标识一个应用环境</li>
+<li>利用 BeanFactory 创建 Bean 对象</li>
+<li>保存对象关系表</li>
+<li>能够捕获各种事件</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/03/28/2014-03-28-java-parse-xml-export-word/" itemprop="url">
+                  Java解析Xml导出Word
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-03-28T10:42:00+08:00" content="2014-03-28">
+              2014-03-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/模板引擎/" itemprop="url" rel="index">
+                    <span itemprop="name">模板引擎</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/模板引擎/导出Word/" itemprop="url" rel="index">
+                    <span itemprop="name">导出Word</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/模板引擎/导出Word/解析Xml/" itemprop="url" rel="index">
+                    <span itemprop="name">解析Xml</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/模板引擎/导出Word/解析Xml/设计/" itemprop="url" rel="index">
+                    <span itemprop="name">设计</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#需求概述<br>不知道大家有没做过用xml定义需要导出word的格式和需要的数据，然后通过Java代码来解析Xml完成导出。<br>本文不考虑解析Xml和怎么导出Word，只考虑如何用解析后的对象来生成需要导出的数据。<br>本文使用的Xml解析方法为Dom4j，Word导出方法为Itext。</p>
+<p>#最初的想法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">    	<span class="keyword">try</span> &#123;</div><div class="line">    		Object data = getData();</div><div class="line">	    	Element xmlElement = DXmlUtil.getXmlElement(<span class="string">"format.xml"</span>, <span class="string">"/Doc"</span>);</div><div class="line">		IDocFactory factory = <span class="keyword">new</span> DDocFactory();</div><div class="line">         Document doc = factory.getDocFactory(out);</div><div class="line">	    	proc(xmlElement,data, doc, factory);</div><div class="line">	    &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">	    	e.printStackTrace();</div><div class="line">	    &#125;</div><div class="line">	&#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">proc</span><span class="params">(Element element,Object obj,Document doc,IDocFactory factory)</span></span>&#123;</div><div class="line">    	<span class="comment">//TODO 接下来就是见证奇迹的时刻</span></div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight xml"><figcaption><span>需解析的模板</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">Doc</span> <span class="attr">title</span>=<span class="string">"$&#123;app.name&#125;"</span> <span class="attr">subtitle</span>=<span class="string">"运维服务报告"</span> <span class="attr">exportpath</span>=<span class="string">"F:\\音乐\\哈哈哈"</span> &gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">chapter</span> <span class="attr">level</span>=<span class="string">"1"</span> <span class="attr">num</span>=<span class="string">"1"</span> <span class="attr">title</span>=<span class="string">"目的"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>本服务报告按月对系统运维情况进行总结，对出现的问题给与说明，以方便用户、部门领导等相关人员对系统状况和项目情况的了解，并为领导决策提供依据。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">chapter</span> <span class="attr">level</span>=<span class="string">"1"</span> <span class="attr">num</span>=<span class="string">"2"</span> <span class="attr">title</span>=<span class="string">"数据来源"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>本服务报告的数据来源包括以下几个部分：<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">list</span> <span class="attr">type</span>=<span class="string">"diamod"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">item</span>&gt;</span>服务器运行状态巡检数据<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">item</span>&gt;</span>巨龙运维监控工具预警数据<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">item</span>&gt;</span>巨龙运维流程系统处置数据<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">list</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">chapter</span> <span class="attr">level</span>=<span class="string">"1"</span> <span class="attr">num</span>=<span class="string">"3"</span> <span class="attr">title</span>=<span class="string">"系统运维工作说明"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">chapter</span> <span class="attr">level</span>=<span class="string">"2"</span> <span class="attr">num</span>=<span class="string">"3.1"</span> <span class="attr">title</span>=<span class="string">"系统基础情况"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"contentItalic"</span>&gt;</span>$&#123;app.name&#125;共有xx台服务器CPU资源使用达到xx%，CPU资源占用xx，CPU处理出现了等待状态；<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"contentItalic"</span>&gt;</span>$&#123;app.name&#125;多少台内存消耗比例达到XX%，内存消耗了多少G，系统运行时剩余内存多少G，服务器内存出现XXX状态。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"contentItalic"</span>&gt;</span>$&#123;app.name&#125;在什么时段出现磁盘IO瓶颈情况，每秒最高达到多少M/s，最低达到多少M/s。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"contentItalic"</span>&gt;</span>综合以上分析，$&#123;app.name&#125;整体运行情况，系统运行资源紧张，CPU、内存、磁盘相对处于高负荷状态。其中XX系统的CPU资源使用过高，XX系统的内存使用明显异常，磁盘IO严重，磁盘增长明显过快，建议更换升级服务器资源或增加硬件资源，平衡系统资源。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">chapter</span> <span class="attr">level</span>=<span class="string">"2"</span> <span class="attr">num</span>=<span class="string">"3.2"</span> <span class="attr">title</span>=<span class="string">"系统运行状况"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">chapter</span> <span class="attr">level</span>=<span class="string">"2"</span> <span class="attr">num</span>=<span class="string">"3.2.1"</span> <span class="attr">title</span>=<span class="string">"系统可用情况"</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">loop</span> <span class="attr">items</span>=<span class="string">"app.appSet"</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">arrow</span> <span class="attr">title</span>=<span class="string">"$&#123;name&#125;"</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>故障次数$&#123;data.failTotal&#125;次，其中一级故障$&#123;data.failHigh&#125;次，二次故障$&#123;data.failMiddle&#125;次，三级故障$&#123;data.failLow&#125;次。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>可用性说明：本月重点人系统运行正常，业务繁忙时段xx访问测试X次，正常访问X次。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">arrow</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">loop</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">chapter</span> <span class="attr">level</span>=<span class="string">"2"</span> <span class="attr">num</span>=<span class="string">"3.2.2"</span> <span class="attr">title</span>=<span class="string">"系统可用情况"</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">loop</span> <span class="attr">items</span>=<span class="string">"app.appSet"</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">arrow</span> <span class="attr">title</span>=<span class="string">"$&#123;name&#125;"</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>非计划中断次数$&#123;data.interruptNum&#125;次，系统稳定性$&#123;steady&#125;。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">arrow</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">loop</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></div><div class="line">		</div><div class="line">		<span class="tag">&lt;<span class="name">chapter</span> <span class="attr">level</span>=<span class="string">"2"</span> <span class="attr">num</span>=<span class="string">"3.3"</span> <span class="attr">title</span>=<span class="string">"系统运行状态趋势分析"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">chapter</span> <span class="attr">level</span>=<span class="string">"2"</span> <span class="attr">num</span>=<span class="string">"3.3.1"</span> <span class="attr">title</span>=<span class="string">"系统故障趋势分析"</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">chapter</span> <span class="attr">level</span>=<span class="string">"2"</span> <span class="attr">num</span>=<span class="string">"3.3.1.1"</span> <span class="attr">title</span>=<span class="string">"XX系统"</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">arrow</span> <span class="attr">title</span>=<span class="string">"数据统计"</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"desc"</span>&gt;</span>$&#123;app.name&#125;$&#123;app.twoPrevMonth&#125;故障数&#123;app.twoPreData.failTotal&#125;，$&#123;app.onePrevMonth&#125;故障数$&#123;app.onePreData.failTotal&#125;，本月$&#123;app.month&#125;故障数$&#123;app.data.failTotal&#125;。从故障数据分析来看，故障数呈$&#123;app.trend&#125;趋势。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">arrow</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">arrow</span> <span class="attr">title</span>=<span class="string">"原因分析"</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"desc"</span>&gt;</span>描述本月故障主要集中点，分析造成原因。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">arrow</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">arrow</span> <span class="attr">title</span>=<span class="string">"改进措施"</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"desc"</span>&gt;</span>针对本月故障上升的情况，提出改进措施。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">arrow</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">chapter</span> <span class="attr">level</span>=<span class="string">"1"</span> <span class="attr">num</span>=<span class="string">"4"</span> <span class="attr">title</span>=<span class="string">"运维服务情况统计"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>$&#123;app.month&#125;共进行系统升级xx次，自动监控$&#123;app.data.monitorFail&#125;次，人工巡检$&#123;app.data.requestFail&#125;次，事件响应xx次。具体情况如下：<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">arrow</span> <span class="attr">title</span>=<span class="string">"人工巡检："</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>故障数量$&#123;app.data.requestFail&#125;次，已解决数量$&#123;app.data.requestSolve&#125;次，未解决数量$&#123;app.data.requestUnsolve&#125;次，解决率$&#123;app.data.requestSolveRate&#125;%。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">arrow</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">arrow</span> <span class="attr">title</span>=<span class="string">"自动监控："</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>故障数量$&#123;app.data.monitorFail&#125;次，已解决数量$&#123;app.data.monitorSolve&#125;次，未解决数量$&#123;app.data.monitorUnsolve&#125;次，解决率$&#123;app.data.requestSolveRate&#125;%。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">arrow</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">arrow</span> <span class="attr">title</span>=<span class="string">"事件响应："</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>故障数量x次，已解决数量x次，未解决数量x次，解决率x%。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">arrow</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">arrow</span> <span class="attr">title</span>=<span class="string">"系统升级："</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>故障数量x次，已解决数量x次，未解决数量x次，解决率x%。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">arrow</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">chapter</span> <span class="attr">level</span>=<span class="string">"2"</span> <span class="attr">num</span>=<span class="string">"4.1"</span> <span class="attr">title</span>=<span class="string">"重大事件报告"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"desc"</span>&gt;</span>如本月有运维相关的重大事件，可在此处简略报告。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">chapter</span>&gt;</span></div><div class="line">	</div><div class="line">	<span class="tag">&lt;<span class="name">endChapter</span> <span class="attr">num</span>=<span class="string">"5"</span> <span class="attr">title</span>=<span class="string">"用户评价及反馈"</span> &gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"desc"</span>&gt;</span>报告打印出来后，由用户方运维工作接口人在本章节对运维工作进行评价。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>本月运维报告用户签收确认：<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span><span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span><span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>本月运维工作用户评价：<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span><span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span><span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span><span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"right"</span>&gt;</span>用户签名：<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">		&lt;para type="right"   日期：&lt;/para&gt;</div><div class="line">	<span class="tag">&lt;/<span class="name">endChapter</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">Doc</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>#处理元素<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">procChild</span><span class="params">(Document doc, IDocFactory factory,</span></span></div><div class="line"><span class="function"><span class="params">           Object model, org.dom4j.Element element)</span> </span>&#123;</div><div class="line"></div><div class="line">       List elements = element.elements();</div><div class="line">       <span class="keyword">if</span> (elements != <span class="keyword">null</span> &amp;&amp; !elements.isEmpty()) &#123;</div><div class="line">           <span class="keyword">for</span> (Object obj : elements) &#123;</div><div class="line">               org.dom4j.Element ele = (org.dom4j.Element) obj;</div><div class="line">               String eleName = ele.getName();</div><div class="line">               <span class="comment">//..... 这里通过元素的名称来判断下一步通过哪种方法处理</span></div><div class="line">           &#125;</div><div class="line">       &#125;</div></pre></td></tr></table></figure></p>
+<p>#生成无参数的模板内容<br>这里通过很多工具类，根据标签的不同使用不同的处理方法，方法如下图。</p>
+<p>随便找一个方法出来举个例子<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">procPara</span><span class="params">(Document doc, IDocFactory factory,</span></span></div><div class="line"><span class="function"><span class="params">           Object model, org.dom4j.Element ele)</span> </span>&#123;</div><div class="line">   	<span class="comment">//获取该段的样式类型，如正文、斜体、初体、居右、注释</span></div><div class="line">       String type = getElementStr(ele, model,DocConstants.PARA_TYPE);</div><div class="line">       <span class="comment">//获取段落的内容</span></div><div class="line">       String text = getElementData(model, ele);</div><div class="line">       <span class="comment">//通过抽象工厂，根据类型生成段落</span></div><div class="line">       Paragraph para = factory.getParagraph(text, type);</div><div class="line">       <span class="comment">//将段落添加到文档输出流中,等close的时候统一输出</span></div><div class="line">       add(doc, para);</div><div class="line">       <span class="comment">//处理子节点，如果有的话</span></div><div class="line">       procChild(doc, factory, model, ele);</div><div class="line">   &#125;</div></pre></td></tr></table></figure></p>
+<p>#处理循环<br>需求要求支持循环，类似<c:foreach>标签的效果。如下就是遍历平台的所有子系统。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">loop</span> <span class="attr">items</span>=<span class="string">"app.appSet"</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">arrow</span> <span class="attr">title</span>=<span class="string">"$&#123;name&#125;"</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>故障次数$&#123;data.failTotal&#125;次，其中一级故障$&#123;data.failHigh&#125;次，二次故障$&#123;data.failMiddle&#125;次，三级故障$&#123;data.failLow&#125;次。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">para</span> <span class="attr">type</span>=<span class="string">"content"</span>&gt;</span>可用性说明：本月重点人系统运行正常，业务繁忙时段xx访问测试X次，正常访问X次。<span class="tag">&lt;/<span class="name">para</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">arrow</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">loop</span>&gt;</span></div></pre></td></tr></table></figure></c:foreach></p>
+<p>#代码实现<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"> String itemsName = getElementStr(ele, model, DocConstants.LOOP_ITEMS);</div><div class="line">Set apps = (Set) getObjectAttribute(model, itemsName);</div><div class="line">      <span class="keyword">if</span> (apps.isEmpty()) &#123;</div><div class="line">             procChild(doc, factory, model, ele);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">             <span class="keyword">for</span> (Object app : apps) &#123;</div><div class="line">                 procChild(doc, factory, app, ele);</div><div class="line">             &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>#处理对象<br>首先，在模板中有很多数据，我们要获取，就一定要有一个通过反射来获取数据的方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Object result = <span class="keyword">null</span>;</div><div class="line">      Method method = obj.getClass().getMethod(</div><div class="line">             <span class="string">"get"</span> + StringUtils.firstUpperCase(tempAttr));</div><div class="line">      <span class="comment">// 判断调用方法的返回类型</span></div><div class="line">      <span class="keyword">if</span> (method != <span class="keyword">null</span>) &#123;</div><div class="line">          result = method.invoke(obj);</div><div class="line">      &#125;</div><div class="line">  <span class="keyword">return</span> result;</div></pre></td></tr></table></figure></p>
+<p>#嵌套对象处理<br>如果需要处理的参数属于存在对象嵌套的，那要先处理这层关系。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">getDupObjectAttribute</span><span class="params">(Object model, String val)</span> </span>&#123;</div><div class="line">        String result = <span class="keyword">null</span>;</div><div class="line">        String[] vals = val.split(<span class="string">"\\."</span>, <span class="number">2</span>);</div><div class="line">        Object object = getObjectAttribute(model, vals[<span class="number">0</span>]);</div><div class="line">        <span class="keyword">if</span>(object == <span class="keyword">null</span>)&#123;</div><div class="line">            <span class="keyword">return</span> <span class="string">"-1"</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (vals[<span class="number">1</span>].contains(<span class="string">"."</span>)) &#123;</div><div class="line">            result = getDupObjectAttribute(object, vals[<span class="number">1</span>]);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            result = (String) getObjectAttribute(object, vals[<span class="number">1</span>]);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> result;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>#处理参数<br>那么可以处理数据了，那参数要怎么从模板中寻找出来呢？第一步就是使用正则表达式来寻找需要处理的参数。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//REGEX = "\\$\\&#123;([^\\&#125;]+)?\\&#125;"</span></div><div class="line">	Pattern pat = Pattern.compile(REGEX);</div><div class="line">       Matcher mat = pat.matcher(text);</div><div class="line">       String result = text;</div><div class="line">       <span class="keyword">while</span> (mat.find()) &#123;</div><div class="line">           String val = mat.group(<span class="number">1</span>);</div><div class="line">           String resultVal = <span class="keyword">null</span>;</div><div class="line">           <span class="keyword">try</span> &#123;</div><div class="line">               <span class="keyword">if</span> (val.contains(<span class="string">"."</span>)) &#123;</div><div class="line">			<span class="comment">//如果存在嵌套，则通过反射先获取</span></div><div class="line">                   resultVal = getDupObjectAttribute(model, val);</div><div class="line">               &#125;</div><div class="line">               <span class="keyword">else</span> &#123;</div><div class="line">                   resultVal = (String) getObjectAttribute(model, val);</div><div class="line">               &#125;</div><div class="line">               <span class="keyword">if</span>(StringUtils.isNotBlank(resultVal) &amp;&amp; !<span class="string">"-1"</span>.equals(resultVal))&#123;</div><div class="line">                   result = result.replaceFirst(<span class="string">"\\$\\&#123;"</span> + val + <span class="string">"\\&#125;"</span>, resultVal);</div><div class="line">               &#125;</div><div class="line">           &#125;</div><div class="line">           <span class="keyword">catch</span>(Throwable e) &#123;</div><div class="line">               e.printStackTrace();</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">return</span> result;</div></pre></td></tr></table></figure></p>
+<p>#思考<br>用Java显然对于制作模板引擎不是很擅长。之前介绍Javascript正则的时候，用20行代码，就可以实现更强大的功能，不过安全性会有一点问题。存在被植入代码的可能。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/03/24/2014-03-24-individual-thinking/" itemprop="url">
                   “下个人”思维
                 </a>
@@ -1368,277 +1728,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/02/15/2014-02-15-linux-is-not-a-window-just-a-dirty-shutdown/" itemprop="url">
-                  Linux不是window，关机须谨慎
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-02-15T10:47:00+08:00" content="2014-02-15">
-              2014-02-15
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>最近饱受感冒和咳嗽的折磨，结果今天又被我的centos折磨了一番。估计是昨天异常关机导致扇区受损，还好没伤害到根目录，还能恢复，不过得长记性了，千万别像操作window那样随意。今天也就把linux关机前要注意的写一写。</p>
-<p>#1 为什么要正确的关机<br>Linux系统不像window系统那样是单用户、假多任务的情况。在linux中，由于每个程序都是在后台执行的，因此在你看不到的背后，其实可能有很多人同时在你的主机上工作。<br>还有个问题就是，若不能正常关机，后台的程序来不及将数据写回到文件中，有些服务的文件就会有问题，就可能造成文件系统的损坏。</p>
-<p>#2 关机要注意什么</p>
-<h2 id="2-1-观察系统的使用状态"><a href="#2-1-观察系统的使用状态" class="headerlink" title="2.1 观察系统的使用状态"></a>2.1 观察系统的使用状态</h2><p>首先可以用who命令查查谁在线，可以发出who命令。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ who</div><div class="line">David    tty1         2014-01-06 21:28 (:0)</div><div class="line">David    pts/1        2014-01-06 21:46 (:0.0)</div><div class="line">David    pts/12       2014-02-15 14:53 (:0.0)</div></pre></td></tr></table></figure></p>
-<p>然后要看看网络的联机状态<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ netstat -a</div><div class="line">Active Internet connections (servers and established)</div><div class="line">Proto Recv-Q Send-Q Local Address               Foreign Address             State</div><div class="line">tcp        0      0 *:sunrpc                    *:*                         LISTEN</div><div class="line">tcp        0      0 *:28017                     *:*                         LISTEN</div><div class="line">//省略1万字</div></pre></td></tr></table></figure></p>
-<p>最后在看看后台的进程状态ps –aux。</p>
-<h2 id="2-2-将数据写入磁盘"><a href="#2-2-将数据写入磁盘" class="headerlink" title="2.2 将数据写入磁盘"></a>2.2 将数据写入磁盘</h2><p>Linux系统为了加快数据的读取速度，默认情况下某些数据将不会直接写入磁盘，而是先暂存在内存中。但是万一异常关机，这些数据将不能写入磁盘机，造成数据更新不正常，因此，关机前最好执行几次sync命令来写入磁盘。当然shutdown/reboot/halt命令都会调用sync，但是最好也还是要执行几次。</p>
-<h2 id="2-3-使用正确的关机命令"><a href="#2-3-使用正确的关机命令" class="headerlink" title="2.3 使用正确的关机命令"></a>2.3 使用正确的关机命令</h2><p>关机（Shutdown）、重启（reboot\halt\poweroff）。</p>
-<h2 id="2-3-1-Shutdown"><a href="#2-3-1-Shutdown" class="headerlink" title="# 2.3.1 Shutdown"></a># 2.3.1 Shutdown</h2><p>这是最常用的关机命令，该命令会通知系统内的各个进程，并且通知系统中运行级别内的一些服务来关闭。该命令只能有root用户来操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ shutdown -k now &apos;abcd&apos;</div><div class="line">shutdown: Need to be root</div></pre></td></tr></table></figure></p>
-<p>可以用man shutdown命令，这个命令当然不是用来“找男人”的，而是用来查看帮助文档的。下面稍微对比较有用的信息翻译了下。<br>命令的格式为：shutdown [OPTION]…  TIME [MESSAGE]<br>-r     将系统服务停了后就重新启动.<br>-h     将系统服务停了后就立即关机.<br>-H     将系统服务停了后就立即挂起.<br>-P     将系统服务停了后就立即切断电源.<br>-c     取消关机，该命令不需要指定时间，第一个参数就是通知信息。<br>-k     只是发送关机提示信息，并不真的关机.<br>例子：<br>Shutdown –h now 立即关机<br>Shutdown –h 20:25 不解释干嘛的<br>Shutdown –h +10 系统字啊管10分钟后自动关机<br>Shutdown –r now “我要重启了” 立即重启，并发送通知。</p>
-<h2 id="2-3-2-Reboot"><a href="#2-3-2-Reboot" class="headerlink" title="# 2.3.2 Reboot"></a># 2.3.2 Reboot</h2><p>该命令基本和Shutdown –r now效果一样。最好这样执行sync;sync;sync;reboot;</p>
-<p>#3 扇区错乱问题修复<br>该问题就是因为异常关机导致，如果根目录没有损坏，那么再提示press root pass word or ctrl+D，这时输入root的口令登入系统进行单人单机的维护，输入fsck /dev/hda7(/dev/hda7为坏的磁盘块，按实际输入)。最后再询问clear?的时候输入Y就好了。修复完毕后reboot。<br>如果根目录坏了，那就麻烦了。
- </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/02/11/2014-02-11-problem-in-the-agile-transformation/" itemprop="url">
-                  敏捷转型中的问题-WH
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-02-11T13:56:00+08:00" content="2014-02-11">
-              2014-02-11
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/scrum/" itemprop="url" rel="index">
-                    <span itemprop="name">scrum</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/scrum/敏捷/" itemprop="url" rel="index">
-                    <span itemprop="name">敏捷</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#1 What?敏捷转型可以带来什么</p>
-<h2 id="1-1-公司-团队-协作"><a href="#1-1-公司-团队-协作" class="headerlink" title="1.1 公司-团队-协作"></a>1.1 公司-团队-协作</h2><p>首先，公司通过敏捷转型对团队有什么期望呢？我觉得是协作！</p>
-<h2 id="1-1-1-团队有清晰的目标"><a href="#1-1-1-团队有清晰的目标" class="headerlink" title="# 1.1.1 团队有清晰的目标"></a># 1.1.1 团队有清晰的目标</h2><p>团队要有自己清晰的目标，并且这个目标是为整体目标服务的，且有准确的价值体现。<br>传统的项目型组织可能他的目标比较明确，但是有可能出现的情况就是来了一个业务，会导致有的抢破头的去做，导致资源浪费。有的业务落下来了，却没人愿意接。职能型组织可能会好一些，但是这对项目经理来说无权无资源会导致项目彻底崩坏。而矩阵型组织又会出现多重领导的局面。<br>在敏捷中，scrum master（后称SM）不在是一个职位，而就是一个角色，作用在于领导和鼓舞团队成员。在后面关于人的地方会详细说明。而product owner（后称PO）也是一个角色，则是为团队指明方向，团队成员依然在职能经理的管理下，不会出现多重领导的作用。然而又有明确的目标，该目标是为整体目标服务的，因为PO可能是为多个团队服务的，很容易协调各团队的目标。<br>在敏捷中，SM不在是一个职位，而就是一个角色。在教材中可能提倡SM全职，但是我认为SM在转型前期是可以全职，因为前期的引导、鼓舞团队工作比较需要，而等团队彻底磨合，完全可以让小组中某个成员来负责这个角色，甚至有的团队可以使用轮流的方式来做。当SM不仅可以培养一个人的分享意识，还能促进它的主动沟通能力。</p>
-<h2 id="1-1-2-打破传统的团队边界"><a href="#1-1-2-打破传统的团队边界" class="headerlink" title="# 1.1.2 打破传统的团队边界"></a># 1.1.2 打破传统的团队边界</h2><p>前面也提到了，PO可能是负责多个团队的，SM同样也可能是为多个团队服务的，这样可以很好的打破传统的文化边界。而且别忘了，还有敏捷教练这一角色，该角色平时不出现，只是在团队需要敏捷指导的时候出现。这样多个团队可能经常一起进行培训、开发，很好的打破了多个团队的边界。<br>传统打破团队边界的方法很多，比如我所知道的一个就是公司鼓励不同团队的人一起聚餐活动，每个月都一定的活动经费可以报销。这样做即死板，又加大了开销。<br>敏捷很重要的一个原则就是沟通和分享，那么我们在协作的时候，我们如果需要另一个团队的协作，而他又有别的事情无法协作，如果我们能down到他们的代码，然后修改接口，最后把修改的代码踢回给他们，这样可以大大的提高了协作的效率。</p>
-<h2 id="1-2-团队-人-高效"><a href="#1-2-团队-人-高效" class="headerlink" title="1.2 团队-人-高效"></a>1.2 团队-人-高效</h2><p>一个好的PO，可以让敏捷团队相当的高效。</p>
-<h2 id="1-2-1-目标分解、故事拆解"><a href="#1-2-1-目标分解、故事拆解" class="headerlink" title="# 1.2.1 目标分解、故事拆解"></a># 1.2.1 目标分解、故事拆解</h2><p>这部分体现的是PO的价值。一个好的PO不一定说明团队一定强，但是一个差的PO，那说明这个团队一定弱。因为目标都不明确，更何谈高效，因为方向都错了。<br>PO一定要为团队确定明确的目标，然后将目标分解，设定优先级，然后带领团队对故事进行分解。</p>
-<h2 id="1-2-2-讲述价值"><a href="#1-2-2-讲述价值" class="headerlink" title="# 1.2.2 讲述价值"></a># 1.2.2 讲述价值</h2><p>然后PO对于目标、故事的价值如果能讲解的比较清楚，那么团队就会有更强的ownership。因为每个人都清楚的知道要做的事情，就产生人主人公的感觉，主动的对任务进行分解、领取、设计、实现、测试。<br>如果PO无法很好的描述故事的价值，那么开发人员都不了解一个故事有什么用，那么久而久之就失去热情和积极性。然后就随意按照需求去任务的描述去开发吧。然后做出来的不是实际需要的，导致返工，久而久之就关系决裂了。</p>
-<h2 id="1-2-3-Scrum让需求质量和实施质量变高"><a href="#1-2-3-Scrum让需求质量和实施质量变高" class="headerlink" title="# 1.2.3 Scrum让需求质量和实施质量变高"></a># 1.2.3 Scrum让需求质量和实施质量变高</h2><p>PO用讲解、沟通、答疑的方式，逼着每个成员把需求理清楚，大大的提高了需求的质量，远远比需求文档来的作用要大得多。<br>然后通过单元测试、CI、结对编程、代码评审、验收会议等，提高了需求实施的质量。并不是敏捷讲究搞笑就忽略了质量问题。</p>
-<h2 id="1-3-公司-人-发展"><a href="#1-3-公司-人-发展" class="headerlink" title="1.3 公司-人-发展"></a>1.3 公司-人-发展</h2><h2 id="1-3-1-T型人才发展模式"><a href="#1-3-1-T型人才发展模式" class="headerlink" title="# 1.3.1 T型人才发展模式"></a># 1.3.1 T型人才发展模式</h2><p>T的意义在于 一代表的是广，|代表的是深。在敏捷团队中，一个人可能要做需求，做设计，做前端开发，做后端开发，做测试，做QA，涉及的面非常的广。用流行的话来说就是全栈工程师。而每个人有可以根据自己的兴趣，找到自己适合的地方深入。</p>
-<h2 id="1-3-2-改变管理人才发展模式"><a href="#1-3-2-改变管理人才发展模式" class="headerlink" title="# 1.3.2 改变管理人才发展模式"></a># 1.3.2 改变管理人才发展模式</h2><p>命令型的管理模式很适合敏捷。因为敏捷讲究的是发挥人的主动性，让沟通代替工具。敏捷希望的应该是辅导型组织，他帮人竖立目标，鼓舞你去实现。他知道你在这方面是不足的，帮助你去改进。</p>
-<h2 id="1-3-3-需要长期稳定的高效"><a href="#1-3-3-需要长期稳定的高效" class="headerlink" title="# 1.3.3 需要长期稳定的高效"></a># 1.3.3 需要长期稳定的高效</h2><p>通过敏捷，让人实现长期稳定的高效，而不是短期的高效。敏捷不鼓励加班，鼓励用充足的休息让工作变得高效。用20%的时间可以80%的效率高效的完成的工作，而不是用80%的时间用20%的低效率来完成工作。<br>IT行业没有加班是不可能的，但是要让人知道为什么加班，而且知道要加班到什么时候。比如一个sprint中，燃尽图明显滞后了，那就需要加班。又比如用户故事中有比较多的高优先级故事，不尽快完成就很难和竞争对手竞争，那么也需要加班。</p>
-<p>#2 How?如何转型，怎么做</p>
-<h2 id="2-1-小白鼠"><a href="#2-1-小白鼠" class="headerlink" title="2.1 小白鼠"></a>2.1 小白鼠</h2><p>公司可以先让几个小团队找中等规模的项目先实践。小团队中用新人比较容易接受敏捷，中等规模项目是让大家可以发现更多敏捷中的问题。前期先实践，然后将实践的问题在团队内不断的总结，然后结合外部教练的引导。让小团队先进入团队的发挥期，最后通过这写小团队带动整体进行转型。<br>2.2 侏罗纪公园<br>该方法比较适合让一个人学会敏捷。也就是等小团队已经成型了，这时候丢入一个没接触过敏捷却有浓厚兴趣的人，在敏捷的环境中，他很快就能跟上节奏，学会敏捷。</p>
-<h2 id="2-3-培养内部教练"><a href="#2-3-培养内部教练" class="headerlink" title="2.3 培养内部教练"></a>2.3 培养内部教练</h2><p>通过小团队的实践和外部教练的知道，让团队中一些感兴趣的人承担起内部教练的作用，通过外部教练的不断辅导，让团队在后期能够摆脱外部教练。</p>
-<h2 id="2-4-轻敏捷，逐步完善"><a href="#2-4-轻敏捷，逐步完善" class="headerlink" title="2.4 轻敏捷，逐步完善"></a>2.4 轻敏捷，逐步完善</h2><p>敏捷没有固定形态，如果不适合，硬套敏捷的最佳实践，那反而更不敏捷了。敏捷就是最适合团队的形式。用Scrum只是说明Scrum的大多数原则和实践比较适合我们当前的小型团队。<br>而且我们开展敏捷也不是完全照搬。我们是一点一点的引入一些敏捷的实践。当我们发现问题的时候我们才会思考我们缺少什么。所以我们需要总结会，而且坚决把总结会的结论落地。</p>
-<h2 id="2-5-自上而下和自下而上"><a href="#2-5-自上而下和自下而上" class="headerlink" title="2.5 自上而下和自下而上"></a>2.5 自上而下和自下而上</h2><p>敏捷的转型必须是由上头发起，由每个成员相应。缺少任何一个都可能导致敏捷转型工程烂尾。</p>
-<h2 id="2-6-制造适合的环境"><a href="#2-6-制造适合的环境" class="headerlink" title="2.6 制造适合的环境"></a>2.6 制造适合的环境</h2><p>如何环境能改变，那最好制造适合的环境。如何不允许，那么就轻敏捷，在允许的条件上做到尽可能的敏捷、高效。<br>可能环境上问题很多，像传统的研发必须要做详细的计划，而敏捷并没有这么详细的计划。又比如传统的开发中可能有很多的文档，就像我们行业，由于监理的存在，文档也是硬性的审核标准。所以必须有。前者我们就可以改变，大体上指定目标，研发过程中根据实际情况变更计划。而后者只能在具备完整的情况下尽可能的实行敏捷。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1679,7 +1773,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">100</span>
+              <span class="site-state-item-count">102</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

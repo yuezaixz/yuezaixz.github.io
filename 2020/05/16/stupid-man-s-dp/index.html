@@ -1,0 +1,570 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="学渣的DP动态规划算法什么是DP对于非算法专业的渣渣，看各种专业的解释有点脑壳疼。不过悟出了点自己的感觉，记录下。 其实拿递归来理解会比较好理解，毕竟递归大家大学都学过，很容易懂。 递归是从上往下方式，而DP则是从下往上的。  算法其实都是计算机的穷举，只是怎么更聪明更高效更节省空间的穷举。拿斐波列次数列来理解是最好不过的了。 斐波列次的递归Swift实现123456789101112131415">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学渣的DP动态规划算法">
+<meta property="og:url" content="http://yoursite.com/2020/05/16/stupid-man-s-dp/index.html">
+<meta property="og:site_name" content="大胃吴的闲话唠嗑">
+<meta property="og:description" content="学渣的DP动态规划算法什么是DP对于非算法专业的渣渣，看各种专业的解释有点脑壳疼。不过悟出了点自己的感觉，记录下。 其实拿递归来理解会比较好理解，毕竟递归大家大学都学过，很容易懂。 递归是从上往下方式，而DP则是从下往上的。  算法其实都是计算机的穷举，只是怎么更聪明更高效更节省空间的穷举。拿斐波列次数列来理解是最好不过的了。 斐波列次的递归Swift实现123456789101112131415">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-05-16T16:22:18.942Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="学渣的DP动态规划算法">
+<meta name="twitter:description" content="学渣的DP动态规划算法什么是DP对于非算法专业的渣渣，看各种专业的解释有点脑壳疼。不过悟出了点自己的感觉，记录下。 其实拿递归来理解会比较好理解，毕竟递归大家大学都学过，很容易懂。 递归是从上往下方式，而DP则是从下往上的。  算法其实都是计算机的穷举，只是怎么更聪明更高效更节省空间的穷举。拿斐波列次数列来理解是最好不过的了。 斐波列次的递归Swift实现123456789101112131415">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/16/stupid-man-s-dp/"/>
+
+  <title> 学渣的DP动态规划算法 | 大胃吴的闲话唠嗑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大胃吴的闲话唠嗑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">扯扯技术，唠唠闲话</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            menu.首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            menu.文章
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                学渣的DP动态规划算法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-05-16T00:19:18+08:00" content="2020-05-16">
+              2020-05-16
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="学渣的DP动态规划算法"><a href="#学渣的DP动态规划算法" class="headerlink" title="学渣的DP动态规划算法"></a>学渣的DP动态规划算法</h1><h2 id="什么是DP"><a href="#什么是DP" class="headerlink" title="什么是DP"></a>什么是DP</h2><p>对于非算法专业的渣渣，看各种专业的解释有点脑壳疼。不过悟出了点自己的感觉，记录下。</p>
+<p>其实拿递归来理解会比较好理解，毕竟递归大家大学都学过，很容易懂。</p>
+<font color="red">递归是从上往下方式，而DP则是从下往上的。</font>
+
+<p>算法其实都是计算机的穷举，只是怎么更聪明更高效更节省空间的穷举。拿斐波列次数列来理解是最好不过的了。</p>
+<h3 id="斐波列次的递归Swift实现"><a href="#斐波列次的递归Swift实现" class="headerlink" title="斐波列次的递归Swift实现"></a>斐波列次的递归Swift实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">fibonacci</span><span class="params">(<span class="number">_</span> n: Int)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">if</span> n == <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span> <span class="comment">// 987次</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> n == <span class="number">1</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">1</span>  <span class="comment">// 1597次</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> fibonacci(n - <span class="number">1</span>) + fibonacci(n - <span class="number">2</span>)  <span class="comment">// 2583次</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">assert</span>(<span class="type">Solution</span>().fibonacci(<span class="number">17</span>) == <span class="number">1597</span>)</div></pre></td></tr></table></figure>
+<p>怎么样，是不是很恐怖，看似优雅的递归方式，执行次数竟然这么多，效率如此低，要是大点的数就完全算不出来了。</p>
+<h3 id="斐波列次的DP算法Swift实现"><a href="#斐波列次的DP算法Swift实现" class="headerlink" title="斐波列次的DP算法Swift实现"></a>斐波列次的DP算法Swift实现</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">class Solution &#123;</div><div class="line">    func dpFibonacci(_ n: Int) -&gt; Int &#123;</div><div class="line">        var dp = Array.init(repeating: 0, count: n + 1)</div><div class="line">        dp[0] = 0</div><div class="line">        dp[1] = 1</div><div class="line">        for i in 2 ..&lt; dp.count &#123;</div><div class="line">            dp[i] = dp[i - 1] + dp[i - 2] // 16次</div><div class="line">        &#125;</div><div class="line">        return dp[n]</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">assert(Solution().dpFibonacci(17) == 1597)</div></pre></td></tr></table></figure>
+<p>怎么样，是不是觉得效果更高了。<br>我们直接从最底下，最简单，问题规模最小的 f(1) 和 f(2) 开始往上推，直到推到我们想要的答案 f(20)。</p>
+<h2 id="状态转移方程"><a href="#状态转移方程" class="headerlink" title="状态转移方程"></a>状态转移方程</h2><p>状态转移方程是解决DP问题的核心,其实也就代表着暴力破解的方式,但不要小看暴力破解.</p>
+<p>比如斐波列次数列的状态转移方式就是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[i] = dp[i-1] + dp[i-2]</div></pre></td></tr></table></figure>
+<p>这算比较简单的，复杂实例前，先让了解下几种动态规划的类型：</p>
+<ul>
+<li>线性动规</li>
+<li>区域动规</li>
+<li>树形动规</li>
+<li>背包动规</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>下篇文章树下线性动规划</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/05/native-app-flutter-hybrid-in-flutter-boost/" rel="next" title="移动端的flutter_boost混编实现">
+                <i class="fa fa-chevron-left"></i> 移动端的flutter_boost混编实现
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/17/stupid-man-s-linear-dp/" rel="prev" title="学渣的线性动规">
+                学渣的线性动规 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="David Woo" />
+          <p class="site-author-name" itemprop="name">David Woo</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">102</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#学渣的DP动态规划算法"><span class="nav-number">1.</span> <span class="nav-text">学渣的DP动态规划算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是DP"><span class="nav-number">1.1.</span> <span class="nav-text">什么是DP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#斐波列次的递归Swift实现"><span class="nav-number">1.1.1.</span> <span class="nav-text">斐波列次的递归Swift实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#斐波列次的DP算法Swift实现"><span class="nav-number">1.1.2.</span> <span class="nav-text">斐波列次的DP算法Swift实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#状态转移方程"><span class="nav-number">1.2.</span> <span class="nav-text">状态转移方程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.2.1.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Woo</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
