@@ -226,6 +226,107 @@
             
               
                 
+                <a class="post-title-link" href="/2015/05/07/2015-05-07-mysql-statistics-for-record/" itemprop="url">
+                  用mysql对运动记录进行分时段统计
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-05-07T22:11:52+08:00" content="2015-05-07">
+              2015-05-07
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="为什么写"><a href="#为什么写" class="headerlink" title="为什么写"></a>为什么写</h2><p>之前做企业级应用都是使用Oracle的存储过程来做统计，用Job来定时执行。换成MySQL后一样用存储过程、视图、Event来完成相应的功能，只是函数和语法变得不大熟悉了，写篇博文来记录下。<br>这篇文章没什么特殊的，就是简单做点工作记录。</p>
+<h2 id="做什么"><a href="#做什么" class="headerlink" title="做什么"></a>做什么</h2><p>其实很简单，就是每周定时执行，统计上一周各时段的运动情况总和。先来看看效果把。<br><img src="http://blog.davidandty.com/images/15/1.jpg" alt=""></p>
+<h2 id="怎么做"><a href="#怎么做" class="headerlink" title="怎么做"></a>怎么做</h2><p>mysql存储过程和Oracle差别还是很大的，游标不能用了，除基础函数外的一个函数都不一致了，语法也不一样了，不好还好这些东西点点数据谷歌百度就可以查到了。</p>
+<h2 id="存储过程"><a href="#存储过程" class="headerlink" title="# 存储过程"></a># 存储过程</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> DEFINER=<span class="string">`runmove`</span>@<span class="string">`%`</span> <span class="keyword">PROCEDURE</span> <span class="string">`week_runcount_statistics`</span>(<span class="keyword">IN</span> last_count <span class="built_in">int</span>)</div><div class="line"><span class="keyword">BEGIN</span></div><div class="line">	<span class="keyword">Declare</span> tempDayBegin <span class="built_in">int</span>;</div><div class="line">	<span class="keyword">Declare</span> tempNightBegin <span class="built_in">int</span>;</div><div class="line">	<span class="keyword">Declare</span> timeRouteCount <span class="built_in">int</span>;</div><div class="line">	<span class="keyword">Declare</span> curr_week <span class="built_in">int</span>;</div><div class="line">    <span class="keyword">Declare</span> dateBegin <span class="built_in">Date</span>;</div><div class="line">    <span class="keyword">Declare</span> dateEnd <span class="built_in">Date</span>;</div><div class="line">	<span class="keyword">Declare</span> vSQL <span class="built_in">varchar</span>(<span class="number">2000</span>);</div><div class="line">	<span class="keyword">Declare</span> stmt <span class="built_in">varchar</span>(<span class="number">2100</span>);</div><div class="line">    <span class="keyword">set</span> tempDayBegin = <span class="number">0</span>;</div><div class="line">    <span class="keyword">set</span> tempNightBegin = <span class="number">24</span>;</div><div class="line">    if last_count = 0 then</div><div class="line">		<span class="keyword">set</span> dateEnd = <span class="built_in">date</span>(<span class="keyword">curdate</span>());</div><div class="line">		<span class="keyword">set</span> dateBegin = <span class="built_in">date</span>(<span class="keyword">date_sub</span>(<span class="keyword">curdate</span>(),<span class="built_in">interval</span> <span class="keyword">WEEKDAY</span>(<span class="keyword">curdate</span>()) <span class="keyword">day</span>));</div><div class="line">    else</div><div class="line">		if last_count = 1 then</div><div class="line">			<span class="keyword">set</span> dateEnd = <span class="built_in">date</span>(<span class="keyword">date_sub</span>(<span class="keyword">curdate</span>(),<span class="built_in">interval</span> <span class="keyword">WEEKDAY</span>(<span class="keyword">curdate</span>())+<span class="number">1</span> <span class="keyword">day</span>));</div><div class="line">			<span class="keyword">set</span> dateBegin = <span class="built_in">date</span>(<span class="keyword">date_sub</span>(dateEnd ,<span class="built_in">interval</span> <span class="number">7</span> <span class="keyword">day</span>));</div><div class="line">		else</div><div class="line">			<span class="keyword">set</span> dateEnd = <span class="built_in">date</span>(<span class="keyword">date_sub</span>(<span class="keyword">curdate</span>(),<span class="built_in">interval</span> <span class="keyword">WEEKDAY</span>(<span class="keyword">curdate</span>())+<span class="number">1</span>+(last_count<span class="number">-1</span>)*<span class="number">7</span> <span class="keyword">day</span>));</div><div class="line">			<span class="keyword">set</span> dateBegin = <span class="built_in">date</span>(<span class="keyword">date_sub</span>(dateEnd ,<span class="built_in">interval</span> <span class="number">7</span> <span class="keyword">day</span>));</div><div class="line">		<span class="keyword">end</span> <span class="keyword">if</span>;</div><div class="line">    <span class="keyword">end</span> <span class="keyword">if</span>;</div><div class="line">    <span class="keyword">delete</span> <span class="keyword">from</span> route_statistics_by_week <span class="keyword">where</span> <span class="keyword">week</span> = <span class="keyword">YEARWEEK</span>(dateBegin);</div><div class="line"></div><div class="line">    <span class="keyword">set</span> vSQL = <span class="string">' '</span>;</div><div class="line">	<span class="keyword">set</span> vSQL=<span class="keyword">CONCAT</span>(vSQL,<span class="string">' insert into route_statistics_by_week'</span>);</div><div class="line">	<span class="keyword">set</span> vSQL=<span class="keyword">CONCAT</span>(vSQL,<span class="string">' values ( date("'</span>,<span class="keyword">date_format</span>(dateBegin,<span class="string">'%Y-%m-%d'</span>),<span class="string">'"),date("'</span>,<span class="keyword">date_format</span>(dateEnd,<span class="string">'%Y-%m-%d'</span>),<span class="string">'"),'</span>,<span class="keyword">YEARWEEK</span>(dateBegin));</div><div class="line"></div><div class="line">    while tempDayBegin &lt; tempNightBegin do</div><div class="line"></div><div class="line">		<span class="keyword">SELECT</span> <span class="keyword">count</span>(r.id) <span class="keyword">into</span> timeRouteCount <span class="keyword">FROM</span> runmove.route r</div><div class="line">		<span class="keyword">WHERE</span> r.device_detail <span class="keyword">not</span> <span class="keyword">like</span> <span class="string">'%Simulator%'</span> <span class="keyword">and</span> r.flag = <span class="number">1</span> <span class="keyword">and</span></div><div class="line">        <span class="keyword">YEARWEEK</span>(<span class="keyword">date_format</span>(r.create_date,<span class="string">'%Y-%m-%d'</span>)) = <span class="keyword">YEARWEEK</span>(<span class="keyword">now</span>())-last_count <span class="keyword">and</span></div><div class="line">        (<span class="keyword">DATE_FORMAT</span>(r.create_date,<span class="string">'%H'</span>) <span class="keyword">between</span> tempDayBegin <span class="keyword">and</span> (tempDayBegin+<span class="number">1</span>) )</div><div class="line">		<span class="keyword">order</span> <span class="keyword">by</span> create_date <span class="keyword">desc</span>;</div><div class="line">		<span class="keyword">set</span> vSQL=<span class="keyword">CONCAT</span>(vSQL,<span class="string">','</span>,timeRouteCount);</div><div class="line"></div><div class="line">        <span class="keyword">set</span> tempDayBegin = tempDayBegin + <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">end</span> <span class="keyword">while</span>;</div><div class="line">    <span class="keyword">set</span> vSQL=<span class="keyword">CONCAT</span>(vSQL,<span class="string">' )'</span>);</div><div class="line">    <span class="keyword">set</span> @sqltext:=vSQL;</div><div class="line">	<span class="keyword">prepare</span> stmt <span class="keyword">from</span> @sqltext;</div><div class="line">	<span class="keyword">execute</span> stmt;</div><div class="line"></div><div class="line"><span class="keyword">END</span></div></pre></td></tr></table></figure>
+<h2 id="定时作业"><a href="#定时作业" class="headerlink" title="# 定时作业"></a># 定时作业</h2><p>event和Oracle的job定义逻辑也差不多，就是语法不大一样。</p>
+<figure class="highlight sql"><figcaption><span>event</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span>  <span class="keyword">EVENT</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span>  STAT</div><div class="line"><span class="keyword">ON</span>  SCHEDULE  EVERY  <span class="number">7</span>  <span class="keyword">DAY</span>  STARTS <span class="keyword">DATE_ADD</span>(<span class="keyword">DATE_ADD</span>(<span class="keyword">DATE_SUB</span>(<span class="keyword">CURDATE</span>(),<span class="built_in">INTERVAL</span> <span class="keyword">WEEKDAY</span>(<span class="keyword">CURDATE</span>())<span class="number">-1</span> <span class="keyword">DAY</span>), <span class="built_in">INTERVAL</span> <span class="number">7</span> <span class="keyword">DAY</span>),<span class="built_in">INTERVAL</span> <span class="number">1</span> <span class="keyword">HOUR</span>)</div><div class="line"><span class="keyword">ON</span>  COMPLETION  <span class="keyword">PRESERVE</span>  <span class="keyword">ENABLE</span></div><div class="line"><span class="keyword">DO</span> <span class="keyword">CALL</span> week_runcount_statistics(<span class="number">1</span>);</div></pre></td></tr></table></figure>
+<p>为了显示效果，所以再加了一个视图去显示。</p>
+<h2 id="视图"><a href="#视图" class="headerlink" title="# 视图"></a># 视图</h2><figure class="highlight sql"><figcaption><span>view</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span></div><div class="line">    ALGORITHM = UNDEFINED</div><div class="line">    DEFINER = <span class="string">`runmove`</span>@<span class="string">`%`</span></div><div class="line">    <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> DEFINER</div><div class="line"><span class="keyword">VIEW</span> <span class="string">`v_route_statistics_by_week`</span> <span class="keyword">AS</span></div><div class="line">    <span class="keyword">SELECT</span></div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`week`</span> <span class="keyword">AS</span> <span class="string">`week`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`start_date`</span> <span class="keyword">AS</span> <span class="string">`start_date`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`end_date`</span> <span class="keyword">AS</span> <span class="string">`end_date`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone0`</span> <span class="keyword">AS</span> <span class="string">`0~1`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone1`</span> <span class="keyword">AS</span> <span class="string">`1~2`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone2`</span> <span class="keyword">AS</span> <span class="string">`2~3`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone3`</span> <span class="keyword">AS</span> <span class="string">`3~4`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone4`</span> <span class="keyword">AS</span> <span class="string">`4~5`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone5`</span> <span class="keyword">AS</span> <span class="string">`5~6`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone6`</span> <span class="keyword">AS</span> <span class="string">`6~7`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone7`</span> <span class="keyword">AS</span> <span class="string">`7~8`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone8`</span> <span class="keyword">AS</span> <span class="string">`8~9`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone9`</span> <span class="keyword">AS</span> <span class="string">`9~10`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone10`</span> <span class="keyword">AS</span> <span class="string">`10~11`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone11`</span> <span class="keyword">AS</span> <span class="string">`11~12`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone12`</span> <span class="keyword">AS</span> <span class="string">`12~13`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone13`</span> <span class="keyword">AS</span> <span class="string">`13~14`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone14`</span> <span class="keyword">AS</span> <span class="string">`14~15`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone15`</span> <span class="keyword">AS</span> <span class="string">`15~16`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone16`</span> <span class="keyword">AS</span> <span class="string">`16~17`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone17`</span> <span class="keyword">AS</span> <span class="string">`17~18`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone18`</span> <span class="keyword">AS</span> <span class="string">`18~19`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone19`</span> <span class="keyword">AS</span> <span class="string">`19~20`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone20`</span> <span class="keyword">AS</span> <span class="string">`20~21`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone21`</span> <span class="keyword">AS</span> <span class="string">`21~22`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone22`</span> <span class="keyword">AS</span> <span class="string">`22~23`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone23`</span> <span class="keyword">AS</span> <span class="string">`23~00`</span></div><div class="line">    <span class="keyword">FROM</span></div><div class="line">        <span class="string">`route_statistics_by_week`</span></div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/05/07/2015-05-07-2015-04-20-beginning-ios-pit-over-those-years-f/" itemprop="url">
                   初学IOS那些年踩过的坑（七）
                 </a>
@@ -1173,104 +1274,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/01/30/2015-01-30-beginning-ios-stepped-on-the-pits-for-years-a/" itemprop="url">
-                  初学IOS那些年踩过的坑(一)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2015-01-30T02:36:00+08:00" content="2015-01-30">
-              2015-01-30
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#Indicator的隐藏显示</p>
-<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>ActivityIndicator的隐藏用stopAnimating，不要用hidden = YES。</p>
-<h2 id="坑描述："><a href="#坑描述：" class="headerlink" title="坑描述："></a>坑描述：</h2><p><img src="http://chuantu.biz/t/63/1422585664x1822611446.jpg" alt=""><br>代码的停止方式使用这种方式去停止<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.heartIndicator.hidden = <span class="literal">YES</span>;</div></pre></td></tr></table></figure></p>
-<p>带来的问题是push到别的页面pop回来后，又开始旋转了。<br><img src="http://chuantu.biz/t/63/1422585698x-954497586.jpg" alt=""><br>创建了个Indicator子类，用KVO可以发现页面PUSH走和POP回来都会change hidden的值</p>
-<h2 id="坑解释"><a href="#坑解释" class="headerlink" title="坑解释"></a>坑解释</h2><p>所以可以看出，IOS对于显示隐藏都会对View属性进行重构，而Indicator的Hidden值在重构时候是根据animate的值来判断的，如果值为YES，那hidden的属性则为NO。<br>所以，千万别用hidden属性来隐藏Indicator（其他地方都操作View都如此），要用[self.heartIndicator stopAnimating];</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1316,7 +1319,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">105</span>
+              <span class="site-state-item-count">106</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

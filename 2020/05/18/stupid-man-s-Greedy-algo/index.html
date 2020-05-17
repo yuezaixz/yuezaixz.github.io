@@ -1,0 +1,571 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="学渣的贪婪算法贪婪算法是寻找最优解的常用算法。一般先要确定每一步贪婪的逻辑是什么，也就是在当前状态下最好/最优的选择判断方式，并以此希望最后推导出来的结果是最好的。 沟通交流mail: xiao303178394@gmail.comwechat: xiao303178394 有时候不是最优解由于只是贪婪局部利益的最大化，他有时候的结果并不是最优解。 比如这个问题，需要找给顾客41分钱，现在的货币只">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学渣的贪婪算法">
+<meta property="og:url" content="http://yoursite.com/2020/05/18/stupid-man-s-Greedy-algo/index.html">
+<meta property="og:site_name" content="大胃吴的闲话唠嗑">
+<meta property="og:description" content="学渣的贪婪算法贪婪算法是寻找最优解的常用算法。一般先要确定每一步贪婪的逻辑是什么，也就是在当前状态下最好/最优的选择判断方式，并以此希望最后推导出来的结果是最好的。 沟通交流mail: xiao303178394@gmail.comwechat: xiao303178394 有时候不是最优解由于只是贪婪局部利益的最大化，他有时候的结果并不是最优解。 比如这个问题，需要找给顾客41分钱，现在的货币只">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://image.runmaf.com/2020-05-17-15897250256218.jpg">
+<meta property="og:updated_time" content="2020-05-17T14:25:27.564Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="学渣的贪婪算法">
+<meta name="twitter:description" content="学渣的贪婪算法贪婪算法是寻找最优解的常用算法。一般先要确定每一步贪婪的逻辑是什么，也就是在当前状态下最好/最优的选择判断方式，并以此希望最后推导出来的结果是最好的。 沟通交流mail: xiao303178394@gmail.comwechat: xiao303178394 有时候不是最优解由于只是贪婪局部利益的最大化，他有时候的结果并不是最优解。 比如这个问题，需要找给顾客41分钱，现在的货币只">
+<meta name="twitter:image" content="http://image.runmaf.com/2020-05-17-15897250256218.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/18/stupid-man-s-Greedy-algo/"/>
+
+  <title> 学渣的贪婪算法 | 大胃吴的闲话唠嗑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大胃吴的闲话唠嗑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">扯扯技术，唠唠闲话 交流email-xiao303178394@gmail.com</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            menu.首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            menu.文章
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                学渣的贪婪算法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-05-18T22:24:39+08:00" content="2020-05-18">
+              2020-05-18
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="学渣的贪婪算法"><a href="#学渣的贪婪算法" class="headerlink" title="学渣的贪婪算法"></a>学渣的贪婪算法</h1><p>贪婪算法是寻找最优解的常用算法。<br>一般先要确定每一步贪婪的逻辑是什么，也就是在当前状态下最好/最优的选择判断方式，并以此希望最后推导出来的结果是最好的。</p>
+<h2 id="沟通交流"><a href="#沟通交流" class="headerlink" title="沟通交流"></a>沟通交流</h2><p>mail: xiao303178394@gmail.com<br>wechat: xiao303178394</p>
+<h2 id="有时候不是最优解"><a href="#有时候不是最优解" class="headerlink" title="有时候不是最优解"></a>有时候不是最优解</h2><p>由于只是贪婪局部利益的最大化，他有时候的结果并不是最优解。</p>
+<p>比如这个问题，需要找给顾客41分钱，现在的货币只有 25 分、20分、10 分、5 分和 1 分四种硬币</p>
+<p>贪婪算法的话，就是尽可能给更大面额的钱，那么就是 25-&gt;10-&gt;5-&gt;1，但其实20-&gt;20-&gt;1才是最优解。</p>
+<h2 id="三步骤"><a href="#三步骤" class="headerlink" title="三步骤"></a>三步骤</h2><ul>
+<li>从某个初始解出发，设定好最优策略</li>
+<li>采用迭代的过程，当可以向目标前进一步时，就根据局部最优策略，得到一部分解，缩小问题规模；</li>
+<li>将所有解综合起来。</li>
+</ul>
+<h2 id="课程问题"><a href="#课程问题" class="headerlink" title="课程问题"></a>课程问题</h2><p>这里有 n 门不同的在线课程，他们按从 1 到 n 编号。每一门课程有一定的持续上课时间（课程时间）t 以及关闭时间第 d 天。一门课要持续学习 t 天直到第 d 天时要完成，你将会从第 1 天开始。</p>
+<p>给出 n 个在线课程用 (t, d) 对表示。你的任务是找出最多可以修几门课。</p>
+<p><a href="https://leetcode-cn.com/problems/course-schedule-iii" target="_blank" rel="external">直达链接</a></p>
+<h3 id="最优策略"><a href="#最优策略" class="headerlink" title="最优策略"></a>最优策略</h3><p>以下是LeetCode官方的最优策略，挺妙的，确实我这脑子想不到：</p>
+<blockquote>
+<p>如果两门课 (t1, d1) 和 (t2, d2) 满足 d1 &lt;= d2，即后者的结束时间不晚于前者，那么我们先学习前者再学习后者总是最优的。因为如果先学习前者，即需要满足 x + t1 &lt;= d1 且 x + t1 + t2 &lt;= d2；如果先学习后者，则需要满足 x + t2 &lt;= d2 且 x + t1 + t2 &lt;= d1。如果后者中的 x + t1 + t2 &lt;= d1 成立，那么显然有 x + t1 &lt;= d1 且 x + t1 + t2 &lt;= d1 &lt;= d2，即前者一定成立；反之如果 x = 0, (t1, d1) = (2, 3), (t2, d2) = (5, 100)，那么前者成立且后者不成立。因此先学习前者再学习后者总是最优的。</p>
+</blockquote>
+<p>基于上面的结论，我们可以将课程按照完成时间 d 递增排序。</p>
+<h3 id="回溯调整"><a href="#回溯调整" class="headerlink" title="回溯调整"></a>回溯调整</h3><p>ti与di为当前遍历到的课程开始时间与结束时间</p>
+<p>如果当前优先队列中所有课程的时间之和 t 与 ti 之和大于 di，那么找到当前优先队列中课程时间最大的课程 (tj, dj)，如果 tj &gt; ti，则将它移出优先队列，并把 (ti, di) 加入优先队列中。</p>
+<h3 id="优化时间复杂度"><a href="#优化时间复杂度" class="headerlink" title="优化时间复杂度"></a>优化时间复杂度</h3><p>因为每次都要调整队列的耗时在长度异常大情况下耗时严重，所以做个小优化，记录下当前的最大时间，只当满足需要替换条件的时候，才做队列排序。</p>
+<h3 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">class Solution &#123;</div><div class="line">    func scheduleCourse(_ courses: [[Int]]) -&gt; Int &#123;</div><div class="line">        let courses = courses.sorted &#123; (c1, c2) -&gt; Bool in</div><div class="line">            if c1[1] == c2[1] &#123;</div><div class="line">                return c1[0] &lt; c2[0]</div><div class="line">            &#125;</div><div class="line">            return c1[1] &lt; c2[1]</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        var sum = 0</div><div class="line">        </div><div class="line">        var queue:[Int] = []</div><div class="line">        // 一个小优化，不然时间达不到要求，每次都要排序</div><div class="line">        var maxCTime: Int = 0</div><div class="line">        </div><div class="line">        for c in courses &#123;</div><div class="line">            if sum + c[0] &lt;= c[1] &#123;</div><div class="line">                sum += c[0]</div><div class="line">                queue.append(c[0])</div><div class="line">                maxCTime = max(c[0], maxCTime)</div><div class="line">            &#125; else &#123;</div><div class="line">                if maxCTime &gt; c[0] &#123;</div><div class="line">                    queue.sort()</div><div class="line">                    sum += c[0] - queue.removeLast()</div><div class="line">                    maxCTime = queue.last ?? 0</div><div class="line">                    queue.append(c[0])</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        return queue.count</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="double-100"><a href="#double-100" class="headerlink" title="double 100%"></a>double 100%</h3><p><img src="http://image.runmaf.com/2020-05-17-15897250256218.jpg" alt=""></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/18/stupid-man-s-dfs-bfs/" rel="next" title="学渣的拓扑排序">
+                <i class="fa fa-chevron-left"></i> 学渣的拓扑排序
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="David Woo" />
+          <p class="site-author-name" itemprop="name">David Woo</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">106</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#学渣的贪婪算法"><span class="nav-number">1.</span> <span class="nav-text">学渣的贪婪算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#沟通交流"><span class="nav-number">1.1.</span> <span class="nav-text">沟通交流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#有时候不是最优解"><span class="nav-number">1.2.</span> <span class="nav-text">有时候不是最优解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三步骤"><span class="nav-number">1.3.</span> <span class="nav-text">三步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#课程问题"><span class="nav-number">1.4.</span> <span class="nav-text">课程问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最优策略"><span class="nav-number">1.4.1.</span> <span class="nav-text">最优策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回溯调整"><span class="nav-number">1.4.2.</span> <span class="nav-text">回溯调整</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化时间复杂度"><span class="nav-number">1.4.3.</span> <span class="nav-text">优化时间复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题"><span class="nav-number">1.4.4.</span> <span class="nav-text">解题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#double-100"><span class="nav-number">1.4.5.</span> <span class="nav-text">double 100%</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Woo</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

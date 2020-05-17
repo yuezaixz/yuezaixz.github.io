@@ -226,6 +226,123 @@
             
               
                 
+                <a class="post-title-link" href="/2017/08/16/Xcode-9-0-beta5-编辑Storyboard时闪退问题/" itemprop="url">
+                  Xcode 9.0 beta5,编辑Storyboard时闪退问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2017-08-16T10:37:01+08:00" content="2017-08-16">
+              2017-08-16
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>最近吃螃蟹，一直使用Xcode9 Beta版本（其实就是新项目直接用Swift4写了，省得到时候还要再做适配）。然而遇到了很多问题，一些问题也就不说了，但这次遇到这个问题，实在不能忍，升级到Xcode 9.0 beta5后，项目的主Storyboard打不开了。</p>
+<h1 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h1><p>Xcode闪退日志如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div></pre></td><td class="code"><pre><div class="line">Process:               Xcode [33099]  </div><div class="line">Path:                  /Applications/Xcode-beta.app/Contents/MacOS/Xcode  </div><div class="line">Identifier:            com.apple.dt.Xcode  </div><div class="line">Version:               9.0 (13226.5)  </div><div class="line">Build Info:            IDEFrameworks-13226005000000000~14  </div><div class="line">Code Type:             X86-64 (Native)  </div><div class="line">Parent Process:        ??? [1]  </div><div class="line">Responsible:           Xcode [33099]  </div><div class="line">User ID:               1700997662  </div><div class="line">  </div><div class="line">  </div><div class="line">Date/Time:             2017-08-10 15:45:59.315 -0400  </div><div class="line">OS Version:            Mac OS X 10.12.6 (16G29)  </div><div class="line">Report Version:        12  </div><div class="line">Anonymous UUID:        4C707867-0F4B-A4D5-CFF4-F497B7B7F058  </div><div class="line">  </div><div class="line">  </div><div class="line">  </div><div class="line">  </div><div class="line">Time Awake Since Boot: 1200000 seconds  </div><div class="line">  </div><div class="line">  </div><div class="line">System Integrity Protection: enabled  </div><div class="line">  </div><div class="line">  </div><div class="line">Crashed Thread:        0  Dispatch queue: com.apple.main-thread  </div><div class="line">  </div><div class="line">  </div><div class="line">Exception Type:        EXC_CRASH (SIGABRT)  </div><div class="line">Exception Codes:       0x0000000000000000, 0x0000000000000000  </div><div class="line">Exception Note:        EXC_CORPSE_NOTIFY  </div><div class="line">  </div><div class="line">  </div><div class="line">Application Specific Information:  </div><div class="line">ProductBuildVersion: 9M202q  </div><div class="line">ASSERTION FAILURE in /Library/Caches/com.apple.xbs/Sources/IDEInterfaceBuilder/IDEInterfaceBuilder-13178.6/InterfaceBuilderKit/Document/StoryboardDocument/Metrics/IBStoryboardMetricsInferrer.m:128  </div><div class="line">Details:  Failed to push inherited simulated metrics to all scenes.  </div><div class="line">Object:   &lt;IBStoryboardMetricsInferrer: 0x7fb91138a690&gt;  </div><div class="line">Method:   -rebuildInferredMetrics  </div><div class="line">Thread:   &lt;NSThread: 0x7fb907c18050&gt;&#123;number = 1, name = main&#125;  </div><div class="line">Hints:   </div><div class="line">  0: Replacement view is installing: &lt;IBStoryboardCanvasViewController: 0x7fb911167ee0 representing: (null)&gt;  </div><div class="line">Backtrace:  </div><div class="line">  0   -[IDEAssertionHandler handleFailureInMethod:object:fileName:lineNumber:assertionSignature:messageFormat:arguments:] (in IDEKit)  </div><div class="line">  1   _DVTAssertionHandler (in DVTFoundation)  </div><div class="line">  2   _DVTAssertionFailureHandler (in DVTFoundation)  </div><div class="line">  3   -[IBStoryboardMetricsInferrer rebuildInferredMetrics] (in IDEInterfaceBuilderKit)  </div><div class="line">  4   -[DVTDelayedInvocation runBlock:] (in DVTFoundation)  </div><div class="line">  5   -[DVTDelayedInvocation invokeIfNeeded] (in DVTFoundation)  </div><div class="line">  6   -[DVTDelayedInvocation invoke] (in DVTFoundation)  </div><div class="line">  7   -[IBCocoaTouchDocumentPlatformAdapter updateDocumentSimulatedMetricsWithDeviceConfiguration:] (in IDEInterfaceBuilderCocoaTouchIntegration)  </div><div class="line">  8   -[IBDocument switchToDeviceConfigurationWithoutFrameDeciding:] (in IDEInterfaceBuilderKit)  </div><div class="line">  9   -[IBDocument switchToDeviceConfiguration:] (in IDEInterfaceBuilderKit)  </div><div class="line">10   -[IBCanvasViewController _addDeviceBarIfNeeded] (in IDEInterfaceBuilderKit)  </div><div class="line">11   -[IBAbstractDocumentEditor didFinishLoadingSubViewControllers] (in IDEInterfaceBuilderKit)  </div><div class="line">12   -[IBAbstractDocumentEditor replacementView:didInstallViewController:] (in IDEInterfaceBuilderKit)  </div><div class="line">13   __42-[DVTReplacementView _setupViewController]_block_invoke (in DVTKit)  </div><div class="line">14   DVTInvokeWithFailureHint (in DVTFoundation)  </div><div class="line">15   -[DVTReplacementView _setupViewController] (in DVTKit)  </div><div class="line">16   -[DVTReplacementView installedViewController] (in DVTKit)  </div><div class="line">17   -[IBAbstractDocumentEditor viewDidInstall] (in IDEInterfaceBuilderKit)  </div><div class="line">18   -[IBStoryboardDocumentEditor viewDidInstall] (in IDEInterfaceBuilderKit)  </div><div class="line">19   -[DVTViewController _viewDidInstall] (in DVTKit)  </div><div class="line">20   -[_DVTViewController_ViewLifecycleInterpositions viewDidMoveToWindow] (in DVTKit)  </div><div class="line">21   -[NSView _setWindow:] (in AppKit)  </div><div class="line">22   -[NSView addSubview:] (in AppKit)  </div><div class="line">23   -[NSView setSubviews:] (in AppKit)  </div><div class="line">24   -[DVTBorderedView setContentView:] (in DVTKit)  </div><div class="line">25   -[IDEEditorContext _setEditorView] (in IDEKit)  </div><div class="line">26   -[IDEEditorContext setupNewEditor:] (in IDEKit)  </div><div class="line">27   __91-[IDEEditorContext _openNavigableItem:documentExtension:document:shouldInstallEditorBlock:]_block_invoke (in IDEKit)  </div><div class="line">28   -[IDEEditorContext _performBlockInsideReentrantGuard:] (in IDEKit)  </div><div class="line">29   -[IDEEditorContext _openNavigableItem:documentExtension:document:shouldInstallEditorBlock:] (in IDEKit)  </div><div class="line">30   -[IDEEditorContext _openNavigableItem:withContentsOfURL:documentExtension:shouldInstallEditorBlock:] (in IDEKit)  </div><div class="line">31   -[IDEEditorContext _notifyDelegateAndOpenNavigableItem:withContentsURL:documentExtensionIdentifier:locationToSelect:annotationRepresentedObject:stateDictionary:annotationWantsIndicatorAnimation:exploreAnnotationRepresentedObject:highlightSelection:alwaysReplaceExistingNavigableItem:skipSubDocumentNavigationUnlessEditorIsReplaced:] (in IDEKit)  </div><div class="line">32   -[IDEEditorContext _notifyDelegateAndOpenEditorOpenSpecifier:updateHistory:] (in IDEKit)  </div><div class="line">33   -[IDEEditorContext openEditorOpenSpecifier:updateHistory:] (in IDEKit)  </div><div class="line">34   -[IDEEditorContext openEditorOpenSpecifier:] (in IDEKit)  </div><div class="line">35   -[IDEEditorModeViewController openEditorOpenSpecifier:editorContext:] (in IDEKit)  </div><div class="line">36   -[IDEEditorArea _openEditorOpenSpecifier:editorContext:takeFocus:] (in IDEKit)  </div><div class="line">37   __108+[IDEEditorCoordinator _doOpenEditorOpenSpecifier:forWorkspaceTabController:editorContext:target:takeFocus:]_block_invoke_2 (in IDEKit)  </div><div class="line">38   __108+[IDEEditorCoordinator _doOpenEditorOpenSpecifier:forWorkspaceTabController:editorContext:target:takeFocus:]_block_invoke (in IDEKit)  </div><div class="line">39   +[IDEEditorCoordinator _doOpenWithWorkspaceTabController:editorContext:target:allowFallback:documentURL:usingBlock:] (in IDEKit)  </div><div class="line">40   +[IDEEditorCoordinator _doOpenEditorOpenSpecifier:forWorkspaceTabController:editorContext:target:takeFocus:] (in IDEKit)  </div><div class="line">41   -[_IDEOpenRequest _primitiveRunIfNecessary] (in IDEKit)  </div><div class="line">42   -[_IDEOpenRequest _runIfNecessary] (in IDEKit)  </div><div class="line">43   __NSFireDelayedPerform (in Foundation)  </div><div class="line">44   __CFRUNLOOP_IS_CALLING_OUT_TO_A_TIMER_CALLBACK_FUNCTION__ (in CoreFoundation)  </div><div class="line">45   __CFRunLoopDoTimer (in CoreFoundation)  </div><div class="line">46   __CFRunLoopDoTimers (in CoreFoundation)  </div><div class="line">47   __CFRunLoopRun (in CoreFoundation)  </div><div class="line">48   CFRunLoopRunSpecific (in CoreFoundation)  </div><div class="line">49   RunCurrentEventLoopInMode (in HIToolbox)  </div><div class="line">50   ReceiveNextEventCommon (in HIToolbox)  </div><div class="line">51   _BlockUntilNextEventMatchingListInModeWithFilter (in HIToolbox)  </div><div class="line">52   _DPSNextEvent (in AppKit)  </div><div class="line">53   -[NSApplication(NSEvent) _nextEventMatchingEventMask:untilDate:inMode:dequeue:] (in AppKit)  </div><div class="line">54   -[DVTApplication nextEventMatchingMask:untilDate:inMode:dequeue:] (in DVTKit)  </div><div class="line">55   -[NSApplication run] (in AppKit)  </div><div class="line">56   NSApplicationMain (in AppKit)  </div><div class="line">57   start (in libdyld.dylib)</div></pre></td></tr></table></figure>
+<h1 id="寻找解决方案"><a href="#寻找解决方案" class="headerlink" title="寻找解决方案"></a>寻找解决方案</h1><p>看到Apple Developer Forums上很多人提了类似的问题，但并没有人踢出解决方案。</p>
+<p>从日志看，只有关键词inherited，但把相关的都去掉了，也并没有效果。</p>
+<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>通过尝试重新创建Storyboard进行测试，还有就是git往前回退找一个不闪退版本的Storyboard，通过他们之间的比较，猜测可能是gestureRecognizers的问题。</p>
+<p>然后，把gestureRecognizers相关的部分都删了，通过代码实现gesture，就不会出现闪退问题了，真是运气好。</p>
+<p>删除以下3部分代码。</p>
+<pre><code>&lt;!-- 删除&lt;gestureRecognizers/&gt; --&gt;
+
+&lt;!--
+&lt;connections&gt;
+    &lt;outletCollection property=&quot;gestureRecognizers&quot; destination=&quot;ngk-1s-19f&quot; appends=&quot;YES&quot; id=&quot;xDu-EO-3XT&quot;/&gt;
+&lt;/connections&gt;
+--&gt;
+
+&lt;!--
+&lt;tapGestureRecognizer id=&quot;ngk-1s-19f&quot;&gt;
+    &lt;connections&gt;
+        &lt;action selector=&quot;tapConnectGestureAction:&quot; destination=&quot;TSL-wS-yk1&quot; id=&quot;VZS-RM-dhp&quot;/&gt;
+        &lt;segue destination=&quot;7YZ-oH-7MN&quot; kind=&quot;presentation&quot; id=&quot;WjS-a1-0BG&quot;/&gt;
+    &lt;/connections&gt;
+&lt;/tapGestureRecognizer&gt;
+--&gt;
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/10/26/终端通过Shadowsocks科学上网/" itemprop="url">
                   终端通过Shadowsocks科学上网
                 </a>
@@ -1245,107 +1362,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/05/07/2015-05-07-mysql-statistics-for-record/" itemprop="url">
-                  用mysql对运动记录进行分时段统计
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2015-05-07T22:11:52+08:00" content="2015-05-07">
-              2015-05-07
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="为什么写"><a href="#为什么写" class="headerlink" title="为什么写"></a>为什么写</h2><p>之前做企业级应用都是使用Oracle的存储过程来做统计，用Job来定时执行。换成MySQL后一样用存储过程、视图、Event来完成相应的功能，只是函数和语法变得不大熟悉了，写篇博文来记录下。<br>这篇文章没什么特殊的，就是简单做点工作记录。</p>
-<h2 id="做什么"><a href="#做什么" class="headerlink" title="做什么"></a>做什么</h2><p>其实很简单，就是每周定时执行，统计上一周各时段的运动情况总和。先来看看效果把。<br><img src="http://blog.davidandty.com/images/15/1.jpg" alt=""></p>
-<h2 id="怎么做"><a href="#怎么做" class="headerlink" title="怎么做"></a>怎么做</h2><p>mysql存储过程和Oracle差别还是很大的，游标不能用了，除基础函数外的一个函数都不一致了，语法也不一样了，不好还好这些东西点点数据谷歌百度就可以查到了。</p>
-<h2 id="存储过程"><a href="#存储过程" class="headerlink" title="# 存储过程"></a># 存储过程</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> DEFINER=<span class="string">`runmove`</span>@<span class="string">`%`</span> <span class="keyword">PROCEDURE</span> <span class="string">`week_runcount_statistics`</span>(<span class="keyword">IN</span> last_count <span class="built_in">int</span>)</div><div class="line"><span class="keyword">BEGIN</span></div><div class="line">	<span class="keyword">Declare</span> tempDayBegin <span class="built_in">int</span>;</div><div class="line">	<span class="keyword">Declare</span> tempNightBegin <span class="built_in">int</span>;</div><div class="line">	<span class="keyword">Declare</span> timeRouteCount <span class="built_in">int</span>;</div><div class="line">	<span class="keyword">Declare</span> curr_week <span class="built_in">int</span>;</div><div class="line">    <span class="keyword">Declare</span> dateBegin <span class="built_in">Date</span>;</div><div class="line">    <span class="keyword">Declare</span> dateEnd <span class="built_in">Date</span>;</div><div class="line">	<span class="keyword">Declare</span> vSQL <span class="built_in">varchar</span>(<span class="number">2000</span>);</div><div class="line">	<span class="keyword">Declare</span> stmt <span class="built_in">varchar</span>(<span class="number">2100</span>);</div><div class="line">    <span class="keyword">set</span> tempDayBegin = <span class="number">0</span>;</div><div class="line">    <span class="keyword">set</span> tempNightBegin = <span class="number">24</span>;</div><div class="line">    if last_count = 0 then</div><div class="line">		<span class="keyword">set</span> dateEnd = <span class="built_in">date</span>(<span class="keyword">curdate</span>());</div><div class="line">		<span class="keyword">set</span> dateBegin = <span class="built_in">date</span>(<span class="keyword">date_sub</span>(<span class="keyword">curdate</span>(),<span class="built_in">interval</span> <span class="keyword">WEEKDAY</span>(<span class="keyword">curdate</span>()) <span class="keyword">day</span>));</div><div class="line">    else</div><div class="line">		if last_count = 1 then</div><div class="line">			<span class="keyword">set</span> dateEnd = <span class="built_in">date</span>(<span class="keyword">date_sub</span>(<span class="keyword">curdate</span>(),<span class="built_in">interval</span> <span class="keyword">WEEKDAY</span>(<span class="keyword">curdate</span>())+<span class="number">1</span> <span class="keyword">day</span>));</div><div class="line">			<span class="keyword">set</span> dateBegin = <span class="built_in">date</span>(<span class="keyword">date_sub</span>(dateEnd ,<span class="built_in">interval</span> <span class="number">7</span> <span class="keyword">day</span>));</div><div class="line">		else</div><div class="line">			<span class="keyword">set</span> dateEnd = <span class="built_in">date</span>(<span class="keyword">date_sub</span>(<span class="keyword">curdate</span>(),<span class="built_in">interval</span> <span class="keyword">WEEKDAY</span>(<span class="keyword">curdate</span>())+<span class="number">1</span>+(last_count<span class="number">-1</span>)*<span class="number">7</span> <span class="keyword">day</span>));</div><div class="line">			<span class="keyword">set</span> dateBegin = <span class="built_in">date</span>(<span class="keyword">date_sub</span>(dateEnd ,<span class="built_in">interval</span> <span class="number">7</span> <span class="keyword">day</span>));</div><div class="line">		<span class="keyword">end</span> <span class="keyword">if</span>;</div><div class="line">    <span class="keyword">end</span> <span class="keyword">if</span>;</div><div class="line">    <span class="keyword">delete</span> <span class="keyword">from</span> route_statistics_by_week <span class="keyword">where</span> <span class="keyword">week</span> = <span class="keyword">YEARWEEK</span>(dateBegin);</div><div class="line"></div><div class="line">    <span class="keyword">set</span> vSQL = <span class="string">' '</span>;</div><div class="line">	<span class="keyword">set</span> vSQL=<span class="keyword">CONCAT</span>(vSQL,<span class="string">' insert into route_statistics_by_week'</span>);</div><div class="line">	<span class="keyword">set</span> vSQL=<span class="keyword">CONCAT</span>(vSQL,<span class="string">' values ( date("'</span>,<span class="keyword">date_format</span>(dateBegin,<span class="string">'%Y-%m-%d'</span>),<span class="string">'"),date("'</span>,<span class="keyword">date_format</span>(dateEnd,<span class="string">'%Y-%m-%d'</span>),<span class="string">'"),'</span>,<span class="keyword">YEARWEEK</span>(dateBegin));</div><div class="line"></div><div class="line">    while tempDayBegin &lt; tempNightBegin do</div><div class="line"></div><div class="line">		<span class="keyword">SELECT</span> <span class="keyword">count</span>(r.id) <span class="keyword">into</span> timeRouteCount <span class="keyword">FROM</span> runmove.route r</div><div class="line">		<span class="keyword">WHERE</span> r.device_detail <span class="keyword">not</span> <span class="keyword">like</span> <span class="string">'%Simulator%'</span> <span class="keyword">and</span> r.flag = <span class="number">1</span> <span class="keyword">and</span></div><div class="line">        <span class="keyword">YEARWEEK</span>(<span class="keyword">date_format</span>(r.create_date,<span class="string">'%Y-%m-%d'</span>)) = <span class="keyword">YEARWEEK</span>(<span class="keyword">now</span>())-last_count <span class="keyword">and</span></div><div class="line">        (<span class="keyword">DATE_FORMAT</span>(r.create_date,<span class="string">'%H'</span>) <span class="keyword">between</span> tempDayBegin <span class="keyword">and</span> (tempDayBegin+<span class="number">1</span>) )</div><div class="line">		<span class="keyword">order</span> <span class="keyword">by</span> create_date <span class="keyword">desc</span>;</div><div class="line">		<span class="keyword">set</span> vSQL=<span class="keyword">CONCAT</span>(vSQL,<span class="string">','</span>,timeRouteCount);</div><div class="line"></div><div class="line">        <span class="keyword">set</span> tempDayBegin = tempDayBegin + <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">end</span> <span class="keyword">while</span>;</div><div class="line">    <span class="keyword">set</span> vSQL=<span class="keyword">CONCAT</span>(vSQL,<span class="string">' )'</span>);</div><div class="line">    <span class="keyword">set</span> @sqltext:=vSQL;</div><div class="line">	<span class="keyword">prepare</span> stmt <span class="keyword">from</span> @sqltext;</div><div class="line">	<span class="keyword">execute</span> stmt;</div><div class="line"></div><div class="line"><span class="keyword">END</span></div></pre></td></tr></table></figure>
-<h2 id="定时作业"><a href="#定时作业" class="headerlink" title="# 定时作业"></a># 定时作业</h2><p>event和Oracle的job定义逻辑也差不多，就是语法不大一样。</p>
-<figure class="highlight sql"><figcaption><span>event</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span>  <span class="keyword">EVENT</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span>  STAT</div><div class="line"><span class="keyword">ON</span>  SCHEDULE  EVERY  <span class="number">7</span>  <span class="keyword">DAY</span>  STARTS <span class="keyword">DATE_ADD</span>(<span class="keyword">DATE_ADD</span>(<span class="keyword">DATE_SUB</span>(<span class="keyword">CURDATE</span>(),<span class="built_in">INTERVAL</span> <span class="keyword">WEEKDAY</span>(<span class="keyword">CURDATE</span>())<span class="number">-1</span> <span class="keyword">DAY</span>), <span class="built_in">INTERVAL</span> <span class="number">7</span> <span class="keyword">DAY</span>),<span class="built_in">INTERVAL</span> <span class="number">1</span> <span class="keyword">HOUR</span>)</div><div class="line"><span class="keyword">ON</span>  COMPLETION  <span class="keyword">PRESERVE</span>  <span class="keyword">ENABLE</span></div><div class="line"><span class="keyword">DO</span> <span class="keyword">CALL</span> week_runcount_statistics(<span class="number">1</span>);</div></pre></td></tr></table></figure>
-<p>为了显示效果，所以再加了一个视图去显示。</p>
-<h2 id="视图"><a href="#视图" class="headerlink" title="# 视图"></a># 视图</h2><figure class="highlight sql"><figcaption><span>view</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span></div><div class="line">    ALGORITHM = UNDEFINED</div><div class="line">    DEFINER = <span class="string">`runmove`</span>@<span class="string">`%`</span></div><div class="line">    <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> DEFINER</div><div class="line"><span class="keyword">VIEW</span> <span class="string">`v_route_statistics_by_week`</span> <span class="keyword">AS</span></div><div class="line">    <span class="keyword">SELECT</span></div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`week`</span> <span class="keyword">AS</span> <span class="string">`week`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`start_date`</span> <span class="keyword">AS</span> <span class="string">`start_date`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`end_date`</span> <span class="keyword">AS</span> <span class="string">`end_date`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone0`</span> <span class="keyword">AS</span> <span class="string">`0~1`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone1`</span> <span class="keyword">AS</span> <span class="string">`1~2`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone2`</span> <span class="keyword">AS</span> <span class="string">`2~3`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone3`</span> <span class="keyword">AS</span> <span class="string">`3~4`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone4`</span> <span class="keyword">AS</span> <span class="string">`4~5`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone5`</span> <span class="keyword">AS</span> <span class="string">`5~6`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone6`</span> <span class="keyword">AS</span> <span class="string">`6~7`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone7`</span> <span class="keyword">AS</span> <span class="string">`7~8`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone8`</span> <span class="keyword">AS</span> <span class="string">`8~9`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone9`</span> <span class="keyword">AS</span> <span class="string">`9~10`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone10`</span> <span class="keyword">AS</span> <span class="string">`10~11`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone11`</span> <span class="keyword">AS</span> <span class="string">`11~12`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone12`</span> <span class="keyword">AS</span> <span class="string">`12~13`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone13`</span> <span class="keyword">AS</span> <span class="string">`13~14`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone14`</span> <span class="keyword">AS</span> <span class="string">`14~15`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone15`</span> <span class="keyword">AS</span> <span class="string">`15~16`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone16`</span> <span class="keyword">AS</span> <span class="string">`16~17`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone17`</span> <span class="keyword">AS</span> <span class="string">`17~18`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone18`</span> <span class="keyword">AS</span> <span class="string">`18~19`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone19`</span> <span class="keyword">AS</span> <span class="string">`19~20`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone20`</span> <span class="keyword">AS</span> <span class="string">`20~21`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone21`</span> <span class="keyword">AS</span> <span class="string">`21~22`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone22`</span> <span class="keyword">AS</span> <span class="string">`22~23`</span>,</div><div class="line">        <span class="string">`route_statistics_by_week`</span>.<span class="string">`time_zone23`</span> <span class="keyword">AS</span> <span class="string">`23~00`</span></div><div class="line">    <span class="keyword">FROM</span></div><div class="line">        <span class="string">`route_statistics_by_week`</span></div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1391,7 +1407,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">105</span>
+              <span class="site-state-item-count">106</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

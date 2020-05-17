@@ -226,6 +226,181 @@
             
               
                 
+                <a class="post-title-link" href="/2014/05/01/2014-05-01-spring-framework-core-source-code-analysis-v-registration-resource/" itemprop="url">
+                  Spring Framework的核心源码解读（五）-Resource注册
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-05-01T15:39:00+08:00" content="2014-05-01">
+              2014-05-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/resource/" itemprop="url" rel="index">
+                    <span itemprop="name">resource</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/resource/IoC/" itemprop="url" rel="index">
+                    <span itemprop="name">IoC</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/resource/IoC/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/resource/IoC/源码分析/Resource注册/" itemprop="url" rel="index">
+                    <span itemprop="name">Resource注册</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="4-3-Resource注册"><a href="#4-3-Resource注册" class="headerlink" title="4.3 Resource注册"></a>4.3 Resource注册</h2><p>到目前为止，我们已经准备好了Spring需要的数据结构BeanDefinition了，但此时这些数据还不能供IoC容器直接使用，需要在IoC容器中对这些BeanDefinition数据进行注册。<br>前面提到的BeanDefinitionReaderUtils.registerBeanDefinition(bdHolder, getReaderContext().getRegistry())调用就是进行BeanDefinition注册。<br><figure class="highlight java"><figcaption><span>BeanDefinitionReaderUtils.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">registerBeanDefinition</span><span class="params">(</span></span></div><div class="line"><span class="function"><span class="params">			BeanDefinitionHolder definitionHolder, BeanDefinitionRegistry registry)</span></span></div><div class="line"><span class="function">			<span class="keyword">throws</span> BeanDefinitionStoreException </span>&#123;</div><div class="line">		String beanName = definitionHolder.getBeanName();</div><div class="line">		registry.registerBeanDefinition(beanName, definitionHolder.getBeanDefinition());</div><div class="line">		String[] aliases = definitionHolder.getAliases();</div><div class="line">		<span class="keyword">if</span> (aliases != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">for</span> (String aliase : aliases) &#123;</div><div class="line">				registry.registerAlias(beanName, aliase);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>这里又调用了registry.registerBeanDefinition(beanName, definitionHolder.getBeanDefinition())方法，我们这里的registry就是DefaultListableBeanFactory，他实现了BeanDefinitionRegistry接口的该方法。DefaultListableBeanFactory类中通过一个HashMap来持有载入的BeanDefinition的。<br><figure class="highlight java"><figcaption><span>DefaultListableBeanFactory.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, BeanDefinitionbeanDefinitionMap = <span class="keyword">new</span> ConcurrentHashMap&lt;String, BeanDefinition&gt;();</div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> List&lt;StringbeanDefinitionNames = <span class="keyword">new</span> ArrayList&lt;String&gt;();</div><div class="line"><span class="comment">//…</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerBeanDefinition</span><span class="params">(String beanName, BeanDefinition beanDefinition)</span></span></div><div class="line"><span class="function">			<span class="keyword">throws</span> BeanDefinitionStoreException </span>&#123;</div><div class="line"></div><div class="line">		Assert.hasText(beanName, <span class="string">"Bean name must not be empty"</span>);</div><div class="line">		Assert.notNull(beanDefinition, <span class="string">"BeanDefinition must not be null"</span>);</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (beanDefinition <span class="keyword">instanceof</span> AbstractBeanDefinition) &#123;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				((AbstractBeanDefinition) beanDefinition).validate();</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">catch</span> (BeanDefinitionValidationException ex) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,</div><div class="line">						<span class="string">"Validation of bean definition failed"</span>, ex);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//注册的过程需要synchronized，保证数据的一致性</span></div><div class="line">		<span class="keyword">synchronized</span> (<span class="keyword">this</span>.beanDefinitionMap) &#123;</div><div class="line">		    <span class="comment">//这里检查是不是有相同名字的BeanDefinition已经在IoC容器中注册了，如果有相同名字的</span></div><div class="line">		    <span class="comment">//BeanDefinition，但又不允许覆盖，那么会抛出异常</span></div><div class="line">			Object oldBeanDefinition = <span class="keyword">this</span>.beanDefinitionMap.get(beanName);</div><div class="line">			<span class="keyword">if</span> (oldBeanDefinition != <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="keyword">if</span> (!<span class="keyword">this</span>.allowBeanDefinitionOverriding) &#123;</div><div class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,</div><div class="line">							<span class="string">"Cannot register bean definition ["</span> + beanDefinition + <span class="string">"] for bean '"</span> + beanName +</div><div class="line">							<span class="string">"': There is already ["</span> + oldBeanDefinition + <span class="string">"] bound."</span>);</div><div class="line">				&#125;</div><div class="line">				<span class="keyword">else</span> &#123;</div><div class="line"><span class="comment">//如果遇到同名的BeanDefinition，但配置了allowBeanDefinitionOverriding，则覆盖</span></div><div class="line">					<span class="keyword">if</span> (<span class="keyword">this</span>.logger.isInfoEnabled()) &#123;</div><div class="line">						<span class="keyword">this</span>.logger.info(<span class="string">"Overriding bean definition for bean '"</span> + beanName +</div><div class="line">								<span class="string">"': replacing ["</span> + oldBeanDefinition + <span class="string">"] with ["</span> + beanDefinition + <span class="string">"]"</span>);</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			<span class="comment">//这是正常注册BeanDefinition的过程，把Bean的名字存入到beanDefinitionNames的同时，把</span></div><div class="line">			<span class="comment">//beanName作为Map的key,把beanDefinition作为value存入到IoC容器持有的beanDefinitionMap中去</span></div><div class="line">			<span class="keyword">else</span> &#123;</div><div class="line">				<span class="keyword">this</span>.beanDefinitionNames.add(beanName);</div><div class="line">				<span class="keyword">this</span>.frozenBeanDefinitionNames = <span class="keyword">null</span>;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">this</span>.beanDefinitionMap.put(beanName, beanDefinition);</div><div class="line"></div><div class="line">			resetBeanDefinition(beanName);</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>完成了BeanDefinition的注册，就完成了IoC容器的整个初始化过程。依赖注入并不输入IoC容器的初始化过程。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/05/01/2014-05-01-spring-framework-core-source-code-analysis-iv-resource-load/" itemprop="url">
                   Spring Framework的核心源码解读（四）-Resource加载
                 </a>
@@ -1695,135 +1870,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/03/11/2014-03-11-in-the-growth-of-three-bell/" itemprop="url">
-                  成长中的三条警世钟
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-03-11T13:44:00+08:00" content="2014-03-11">
-              2014-03-11
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/载记/" itemprop="url" rel="index">
-                    <span itemprop="name">载记</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/载记/警世钟/" itemprop="url" rel="index">
-                    <span itemprop="name">警世钟</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>文章大部分内容载自电影《我在伊朗长大》中奶奶的忠告。</p>
-<p>#躲开那些无耻的混蛋，千万别因为他们变的卑鄙<br><em>一生当中，你会碰到许多混蛋，他们伤害你，是因为他们愚蠢，你不必因此回应他们的恶意，世上最糟的就是自卑和报复心理。永远要维持自尊与诚实。</em><br>混蛋总会有，在某些阶段和时刻，个人的力量也许微小，不足以向混蛋抗衡，但个人可以游离混蛋之外，不被恶棍影响，不让他们剥夺我们内心最可贵的诚实，也绝不让他们将自卑与粗鄙植入我们的心灵——如果你这样做了，无论如何，你都上了他们当，因为你被他们控制，失去了最重要的东西。在一些特殊的宗教或政治影响 下，很多人一辈子都沦为创伤和仇恨的工具，从未真正地活过</p>
-<p>#每个人都可以选择，别用借口把自己的选择伪装的多么无奈似的<br><em>你当然有选择。每个人都有。所有的人永远都有选择权。</em><br>你选择了什么，就是什么，别找借口。口口声声说自己没有选择权而做出伤害他人的卑鄙之事，是否认自己身而为人，否则自己有自由意志，是不可原谅的下作之举。</p>
-<p>#活自己<br><em>活得洒脱自在，蔑视世人愚蠢的规矩和偏见</em><br>假如生活欺骗了你，不要悲伤，过好自己的生活，没有什么事情是可怕的，除非是谁死掉了。这次的不如意是为之后的成功做准备，下次会更满意的。</p>
-<p>#总结<br>人终有一老，或老而猥琐，或老而优雅，我们总有选择。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1869,7 +1915,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">105</span>
+              <span class="site-state-item-count">106</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
