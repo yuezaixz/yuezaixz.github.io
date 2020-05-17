@@ -1,0 +1,614 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="学渣的拓扑排序看了好久的 DFS和BFS题目，还是想不到怎么简单解释清楚拓扑排序。 比较标准的解释就是给定一个包含 n 个节点的有向图 G，我们给出它的节点编号的一种排列，如果满足 12对于图 G 中的任意一条有向边 (u, v)，u 在排列中都出现在 V 的前面。 那么称该排列是图 G 的「拓扑排序」。 如果实在理解不了，就记住是一个有向图，但他可以有一些节点独立，他不能存在环。 DFS 深度优">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学渣的拓扑排序">
+<meta property="og:url" content="http://yoursite.com/2020/05/18/stupid-man-s-dfs-bfs/index.html">
+<meta property="og:site_name" content="大胃吴的闲话唠嗑">
+<meta property="og:description" content="学渣的拓扑排序看了好久的 DFS和BFS题目，还是想不到怎么简单解释清楚拓扑排序。 比较标准的解释就是给定一个包含 n 个节点的有向图 G，我们给出它的节点编号的一种排列，如果满足 12对于图 G 中的任意一条有向边 (u, v)，u 在排列中都出现在 V 的前面。 那么称该排列是图 G 的「拓扑排序」。 如果实在理解不了，就记住是一个有向图，但他可以有一些节点独立，他不能存在环。 DFS 深度优">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-05-17T11:54:07.786Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="学渣的拓扑排序">
+<meta name="twitter:description" content="学渣的拓扑排序看了好久的 DFS和BFS题目，还是想不到怎么简单解释清楚拓扑排序。 比较标准的解释就是给定一个包含 n 个节点的有向图 G，我们给出它的节点编号的一种排列，如果满足 12对于图 G 中的任意一条有向边 (u, v)，u 在排列中都出现在 V 的前面。 那么称该排列是图 G 的「拓扑排序」。 如果实在理解不了，就记住是一个有向图，但他可以有一些节点独立，他不能存在环。 DFS 深度优">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/18/stupid-man-s-dfs-bfs/"/>
+
+  <title> 学渣的拓扑排序 | 大胃吴的闲话唠嗑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大胃吴的闲话唠嗑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">扯扯技术，唠唠闲话 交流email-xiao303178394@gmail.com</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            menu.首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            menu.文章
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                学渣的拓扑排序
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-05-18T19:53:43+08:00" content="2020-05-18">
+              2020-05-18
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="学渣的拓扑排序"><a href="#学渣的拓扑排序" class="headerlink" title="学渣的拓扑排序"></a>学渣的拓扑排序</h1><p>看了好久的 DFS和BFS题目，还是想不到怎么简单解释清楚拓扑排序。</p>
+<p>比较标准的解释就是<br>给定一个包含 n 个节点的有向图 G，我们给出它的节点编号的一种排列，如果满足</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">对于图 G 中的任意一条有向边 (u, v)，u 在排列中都出现在 V 的前面。</div></pre></td></tr></table></figure>
+<p>那么称该排列是图 G 的「拓扑排序」。</p>
+<p>如果实在理解不了，就记住是一个有向图，但他可以有一些节点独立，他不能存在环。</p>
+<h2 id="DFS-深度优先搜索"><a href="#DFS-深度优先搜索" class="headerlink" title="DFS 深度优先搜索"></a>DFS 深度优先搜索</h2><p>如果对二叉树比较熟，那么先序遍历就类似于深度优先搜索。</p>
+<p>比如</p>
+<table>
+<thead>
+<tr>
+<th>a</th>
+<th>→</th>
+<th>→</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>↓</td>
+<td>↓</td>
+<td>↓</td>
+</tr>
+<tr>
+<td>b</td>
+<td>c</td>
+<td>d</td>
+</tr>
+<tr>
+<td>↓</td>
+<td></td>
+<td>↓</td>
+</tr>
+<tr>
+<td>e</td>
+<td></td>
+<td>f</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>↓</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>g</td>
+</tr>
+</tbody>
+</table>
+<p>那么 a 先放进备忘录memo，备忘录中的元素有3种状态</p>
+<ul>
+<li>未遍历,记住nil或者0</li>
+<li>遍历中,记住1</li>
+<li>遍历结束,记住2</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">a 0 b 1 c 2 d 3 e 4 f 5 g 6</div><div class="line">// 先序条件</div><div class="line">edges: [d: [f], b: [e], a: [b, c, d], f: [g]]</div><div class="line"></div><div class="line">// 那么备忘录中的状态变化就是</div><div class="line">遍历a [a: 1] </div><div class="line">找到a的后续节点 b, c, d</div><div class="line">遍历b [b: 1, a: 1]</div><div class="line">找到b的后续节点 e</div><div class="line">遍历e [b: 1, e: 1, a: 1]</div><div class="line">e没有后续节点了，结束标记为2，</div><div class="line">退回到b，b也没有后续节点了，结束标记为2，</div><div class="line">退回到a，遍历a的第二个后续节点c</div><div class="line">遍历c [b: 2, e: 2, a: 1, c: 1]</div><div class="line">c没有后续节点了，结束标记为2，退回到a，继续遍历a的下一个后续节点d</div><div class="line">遍历d [b: 2, e: 2, d: 1, a: 1, c: 2]</div><div class="line">找到d的后续节点 f</div><div class="line">遍历f [b: 2, e: 2, d: 1, 5: 1, a: 1, c: 2]</div><div class="line">找到f的后续节点 g</div><div class="line">遍历g [g: 1, f: 1, e: 2, d: 1, a: 1, b: 2, c: 2]</div><div class="line">g没有后续节点了，结束标记为2，退回到f</div><div class="line">f没有后续节点了，结束标记为2，退回到d</div><div class="line">d没有后续节点了，结束标记为2，退回到a</div><div class="line">a没有后续节点了，结束标记为2，结束</div></pre></td></tr></table></figure>
+<p>如果要记录遍历顺序，标记为2的时候，就可以放入results了。<br>由于是深度优先，所以results要reverse下。</p>
+<p>如果存在环，那么就会出现要遍历他的时候，他已经是遍历中的状态了，那么这时候就可以直接返回，并标识这不是一个拓扑结构。</p>
+<h3 id="例题-课程表"><a href="#例题-课程表" class="headerlink" title="例题-课程表"></a>例题-课程表</h3><p>现在你总共有 n 门课需要选，记为 0 到 n-1。</p>
+<p>在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们: [0,1]</p>
+<p>给定课程总量以及它们的先决条件，返回你为了学完所有课程所安排的学习顺序。</p>
+<p>可能会有多个正确的顺序，你只要返回一种就可以了。如果不可能完成所有课程，返回一个空数组。</p>
+<p><a href="https://leetcode-cn.com/problems/course-schedule-ii" target="_blank" rel="external">直达链接</a></p>
+<h4 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h4><p>前面分析很多了，直接上源码吧</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">findOrder</span><span class="params">(<span class="number">_</span> numCourses: Int, <span class="number">_</span> prerequisites: [[Int]])</span></span> -&gt; [<span class="type">Int</span>] &#123;</div><div class="line">        <span class="keyword">var</span> edges: [<span class="type">Int</span>: [<span class="type">Int</span>]] = [:]</div><div class="line"></div><div class="line">        <span class="keyword">for</span> prerequisite <span class="keyword">in</span> prerequisites &#123;</div><div class="line">            edges[prerequisite[<span class="number">1</span>], <span class="keyword">default</span>: []].append(prerequisite[<span class="number">0</span>])</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> memo: [<span class="type">Int</span>: <span class="type">Int</span>] = [:]</div><div class="line">        <span class="keyword">var</span> isInvalid = <span class="literal">false</span></div><div class="line">        <span class="keyword">var</span> result: [<span class="type">Int</span>] = []</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">func</span> <span class="title">dfs</span><span class="params">(<span class="number">_</span> i: Int)</span></span> &#123;</div><div class="line">            memo[i] = <span class="number">1</span></div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> edges[i] ?? [] &#123;</div><div class="line">                <span class="keyword">if</span> memo[j] == <span class="literal">nil</span> &#123;</div><div class="line">                    dfs(j)</div><div class="line">                    <span class="keyword">if</span> isInvalid &#123; <span class="keyword">return</span> &#125;</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> memo[j] == <span class="number">1</span> &#123;</div><div class="line">                    isInvalid = <span class="literal">true</span></div><div class="line">                    <span class="keyword">return</span></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            memo[i] = <span class="number">2</span></div><div class="line">            result.append(i)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span> ..&lt; numCourses <span class="keyword">where</span> !isInvalid &amp;&amp; memo[i] == <span class="literal">nil</span> &#123;</div><div class="line">            dfs(i)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> isInvalid &#123; <span class="keyword">return</span> [] &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> result.reversed()</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="BFS-广度优先搜索"><a href="#BFS-广度优先搜索" class="headerlink" title="BFS 广度优先搜索"></a>BFS 广度优先搜索</h2><p>广度优先遍历，就类似中序遍历，一层一层的往下。</p>
+<p>广度优先需要一个先进先出的队列，队列初始是没有先序的节点，遍历这些节点并塞入他们的后续节点（有多个先序，还需要判断是否先序全部都完成了，所以还需要一个counter记录其先序节点的数量），并且查找该节点的后续节点。</p>
+<h3 id="题目-课程表"><a href="#题目-课程表" class="headerlink" title="题目-课程表"></a>题目-课程表</h3><p>题目一样</p>
+<h4 id="解题-1"><a href="#解题-1" class="headerlink" title="解题"></a>解题</h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">findOrder</span><span class="params">(<span class="number">_</span> numCourses: Int, <span class="number">_</span> prerequisites: [[Int]])</span></span> -&gt; [<span class="type">Int</span>] &#123;</div><div class="line">        <span class="keyword">var</span> edges: [<span class="type">Int</span>: [<span class="type">Int</span>]] = [:]</div><div class="line">        <span class="keyword">var</span> counter: [<span class="type">Int</span>: <span class="type">Int</span>] = [:]</div><div class="line"></div><div class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> prerequisites &#123;</div><div class="line">            edges[p[<span class="number">1</span>], <span class="keyword">default</span>: []].append(p[<span class="number">0</span>])</div><div class="line">            counter[p[<span class="number">0</span>], <span class="keyword">default</span>: <span class="number">0</span>] += <span class="number">1</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">var</span> queue: [<span class="type">Int</span>] = []</div><div class="line"></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span> ..&lt; numCourses &#123;</div><div class="line">            <span class="keyword">if</span> counter[i] == <span class="literal">nil</span> &#123;</div><div class="line">                queue.append(i)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">var</span> result: [<span class="type">Int</span>] = []</div><div class="line"></div><div class="line">        <span class="keyword">while</span> !queue.isEmpty &#123;</div><div class="line">            <span class="keyword">let</span> num = queue.removeFirst()</div><div class="line">            result.append(num)</div><div class="line"></div><div class="line">            <span class="keyword">for</span> e <span class="keyword">in</span> edges[num] ?? [] &#123;</div><div class="line">                <span class="keyword">if</span> <span class="keyword">let</span> <span class="built_in">count</span> = counter[e] &#123;</div><div class="line">                    <span class="keyword">if</span> <span class="built_in">count</span> == <span class="number">1</span> &#123;</div><div class="line">                        queue.append(e)</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        counter[e] = <span class="built_in">count</span> - <span class="number">1</span></div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> result.<span class="built_in">count</span> != numCourses &#123;</div><div class="line">            <span class="keyword">return</span> []</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> result</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/17/stupid-man-s-dfs/" rel="next" title="学渣的分治算法">
+                <i class="fa fa-chevron-left"></i> 学渣的分治算法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="David Woo" />
+          <p class="site-author-name" itemprop="name">David Woo</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">105</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#学渣的拓扑排序"><span class="nav-number">1.</span> <span class="nav-text">学渣的拓扑排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DFS-深度优先搜索"><span class="nav-number">1.1.</span> <span class="nav-text">DFS 深度优先搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#例题-课程表"><span class="nav-number">1.1.1.</span> <span class="nav-text">例题-课程表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解题"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">解题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BFS-广度优先搜索"><span class="nav-number">1.2.</span> <span class="nav-text">BFS 广度优先搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目-课程表"><span class="nav-number">1.2.1.</span> <span class="nav-text">题目-课程表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解题-1"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">解题</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Woo</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -150,7 +150,7 @@
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
-  <p class="site-subtitle">扯扯技术，唠唠闲话</p>
+  <p class="site-subtitle">扯扯技术，唠唠闲话 交流email-xiao303178394@gmail.com</p>
 </div>
 
 <div class="site-nav-toggle">
@@ -204,6 +204,171 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/01/07/2014-01-07-lack-of-change-java-of-the-class-loader-works/" itemprop="url">
+                  不足则改之---Java类装载器的工作原理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-01-07T16:14:00+08:00" content="2014-01-07">
+              2014-01-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/jvm/" itemprop="url" rel="index">
+                    <span itemprop="name">jvm</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/jvm/classloader/" itemprop="url" rel="index">
+                    <span itemprop="name">classloader</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>很高兴，晚上回来路上捡到了100块钱。我交给了警察叔叔处理，终于拾金不昧了一把。T.T以前都是特么的捡不到钱啊。</p>
+<p>#不足<br>今天和一位技术上的前辈聊了一个小时，除了了解到自己需求等各方面的不足，还发现了自己一个薄弱点，那就是对java底层是如何运行的还不是很了解。早在刚毕业的时候，我还会去了解JVM的运行机制、一个java文件如何编译成字节码文件、如何通过类加载器加载、如何解释运行、JIT，包括JVM实例的堆、程序计数器，包括每个方法的栈。<br>但是现在，对于这些东西，由于长期专注于web，并且心猿意马，早就关注其他新的技术，导致忘了这些老本行。这些东西早就有所了解而却说不出个所以然来。<br>因此，晚上回来就痛彻心扉的决定要把这块已经丢失的骨头再啃起来。本来计划今天要把之前写好的javascript实战篇的最后一篇博文整理下发出来，但是，我决定还是先把JVM相关的搞定了把。</p>
+<p>#JVM的核心</p>
+<p><img src="http://user-image.logdown.io/user/3769/blog/3827/post/174805/kWlOwaDJSbGCe5LDNuxi_1.gif" alt="1.gif"></p>
+<p>#类加载器<br>可以看到，类加载器在其中占了很重要的一大块，今天就先把类装载器这老骨头给重新啃一啃。</p>
+<h2 id="1-基础概念"><a href="#1-基础概念" class="headerlink" title="1 基础概念"></a>1 基础概念</h2><h2 id="1-1-什么是类加载器"><a href="#1-1-什么是类加载器" class="headerlink" title="# 1.1 什么是类加载器"></a># 1.1 什么是类加载器</h2><p>类加载器是一个用来加载类文件的类。<br>默认的类加载器有三种：Bootstrap类加载器、Extension类加载器和System类加载器。之后章节具体介绍每种类加载器从哪里加载类。</p>
+<h2 id="1-2-类加载器的作用"><a href="#1-2-类加载器的作用" class="headerlink" title="# 1.2 类加载器的作用"></a># 1.2 类加载器的作用</h2><p>在Java虚拟机的执行引擎执行的时候加载类。<br>Java源代码通过javac编译器编译成类文件。然后JVM来执行类文件中的字节码（注意：JIT会把热点代码编译成机器码进行执行，为了提供运行时效率）来执行程序。<br>类加载器负责加载文件系统、网络或其他来源的类文件。</p>
+<h2 id="1-3-类加载器的三个机制"><a href="#1-3-类加载器的三个机制" class="headerlink" title="# 1.3 类加载器的三个机制"></a># 1.3 类加载器的三个机制</h2><p>Java类加载器的工作原理基于以下三个机制：委托、可见性和单一性。</p>
+<h2 id="1-3-1-委托"><a href="#1-3-1-委托" class="headerlink" title="# # 1.3.1 委托"></a># # 1.3.1 委托</h2><p>委托机制是指将加载一个类的请求交给父加载器，如果这个父类加载器不能找到或者加载这个类，那么再加载它。</p>
+<h2 id="1-3-2-可见性"><a href="#1-3-2-可见性" class="headerlink" title="# # 1.3.2 可见性"></a># # 1.3.2 可见性</h2><p>子类的加载器可以看见所有父类的加载器加载的类，而父类加载器看不到子类加载器加载的类。</p>
+<h2 id="1-3-3-单一性"><a href="#1-3-3-单一性" class="headerlink" title="# # 1.3.3 单一性"></a># # 1.3.3 单一性</h2><p>指一个类仅加载一次，该机制是通过委托机制确保子类加载器不会再次加载父类加载器加载过的类。</p>
+<h2 id="1-3-4-例子"><a href="#1-3-4-例子" class="headerlink" title="# # 1.3.4 例子"></a># # 1.3.4 例子</h2><p>通过后面章节介绍了各个类加载器及其工作原理后再结合例子介绍。</p>
+<h2 id="1-4-Bootstrap类加载器"><a href="#1-4-Bootstrap类加载器" class="headerlink" title="# 1.4 Bootstrap类加载器"></a># 1.4 Bootstrap类加载器</h2><h2 id="1-4-1-概念"><a href="#1-4-1-概念" class="headerlink" title="# # 1.4.1 概念"></a># # 1.4.1 概念</h2><p>该类加载器负责加载rt.jar中的JDK类文件，他是所有类加载器的父加载器。该类加载器没有父类加载器，如果你调用String.class.getClassLoader()，会返回null。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">System.out.println(String.class.getClassLoader());</div><div class="line">System.out.println(TestBootstrapCL.class.getClassLoader());</div></pre></td></tr></table></figure></p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">null</div><div class="line">sun.misc.Launcher$AppClassLoader@82ba41</div></pre></td></tr></table></figure>
+<p>因此，bootstrap类加载器被称为初始类加载器。</p>
+<h2 id="1-4-2-加载类文件的地方"><a href="#1-4-2-加载类文件的地方" class="headerlink" title="# # 1.4.2 加载类文件的地方"></a># # 1.4.2 加载类文件的地方</h2><p>JRE/lib/rt.jar</p>
+<h2 id="1-5-Extension类加载器"><a href="#1-5-Extension类加载器" class="headerlink" title="# 1.5 Extension类加载器"></a># 1.5 Extension类加载器</h2><h2 id="1-5-1-概念"><a href="#1-5-1-概念" class="headerlink" title="# # 1.5.1 概念"></a># # 1.5.1 概念</h2><p>Extension类加载器负责加载标准扩展目录下面的类。他加载类之前，会先委托他的父类加载器（Bootstrap）进行加载，没有加载到再从jre/lib/ext目录下或者java.ext.dirs系统属性定义的目录下加载类。<br>这样就可以使得编写程序变得简单，只需把JAR文件拷贝到扩展目录下面即可，类加载器会自动的在下面查找。<br>Extension加载器由sun.misc.Launcher$ExtClassLoader实现。</p>
+<h2 id="1-5-2-加载类文件的地方"><a href="#1-5-2-加载类文件的地方" class="headerlink" title="# # 1.5.2 加载类文件的地方"></a># # 1.5.2 加载类文件的地方</h2><p>jre/lib/ext</p>
+<h2 id="1-6-System类加载器"><a href="#1-6-System类加载器" class="headerlink" title="# 1.6 System类加载器"></a># 1.6 System类加载器</h2><h2 id="1-6-1-概念"><a href="#1-6-1-概念" class="headerlink" title="# # 1.6.1 概念"></a># # 1.6.1 概念</h2><p>System类加载器是默认的类加载器，他会从CLASSPATH目录下查找类。CLASSPATH可以是系统CLASSPATH变量中设定的，可以是命令行-classpath –cp后的参数定义的，也可以是jar文件中的Mainfest的classpath属性定义的。SYSTEM类加载器是通过sun.misc.Launcher$AppClassLoader在实现的。</p>
+<h2 id="1-6-2-加载类文件的地方"><a href="#1-6-2-加载类文件的地方" class="headerlink" title="# # 1.6.2 加载类文件的地方"></a># # 1.6.2 加载类文件的地方</h2><p>CLASSPATH</p>
+<h2 id="2-工作原理"><a href="#2-工作原理" class="headerlink" title="2 工作原理"></a>2 工作原理</h2><p>把三种类加载器说完了，现在补充下之前没说完的类加载器工作原理的三个机制。</p>
+<h2 id="2-1-委托机制"><a href="#2-1-委托机制" class="headerlink" title="# 2.1 委托机制"></a># 2.1 委托机制</h2><p>当一个类加载和初始化的时候，类尽在有需要加载的时候被加载。假设你有一个应用需要的类家Abc.class，首先加载这个类的请求由System类加载器委托给Extension类加载器，然后再委托给Bootstrap类加载器。Bootstrap会先看看rt.jar中有没有这个类，没有的话再把请求返回给extension类加载器，如果这个类被Extension类加载器找到了，那么他将被加载，而System不会加载这个类。如果没有找到，那么System就回去CLASSPATH中寻找。</p>
+<h2 id="2-2-可见性机制"><a href="#2-2-可见性机制" class="headerlink" title="# 2.2 可见性机制"></a># 2.2 可见性机制</h2><p>根据可见性机制，子类加载器可以看到父类加载器加载的类，而反之则不行。<br>看以下例子<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">            System.out.println(<span class="string">"TestBootstrapCL.class.getClassLoader():"</span>+TestBootstrapCL.class.getClassLoader());</div><div class="line">            System.out.println(<span class="string">"TestBootstrapCL.class.getClassLoader().getParent():"</span>+TestBootstrapCL.class.getClassLoader().getParent());</div><div class="line">            Class.forName(<span class="string">"com.dragonsoft.test.d140107"</span>, <span class="keyword">true</span>, TestBootstrapCL.class.getClassLoader().getParent());</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">catch</span>(ClassNotFoundException e) &#123;</div><div class="line">            Logger.getLogger(TestBootstrapCL.class.getName()).log(Level.SEVERE, e.toString());</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">TestBootstrapCL.class.getClassLoader():sun.misc.Launcher$AppClassLoader@82ba41</div><div class="line">TestBootstrapCL.class.getClassLoader().getParent():sun.misc.Launcher$ExtClassLoader@923e30</div><div class="line">2014-1-7 23:58:48 com.dragonsoft.test.d140107.TestBootstrapCL main</div><div class="line">严重: java.lang.ClassNotFoundException: com.dragonsoft.test.d140107</div></pre></td></tr></table></figure>
+<p>可以看出TestBootstrapCL的类加载器是SYSTEM类加载器。TestBootstrapCL类加载器的父类加载器是Extension。而Extension类加载器无法加载到TestBootstrapCL类，因为可见性原则限制父类加载器是无法加载子类加载器的。</p>
+<h2 id="2-3-单一性原则"><a href="#2-3-单一性原则" class="headerlink" title="# 2.3 单一性原则"></a># 2.3 单一性原则</h2><p>根据该机制，父类加载器加载过的类不能被子类加载器加载第二次。</p>
+<h2 id="3-显示类加载"><a href="#3-显示类加载" class="headerlink" title="3 显示类加载"></a>3 显示类加载</h2><p>Class.forName(className)和 Class.forName(className,initialized,classloader)。在JAVA创建JDBC连接的时候，都会要显示的加载数据库驱动类。<br>类加载是通过调用CLassLoader的loadClass()方法，loadClass()再调用findClass()。如果最后都没找到该类，那就会报错。找到的话就调用defineClass()将字节码转化成类实例，然后返回。</p>
+<h2 id="4-显示类加载的作用"><a href="#4-显示类加载的作用" class="headerlink" title="4 显示类加载的作用"></a>4 显示类加载的作用</h2><p>Class.forName(className)在返回一个Class的同时，他会执行该类的静态代码段。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Class clazz=Class.forName(driverClass);</div><div class="line">Driver driver=(java.sql.Driver)clazz.newInstance();</div><div class="line">DriverManager.registerDriver(driver);</div></pre></td></tr></table></figure></p>
+<p>比如上面这段代码，我就可以把driverClass写在配置文件中，写在数据库中。只要这些驱动类都是java.sql.Driver实现类的，我就能把他们动态的加载到应用中。是不是有点动态语言的风范？这也就是java用代理事先动态语言的一种方式。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -915,7 +1080,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">104</span>
+              <span class="site-state-item-count">105</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

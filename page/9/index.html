@@ -150,7 +150,7 @@
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
-  <p class="site-subtitle">扯扯技术，唠唠闲话</p>
+  <p class="site-subtitle">扯扯技术，唠唠闲话 交流email-xiao303178394@gmail.com</p>
 </div>
 
 <div class="site-nav-toggle">
@@ -204,6 +204,146 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/03/10/2014-03-10-linux-shell-programming-study-notes-c-local-variables/" itemprop="url">
+                  Linux Shell编程学习笔记（三）本地变量 
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-03-10T14:43:00+08:00" content="2014-03-10">
+              2014-03-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/bash/" itemprop="url" rel="index">
+                    <span itemprop="name">bash</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/bash/Shell/" itemprop="url" rel="index">
+                    <span itemprop="name">Shell</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="本地变量"><a href="#本地变量" class="headerlink" title="本地变量"></a>本地变量</h2><h2 id="显示本地变量"><a href="#显示本地变量" class="headerlink" title="#  显示本地变量"></a>#  显示本地变量</h2><p>set命令可以显示当前环境所有变量，包括本地变量和环境变量。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ aaa=bbb</div><div class="line">[David@localhost ~]$ env | grep aaa</div><div class="line">[David@localhost ~]$ <span class="built_in">set</span> | grep aaa</div><div class="line">aaa=bbb</div><div class="line">[David@localhost ~]$ <span class="built_in">export</span> aaa</div><div class="line">[David@localhost ~]$ env | grep aaa</div><div class="line">aaa=bbb</div><div class="line">[David@localhost ~]$ <span class="built_in">set</span> | grep aaa</div><div class="line">aaa=bbb</div></pre></td></tr></table></figure></p>
+<h2 id="定义本地变量"><a href="#定义本地变量" class="headerlink" title="#  定义本地变量"></a>#  定义本地变量</h2><p>变量名=value 会解析，用于定义连续的比较简单的字符串数字<br>变量名=’value’  所见即所得，单引号里面的是什么就会显示什么，不会进行解析<br>变量名=”value” 会解析，一般字符串定义推荐使用<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ a=192.168.0.248</div><div class="line">[David@localhost ~]$ b=<span class="string">'192.168.0.248'</span></div><div class="line">[David@localhost ~]$ c=<span class="string">"192.168.0.248"</span></div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="string">"a=<span class="variable">$a</span>"</span></div><div class="line">a=192.168.0.248</div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="string">"b=<span class="variable">$b</span>"</span></div><div class="line">b=192.168.0.248</div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="string">"c=<span class="variable">$c</span>"</span></div><div class="line">c=192.168.0.248</div><div class="line">[David@localhost ~]$ a=192.168.1.2-<span class="variable">$a</span></div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$a</span></div><div class="line">192.168.1.2-192.168.0.248</div><div class="line">[David@localhost ~]$ b=<span class="string">'192.168.1.2-$b'</span></div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$b</span></div><div class="line">192.168.1.2-<span class="variable">$b</span></div><div class="line">[David@localhost ~]$ c=<span class="string">"192.168.1.2-<span class="variable">$c</span>"</span></div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$c</span></div><div class="line">192.168.1.2-192.168.0.248</div></pre></td></tr></table></figure></p>
+<h2 id="通过反引号用本地变量引用linux命令"><a href="#通过反引号用本地变量引用linux命令" class="headerlink" title="#  通过反引号用本地变量引用linux命令"></a>#  通过反引号用本地变量引用linux命令</h2><p>用反引号将命令括起来，可以赋给本地变量。显示的时候就会执行该变量。但是记得不能用单引号。推荐使用$(date)方式处理命令，因为反引号不容易发现且会给当成单引号。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ userCommand=`whoami`</div><div class="line">[David@localhost ~]$ echo $userCommand</div><div class="line">David</div><div class="line">[David@localhost ~]$ echo &quot;`date`&quot;</div><div class="line">2014年 03月 10日 星期一 22:07:38 CST</div><div class="line">[David@localhost ~]$ echo `date`</div><div class="line">2014年 03月 10日 星期一 22:07:44 CST</div><div class="line">[David@localhost ~]$ echo &apos;`date`&apos;</div><div class="line">`date`</div></pre></td></tr></table></figure></p>
+<h2 id="规范"><a href="#规范" class="headerlink" title="#  规范"></a>#  规范</h2><p>数字或简单字符串不用引号；<br>没特殊情况一般用双引号；<br>原样输出用双引号；<br>常量尽量用大写，多单词用下划线连接，特别是全局变量；<br>引用最好是${VAR_NAME}；<br>避免使用无意义的名字，比如COUNT；<br>在函数里定义变量，记得用local来声明，例如：local i；<br>使用$(date)方式处理命令，因为反引号不容易发现且会给当成单引号；</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -1849,199 +1989,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/01/29/2014-01-29-arrays-in-wuyi-travel-javascript-b/" itemprop="url">
-                  武夷游记-----javascript中的数组（二）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-01-29T03:53:00+08:00" content="2014-01-29">
-              2014-01-29
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/javascript/" itemprop="url" rel="index">
-                    <span itemprop="name">javascript</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/javascript/javascript/" itemprop="url" rel="index">
-                    <span itemprop="name">javascript</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/javascript/javascript/游记/" itemprop="url" rel="index">
-                    <span itemprop="name">游记</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/javascript/javascript/游记/Node-js/" itemprop="url" rel="index">
-                    <span itemprop="name">Node.js</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/javascript/javascript/游记/Node-js/个人随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">个人随笔</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/javascript/javascript/游记/Node-js/个人随笔/数组/" itemprop="url" rel="index">
-                    <span itemprop="name">数组</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>趁着淡季去武夷山游玩了一圈，还是挺不错的。不用看着如山如海的人头，风景都变得格外好了。由于季节原因，没有玩什么九曲竹筏漂流，但是此行的目的还是达到了。很好的放松了下身心，然后和朋友们一起出行，这路途本身就是一种享受，然后也吃到了一些特色的吃的，比如熏鹅、孝母饼。不过印象最深的就是，在武夷山读书3年的朋友，竟然把我们带错路了，我们只看着玉女峰离我们越来越远，由此可总结，去旅游千万别让路痴当导游，就算是他主场，他也能毫不犹豫的带错路。不过这样一来，我们一路吐槽反而变得非常有乐趣。<br>一回家就想写博客，写博客真成了一种病了。接下来javascript数组的第二篇，最后还有个第三篇，本系列就结束了。<br>———————–分割线：序号接第一篇————————-</p>
-<h2 id="2-7-Map映射"><a href="#2-7-Map映射" class="headerlink" title="2.7 Map映射"></a>2.7 Map映射</h2><p>Map映射会将数组中所有有赋值（是赋值，null、false、空串、void 0等都会执行。）的元素都调用回调函数，再将返回的值组成一个数组。<br>Map和foreach、some、every有点像，只是map会将返回值组成一个新的数组。<br>在python中可以通过下面这种方式来达到map同样的效果。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sanitize(time_string) <span class="keyword">for</span> time_string <span class="keyword">in</span> dataList</div></pre></td></tr></table></figure></p>
-<p>接着让我们来看看javascript中的例子。<br><figure class="highlight javascript"><figcaption><span>testmap.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">values = [<span class="keyword">void</span> <span class="number">0</span>, <span class="literal">null</span>, <span class="literal">false</span>, <span class="string">''</span>,<span class="string">'5'</span>];</div><div class="line">values[<span class="number">7</span>] = <span class="keyword">void</span> <span class="number">0</span>;</div><div class="line">result = values.map(<span class="function"><span class="keyword">function</span>(<span class="params">value, index, array</span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'The '</span>+index+<span class="string">'th element is '</span>+value);</div><div class="line">    <span class="keyword">return</span> value;</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'The new array is '</span>+result);</div><div class="line">~</div></pre></td></tr></table></figure></p>
-<p>输出：<br><figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[David@localhost arraytest]$ node testmap.js</div><div class="line">The 0th element is undefined</div><div class="line">The 1th element is null</div><div class="line">The 2th element is false</div><div class="line">The 3th element is</div><div class="line">The 4th element is 5</div><div class="line">The 7th element is undefined</div><div class="line">The new array is ,,false,,5,,,</div></pre></td></tr></table></figure></p>
-<p>可以看出，索引为5和6的元素没有执行回调函数，因为他们并没有被赋值。</p>
-<p>我们还可以通过map来获取一个映射模型（python叫字典，java中叫hashmap）。<br><figure class="highlight javascript"><figcaption><span>Map.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Map</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">this</span>._map=&#123;&#125;;</div><div class="line">&#125;</div><div class="line"><span class="built_in">Map</span>.prototype.getMap = <span class="function"><span class="keyword">function</span>(<span class="params">items</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> items.map(<span class="function"><span class="keyword">function</span>(<span class="params">item,index,array</span>)</span>&#123;</div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            id:index,</div><div class="line">            name:item</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = <span class="built_in">Map</span>;</div><div class="line">~</div></pre></td></tr></table></figure></p>
-<figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[David@localhost arraytest]$ node</div><div class="line">var Map = require('./Map.js');var map = new Map();var newmap = map.getMap(['1','3','4']);newmap;</div><div class="line">[ &#123; id: 0, name: '1' &#125;,</div><div class="line">  &#123; id: 1, name: '3' &#125;,</div><div class="line">  &#123; id: 2, name: '4' &#125; ]</div><div class="line"><span class="meta">&gt;</span></div></pre></td></tr></table></figure>
-<h2 id="2-8-Filter过滤"><a href="#2-8-Filter过滤" class="headerlink" title="2.8 Filter过滤"></a>2.8 Filter过滤</h2><p>用filter方法，可以将数组的每个有赋值的元素都执行回调函数，将返回true的数组组成一个新的数组集合。<br>用法：.filter(fn(value, index, array), thisArgument)<br>例子如下：<br><figure class="highlight javascript"><figcaption><span>testfilter.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> oldarray = [<span class="keyword">void</span> <span class="number">0</span>, <span class="literal">null</span>, <span class="literal">false</span>, <span class="string">''</span>, <span class="number">1</span>];</div><div class="line">oldarray[<span class="number">8</span>]=<span class="string">'0'</span>;</div><div class="line"><span class="keyword">var</span> trueresult = oldarray.filter(<span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'true filte :'</span>+value);</div><div class="line">    <span class="keyword">return</span> value;</div><div class="line">    &#125;);</div><div class="line"><span class="keyword">var</span> falseresule = oldarray.filter(<span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'false flite :'</span>+value);</div><div class="line">    <span class="keyword">return</span> !value;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'true array is '</span>+trueresult);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'false array is '</span>+falseresule);</div><div class="line">~</div><div class="line">~</div></pre></td></tr></table></figure></p>
-<p>输出：<br><figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[David@localhost arraytest]$ node testfilter.js</div><div class="line">true filte :undefined</div><div class="line">true filte :null</div><div class="line">true filte :false</div><div class="line">true filte :</div><div class="line">true filte :1</div><div class="line">true filte :0</div><div class="line">false flite :undefined</div><div class="line">false flite :null</div><div class="line">false flite :false</div><div class="line">false flite :</div><div class="line">false flite :1</div><div class="line">false flite :0</div><div class="line">true array is 1,0</div><div class="line">false array is ,,false,</div></pre></td></tr></table></figure></p>
-<p>从结果可以看出，有值的才执行回调函数，回调函数返回true的原数组元素会组成一个新的数组。<br>另外可以看出0在javascript中是true，C语言玩习惯的人还真要注意这个。</p>
-<h2 id="2-9-Sort排序"><a href="#2-9-Sort排序" class="headerlink" title="2.9 Sort排序"></a>2.9 Sort排序</h2><p>在sort方法中如果未提供回调函数，那么将使用字典序的顺序排，这样60会排在9的前面。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[<span class="number">60</span>,<span class="number">9</span>,<span class="number">23</span>,<span class="number">10</span>,<span class="number">28</span>].sort();</div><div class="line">[ <span class="number">10</span>,  <span class="number">23</span>,  <span class="number">28</span>,  <span class="number">60</span>,  <span class="number">9</span> ]</div></pre></td></tr></table></figure></p>
-<p>回调函数有两个参数a,b，返回小于0，a在b前。等于0或者NaN则按数组原始的先后顺序。而且是用冒泡排序的方式进行排序的。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">[<span class="string">'a'</span>,<span class="number">60</span>,<span class="number">9</span>,<span class="number">23</span>,<span class="number">70</span>,<span class="number">10</span>].sort(<span class="function"><span class="keyword">function</span>(<span class="params">a,b</span>)</span>&#123; <span class="built_in">console</span>.log(<span class="string">'a:'</span>+a+<span class="string">'- b:'</span>+b+<span class="string">'='</span>+(a-b)); <span class="keyword">return</span> a-b;&#125;);</div><div class="line">a:a- b:<span class="number">60</span>=<span class="literal">NaN</span></div><div class="line">a:<span class="number">60</span>- b:<span class="number">9</span>=<span class="number">51</span></div><div class="line">a:a- b:<span class="number">9</span>=<span class="literal">NaN</span></div><div class="line">a:<span class="number">60</span>- b:<span class="number">23</span>=<span class="number">37</span></div><div class="line">a:<span class="number">9</span>- b:<span class="number">23</span>=<span class="number">-14</span></div><div class="line">a:<span class="number">60</span>- b:<span class="number">70</span>=<span class="number">-10</span></div><div class="line">a:<span class="number">70</span>- b:<span class="number">10</span>=<span class="number">60</span></div><div class="line">a:<span class="number">60</span>- b:<span class="number">10</span>=<span class="number">50</span></div><div class="line">a:<span class="number">23</span>- b:<span class="number">10</span>=<span class="number">13</span></div><div class="line">a:<span class="number">9</span>- b:<span class="number">10</span>=<span class="number">-1</span></div><div class="line">[ <span class="string">'a'</span>,</div><div class="line">  <span class="number">9</span>,</div><div class="line">  <span class="number">10</span>,</div><div class="line">  <span class="number">23</span>,</div><div class="line">  <span class="number">60</span>,</div><div class="line">  <span class="number">70</span> ]</div></pre></td></tr></table></figure></p>
-<h2 id="2-10-Reduce和reduceRight计算"><a href="#2-10-Reduce和reduceRight计算" class="headerlink" title="2.10 Reduce和reduceRight计算"></a>2.10 Reduce和reduceRight计算</h2><p>Reduce为从左到右，reduceRight为从右到左。每次回调函数接收到目前为止的部分结果和当前遍历的值，最后返回一个总计值。<br>用法：reduce(callback(previousValue, currentValue, index, array), initialValue)。</p>
-<ul>
-<li>previousValue是上一次被调用的回调函数的返回值</li>
-<li>initialValue是开始时previousValue被初始化的值</li>
-<li>currentValue 是当前被遍历的元素值</li>
-<li>index是当前元素在数组中的索引值</li>
-<li>array是对调用.reduce数组的简单引用。</li>
-</ul>
-<p>下例是用reduce来数组的总和：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.prototype.sum = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="keyword">return</span> <span class="keyword">this</span>.reduce(<span class="function"><span class="keyword">function</span>(<span class="params">preValue,value,index</span>)</span>&#123;<span class="keyword">return</span> preValue+value&#125;,<span class="number">0</span>)&#125;</div><div class="line">[<span class="built_in">Function</span>]</div><div class="line">[<span class="string">'a'</span>,<span class="number">60</span>,<span class="number">9</span>,<span class="number">23</span>,<span class="number">70</span>,<span class="number">10</span>].sum()</div><div class="line"><span class="string">'0a609237010'</span></div><div class="line">[<span class="number">60</span>,<span class="number">9</span>,<span class="number">23</span>,<span class="number">70</span>,<span class="number">10</span>].sum()</div><div class="line"><span class="number">172</span></div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2087,7 +2034,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">104</span>
+              <span class="site-state-item-count">105</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

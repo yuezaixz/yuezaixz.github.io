@@ -150,7 +150,7 @@
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
-  <p class="site-subtitle">扯扯技术，唠唠闲话</p>
+  <p class="site-subtitle">扯扯技术，唠唠闲话 交流email-xiao303178394@gmail.com</p>
 </div>
 
 <div class="site-nav-toggle">
@@ -204,6 +204,108 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/05/07/2015-05-07-2015-04-20-beginning-ios-pit-over-those-years-f/" itemprop="url">
+                  初学IOS那些年踩过的坑（七）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-05-07T14:21:16+08:00" content="2015-05-07">
+              2015-05-07
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="地图的View退到后台后导致闪退"><a href="#地图的View退到后台后导致闪退" class="headerlink" title="地图的View退到后台后导致闪退"></a>地图的View退到后台后导致闪退</h2><p>错误信息为gpus_ReturnNotPermittedKillClient</p>
+<h2 id="事因"><a href="#事因" class="headerlink" title="# 事因"></a># 事因</h2><p>情况大概是这样的，中间有个版本因为地图占用了内存，所以在4S上会有内存不足闪退的原因，然后做了一次修改就是进入后台的时候把地图销毁了，具体代码如下。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(applicationDidEnterBackgroundNotification:) name:RMApplicationDidEnterBackgroundNotification object:<span class="literal">nil</span>];</div><div class="line">[[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(applicationDidWillEnterForegroundNotification:) name:RMApplicationDidWillEnterForegroundNotification object:<span class="literal">nil</span>];</div></pre></td></tr></table></figure>
+<p>销毁代码如下</p>
+<figure class="highlight objc"><figcaption><span>RMMapView.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)applicationDidEnterBackgroundNotification:(<span class="built_in">NSNotification</span> *)notification &#123;</div><div class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span> viewController] == [<span class="keyword">self</span> topViewController]) &#123;</div><div class="line">        [<span class="keyword">self</span> setHiddenMap:<span class="literal">YES</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)applicationDidWillEnterForegroundNotification:(<span class="built_in">NSNotification</span> *)notification &#123;</div><div class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span> viewController] == [<span class="keyword">self</span> topViewController]) &#123;</div><div class="line">        [<span class="keyword">self</span> setHiddenMap:<span class="literal">NO</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)setHiddenMap:(<span class="built_in">BOOL</span>)hiddenMap &#123;</div><div class="line">    <span class="keyword">if</span> (hiddenMap == _hiddenMap) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">self</span>.hidden = hiddenMap;</div><div class="line">    _hiddenMap = hiddenMap;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (hiddenMap) &#123;</div><div class="line">        <span class="keyword">if</span> (_mapViewClient) &#123;</div><div class="line">            _latitudeDelta = [_mapViewClient getMapRegionLatitudeDelta];</div><div class="line">            _longitudeDelta = [_mapViewClient getMapRegionLatitudeDelta];</div><div class="line">            _coordinate = [_mapViewClient getMapCenterLocationCoordinate2D];</div><div class="line">            [_mapViewClient removeMapView];</div><div class="line">            _changedMapLevel = <span class="literal">NO</span>;</div><div class="line">            _mapViewClient = <span class="literal">nil</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">if</span> ([_mapViewClient getMapView] == <span class="literal">nil</span>) &#123;</div><div class="line"><span class="comment">//            [self performSelector:@selector(createMap) withObject:nil afterDelay:0.5];</span></div><div class="line">            _changedMapLevel = <span class="literal">NO</span>;</div><div class="line">            [<span class="keyword">self</span> createMap];</div><div class="line">            [<span class="keyword">self</span> drawLineForMapView];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight objc"><figcaption><span>MapViewClient.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)removeMapView &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="literal">nil</span> != mainMapView) &#123;</div><div class="line">        [mainMapView removeFromSuperview];</div><div class="line">    &#125;</div><div class="line">    mainMapView = <span class="literal">nil</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后就偶尔会出现退到后台会闪退的原因。Google了一些资料算是把自己误导了。<br>回答的意思基本上是销毁的方法不对（可能确实是销毁的有问题），但是回答也基本上都是设置成nil，要不就把delegate=nil，尝试了都没效果，还是一直会闪退。</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="# 解决"></a># 解决</h2><p>最后换了个思路，放弃销毁，把销毁的代码全部去了，只是在地图的代理方法里加判断，判断是否为Active，不是则不执行。暂时测试还未发现闪退问题</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ([<span class="built_in">UIApplication</span> sharedApplication].applicationState != <span class="built_in">UIApplicationStateActive</span>) &#123;</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -1169,165 +1271,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/01/28/2015-01-28-django-nginx-uswgi-mysql-production-environment-server-migration/" itemprop="url">
-                  Django、nginx、uswgi、mysql生产环境的服务器迁移
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2015-01-28T08:28:00+08:00" content="2015-01-28">
-              2015-01-28
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#迁移环境</p>
-<h2 id="source"><a href="#source" class="headerlink" title="source"></a>source</h2><ul>
-<li>(此处修改，不公开服务器)</li>
-<li>ubuntu 12.04</li>
-</ul>
-<h2 id="target"><a href="#target" class="headerlink" title="target"></a>target</h2><ul>
-<li>此处修改，不公开服务器</li>
-<li>ubuntu 14.04.1</li>
-</ul>
-<p>#旧服务器备份</p>
-<h2 id="数据备份"><a href="#数据备份" class="headerlink" title="数据备份"></a>数据备份</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#先连接source</span></div><div class="line">ssh 此处修改，不公开服务器 -l unbx</div><div class="line"><span class="comment">#使用mysqldump命令，用unbxprod用户登录，备份unbxprod库到用户根目录backUp文件夹中的unitybox_mysql_dump.txt文件</span></div><div class="line">mkdir ~/backUp</div><div class="line">mysqldump -u此处修改，不公开服务器 -p 此处修改，不公开服务器 &gt; ~/backUp/unitybox_mysql_dump.txt</div></pre></td></tr></table></figure>
-<h2 id="Python运行环境备份"><a href="#Python运行环境备份" class="headerlink" title="Python运行环境备份"></a>Python运行环境备份</h2><p>使用pip命令备份，如果source环境为安装pip。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip freeze &gt; ~/backUp/requirements.txt</div></pre></td></tr></table></figure></p>
-<h2 id="ssl文件备份"><a href="#ssl文件备份" class="headerlink" title="ssl文件备份"></a>ssl文件备份</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp -r nginx-conf/ backUp/</div></pre></td></tr></table></figure>
-<h2 id="脚本-amp-nginx-amp-uwsgi配置文件备份"><a href="#脚本-amp-nginx-amp-uwsgi配置文件备份" class="headerlink" title="脚本&amp;nginx &amp; uwsgi配置文件备份"></a>脚本&amp;nginx &amp; uwsgi配置文件备份</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">mkdir ~/backUp/sript</div><div class="line">mkdir ~/backUp/ng_conf</div><div class="line">mkdir ~/backUp/wsgi_conf</div><div class="line">find ~/ -name *.sh -<span class="built_in">exec</span> cp &#123;&#125; ~/backUp/sript  \</div><div class="line">find ~/ -name *.conf -<span class="built_in">exec</span> cp &#123;&#125; ~/backUp/ng_conf  \</div><div class="line">find ~/ -name *.ini -<span class="built_in">exec</span> cp &#123;&#125; ~/backUp/wsgi_conf  \</div></pre></td></tr></table></figure>
-<h2 id="备份文件传送"><a href="#备份文件传送" class="headerlink" title="备份文件传送"></a>备份文件传送</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp -r /home/unbx/backUp unbx@此处修改，不公开服务器:/home/unbx/</div></pre></td></tr></table></figure>
-<p>#新环境部署<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#先用root连接新服务器，如果unbx用户已创建，请直接用unbx登录</span></div><div class="line">ssh 此处修改，不公开服务器 -l root</div></pre></td></tr></table></figure></p>
-<h2 id="系统用户初始"><a href="#系统用户初始" class="headerlink" title="系统用户初始"></a>系统用户初始</h2><h2 id="用户及用户组创建"><a href="#用户及用户组创建" class="headerlink" title="# 用户及用户组创建"></a># 用户及用户组创建</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#记住这里要adduser，否则unbuntu将不会帮你创建用户主目录</span></div><div class="line">adduser unbx</div><div class="line">passwd unbx</div><div class="line">vim /etc/group</div><div class="line"><span class="comment">#配置unbx 组到www-data ，www-data到unbx</span></div></pre></td></tr></table></figure>
-<h2 id="设置sudoer"><a href="#设置sudoer" class="headerlink" title="# 设置sudoer"></a># 设置sudoer</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">chmod u+w /etc/sudoers</div><div class="line">vim /etc/sudoers</div><div class="line">chmod u-w /etc/sudoers</div><div class="line"><span class="comment">#这时候用户已经创建完成，切换unbx开始工作</span></div><div class="line">su unbx</div><div class="line"><span class="built_in">cd</span> ~/</div></pre></td></tr></table></figure>
-<h2 id="数据清理"><a href="#数据清理" class="headerlink" title="数据清理"></a>数据清理</h2><p>如果mysql在旧机器上未安装，请跳过该章节<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo apt-get autoremove --purge mysql-server-5.0</div><div class="line">sudo apt-get remove mysql-server</div><div class="line">sudo apt-get autoremove mysql-server</div><div class="line">sudo apt-get remove mysql-common</div><div class="line">dpkg -l |grep ^rc|awk <span class="string">'&#123;print $2&#125;'</span> |sudo xargs dpkg -P</div></pre></td></tr></table></figure></p>
-<h2 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install git mysql-server python-mysqldb python2.7 python2.7-dev</div><div class="line"><span class="comment">#安装pip</span></div><div class="line">wget https://bootstrap.pypa.io/get-pip.py</div><div class="line">python get-pip.py</div><div class="line">sudo python get-pip.py</div><div class="line"><span class="comment">#安装django</span></div><div class="line">sudo pip install https://www.djangoproject.com/download/1.7c1/tarball/</div><div class="line"><span class="comment">#安装pillow的jpg和png依赖</span></div><div class="line">sudo apt-get install libjpeg-dev zlib1g*</div><div class="line">sudo aptitude install libfreetype6-dev</div><div class="line"><span class="comment">#安装OpenSSL的依赖</span></div><div class="line">sudo apt-get install libssl-dev</div></pre></td></tr></table></figure>
-<h2 id="配置MySql字符集"><a href="#配置MySql字符集" class="headerlink" title="配置MySql字符集"></a>配置MySql字符集</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/mysql/my.cnf</div></pre></td></tr></table></figure>
-<p>在my.cnf中添加相应内容，如下所示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">……</div><div class="line">    [client]</div><div class="line">    default-character-set=utf8</div><div class="line">……</div><div class="line">    [mysql]</div><div class="line">    default-character-set=utf8</div><div class="line">……</div><div class="line">    [mysqld]</div><div class="line">    collation-server=utf8_unicode_ci</div><div class="line">    init-connect=&apos;SET NAMES utf8&apos;</div><div class="line">    character-set-server=utf8</div><div class="line">    default-storage-engine=InnoDB</div><div class="line">……</div></pre></td></tr></table></figure>
-<p>然后重启mysql服务</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service mysql restart</div></pre></td></tr></table></figure>
-<h2 id="设置git的ssh"><a href="#设置git的ssh" class="headerlink" title="设置git的ssh"></a>设置git的ssh</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#https://confluence.atlassian.com/pages/viewpage.action?pageId=270827678</span></div><div class="line">ssh-v    <span class="comment">#看ssh版本</span></div><div class="line">ls<span class="_">-a</span>~/.ssh <span class="comment">#看是否存在.ssh目录，有的话备份后删除</span></div><div class="line">ssh-keygen <span class="comment">#生成ssh秘钥</span></div><div class="line">ls<span class="_">-a</span>~/.ssh <span class="comment">#查看是否生成</span></div><div class="line">ps<span class="_">-e</span>|grep[s]sh-agent  <span class="comment">#查看是否有ssh-agent进程，我的做法是由的话杀了</span></div><div class="line">ssh-agent/bin/bash <span class="comment">#启动ssh-agent</span></div><div class="line">ps<span class="_">-e</span>|grep[s]sh-agent <span class="comment">#查看是否生成</span></div><div class="line">ssh-add~/.ssh/id_rsa <span class="comment">#添加信息到秘钥</span></div><div class="line">ssh-add<span class="_">-l</span></div><div class="line">cat~/.ssh/id_rsa.pub <span class="comment">#查看公钥，添加到git服务器端的个人配置中</span></div></pre></td></tr></table></figure>
-<p>把公钥添加到git服务器端的个人ssh配置后，就可以用git下载工程了。注意：【此处修改，不公开服务器】的秘钥时候我设置了密码，密码请参考<a href="https://bitbucket.org/unitybox/pyunitybox/wiki/passwords" target="_blank" rel="external">Account and Passwords</a></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gitclonegit@此处不公开</div></pre></td></tr></table></figure>
-<h2 id="安装Python运行环境"><a href="#安装Python运行环境" class="headerlink" title="安装Python运行环境"></a>安装Python运行环境</h2><p>前面的步骤中我们已经安装了pip了，现在可以让他排上用场了。先修改requirenment.txt，首先Django刚刚我们已经安装了1.7c1，所以Django那行可以删除。另外，有一些依赖在pip环境上已经变更，所以也需要相应的调整，否则会受影响，这里我根据执行中的环境差异做的调整如下，x为已经不存在的。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -r requirenment.txt</div></pre></td></tr></table></figure></p>
-<p>有些环境不一致，可能会报错，很多依赖找不到或者版本不正确，如果遇到可以进行调整，参考如下：</p>
-<blockquote>
-<p>Twisted-Core==11.1.0 13.2.0</p>
-<p>Twisted-Names==11.1.0 x</p>
-<p>Twisted-Web==11.1.0 x</p>
-<p>apt-xapian-index==0.44 0.45</p>
-<p>cloud-init==0.6.3 0.7.5</p>
-<p>command-not-found==0.2.44 x</p>
-<p>euca2ools==2.0.0 x</p>
-<p>language-selector==0.1 xx</p>
-<p>launchpadlib==1.9.12  1.6.0</p>
-<p>lazr.restfulclient==0.12.0  0.12.2</p>
-<p>pycurl==7.19.0  安装报错</p>
-<p>python-apt==0.8.3ubuntu7.2   0.9.3.5</p>
-<p>unattended-upgrades==0.1 x</p>
-<p>wadllib==1.3.0 1.3.2</p>
-<p>ufw x</p>
-</blockquote>
-<p>调整完就可以进行安装了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install -r requirenment.txt</div></pre></td></tr></table></figure></p>
-<h2 id="初始化数据库"><a href="#初始化数据库" class="headerlink" title="初始化数据库"></a>初始化数据库</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -uroot -p</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">---初始化数据库用户和数据库</div><div class="line">此处不公开</div><div class="line">---初始化数据</div><div class="line">此处不公开</div><div class="line">source /home/unbx/backUp/unitybox_mysql_dump.txt</div></pre></td></tr></table></figure>
-<h2 id="配置uwsgi和nginx"><a href="#配置uwsgi和nginx" class="headerlink" title="配置uwsgi和nginx"></a>配置uwsgi和nginx</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sudo ln -s ~/PyUnitybox/Web/src/adm_nginx.conf /etc/nginx/sites-enabled/</div><div class="line">sudo ln -s ~/PyUnitybox/Web/src/api_nginx.conf /etc/nginx/sites-enabled/</div><div class="line">sudo ln -s ~/PyUnitybox/Web/src/biz_nginx.conf /etc/nginx/sites-enabled/</div><div class="line">sudo mkdir /etc/uwsgi</div><div class="line">sudo mkdir /etc/uwsgi/vassals</div><div class="line">sudo ln -s ~/PyUnitybox/Web/src/adm_uwsgi.ini /etc/uwsgi/vassals</div><div class="line">sudo ln -s ~/PyUnitybox/Web/src/api_uwsgi.ini /etc/uwsgi/vassals</div><div class="line">sudo ln -s ~/PyUnitybox/Web/src/biz_uwsgi.ini /etc/uwsgi/vassals</div><div class="line"><span class="comment">#创建nginx的log目录</span></div><div class="line">mkdir <span class="built_in">log</span></div></pre></td></tr></table></figure>
-<h2 id="考核ssl文件"><a href="#考核ssl文件" class="headerlink" title="考核ssl文件"></a>考核ssl文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp -r ~/backUp/nginx-conf ~/</div></pre></td></tr></table></figure>
-<h2 id="修改Django的setting配置文件"><a href="#修改Django的setting配置文件" class="headerlink" title="修改Django的setting配置文件"></a>修改Django的setting配置文件</h2><p>然后要根据所部署的服务器server name的不同，修改biz/settings.py和adm/settings.py中的相应部分。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">此处不公开</div></pre></td></tr></table></figure></p>
-<h2 id="启动uwsgi"><a href="#启动uwsgi" class="headerlink" title="启动uwsgi"></a>启动uwsgi</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/rc.local</div><div class="line"><span class="comment">#增加内容：/usr/local/bin/uwsgi --emperor /etc/uwsgi/vassals --uid www-data --gid www-data</span></div></pre></td></tr></table></figure>
-<p>#collectstatic<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> PyUnitybox/Web/src/</div><div class="line">python manage_biz.py collectstatic</div><div class="line">python manage_adm.py collectstatic</div></pre></td></tr></table></figure></p>
-<h2 id="重启测试是否能自动启动uwsgi"><a href="#重启测试是否能自动启动uwsgi" class="headerlink" title="重启测试是否能自动启动uwsgi"></a>重启测试是否能自动启动uwsgi</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">reboot</div></pre></td></tr></table></figure>
-<h2 id="创建启动脚本"><a href="#创建启动脚本" class="headerlink" title="创建启动脚本"></a>创建启动脚本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">vim restart_pyunitybox.sh</div><div class="line">sudo <span class="built_in">kill</span> -9 `cat ~/<span class="built_in">log</span>/unitybox-biz.pid`</div><div class="line">sudo <span class="built_in">kill</span> -9 `cat ~/<span class="built_in">log</span>/unitybox-adm.pid`</div><div class="line">sudo <span class="built_in">kill</span> -9 `cat ~/<span class="built_in">log</span>/unitybox-api.pid`</div><div class="line"></div><div class="line">chmod +x restart_pyunitybox.sh</div><div class="line">./restart_pyunitybox.sh</div></pre></td></tr></table></figure>
-<p>#FAQ</p>
-<h2 id="uwsgi无法启动，报错mysqld-sock"><a href="#uwsgi无法启动，报错mysqld-sock" class="headerlink" title="uwsgi无法启动，报错mysqld.sock"></a>uwsgi无法启动，报错mysqld.sock</h2><h2 id="可能是mysql服务down了"><a href="#可能是mysql服务down了" class="headerlink" title="# 可能是mysql服务down了"></a># 可能是mysql服务down了</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo /etc/init.d/mysql restart</div><div class="line"><span class="comment">#如果启动不要，请先kill wsgi相关的pid，否则被占用服务重启</span></div></pre></td></tr></table></figure>
-<h2 id="可能是服务器内存不足造成"><a href="#可能是服务器内存不足造成" class="headerlink" title="# 可能是服务器内存不足造成"></a># 可能是服务器内存不足造成</h2><p>该情况可以在wsgi运行的内存中发现提示</p>
-<blockquote>
-<p>spawned uWSGI master process (pid: 12149) fork(): Cannot allocate memory [core/master_utils.c line 726]</p>
-</blockquote>
-<p>这情况就只能将云服务resize了。</p>
-<h2 id="部署后二维码打印图片无法显示问题"><a href="#部署后二维码打印图片无法显示问题" class="headerlink" title="# 部署后二维码打印图片无法显示问题"></a># 部署后二维码打印图片无法显示问题</h2><p>问题可能为pillow的依赖lib不存在，具体可以看日志，如果为该情况，可以执行以下脚本去安装依赖，安装后记得重装pillow<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo aptitude install libfreetype6-devpip</div><div class="line">uninstall Pillowpip</div><div class="line">install Pillow==2.5.1</div></pre></td></tr></table></figure></p>
-<h2 id="部署后，登录应用无法登录，后台报各种表找不到"><a href="#部署后，登录应用无法登录，后台报各种表找不到" class="headerlink" title="# 部署后，登录应用无法登录，后台报各种表找不到"></a># 部署后，登录应用无法登录，后台报各种表找不到</h2><p>按该章节操作<a href="#django_setting">Django的setting配置</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1373,7 +1316,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">104</span>
+              <span class="site-state-item-count">105</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
