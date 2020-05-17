@@ -226,6 +226,118 @@
             
               
                 
+                <a class="post-title-link" href="/2015/05/06/2015-05-06-whats-the-fucker-programmer/" itemprop="url">
+                  程序员何苦为难程序员系列
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-05-06T15:56:08+08:00" content="2015-05-06">
+              2015-05-06
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="呵呵"><a href="#呵呵" class="headerlink" title="呵呵"></a>呵呵</h2><p>最近都在做UI，初学IOS那些年系列呵呵的进展很慢，然后又挖了一个坑来作死，充分发扬了一贯不负责任的传统。</p>
+<h2 id="为啥呵呵"><a href="#为啥呵呵" class="headerlink" title="为啥呵呵"></a>为啥呵呵</h2><p>最近做的一个功能是把轨迹在服务端生成地图轨迹图片，然后存在小米的CDN上。然后功能都做好了，发现IOS客户端上图片无法显示，使用的SDWebImage，代码如下。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[cell.leftTrackImageView sd_setImageWithURL:[<span class="built_in">NSURL</span> URLWithString:leftUrl]];</div></pre></td></tr></table></figure>
+<p>报错信息如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Error Domain=NSURLErrorDomain Code=406 &quot;The operation couldn’t be completed. (NSURLErrorDomain error 406.)&quot;</div></pre></td></tr></table></figure></p>
+<h2 id="如何不呵呵"><a href="#如何不呵呵" class="headerlink" title="如何不呵呵"></a>如何不呵呵</h2><p>用charles拦截请求,可以看到请求头</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Host: cdn.fds.api.xiaomi.com</div><div class="line">Accept-Encoding: gzip, deflate</div><div class="line">Accept: image/webp,image/*;q=0.8</div><div class="line">Accept-Language: zh-cn</div><div class="line">Connection: keep-alive</div><div class="line">User-Agent: Runmove/110 CFNetwork/711.2.23 Darwin/14.0.0</div></pre></td></tr></table></figure>
+<p>然后用python的requests库来请求，发现可以正常获得，那看看python请求和相应的headers把。<br>请求如下：</p>
+<figure class="highlight"><figcaption><span>request.headers</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;'Connection': 'keep-alive', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'User-Agent': 'python-requests/2.6.0 CPython/2.7.6 Darwin/14.3.0'&#125;</div></pre></td></tr></table></figure>
+<p>响应如下：</p>
+<figure class="highlight"><figcaption><span>response.headers</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;'content-length': '68236', 'access-control-allow-headers': 'DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Content-MD5', 'proxy-connection': 'Keep-alive', 'access-control-max-age': '1728000', 'cache-control': 'max-age=86400', 'x-via': '1.1 zw11:8080 (Cdn Cache Server V2.0), 1.1 xiazai199:4 (Cdn Cache Server V2.0)', 'server': 'Tengine', 'content-md5': 'b4f3f2a873822d8f56ef928ef0587b8b', 'last-modified': 'Wed, 06 May 2015 03:20:02 GMT', 'access-control-allow-credentials': 'true', 'date': 'Wed, 06 May 2015 11:55:34 GMT', 'access-control-allow-methods': 'GET, POST, PUT, HEAD, DELETE, OPTIONS', 'content-type': 'image/jpeg'&#125;</div></pre></td></tr></table></figure>
+<p>发现客户端请求的Accept包含上面响应头的content-type（image/webp,image/<em>;q=0.8和image/jpeg）。而上面请求的请求头的Accept为</em>/*，这为默认的值，也是范围最广的。那么我在Python把请求头修改下试试。</p>
+<h2 id="偷天换日"><a href="#偷天换日" class="headerlink" title="偷天换日"></a>偷天换日</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">headers = &#123;<span class="string">'Accept'</span>: <span class="string">'image/webp,image/*;q=0.8'</span>&#125;</div><div class="line">r = requests.get(<span class="string">'http://cdn.fds.api.xiaomi.com/ir-heatmap/pathmap/colorline/8122/53d501c213ba564c9958ead983d1b9c014ae2630-s788_640.jpg'</span>,headers=headers)</div><div class="line"><span class="comment">#r:&lt;Response [406]&gt;</span></div></pre></td></tr></table></figure>
+<p>呵呵重现了，嘿嘿。果然是小米那帮坑货，对请求头做了限制。</p>
+<h2 id="如何不呵呵-1"><a href="#如何不呵呵-1" class="headerlink" title="如何不呵呵"></a>如何不呵呵</h2><p>既然发现了原理，那么怎么可以不呵呵呢？<br>首先考虑，如果不设置，Accept应该是*/*的，肯定是被修改了，那么来看看SDWebImage的源码把。</p>
+<figure class="highlight objc"><figcaption><span>SDWebImageDownloader.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">_HTTPHeaders = [<span class="built_in">NSMutableDictionary</span> dictionaryWithObject:<span class="string">@"image/webp,image/*;q=0.8"</span></div><div class="line">                                                  forKey:<span class="string">@"Accept"</span>];</div></pre></td></tr></table></figure>
+<p>原来是SDWebImage内部修改了请求头，那么我们把它修改下就好了，SDWebImageDownloader是个单例，修改一次就全局修改了。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[SDWebImageDownloader.sharedDownloader setValue:<span class="string">@"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"</span></div><div class="line">                             forHTTPHeaderField:<span class="string">@"Accept"</span>];</div></pre></td></tr></table></figure>
+<p>问题解决。</p>
+<h2 id="呵呵总结"><a href="#呵呵总结" class="headerlink" title="呵呵总结"></a>呵呵总结</h2><p>程序员何苦为难程序员啊，挖了这么一个坑，谢谢你祖宗啊。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/04/20/2015-04-20-beginning-ios-pit-over-those-years-e/" itemprop="url">
                   初学IOS那些年踩过的坑（六）
                 </a>
@@ -1216,135 +1328,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/01/08/2015-01-08-afnetworking-transmission-objects-to-convert-a-parameter-of-type-str/" itemprop="url">
-                  AFNetworking传输对象时，将参数的类型转换成str的坑
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2015-01-08T02:47:00+08:00" content="2015-01-08">
-              2015-01-08
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS/AFNetworking/" itemprop="url" rel="index">
-                    <span itemprop="name">AFNetworking</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#背景<br>先描述下背景，现在要增加一个功能，用户在地图上触摸操作，移动或放大缩小了地图，这时候要根据新的region去服务器端拿范围的数据。</p>
-<p>#问题<br>之前是用IOS自带的网络传输，数据的序列化方式是 ‘’’NSData* data = [NSJSONSerialization dataWithJSONObject:[location toDictionary] options:0 error:NULL];’’’ 后直接塞进去作为参数。<br>但是，后面把相应的网络功能全部替换，改成了AFNetWorking进行传输，他的POST函数接受的params为dictionary或者字符串。所以就直接把[location toDictionary]传了进去。<br>这之后就导致mongo查询db.locations.find({“location”:{“$geoWithin”:{“$box”:[[0,0],[150,100]]}}}) 再查不到数据了，因为数据变了,下面第一条是正常数据，第二条是异常数据，coordinates里的值编程了字符串。<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&#123; <span class="attr">"_id"</span> : ObjectId(<span class="string">"54acfef52390d9a68247df6b"</span>), <span class="attr">"details"</span> : <span class="string">"amoy"</span>, <span class="attr">"location"</span> : &#123; <span class="attr">"type"</span> : <span class="string">"Point"</span>, <span class="attr">"coordinates"</span> : [ <span class="number">118.1189864873886</span>, <span class="number">24.48821130558777</span> ] &#125;, <span class="attr">"categories"</span> : [ ], <span class="attr">"placename"</span> : <span class="string">"福建省厦门市思明区嘉莲街道怡祥大厦"</span>, <span class="attr">"name"</span> : <span class="string">"福建省厦门市思明区嘉莲街道怡祥大厦"</span>, <span class="attr">"imageId"</span> : <span class="string">"54abdd38f648dbff427cbf0b"</span> &#125;</div><div class="line">&#123; <span class="attr">"_id"</span> : ObjectId(<span class="string">"54acff2b4a07474a1d8467d4"</span>), <span class="attr">"categories"</span> : [ <span class="string">"03"</span> ], <span class="attr">"details"</span> : <span class="string">"fdfdfdfdfdf"</span>, <span class="attr">"location"</span> : &#123; <span class="attr">"coordinates"</span> : [ <span class="string">"118.1164839863777"</span>, <span class="string">"24.48796232996047"</span> ], <span class="attr">"type"</span> : <span class="string">"Point"</span> &#125;, <span class="attr">"name"</span> : <span class="string">"福建省厦门市思明区筼筜街道莲岳路173之10号"</span>, <span class="attr">"placename"</span> : <span class="string">"福建省厦门市思明区筼筜街道莲岳路173之10号"</span>, <span class="attr">"created_at"</span> : ISODate(<span class="string">"2015-01-07T09:40:59.815Z"</span>) &#125;</div></pre></td></tr></table></figure></p>
-<p>发现是字符串引擎的问题就找了很久。之后开始尝试解决。</p>
-<p>#在APP端直接给AFNetworking传字符串。<br>如下代码，但是新问题就来了，服务器端接收的数据格式为{“(null)”:”{\”details\”:\”fffdfd\”,\”categories\”:[],\”name\”:\”福建省厦门市思明区开元街道厦门歌仔戏研习中心\”,\”location\”:{\”type\”:\”Point\”,\”coordinates\”:[118.0860650539398,24.45868229051323]},\”placename\”:\”福建省厦门市思明区开元街道厦门歌仔戏研习中心\”}”}，多了一层。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//IOS自己的JSON转换方式</div><div class="line">NSData* data = [NSJSONSerialization dataWithJSONObject:[location toDictionary] options:0 error:NULL];</div><div class="line">NSString *jsonString = [NSString stringWithUTF8String:[data bytes]];</div><div class="line"></div><div class="line">NSString* urlStr = isExistingLocation ?[locations stringByAppendingPathComponent:location._id]:locations;</div><div class="line">AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];</div><div class="line">[manager.requestSerializer setValue:@&quot;application/json&quot; forHTTPHeaderField:@&quot;Accept&quot;];</div><div class="line">[manager  POST:urlStr parameters:jsonString success:successCallback failure:^(AFHTTPRequestOperation *operation, NSError *error) &#123;</div><div class="line">        NSLog(@&quot;%@&quot;,error);</div><div class="line"> &#125;];</div></pre></td></tr></table></figure></p>
-<p>#在服务器端操作<br>APP端不变，在服务器端接收时候做转换，int(inputStr)。好，问题就这么简单解决了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1390,7 +1373,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">103</span>
+              <span class="site-state-item-count">104</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

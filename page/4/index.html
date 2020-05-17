@@ -226,6 +226,135 @@
             
               
                 
+                <a class="post-title-link" href="/2015/01/08/2015-01-08-afnetworking-transmission-objects-to-convert-a-parameter-of-type-str/" itemprop="url">
+                  AFNetworking传输对象时，将参数的类型转换成str的坑
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-01-08T02:47:00+08:00" content="2015-01-08">
+              2015-01-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/AFNetworking/" itemprop="url" rel="index">
+                    <span itemprop="name">AFNetworking</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#背景<br>先描述下背景，现在要增加一个功能，用户在地图上触摸操作，移动或放大缩小了地图，这时候要根据新的region去服务器端拿范围的数据。</p>
+<p>#问题<br>之前是用IOS自带的网络传输，数据的序列化方式是 ‘’’NSData* data = [NSJSONSerialization dataWithJSONObject:[location toDictionary] options:0 error:NULL];’’’ 后直接塞进去作为参数。<br>但是，后面把相应的网络功能全部替换，改成了AFNetWorking进行传输，他的POST函数接受的params为dictionary或者字符串。所以就直接把[location toDictionary]传了进去。<br>这之后就导致mongo查询db.locations.find({“location”:{“$geoWithin”:{“$box”:[[0,0],[150,100]]}}}) 再查不到数据了，因为数据变了,下面第一条是正常数据，第二条是异常数据，coordinates里的值编程了字符串。<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&#123; <span class="attr">"_id"</span> : ObjectId(<span class="string">"54acfef52390d9a68247df6b"</span>), <span class="attr">"details"</span> : <span class="string">"amoy"</span>, <span class="attr">"location"</span> : &#123; <span class="attr">"type"</span> : <span class="string">"Point"</span>, <span class="attr">"coordinates"</span> : [ <span class="number">118.1189864873886</span>, <span class="number">24.48821130558777</span> ] &#125;, <span class="attr">"categories"</span> : [ ], <span class="attr">"placename"</span> : <span class="string">"福建省厦门市思明区嘉莲街道怡祥大厦"</span>, <span class="attr">"name"</span> : <span class="string">"福建省厦门市思明区嘉莲街道怡祥大厦"</span>, <span class="attr">"imageId"</span> : <span class="string">"54abdd38f648dbff427cbf0b"</span> &#125;</div><div class="line">&#123; <span class="attr">"_id"</span> : ObjectId(<span class="string">"54acff2b4a07474a1d8467d4"</span>), <span class="attr">"categories"</span> : [ <span class="string">"03"</span> ], <span class="attr">"details"</span> : <span class="string">"fdfdfdfdfdf"</span>, <span class="attr">"location"</span> : &#123; <span class="attr">"coordinates"</span> : [ <span class="string">"118.1164839863777"</span>, <span class="string">"24.48796232996047"</span> ], <span class="attr">"type"</span> : <span class="string">"Point"</span> &#125;, <span class="attr">"name"</span> : <span class="string">"福建省厦门市思明区筼筜街道莲岳路173之10号"</span>, <span class="attr">"placename"</span> : <span class="string">"福建省厦门市思明区筼筜街道莲岳路173之10号"</span>, <span class="attr">"created_at"</span> : ISODate(<span class="string">"2015-01-07T09:40:59.815Z"</span>) &#125;</div></pre></td></tr></table></figure></p>
+<p>发现是字符串引擎的问题就找了很久。之后开始尝试解决。</p>
+<p>#在APP端直接给AFNetworking传字符串。<br>如下代码，但是新问题就来了，服务器端接收的数据格式为{“(null)”:”{\”details\”:\”fffdfd\”,\”categories\”:[],\”name\”:\”福建省厦门市思明区开元街道厦门歌仔戏研习中心\”,\”location\”:{\”type\”:\”Point\”,\”coordinates\”:[118.0860650539398,24.45868229051323]},\”placename\”:\”福建省厦门市思明区开元街道厦门歌仔戏研习中心\”}”}，多了一层。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//IOS自己的JSON转换方式</div><div class="line">NSData* data = [NSJSONSerialization dataWithJSONObject:[location toDictionary] options:0 error:NULL];</div><div class="line">NSString *jsonString = [NSString stringWithUTF8String:[data bytes]];</div><div class="line"></div><div class="line">NSString* urlStr = isExistingLocation ?[locations stringByAppendingPathComponent:location._id]:locations;</div><div class="line">AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];</div><div class="line">[manager.requestSerializer setValue:@&quot;application/json&quot; forHTTPHeaderField:@&quot;Accept&quot;];</div><div class="line">[manager  POST:urlStr parameters:jsonString success:successCallback failure:^(AFHTTPRequestOperation *operation, NSError *error) &#123;</div><div class="line">        NSLog(@&quot;%@&quot;,error);</div><div class="line"> &#125;];</div></pre></td></tr></table></figure></p>
+<p>#在服务器端操作<br>APP端不变，在服务器端接收时候做转换，int(inputStr)。好，问题就这么简单解决了。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/01/06/2015-01-06-just-to-summarize-discuss-changes-in-2014-individual-plans/" itemprop="url">
                   随便总结，谈谈2014年个人规划上的转变
                 </a>
@@ -1590,196 +1719,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/11/26/2014-11-26-hashmap-and-hashtable-and-analysis-of-cocurrenthashmap/" itemprop="url">
-                  HashMap、HashTable、CocurrentHashMap的几点自问自答
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-11-26T01:29:00+08:00" content="2014-11-26">
-              2014-11-26
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/多线程/" itemprop="url" rel="index">
-                    <span itemprop="name">多线程</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/多线程/HashMap/" itemprop="url" rel="index">
-                    <span itemprop="name">HashMap</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/多线程/HashMap/HashTable/" itemprop="url" rel="index">
-                    <span itemprop="name">HashTable</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/" itemprop="url" rel="index">
-                    <span itemprop="name">CocurrentHashMap</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/同步/" itemprop="url" rel="index">
-                    <span itemprop="name">同步</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/多线程/HashMap/HashTable/CocurrentHashMap/同步/线程安全/" itemprop="url" rel="index">
-                    <span itemprop="name">线程安全</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#背景<br>最近项目线程安全的问题比较严重，因此也对HashMap、HashTable、CocurrentHashMap、ArrayList、CopyOnWriteArrayList做了点浅析。以下是几点自问自答。</p>
-<p>#自问自答</p>
-<h2 id="HashMap与HashTable区别？"><a href="#HashMap与HashTable区别？" class="headerlink" title="HashMap与HashTable区别？"></a>HashMap与HashTable区别？</h2><ul>
-<li>HashMap可以接受null键值和值，而Hashtable则不能</li>
-<li>前置非synchronized，后者是</li>
-<li>前者的迭代器(Iterator)是fail-fast迭代器，而Hashtable的enumerator迭代器不是fail-fast的，区别见“把HashMap用在多线程环境会怎么样？”章节</li>
-</ul>
-<h2 id="HashMap的元素次序不变吗？"><a href="#HashMap的元素次序不变吗？" class="headerlink" title="HashMap的元素次序不变吗？"></a>HashMap的元素次序不变吗？</h2><p>随着时间的推移，HashMap中的元素次序可能会变。</p>
-<h2 id="如何让Has和Map同步"><a href="#如何让Has和Map同步" class="headerlink" title="如何让Has和Map同步?"></a>如何让Has和Map同步?</h2><p> Map m = Collections.synchronizeMap(hashMap);<br><strong>但有些因素使得它们不适合高并发的系统。它们仅有单个锁，对整个集合加锁，以及为了防止ConcurrentModificationException异常经常要在迭代的时候要将集合锁定一段时间，这些特性对可扩展性来说都是障碍。</strong></p>
-<h2 id="那用什么集合类进行多线程既安全又提供高并发性"><a href="#那用什么集合类进行多线程既安全又提供高并发性" class="headerlink" title="那用什么集合类进行多线程既安全又提供高并发性?"></a>那用什么集合类进行多线程既安全又提供高并发性?</h2><p>ConcurrentHashMap和CopyOnWriteArrayList保留了线程安全的同时，也提供了更高的并发性。 ConcurrentHashMap和CopyOnWriteArrayList并不是处处都需要用，大部分时候你只需要用到HashMap和 ArrayList，它们用于应对一些普通的情况。</p>
-<h2 id="把HashMap用在多线程环境会怎么样？"><a href="#把HashMap用在多线程环境会怎么样？" class="headerlink" title="把HashMap用在多线程环境会怎么样？"></a>把HashMap用在多线程环境会怎么样？</h2><p>HashMap的iterator是fail-fast迭代器，别的线程改变了map的结构， （增加或者移除元素），将会抛出ConcurrentModificationException，但迭代器本身的remove()方法移除元素则不会抛出ConcurrentModificationException异常。 但这并不是一个一定发生的行为，要看JVM。这条同样也是Enumeration和Iterator的区别。</p>
-<h2 id="性能都如何？"><a href="#性能都如何？" class="headerlink" title="性能都如何？"></a>性能都如何？</h2><p>HashMap是非synchronized,CocurrentHashMap和 Hashtable 是，所以HashMap快</p>
-<h2 id="CocurrentHashMap和-Hashtable区别？"><a href="#CocurrentHashMap和-Hashtable区别？" class="headerlink" title="CocurrentHashMap和 Hashtable区别？"></a>CocurrentHashMap和 Hashtable区别？</h2><p>用于多线程的环境，但是当Hashtable的大小增加到一定的时候，性能会急剧下降，因为迭代时需要被锁定很长的时间。<br>ConcurrentHashMap同步性能更好，因为它仅仅根据同步级别对map的一部分进行上锁 ， 它引入了分割(segmentation)，不论它变得多么大，仅仅需要锁定map的某个部分，而其它的线程不需要等到迭代完成才能访问map。但是HashTable会锁整个map提供更强的线程安全性</p>
-<h2 id="HashMap内部实现原理？"><a href="#HashMap内部实现原理？" class="headerlink" title="HashMap内部实现原理？"></a>HashMap内部实现原理？</h2><p>HashMap在Put的时候，先对key进行hashCode()，返回的值用于查找bucket位置来存储对象，因此它是在bucket中储存键对象和值对象，作为Map.Entry。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (key == <span class="keyword">null</span>)</div><div class="line">	    <span class="keyword">return</span> putForNullKey(value);</div><div class="line">  <span class="comment">//计算key的hashCode</span></div><div class="line">  <span class="keyword">int</span> hash = hash(key.hashCode());</div><div class="line">  <span class="comment">//找hashCode在bucket中的索引值</span></div><div class="line">  <span class="keyword">int</span> i = indexFor(hash, table.length);</div><div class="line">  <span class="comment">//找相应索引值的Entry（链表结构）中是否有key相同的值，如果有则覆盖</span></div><div class="line">  <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[i]; e != <span class="keyword">null</span>; e = e.next) &#123;</div><div class="line">      Object k;</div><div class="line">      <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) &#123;</div><div class="line">        V oldValue = e.value;</div><div class="line">        e.value = value;</div><div class="line">        e.recordAccess(<span class="keyword">this</span>);</div><div class="line">        <span class="keyword">return</span> oldValue;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">//没找到就在该位置的链表增加一个Entry到头部，这里的addEntry还会检查容量，超过负载指数就扩容</span></div><div class="line">  modCount++;</div><div class="line">  addEntry(hash, key, value, i);</div><div class="line">  <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当我们调用get()方法，HashMap会使用键对象的hashcode找到bucket位置，这个位置是一个链表，包含有键值对的Map.Entry对象 ，存储的是键值对，当有两个值存在于同一个bucket时候， 在调用get时，会先找到bucket位置之后，会调用keys.equals()方法去找到链表中正确的节点，最终找到要找的值对象<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</div><div class="line">		<span class="keyword">if</span> (key == <span class="keyword">null</span>)</div><div class="line">    	<span class="keyword">return</span> getForNullKey();</div><div class="line">    <span class="keyword">int</span> hash = hash(key.hashCode());</div><div class="line">    <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[indexFor(hash, table.length)];e != <span class="keyword">null</span>;e = e.next) &#123;</div><div class="line">    	Object k;</div><div class="line">    	<span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k)))</div><div class="line">    		<span class="keyword">return</span> e.value;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>所以， 采用合适的equals()和hashCode()方法的话，将会减少碰撞的发生，提高效率。所以，用不可变性使得能够缓存不同键的hashcode，这将提高整个获取对象的速度，使用String，Interger这样的wrapper类作为键是非常好的选择</p>
-<h2 id="HashMap如何扩容？"><a href="#HashMap如何扩容？" class="headerlink" title="HashMap如何扩容？"></a>HashMap如何扩容？</h2><p> 默认的负载因子大小为0.75，也就是说，当一个map填满了75%的bucket时候，和其它集合类(如ArrayList等)一样，将会创建原来 HashMap大小的两倍的bucket数组，来重新调整map的大小，并将原来的对象放入新的bucket数组中。这个过程叫作rehashing，因 为它调用hash方法找到新的bucket位置。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1825,7 +1764,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">103</span>
+              <span class="site-state-item-count">104</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
