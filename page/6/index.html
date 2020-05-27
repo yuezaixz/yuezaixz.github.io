@@ -226,6 +226,185 @@
             
               
                 
+                <a class="post-title-link" href="/2014/10/26/2014-10-26-use-one-month-after-sublime-skill-of-using-some-of-the-summary/" itemprop="url">
+                  使用Sublime一个月后的一些使用技巧总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-10-26T01:45:00+08:00" content="2014-10-26">
+              2014-10-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Sublime/" itemprop="url" rel="index">
+                    <span itemprop="name">Sublime</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Sublime/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Sublime/工具/编辑器/" itemprop="url" rel="index">
+                    <span itemprop="name">编辑器</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Sublime/工具/编辑器/提升工作效率/" itemprop="url" rel="index">
+                    <span itemprop="name">提升工作效率</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#废话<br>这个月开始从VIM转向使用Sublime，可能很多Sublime脑残粉会说，这工具你现在才开始用啊，也可能很多Vim脑残粉会说，Vim是最高级的编辑器，你竟然自我退化。确实Vim太高级了，我用不好，Sublime至少一个月内让我把IntelliJ的前端功能都摒弃了（以前html、css、JavaScript基本用他操作）。</p>
+<p>#Feature<br>那就来说说我感受到的他的优点</p>
+<h2 id="强大的命令模式"><a href="#强大的命令模式" class="headerlink" title="强大的命令模式"></a>强大的命令模式</h2><p>在编辑窗口按ctrl+shift+p就可以进入命令模式，命令模式即为在编辑窗口上方弹出了一个输入框，可以输入Sublime内置和插件所扩展的命令功能，而且支持模糊匹配。比如：</p>
+<ul>
+<li>set synax javascript 命令可以设置当前语法为javascript</li>
+<li>安装Package Control后可以用Package Install命令来安装插件</li>
+<li>minimap 可以关闭打开编辑器迷你图</li>
+<li>等等等等</li>
+</ul>
+<h2 id="强大的Goto功能"><a href="#强大的Goto功能" class="headerlink" title="强大的Goto功能"></a>强大的Goto功能</h2><p>在编辑窗口输入ctrl+p就可以进入goto命令，与命令模式一样，在编辑窗口上方会弹出了一个输入框，可以输入goto的命令，可以是文件跳转，也可以是文件跳转行，也可以跳转到某个元素（函数、选择器等），也可以在页面中查找。</p>
+<ul>
+<li>@可以快速定位元素，比如js的函数，CSS文件的选择器，支持模糊匹配</li>
+<li>#可以定位到页面内的内容，支持模糊匹配</li>
+<li>：+行数 跳转到行</li>
+</ul>
+<h2 id="模糊匹配功能"><a href="#模糊匹配功能" class="headerlink" title="模糊匹配功能"></a>模糊匹配功能</h2><p>我认为的模糊分两种，一种是模糊缩写自动补全，一种是搜索的时候的模糊匹配，如下：</p>
+<ul>
+<li>模糊补全：在CSS文件中输入bgc按tab键就是自动键入background-color</li>
+<li>模糊匹配：比如在命令模式输入ssjs，就会模糊匹配上 <strong>s</strong>et <strong>s</strong>ynax <strong>j</strong>ava <strong>s</strong>cript，粗体的字符为模糊匹配的字段；</li>
+</ul>
+<h2 id="强大的插件功能"><a href="#强大的插件功能" class="headerlink" title="强大的插件功能"></a>强大的插件功能</h2><p>基本上所有的语法都能找到很好的插件，比如对于Html就有Emmet，他极大的提升了前端开发的工作效率，这里就不一一细说该插件，有兴趣的可以Google下，这里稍微举个例子来看看。<br>ctrl+n创建个页面后，输入 !+[tab]，就可以自动生成html5的标准文档，如果需要HTML4的标准，就输入html:4s+[tab]。之后会自动生成如下代码。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>然后在任意位置输入元素名字后按tab都能生成相应名字的元素，比如输入script+[tab]，就会生成script标签。如果输入div.className就会生成<figure class="highlight plain"><figcaption><span>class="className">``` ，是不是很神奇。更神奇的是，输入ul>.item$*5+[tab]（ *这里注意，>代表子元素，+代表并列。子元素的情况下默认子元素为div，但是ul的默认为li，tr的默认为td等* ），会自动生成以下代码：</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">```html</div><div class="line">&lt;ul&gt;</div><div class="line">        &lt;li class=&quot;item1&quot;&gt;&lt;/li&gt;</div><div class="line">        &lt;li class=&quot;item2&quot;&gt;&lt;/li&gt;</div><div class="line">        &lt;li class=&quot;item3&quot;&gt;&lt;/li&gt;</div><div class="line">        &lt;li class=&quot;item4&quot;&gt;&lt;/li&gt;</div><div class="line">        &lt;li class=&quot;item5&quot;&gt;&lt;/li&gt;</div><div class="line">&lt;/ul&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="多行编辑功能"><a href="#多行编辑功能" class="headerlink" title="多行编辑功能"></a>多行编辑功能</h2><p>就在上列html代码中，如果要同时编辑li元素中的内容，那么正常情况需要先编辑完一个后复制粘贴4次。Subilme的多行编辑功能很好的帮我们简化了这个操作（编码+鼠标+键盘+再鼠标+再键盘……），提升了我们的编码速率。<br>进入多行编辑模式有几种方式，如下：</p>
+<ul>
+<li>选中&gt;&lt;按alt+f3可以多行光标模式（这里输入的内容为需要匹配的共同点），这样做的坏处是共同点与其他页面元素相同时候不方便匹配，比较不灵活</li>
+<li>争对上面的问题就有另一个办法，可以把鼠标放在&gt;&lt;之间按住shift用右键往下拖来就可以进行多行编辑，这样做的坏处是，如果需要多行编辑的元素不在一个垂直线并且不是末尾元素，将无法进行</li>
+<li>再争对以上问题就又有一个办法，可以选中&gt;&lt;后用ctrl+d 和ctrl+k来选择跳过选中，这样的缺点就是太慢，尽可能还是在相同点按alt+f3吧</li>
+</ul>
+<p>多行选择后可以p{This is content}+[tab]来生成以下代码<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item1 "</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is content<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item2 "</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is content<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item3 "</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is content<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item4 "</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is content<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"item5 "</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is content<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="其他快捷键"><a href="#其他快捷键" class="headerlink" title="其他快捷键"></a>其他快捷键</h2><p>其中粗体的内容为我认为可以大幅度增加工作效率的功能，而且其他浏览器可能没有的（不是绝对没有，请勿喷）。<br>ctrl+tab切换正在编辑的文件（ctrl+shift+tab可以相反方向）<br>ctrl+H当前文件查找替换模式（类型其他编辑器的替换查找）<br>ctrl+f所有文件查找内容(使用完后按esc退出，之前一直不知道这个。。。)<br>ctrl+shift+f所有文件替换内容<br>ctrl+shift+d 复制当前或者复制选中内容<br>ctrl+shift+k 删除当前行<br>alt+. 闭合标签<br><strong>shift+f11</strong> 进入无干扰模式<br><strong>ctrl+enter</strong> 在下一行插入并移动光标到那<br><strong>ctrl+shift+enter</strong> 在上一行插入并移动光标到那<br><strong>ctrl+shift+v</strong> 带自动缩进的粘贴（正常复制后格式会乱，这种方式粘贴后省略了人工排版的问题）</p>
+<p>#总结<br>好用，谁用谁知道！</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/10/26/2014-10-26-july-september-output-of-06-version-summary/" itemprop="url">
                   7-9月产品0.6版本总结
                 </a>
@@ -1748,173 +1927,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/05/20/2014-05-20-everythis-is-in-our-store-2/" itemprop="url">
-                  Everythis is store书载(2)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-05-20T14:32:00+08:00" content="2014-05-20">
-              2014-05-20
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/" itemprop="url" rel="index">
-                    <span itemprop="name">Amazon</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/bezos/" itemprop="url" rel="index">
-                    <span itemprop="name">bezos</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/bezos/一网打尽/" itemprop="url" rel="index">
-                    <span itemprop="name">一网打尽</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Amazon/bezos/一网打尽/EverythisIsStore/" itemprop="url" rel="index">
-                    <span itemprop="name">EverythisIsStore</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>有一次散步时，卡芬问贝佐斯，既然他们现在已经实现了一些早期目标，为何还极力向外扩张。贝佐斯回答：“当公司规模还非常弱小时，其他大公司会随时出现，并且极力抢夺你的果实。因此我们必须平衡竞争力量，来和那些老牌图书销售商抗衡。”</p>
-<p>每天一睁眼就要有忧患意识，但不用关注我们的对手，因为他们不会给我们送钱。让我们更关注顾客吧，各位一定要脚踏实地。</p>
-<p>首次公开募股前，贝佐斯和他的这位老搭档一同散步，告诉他公司需要更强的技术管理人员，然后想任命他为亚马逊的首席技术官。这听起来像是升职了，但实际上，卡芬将变成一个顾问的角色，既不需要做预算，也不需要负直接责任。卡芬想了几天，没答应，但贝佐斯知道卡芬的性格，然后说“让它过去吧”,就再也没提这事了。</p>
-<p>这时，两个承诺发生了冲突。贝佐斯曾向卡芬承诺，可以永久保留他的工作。但亚马逊的创始人还向公司和投资人承诺，他将会提高应聘标准，亚马逊的命运与招募的技术人员的能力息息相关。瑞克·达尔泽尔和乔尔·施皮格尔两人擅长于公司政治；而卡芬是一位性格内向的电脑奇才，有些过于理想化，缺乏领导才能事实上，他已经不再插手员工招聘和壮大自己部门的工作了。但他却默默地为亚马逊奉献了自己，并且帮助亚马逊确立了世界地位。回首当年，贝佐斯的电子表格上就是一串虚无缥缈的数字而已。</p>
-<p>年来的历程却感到有些酸楚。他把贝佐斯不让他参与亚马逊决策一事称为“是对信任的一种背叛”，忘了当初两人共同创业时的艰辛。卡芬说，他得到的是“一生中最令他失望的一次遭遇”。</p>
-<p>这些不满是许多亚马逊老员工相同境遇的浓缩版。由于贝佐斯令人信服的信条，使得所有员工都怀有一种信念，他们确实也得到了丰厚的回报。但这位眼神坚定的创始人最终还是把他们解雇了，取而代之的是拥有新观念和更多经验的人。公司前进中，再也看不到这些老员工的身影了，这实在让人心酸，好像是他的孩子离开了家，又搬到了另一个家。最终，Bezos向卡芬坦言，亚马逊只有一个真正的父亲。</p>
-<p>当我们看到获得市场领先地位的可能性很大时，做投资决定就要大胆，而不要畏首畏尾。这些投资有些会获得回报，有些则不能，但我们从二者中都会吸取宝贵的经验。</p>
-<p>贝佐斯强调亚马逊日常运行中的节俭习惯。他让员工付停车费，并要求所有高管出差坐经济舱。</p>
-<p>贝佐斯吸取了沃尔顿自传中的精华，而且沿用沃尔玛创始人的节俭作风以及“崇尚行动”的做法，并使其融入了亚马逊的文化中。</p>
-<p><strong>沃尔玛式的传奇在今天这个时代还能重现吗？我的答案是，当然还会。或许现在就有人正在跃跃欲试——或许有成千上万的人在做——他们有足够多的创意支持其一路走下去。假如有人非常热切地追求自己心中的梦想，虽然期间会经历很多的失败，但也要锲而不舍地坚持下去。这全仰仗一个人的态度和能力，要不断研究和探寻商业管理的秘诀。</strong></p>
-<p>杰夫·贝佐斯就具备了山姆·沃尔顿所描绘的那些品质。他一直不愿意让亚马逊屈从于任何官僚的慵懒作风，希望不断有新的想法涌现，想方设法改进网站的过去做法，以吸引更多的顾客，始终走在对手的前头。</p>
-<p>谁也不能跟杰夫·贝佐斯合作，而只能替他卖命。</p>
-<p>Bezos把亚马逊定义为一家以顾客为中心的公司，而并非以竞争者为核心的公司。</p>
-</blockquote>
-<p><em>但后来事实证明，Bezos在易趣的竞争下，单纯为了竞争，下了很多昏招。</em></p>
-<blockquote>
-<p><strong>五项狠心价值：顾客至上（ customer   obsession）、 勤俭节约（ frugality）、 崇尚行动（ bias   for   action）、 主人翁精神（ ownership） 和人才招聘的高标准（ high   bar   talent）。 后来又加上一条：创新（ innovation ）</strong></p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1960,7 +1972,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">106</span>
+              <span class="site-state-item-count">107</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

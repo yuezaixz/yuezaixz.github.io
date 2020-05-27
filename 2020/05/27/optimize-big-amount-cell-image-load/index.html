@@ -1,0 +1,570 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="TableView图片加载优化Situation昨天被位大佬问到当一个TableView有无限多的Cell，当快速滑动时候，如何避免由于加载图片造成的卡顿问题。UITableView算最常用的UIKit控件之一了，苹果已经为它做了很多优化，比如重用池就解决了反复创建Cell造成的性能问题。但像iPhone5S上还是无法运行流畅滑动TableView，Cell的离屏渲染、Cell过大、Cell滑动过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="优化无限数量快速滑动情况的Cell Image加载过程">
+<meta property="og:url" content="http://yoursite.com/2020/05/27/optimize-big-amount-cell-image-load/index.html">
+<meta property="og:site_name" content="大胃吴的闲话唠嗑">
+<meta property="og:description" content="TableView图片加载优化Situation昨天被位大佬问到当一个TableView有无限多的Cell，当快速滑动时候，如何避免由于加载图片造成的卡顿问题。UITableView算最常用的UIKit控件之一了，苹果已经为它做了很多优化，比如重用池就解决了反复创建Cell造成的性能问题。但像iPhone5S上还是无法运行流畅滑动TableView，Cell的离屏渲染、Cell过大、Cell滑动过">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-05-27T11:01:36.990Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="优化无限数量快速滑动情况的Cell Image加载过程">
+<meta name="twitter:description" content="TableView图片加载优化Situation昨天被位大佬问到当一个TableView有无限多的Cell，当快速滑动时候，如何避免由于加载图片造成的卡顿问题。UITableView算最常用的UIKit控件之一了，苹果已经为它做了很多优化，比如重用池就解决了反复创建Cell造成的性能问题。但像iPhone5S上还是无法运行流畅滑动TableView，Cell的离屏渲染、Cell过大、Cell滑动过">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/27/optimize-big-amount-cell-image-load/"/>
+
+  <title> 优化无限数量快速滑动情况的Cell Image加载过程 | 大胃吴的闲话唠嗑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大胃吴的闲话唠嗑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">扯扯技术，唠唠闲话 交流email-xiao303178394@gmail.com</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            menu.首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            menu.文章
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                优化无限数量快速滑动情况的Cell Image加载过程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-05-27T20:49:19+08:00" content="2020-05-27">
+              2020-05-27
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="TableView图片加载优化"><a href="#TableView图片加载优化" class="headerlink" title="TableView图片加载优化"></a>TableView图片加载优化</h1><h2 id="Situation"><a href="#Situation" class="headerlink" title="Situation"></a>Situation</h2><p>昨天被位大佬问到当一个TableView有无限多的Cell，当快速滑动时候，如何避免由于加载图片造成的卡顿问题。<br>UITableView算最常用的UIKit控件之一了，苹果已经为它做了很多优化，比如重用池就解决了反复创建Cell造成的性能问题。<br>但像iPhone5S上还是无法运行流畅滑动TableView，Cell的离屏渲染、Cell过大、Cell滑动过程大图片加载、业务逻辑阻塞线程等都是造成滑动不流畅的原因。<br>大图片可以考虑把加载图片的block添加到DefaultRunLoopMode上执行，但大佬说的图片较小，需要滑动过程就立即展现，确实很少会有这种情况，因为一般产品设计和交互设计上，都会有分页加载逻辑，不会出现可以让用户疯狂无限滑动情况。</p>
+<p>不过这个问题还是可以研究一下的TableView图片加载优化。</p>
+<p><a href="https://github.com/yuezaixz/DwOptimizeCellImageLoad/tree/start_project" target="_blank" rel="external">初始工程分支</a></p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><ul>
+<li>大量图片，url不一致不会被cache命中。</li>
+<li>快速滑动卡顿或者滑动结束后图片无法加载，因为中间N张图片正在加载，体验糟糕</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">extension ViewController: UITableViewDelegate, UITableViewDataSource &#123;</div><div class="line">    </div><div class="line">    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -&gt; CGFloat &#123;</div><div class="line">        return 60.0</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -&gt; Int &#123;</div><div class="line">        10000</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -&gt; UITableViewCell &#123;</div><div class="line">        let cell = tableView.dequeueReusableCell(withIdentifier: ImageTableViewCell.kReuseIdentifier, for: indexPath) as! ImageTableViewCell</div><div class="line">        cell.loadImage(imageUrlStr: imageUrlStrs[indexPath.row % 8] + &quot;?random=&quot; + randomStrUtil.getRandomStringOfLength(length: 10))</div><div class="line">        return cell</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Task"><a href="#Task" class="headerlink" title="Task"></a>Task</h2><p>可以从几个方面去考虑优化：</p>
+<ul>
+<li>异步渲染，本案例中不使用这个方式，可以使用AsyncDisplayKit(现在叫Texture)</li>
+<li>根据行为区分加载策略，快速滑动时候，只加载内存缓存的图片，因为磁盘加载还需要解码，生成位图，也是耗时操作；滑动或者减速后才正常通过全缓存和网络进行加载</li>
+</ul>
+<h2 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h2><h3 id="根据滚动的交互，来控制load"><a href="#根据滚动的交互，来控制load" class="headerlink" title="根据滚动的交互，来控制load"></a>根据滚动的交互，来控制load</h3><ul>
+<li>finalPureLand为放开拖动时候的区域finalPureLand</li>
+<li>刚刚拖拽时:finalPureLand=nil</li>
+<li>拖拽完毕的减速过程:速度超过一个常量则finalPureLand=Rect，否则还是nil，finalPureLand有值情况，判断当前界面展现的cell是否在相应范围内，在的话加载内存中图片，没加载到则不加载</li>
+<li>减速还未完全停止时再次拖拽:finalPureLand=nil</li>
+<li>手势跟随过程中，仍然加载图片</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">extension ViewController: UIScrollViewDelegate &#123;</div><div class="line">    </div><div class="line">    // 刚开始拖动，可以加载图片</div><div class="line">    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) &#123;</div><div class="line">        finalPureLand = nil</div><div class="line">        </div><div class="line">        loadImageIfNeed()</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    // 滚动过程中，如果手势跟随，加载图片</div><div class="line">    func scrollViewDidScroll(_ scrollView: UIScrollView) &#123;</div><div class="line">        if scrollView.isTracking &#123;</div><div class="line">            loadImageIfNeed()</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    // 手势放开，根据速度判断是否要启用内存加载机制</div><div class="line">    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer&lt;CGPoint&gt;) &#123;</div><div class="line">        // 速度低的话，加载，速度快的话，等减速</div><div class="line">        // 1 是个magicNum，DEMO项目不要太注意细节 =。。=</div><div class="line">        if velocity.y &gt; 1 &#123;</div><div class="line">            finalPureLand = CGRect(x: targetContentOffset.pointee.x, y: targetContentOffset.pointee.y, width: scrollView.frame.size.width, height: scrollView.frame.size.height)</div><div class="line">        &#125; else &#123;</div><div class="line">            finalPureLand = nil</div><div class="line">            loadImageIfNeed()</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    // 结束减速，正常加载图片</div><div class="line">    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) &#123;</div><div class="line">        finalPureLand = nil</div><div class="line">        loadImageIfNeed()</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    func loadImageIfNeed() &#123;</div><div class="line">        for cell in tableView.visibleCells &#123;</div><div class="line">            if let indexPath = tableView.indexPath(for: cell), let imageCell = cell as? ImageTableViewCell &#123;</div><div class="line">                </div><div class="line">                // 制造一些可以在内存中展现的cell</div><div class="line">                let urlStr = indexPath.row / 10 % 5 == 1 ? imageUrlStrs[indexPath.row % 8] : (imageUrlStrs[indexPath.row % 8] + &quot;?random=\(indexPath.row)&quot;)</div><div class="line">                let cellRect = tableView.rectForRow(at: indexPath)</div><div class="line">                imageCell.loadImage(imageUrlStr: urlStr, landRect: finalPureLand, cellFrame: cellRect)</div><div class="line">            &#125;</div><div class="line">            </div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="磁盘加载机制"><a href="#磁盘加载机制" class="headerlink" title="磁盘加载机制"></a>磁盘加载机制</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">func loadImage(imageUrlStr: String, landRect: CGRect?, cellFrame: CGRect) &#123;</div><div class="line">        guard !isLoad else &#123; return &#125;</div><div class="line">        if let landRect = landRect, !landRect.intersects(cellFrame) &#123;</div><div class="line">            // 如果滑动中为减速，则只加载内存中的。</div><div class="line">            // 如果加载硬盘中的，硬盘中的加载后要解析转换成位图，也会造成卡顿</div><div class="line">            if let image = ImageCache.default.retrieveImageInMemoryCache(forKey: imageUrlStr) &#123;</div><div class="line">                isLoad = true</div><div class="line">                avatarImageView.image = image</div><div class="line">            &#125;</div><div class="line">        &#125; else &#123;</div><div class="line">            loadImage(imageUrlStr: imageUrlStr)</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><p>效果上看起来，比start分支的效果和体验好太多了。<br>本DEMO只是个实例，具体应用还需要进一步优化，并且需要通过TableView和ImageView的扩展或者继承来实现，达到组件复用。</p>
+<p><a href="https://github.com/yuezaixz/DwOptimizeCellImageLoad" target="_blank" rel="external">源码地址</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/18/stupid-man-s-Greedy-algo/" rel="next" title="学渣的贪婪算法">
+                <i class="fa fa-chevron-left"></i> 学渣的贪婪算法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="David Woo" />
+          <p class="site-author-name" itemprop="name">David Woo</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">107</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TableView图片加载优化"><span class="nav-number">1.</span> <span class="nav-text">TableView图片加载优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Situation"><span class="nav-number">1.1.</span> <span class="nav-text">Situation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">1.1.1.</span> <span class="nav-text">背景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task"><span class="nav-number">1.2.</span> <span class="nav-text">Task</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Action"><span class="nav-number">1.3.</span> <span class="nav-text">Action</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#根据滚动的交互，来控制load"><span class="nav-number">1.3.1.</span> <span class="nav-text">根据滚动的交互，来控制load</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘加载机制"><span class="nav-number">1.3.2.</span> <span class="nav-text">磁盘加载机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Result"><span class="nav-number">1.4.</span> <span class="nav-text">Result</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Woo</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

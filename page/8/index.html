@@ -226,6 +226,172 @@
             
               
                 
+                <a class="post-title-link" href="/2014/05/02/2014-05-02-python-version-of-fizzbuzzwhizz-a-the-first-night/" itemprop="url">
+                  Python版FizzBuzzWhizz(一)--第一晚
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-05-02T13:35:00+08:00" content="2014-05-02">
+              2014-05-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/设计/" itemprop="url" rel="index">
+                    <span itemprop="name">设计</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/设计/fizzbuzzwhizz/" itemprop="url" rel="index">
+                    <span itemprop="name">fizzbuzzwhizz</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#1 概述<br><a href="https://github.com/yuezaixz/fizzBuzzWhizz" target="_blank" rel="external">该项目github地址点这</a><br>ThoughtWorks这个被评为世界上最难面试的IT公司，最近搞了个“抛弃简历，用代码说话”的活动，其实就是出了一道题，让程序员们编码实现后发给他们。题目是英国小学生练习除法的一个游戏，比如100名学生玩这个游戏。游戏的规则是：</p>
+<ul>
+<li>你首先说出三个不同的特殊数，要求必须是个位数，比如3、5、7。</li>
+<li>让所有学生拍成一队，然后按顺序报数。</li>
+<li>学生报数时，如果所报数字是第一个特殊数（3）的倍数，那么不能说该数字，而要说Fizz；如果所报数字是第二个特殊数（5）的倍数，那么要说Buzz；如果所报数字是第三个特殊数（7）的倍数，那么要说Whizz。</li>
+<li>学生报数时，如果所报数字同时是两个特殊数的倍数情况下，也要特殊处理，比如第一个特殊数和第二个特殊数的倍数，那么不能说该数字，而是要说FizzBuzz, 以此类推。如果同时是三个特殊数的倍数，那么要说FizzBuzzWhizz。</li>
+<li>学生报数时，如果所报数字包含了第一个特殊数，那么也不能说该数字，而是要说相应的单词，比如本例中第一个特殊数是3，那么要报13的同学应该说Fizz。如果数字中包含了第一个特殊数，那么忽略规则3和规则4，比如要报35的同学只报Fizz，不报BuzzWhizz。</li>
+</ul>
+<p>现在，我们需要你完成一个程序来模拟这个游戏，它首先接受3个特殊数，然后输出100名学生应该报数的数或单词。比如，<br>输入 3,5,7 输出（片段）<br>1 2 Fizz 4 Buzz Fizz Whizz 8 Fizz Buzz 11 Fizz Fizz Whizz FizzBuzz 16 17 Fizz 19 Buzz … 一直到100<br>那3个单词我是完全不能理解，所以我稍微把题目改了下，改成了Ha Hei Ah。</p>
+<p>#2 实现<br>这个题目我自己用Python、Java、node.js都实现了一次，Java主要是用责任链设计模式，Python则通过一行代码实现逻辑功能，node.js类似python。本文主要讲的是完成python的思路。</p>
+<p>#3 分析</p>
+<h2 id="3-1-可能的情况"><a href="#3-1-可能的情况" class="headerlink" title="3.1 可能的情况"></a>3.1 可能的情况</h2><p>首先分析，1-100之间有几种情况：</p>
+<p>1) 数字中含有3。<br>2) 3的倍数，而不是5、7的倍数。<br>2) 5的倍数，而不是3、7的倍数。<br>2) 7的倍数，而不是3、5的倍数。<br>2) 既是3的倍数，又是5的倍数，但不是7的倍数。<br>2) 既是3的倍数，又是7的倍数，但不是5的倍数。<br>2) 既是5的倍数，又是7的倍数，但不是3的倍数。<br>2) 既是3的倍数，又是5的倍数，又是7的倍数。<br>3) 既不是3的倍数，又不是5的倍数，又不是7的倍数。</p>
+<h2 id="3-2-条件间的关系"><a href="#3-2-条件间的关系" class="headerlink" title="3.2 条件间的关系"></a>3.2 条件间的关系</h2><p>数字代表优先级，数字相同表示同级别，且数字相同的情况不会同时出现。</p>
+<h2 id="3-3-组合条件"><a href="#3-3-组合条件" class="headerlink" title="3.3 组合条件"></a>3.3 组合条件</h2><p>因此，我们可以把数字不同的条件用or连接，序号相同的用and连接。<br>比如这样：条件1 or (条件2  and 条件3 and 条件4……) or 条件10</p>
+<h2 id="3-4-再思考"><a href="#3-4-再思考" class="headerlink" title="3.4 再思考"></a>3.4 再思考</h2><p>有没更好的方式呢？再想了下，条件2虽然情况很多种，输出无非是3个单词的集合，且顺序固定。那么我们把条件改一下。<br>条件1 or ( (输出Ha)  and (输出Hei)  and (输出Ah)) or 条件10<br>另外，想到python的一个特殊的语法 str[x:y:z]，大概就是用来截取字符串的，比如’abcdefg’[1:6:2]的输出会是bd。<br>那怎么用呢，比如’Ha’[0<em>2::]这样就是输出’Ha’[x</em>2::]就是输出空字符（x&gt;=1）。那么如果n能被3整除，那么n%3就为0。很好，Perfect！</p>
+<p>#4 实现思路</p>
+<h2 id="4-1-逻辑实现"><a href="#4-1-逻辑实现" class="headerlink" title="4.1 逻辑实现"></a>4.1 逻辑实现</h2><p>既然有了思路，那么先在python的shell里实现下<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">100</span>):</div><div class="line"><span class="keyword">print</span> (<span class="string">"Ha"</span> <span class="keyword">if</span> str(x).find(str(<span class="number">3</span>)) &gt;=<span class="number">0</span> <span class="keyword">else</span> <span class="string">''</span> ) <span class="keyword">or</span> <span class="string">"Ha"</span>[x%<span class="number">3</span>*<span class="number">2</span>::]+<span class="string">"Hei"</span>[x%<span class="number">5</span>*<span class="number">3</span>::] +<span class="string">"Ah"</span>[x%<span class="number">7</span>*<span class="number">2</span>::] <span class="keyword">or</span> x</div></pre></td></tr></table></figure></p>
+<p>看下面的输出信息可以发现，很好，已经可以得到想要的结果了。（这中间当然还有一些Fix，一部到位那么是神人啊）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">1</div><div class="line">2</div><div class="line">Ha</div><div class="line">4</div><div class="line">Hei</div><div class="line">Ha</div><div class="line">Ah</div><div class="line">8</div><div class="line">Ha</div><div class="line">Hei</div><div class="line">11</div><div class="line">Ha</div><div class="line">Ha</div><div class="line">Ah</div><div class="line">HaHei</div><div class="line">16</div><div class="line">17</div><div class="line">Ha</div><div class="line">19</div><div class="line">Hei</div><div class="line">HaAh</div><div class="line">22</div><div class="line">Ha</div><div class="line">Ha</div><div class="line">Hei</div><div class="line">26</div><div class="line">Ha</div><div class="line">Ah</div><div class="line">29</div><div class="line">Ha</div><div class="line">Ha</div><div class="line">Ha</div><div class="line">……(省略)</div></pre></td></tr></table></figure>
+<h2 id="4-2-性能和显示的优化"><a href="#4-2-性能和显示的优化" class="headerlink" title="4.2 性能和显示的优化"></a>4.2 性能和显示的优化</h2><p>这时候效果是达到了，但是没有优化,现在优化，改用xrange在数字量比较大的时候性能可以提升，判断含有3的代码也优化同后面形式一样，并加上原数字进行提示。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">101</span>):</div><div class="line">        <span class="keyword">print</span> x,<span class="string">"Ha"</span>[<span class="number">0</span> <span class="keyword">if</span> str(x).find(str(num_a))&gt;<span class="number">-1</span> <span class="keyword">else</span> <span class="number">2</span>:] <span class="keyword">or</span> <span class="string">"Ha"</span>[x%num_a*<span class="number">2</span>::]+<span class="string">"Hei"</span>[x%num_b*<span class="number">3</span>::] +<span class="string">"Ah"</span>[x%num_c*<span class="number">2</span>::] <span class="keyword">or</span> x;</div></pre></td></tr></table></figure></p>
+<p>这样改进下性能好了一些，而且提示信息更友好了。</p>
+<h2 id="4-3-单元测试"><a href="#4-3-单元测试" class="headerlink" title="4.3 单元测试"></a>4.3 单元测试</h2><p>写模块前，用先写单元测试的方法可以更好的设计松耦合的函数方法。<br><figure class="highlight python"><figcaption><span>testHaHeiAh.py</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- coding:utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> unittest</div><div class="line"><span class="keyword">import</span> haHeiAh <span class="keyword">as</span> testClass</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">testHaHeiAh</span><span class="params">(unittest.TestCase)</span>:</span></div><div class="line">    <span class="comment">#初始化工作</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setUp</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line">    <span class="comment">#推出清理工作</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">tearDown</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">testHhaHandle</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="comment">#测试被第一个数（3）整除</span></div><div class="line">        self.assertEqual(testClass.hhaHandle(<span class="number">3</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>),’Ha’,<span class="string">'fail'</span>)</div><div class="line">        <span class="comment">#测试不被任何数整除，且不含有第一个数（3）</span></div><div class="line">        self.assertEqual(testClass.hhaHandle(<span class="number">4</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>),<span class="number">4</span>,<span class="string">'fail'</span>)</div><div class="line">        <span class="comment">#测试被第二个数（5）整除</span></div><div class="line">        self.assertEqual(testClass.hhaHandle(<span class="number">5</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>),’Hei’,<span class="string">'fail'</span>)</div><div class="line">        <span class="comment">#测试被第三个数（7）整除</span></div><div class="line">        self.assertEqual(testClass.hhaHandle(<span class="number">7</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>),’Ah’,<span class="string">'fail'</span>)</div><div class="line">        <span class="comment">#测试同时被两个数整除</span></div><div class="line">        self.assertEqual(testClass.hhaHandle(<span class="number">15</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>),’Ha’+’Hei’,<span class="string">'fail'</span>)</div><div class="line">        <span class="comment">#测试同时被三个数整除</span></div><div class="line">        self.assertEqual(testClass.hhaHandle(<span class="number">105</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>),’Ha’+’Hei’+’Ah’,<span class="string">'fail'</span>)</div><div class="line">        <span class="comment">#以下测试除3 5 7外别的数字组合</span></div><div class="line">        self.assertEqual(testClass.hhaHandle(<span class="number">16</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">9</span>),’Ha’,<span class="string">'fail'</span>)</div><div class="line">        self.assertEqual(testClass.hhaHandle(<span class="number">18</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">9</span>),’Ha’+’Hei’+’Ah’,<span class="string">'fail'</span>)</div><div class="line">        self.assertEqual(testClass.hhaHandle(<span class="number">24</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">8</span>),’Ha’+’Hei’+’Ah’,<span class="string">'fail'</span>)</div><div class="line">        self.assertEqual(testClass.hhaHandle(<span class="number">24</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>),’Ha’+’Hei’+’Ah’,<span class="string">'fail'</span>)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    unittest.main()</div></pre></td></tr></table></figure></p>
+<p>现在运行单元测试结果当然是失败，因为这个方法都没有。</p>
+<h2 id="4-4-整合成模块"><a href="#4-4-整合成模块" class="headerlink" title="4.4 整合成模块"></a>4.4 整合成模块</h2><p>上面的代码都还只是面向过程级别的，没有可复用性，那么我们就重构一下。<br>模块：<br><figure class="highlight python"><figcaption><span>haHeiAh.py</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">haHeiAh</span><span class="params">(num_a,num_b,num_c)</span>:</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'the div num is '</span>,num_a,num_b,num_c;</div><div class="line">    <span class="keyword">return</span> [str(num) + <span class="string">":"</span> + str(hhaHandle(num,num_a,num_b,num_c)) <span class="keyword">for</span> num <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">101</span>)];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">hhaHandle</span><span class="params">(num,num_a,num_b,num_c)</span>:</span></div><div class="line">    <span class="keyword">return</span> <span class="string">"Ha"</span>[<span class="number">0</span> <span class="keyword">if</span> str(num).find(str(num_a))&gt;<span class="number">-1</span> <span class="keyword">else</span> <span class="number">2</span>:] <span class="keyword">or</span> <span class="string">"Ha"</span>[num%num_a*<span class="number">2</span>::]+<span class="string">"Hei"</span>[num%num_b*<span class="number">3</span>::] +<span class="string">"Ah"</span>[num%num_c*<span class="number">2</span>::] <span class="keyword">or</span> num;</div></pre></td></tr></table></figure></p>
+<h2 id="4-5-执行单元测试"><a href="#4-5-执行单元测试" class="headerlink" title="4.5 执行单元测试"></a>4.5 执行单元测试</h2><p>写好模块接可以执行单元测试了，执行的过程会结合了很多Fix。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">[David@localhost haheiahx]$ python testHaHeiAh.py</div><div class="line">----------------------------------------------------------------------</div><div class="line">Ran 1 test in 0.000s</div><div class="line">OK</div></pre></td></tr></table></figure>
+<h2 id="4-6-可运行测试入口来重构"><a href="#4-6-可运行测试入口来重构" class="headerlink" title="4.6 可运行测试入口来重构"></a>4.6 可运行测试入口来重构</h2><p>可运行测试方法：<br><figure class="highlight python"><figcaption><span>test.py</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">testHaHeiAh</span><span class="params">(p_a=<span class="number">3</span>,p_b=<span class="number">5</span>,p_c=<span class="number">7</span>)</span>:</span></div><div class="line">    moduleName = <span class="string">"haHeiAh"</span>;</div><div class="line">    methodName = <span class="string">"haHeiAh"</span>;</div><div class="line"></div><div class="line">    module = __import__(moduleName);</div><div class="line">    method = getattr(module,methodName);</div><div class="line">    <span class="keyword">print</span> method(p_a,p_b,p_c);</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    params = [int(x) <span class="keyword">for</span> x <span class="keyword">in</span> sys.argv[<span class="number">1</span>::] <span class="keyword">if</span> x.__len__() == <span class="number">1</span>];</div><div class="line">    testHaHeiAh() <span class="keyword">if</span> params.__len__() &lt; <span class="number">3</span> <span class="keyword">else</span> testHaHeiAh(params[<span class="number">0</span>],params[<span class="number">1</span>],params[<span class="number">2</span>]);</div></pre></td></tr></table></figure></p>
+<p>这下代码好多了。而且3个特殊数字也可以通过用户自己来输入了。具体看下面操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">[David@localhost haheiah]$ python test.py</div><div class="line">the div num is  3 5 7</div><div class="line">[&apos;1:1&apos;, &apos;2:2&apos;, &apos;3:Ha&apos;, &apos;4:4&apos;, &apos;5:Hei&apos;, &apos;6:Ha&apos;, &apos;7:Ah&apos;, &apos;8:8&apos;, &apos;9:Ha&apos;, &apos;10:Hei&apos;, &apos;11:11&apos;, &apos;12:Ha&apos;, &apos;13:Ha&apos;, &apos;14:Ah&apos;, &apos;15:HaHei&apos;, &apos;16:16&apos;, &apos;17:17&apos;, &apos;18:Ha&apos;, &apos;19:19&apos;, &apos;20:Hei&apos;, &apos;21:HaAh&apos;, &apos;22:22&apos;, &apos;23:Ha&apos;, &apos;24:Ha&apos;, &apos;25:Hei&apos;, &apos;26:26&apos;, &apos;27:Ha&apos;, &apos;28:Ah&apos;, &apos;29:29&apos;, &apos;30:Ha&apos;, &apos;31:Ha&apos;, &apos;32:Ha&apos;, &apos;33:Ha&apos;, &apos;34:Ha&apos;, &apos;35:Ha&apos;, &apos;36:Ha&apos;, &apos;37:Ha&apos;, &apos;38:Ha&apos;, &apos;39:Ha&apos;, &apos;40:Hei&apos;, &apos;41:41&apos;, &apos;42:HaAh&apos;, &apos;43:Ha&apos;, &apos;44:44&apos;, &apos;45:HaHei&apos;, &apos;46:46&apos;, &apos;47:47&apos;, &apos;48:Ha&apos;, &apos;49:Ah&apos;, &apos;50:Hei&apos;, &apos;51:Ha&apos;, &apos;52:52&apos;, &apos;53:Ha&apos;, &apos;54:Ha&apos;, &apos;55:Hei&apos;, &apos;56:Ah&apos;, &apos;57:Ha&apos;, &apos;58:58&apos;, &apos;59:59&apos;, &apos;60:HaHei&apos;, &apos;61:61&apos;, &apos;62:62&apos;, &apos;63:Ha&apos;, &apos;64:64&apos;, &apos;65:Hei&apos;, &apos;66:Ha&apos;, &apos;67:67&apos;, &apos;68:68&apos;, &apos;69:Ha&apos;, &apos;70:HeiAh&apos;, &apos;71:71&apos;, &apos;72:Ha&apos;, &apos;73:Ha&apos;, &apos;74:74&apos;, &apos;75:HaHei&apos;, &apos;76:76&apos;, &apos;77:Ah&apos;, &apos;78:Ha&apos;, &apos;79:79&apos;, &apos;80:Hei&apos;, &apos;81:Ha&apos;, &apos;82:82&apos;, &apos;83:Ha&apos;, &apos;84:HaAh&apos;, &apos;85:Hei&apos;, &apos;86:86&apos;, &apos;87:Ha&apos;, &apos;88:88&apos;, &apos;89:89&apos;, &apos;90:HaHei&apos;, &apos;91:Ah&apos;, &apos;92:92&apos;, &apos;93:Ha&apos;, &apos;94:94&apos;, &apos;95:Hei&apos;, &apos;96:Ha&apos;, &apos;97:97&apos;, &apos;98:Ah&apos;, &apos;99:Ha&apos;, &apos;100:Hei&apos;]</div><div class="line">[David@localhost haheiah]$ python test.py 3 6 9</div><div class="line">the div num is  3 6 9</div><div class="line">[&apos;1:1&apos;, &apos;2:2&apos;, &apos;3:Ha&apos;, &apos;4:4&apos;, &apos;5:5&apos;, &apos;6:HaHei&apos;, &apos;7:7&apos;, &apos;8:8&apos;, &apos;9:HaAh&apos;, &apos;10:10&apos;, &apos;11:11&apos;, &apos;12:HaHei&apos;, &apos;13:Ha&apos;, &apos;14:14&apos;, &apos;15:Ha&apos;, &apos;16:16&apos;, &apos;17:17&apos;, &apos;18:HaHeiAh&apos;, &apos;19:19&apos;, &apos;20:20&apos;, &apos;21:Ha&apos;, &apos;22:22&apos;, &apos;23:Ha&apos;, &apos;24:HaHei&apos;, &apos;25:25&apos;, &apos;26:26&apos;, &apos;27:HaAh&apos;, &apos;28:28&apos;, &apos;29:29&apos;, &apos;30:Ha&apos;, &apos;31:Ha&apos;, &apos;32:Ha&apos;, &apos;33:Ha&apos;, &apos;34:Ha&apos;, &apos;35:Ha&apos;, &apos;36:Ha&apos;, &apos;37:Ha&apos;, &apos;38:Ha&apos;, &apos;39:Ha&apos;, &apos;40:40&apos;, &apos;41:41&apos;, &apos;42:HaHei&apos;, &apos;43:Ha&apos;, &apos;44:44&apos;, &apos;45:HaAh&apos;, &apos;46:46&apos;, &apos;47:47&apos;, &apos;48:HaHei&apos;, &apos;49:49&apos;, &apos;50:50&apos;, &apos;51:Ha&apos;, &apos;52:52&apos;, &apos;53:Ha&apos;, &apos;54:HaHeiAh&apos;, &apos;55:55&apos;, &apos;56:56&apos;, &apos;57:Ha&apos;, &apos;58:58&apos;, &apos;59:59&apos;, &apos;60:HaHei&apos;, &apos;61:61&apos;, &apos;62:62&apos;, &apos;63:Ha&apos;, &apos;64:64&apos;, &apos;65:65&apos;, &apos;66:HaHei&apos;, &apos;67:67&apos;, &apos;68:68&apos;, &apos;69:Ha&apos;, &apos;70:70&apos;, &apos;71:71&apos;, &apos;72:HaHeiAh&apos;, &apos;73:Ha&apos;, &apos;74:74&apos;, &apos;75:Ha&apos;, &apos;76:76&apos;, &apos;77:77&apos;, &apos;78:HaHei&apos;, &apos;79:79&apos;, &apos;80:80&apos;, &apos;81:HaAh&apos;, &apos;82:82&apos;, &apos;83:Ha&apos;, &apos;84:HaHei&apos;, &apos;85:85&apos;, &apos;86:86&apos;, &apos;87:Ha&apos;, &apos;88:88&apos;, &apos;89:89&apos;, &apos;90:HaHeiAh&apos;, &apos;91:91&apos;, &apos;92:92&apos;, &apos;93:Ha&apos;, &apos;94:94&apos;, &apos;95:95&apos;, &apos;96:HaHei&apos;, &apos;97:97&apos;, &apos;98:98&apos;, &apos;99:HaAh&apos;, &apos;100:100&apos;]</div></pre></td></tr></table></figure></p>
+<p>#5 再思考<br>以上部分是在周二下班后完成的，做到那里也就洗洗睡了。隔天拿起程序不禁又看了下，发现了很多不足，在下一章节我将介绍下还有哪些改进的地方。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/05/01/2014-05-01-spring-framework-core-source-code-analysis-v-registration-resource/" itemprop="url">
                   Spring Framework的核心源码解读（五）-Resource注册
                 </a>
@@ -1732,144 +1898,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/03/11/2014-03-11-team-executive-power-please-consider-reason-from-the-management/" itemprop="url">
-                  团队执行力不足？请从管理上考虑原因
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-03-11T14:42:00+08:00" content="2014-03-11">
-              2014-03-11
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/项目管理/" itemprop="url" rel="index">
-                    <span itemprop="name">项目管理</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/项目管理/执行力/" itemprop="url" rel="index">
-                    <span itemprop="name">执行力</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p> <strong><em>本文是看了陆老师博客，并且结合自己在研发管理工作中的体会，半载半写的一边扯文，不喜欢看的请点这<a href="http://blog.csdn.net/happydeer/article/details/21018027" target="_blank" rel="external">解决执行力问题的思路 </a></em></strong></p>
-<p>#执行力不足的原因？<br>斯坦迪集团（StandishGroup）的创始人Jim Johnson曾经说过，“<em>Whenprojects fail, it’s rarely technical.</em>”<br>这句话真是Can’t agree more!一个项目失败的原因很多，但是只有10%的原因会是技术不足造成的。今天项目的测试人员给我说，经过领导评审后，界面上真的有很大改观，好看多了，之前没有这样的效果，真 <strong>关键不是能不能做，而是想不想做</strong> 。<br>因此，面对执行力差这个结果，我更愿意怀疑是管理和沟通、态度上的问题，而未必就是直觉上认为的团队的技术能力问题。<br> <img src="http://a3.att.hudong.com/21/38/01300533987802133715382738688.png" alt="执行力.jpg"></p>
-<p>#何为执行力？<br>陆老师找了个网上对执行力的解释，执行力指的是贯彻<strong>战略意图</strong>，完成预定<strong>目标</strong>的操作<strong>能力</strong>。从这句话可以看出，先得有目标，然后有达到目标的战略，最后才是依靠能力去实现。</p>
-<p>#让团队成员充分理解正确的目标<br>首先没有明确的目标，或者目标传递的不够充分，那么说团队执行力不足那简直就是扯淡。作为管理者必须思考<em>每个团队成员都准确理解了他们的目标吗？大家都认可吗？</em>，首先我承认自己在这点上做的很不好。</p>
-<p>#切合实际的战略意图<br>在看看战略意图，也就是一件事的大方向。最终的执行结果不理想，有没有可能是因为这个战略在一开始就是错误的（或者不切实际的）呢？如果给团队指了一个错的方向，团队当然到不了对的地方。即使战略是正确的，执行的人100%理解并认可这个战略吗？如果没有理解和认可，可想而知执行效果不会好！这里可能存在老板与高层管理者之间的沟通问题。<br>这点上，团队当前项目在去年一直摇摆不定，战略意图不明确，战略地位更没个谱，可以说到现在有点成绩，还真是很不容易。<br>战略在被执行的时候要细化成一个个小目标。这些目标都遵循了著名的SMART原则吗？让我们来回顾一下这5个原则：</p>
-<pre><code>1. 目标必须是具体的（Specific）
-2. 目标必须是可以衡量的（Measurable）
-3. 目标必须是可以达到的（Attainable）
-4. 目标必须和其他目标具有相关性（Relevant）
-5. 目标必须具有明确的截止期限（Time-bound）
-</code></pre><p>#能力=管理能力+技术能力</p>
-<h2 id="管理能力"><a href="#管理能力" class="headerlink" title="管理能力"></a>管理能力</h2><p>首先，在能力上找原因还得先找管理上的能力。团队领导给队员做了足够的沟通吗？在执行的过程中，有没有专人进行有效的跟踪和控制？过程中有没有引入反馈机制以形成自我完善的良性循环？<br>可以说，这些对于我这个管理新人来说，都没做好。真是上头能让我这样试错，团队成员没对我表现不满，真是难为大家了。</p>
-<h2 id="技术能力"><a href="#技术能力" class="headerlink" title="技术能力"></a>技术能力</h2><p>我们再把注意力转到能力上来。执行最终靠的是团队。有的人技术不错，但是做事的方法不对，不会需找技巧；而又有的人态度上不够积极，没有 Go Hard Or Go Home 的精神；有的人想学习，但是意愿不够强烈导致最终只是想想而已。<br>这点我还真不知道怎么用自己的想法去约束他人，我的领导是这么给我说的，如果这个人求稳，那么，去做二次开发，让有意愿做产品的人来做。</p>
-<p>#总结<br>执行力差是一个结果，但它是由什么造成的呢？只有知道了原因，才能对症下药。原因多数情况下并非技术问题，而是目标、战略、管理、控制的原因。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1915,7 +1943,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">106</span>
+              <span class="site-state-item-count">107</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
