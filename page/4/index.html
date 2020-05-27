@@ -226,6 +226,113 @@
             
               
                 
+                <a class="post-title-link" href="/2015/02/05/2015-02-05-beginning-ios-pit-over-those-years-c/" itemprop="url">
+                  初学IOS那些年踩过的坑(三)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-02-05T04:55:00+08:00" content="2015-02-05">
+              2015-02-05
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#我是主题<br>今天这章就是一些小问题的汇总，木有主题</p>
+<p>#我是内容</p>
+<h2 id="无符号整形的负溢出负溢出"><a href="#无符号整形的负溢出负溢出" class="headerlink" title="无符号整形的负溢出负溢出"></a>无符号整形的负溢出负溢出</h2><p>要小心无符号整形的负溢出负溢出，比如下面代码，当photos数组的数量为1时，第三行就负溢出了。要使用 [array count]的时候要注意。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NSString *leftPhotoName = [_photos count] &gt; indexPath.row ?[_photos objectAtIndex:indexPath.row]:nil;</div><div class="line">NSString *middlePhotoName = [_photos count]-1) &gt; indexPath.row ?[_photos objectAtIndex:(indexPath.row+1)]:nil;</div><div class="line">NSString *rightPhotoName = ([_photos count]-2) &gt; indexPath.row ?[_photos objectAtIndex:(indexPath.row+2)]:nil;</div></pre></td></tr></table></figure></p>
+<h2 id="NIB与手写代码不一致的一些坑"><a href="#NIB与手写代码不一致的一些坑" class="headerlink" title="NIB与手写代码不一致的一些坑"></a>NIB与手写代码不一致的一些坑</h2><h2 id="UIView的交互开关"><a href="#UIView的交互开关" class="headerlink" title="# UIView的交互开关"></a># UIView的交互开关</h2><p>用Nib创建的View默认是不进行交互的，所以要勾上User Interaction Enabled。<br>否则将不能接受如下代码的手势的事件<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)initPhotoImageViewAction:(<span class="built_in">UIImageView</span> \*) imageView</div><div class="line">&#123;</div><div class="line">    <span class="built_in">UITapGestureRecognizer</span> \*tapRecognizer = [[<span class="built_in">UITapGestureRecognizer</span> alloc] initWithTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(scrollerTapped:)];</div><div class="line"></div><div class="line">    [imageView addGestureRecognizer:tapRecognizer];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)scrollerTapped:(<span class="built_in">UITapGestureRecognizer</span>*)gesture</div><div class="line">&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,gesture.view);</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"11"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="UIActivityIndicator的动画"><a href="#UIActivityIndicator的动画" class="headerlink" title="# UIActivityIndicator的动画"></a># UIActivityIndicator的动画</h2><p>nib中创建的会自动旋转，而手写代码要记得[indicator startAnimation]，否则不显示。</p>
+<h2 id="UIViewController的绘制"><a href="#UIViewController的绘制" class="headerlink" title="UIViewController的绘制"></a>UIViewController的绘制</h2><p>问题是这样的，UIViewController的self.view只有一个subview，而subview为UIImageView，开始在initWithNibName中初始化UIImageView的image，UIImageView的初始化不成功，第一次进入时候图片无法展现。<br>之后迁移到viewDidLoad中，进行初始化，就没问题了，所以要注意，UIVIewCOntroller的生命周期，initWithNibName并未完成初始化。</p>
+<h2 id="UIImageVIew的autolayout和Aspect-Fit"><a href="#UIImageVIew的autolayout和Aspect-Fit" class="headerlink" title="UIImageVIew的autolayout和Aspect Fit"></a>UIImageVIew的autolayout和Aspect Fit</h2><p>autolayout和Aspect Fit不冲突，因此，UIImageVIew需要增加完全的约束，而Aspect Fit会根据计算的大小进行Aspect Fit。</p>
+<h2 id="用-class避免循环引用"><a href="#用-class避免循环引用" class="headerlink" title="用@class避免循环引用"></a>用@class避免循环引用</h2><p>A引用B，B引用A则为造成引用循环，这时候可以用@class来解决。此外，还可以提高效率，比如引用链为A-&gt;B,B-&gt;C,C-&gt;D如果都用#import，则中间有一个修改都会造成全部的编译，效率较低</p>
+<h2 id="UIVIewController对于布局的生命周期"><a href="#UIVIewController对于布局的生命周期" class="headerlink" title="UIVIewController对于布局的生命周期"></a>UIVIewController对于布局的生命周期</h2><p>[[UIVIewController alloc] init]时候，不会UpdateContrainers，不会进行AutoLayout，不会触发viewDidAppear等方法，所以在[[UIVIewController alloc] init]后就对视图进行和布局有关的操作都是无效的，在viewDidLoad中、[[UIVIewController alloc] init]后只能进行数据的初始化操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[runPhotoViewController index:gesture.view.tag];</div><div class="line">[self presentViewController:runPhotoViewController animated:YES completion:^&#123;&#125;];</div></pre></td></tr></table></figure>
+<p>要改为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[self presentViewController:runPhotoViewController animated:YES completion:^&#123;</div><div class="line">    [runPhotoViewController index:gesture.view.tag];</div><div class="line">&#125;];</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">- (void)viewDidLoad &#123;</div><div class="line">    //去掉</div><div class="line">    //[self setScrollViewContentSize];</div><div class="line">&#125;</div><div class="line">-(void)viewDidAppear:(BOOL)animated</div><div class="line">&#123;</div><div class="line">    if(!isInitScale)//防止多次调用</div><div class="line">    &#123;</div><div class="line">        [self setScrollViewContentSize];</div><div class="line">        isInitScale = YES;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="真机调试证书问题"><a href="#真机调试证书问题" class="headerlink" title="真机调试证书问题"></a>真机调试证书问题</h2><p>coding signing indntity问题，需要更新证书<br><img src="http://chuantu.biz/t/65/1423112120x1822611171.png" alt=""><br><img src="http://chuantu.biz/t/65/1423112614x1822611171.png" alt=""><br><img src="http://chuantu.biz/t/65/1423112647x-954497605.png" alt=""></p>
+<h2 id="building时候报错"><a href="#building时候报错" class="headerlink" title="building时候报错"></a>building时候报错</h2><p>报错说XXX文件找不到，考虑可能是更新代码后遗留库影响，product中的clean执行一下<br><img src="http://chuantu.biz/t/65/1423112680x-954497605.png" alt=""></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/02/01/2015-02-01-ios-beginner-pit-over-those-years-b/" itemprop="url">
                   初学IOS那些年踩过的坑(二)
                 </a>
@@ -1463,157 +1570,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/12/03/2014-12-03-python-str-related-set-of-operations/" itemprop="url">
-                  python的str相关操作集合
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-12-03T09:06:00+08:00" content="2014-12-03">
-              2014-12-03
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Python/字符串/" itemprop="url" rel="index">
-                    <span itemprop="name">字符串</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Python/字符串/str/" itemprop="url" rel="index">
-                    <span itemprop="name">str</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Python/字符串/str/基础/" itemprop="url" rel="index">
-                    <span itemprop="name">基础</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>结合做leetcode这些时间对python的字符串的了解，做了一下代码的总结，注释全写代码里了，看代码就好了。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># coding:utf-8</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">printUnicode</span><span class="params">(s)</span>:</span></div><div class="line">    <span class="keyword">if</span> isinstance(s, unicode): </div><div class="line">        <span class="comment">#s=u"中文" </span></div><div class="line">        <span class="keyword">print</span> <span class="string">u"unicode字符："</span>,s.encode(<span class="string">'gb2312'</span>) </div><div class="line">    <span class="keyword">else</span>: </div><div class="line">        <span class="comment">#s="中文" </span></div><div class="line">        <span class="keyword">print</span> <span class="string">u"普通字符："</span>,s.decode(<span class="string">'utf-8'</span>).encode(<span class="string">'gb2312'</span>)</div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    <span class="comment">#1、查找元素find index，计算出现次数count，替换replace</span></div><div class="line">    <span class="comment">#   find和index区别,前者找不到返回-1，后者找不到报错</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.find(<span class="string">"9"</span>) <span class="comment"># 输出：-1</span></div><div class="line">    <span class="comment">#   print "aaab".index("9") # 抛出异常</span></div><div class="line">    <span class="comment">#   加r从右开始找</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.rfind(<span class="string">"a"</span>) <span class="comment"># 输出：2</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.rindex(<span class="string">"a"</span>) <span class="comment"># 输出：2</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.count(<span class="string">"a"</span>) <span class="comment"># 计算出现次数， 输出：3</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.replace(<span class="string">"a"</span>,<span class="string">"c"</span>,<span class="number">2</span>) <span class="comment"># 将a替换成c，替换2次，输出：ccab</span></div><div class="line"></div><div class="line">    <span class="comment">#2、去除元素 strip</span></div><div class="line">    <span class="comment">#   默认去除 \t\n，l从消除左边，r是消除右边</span></div><div class="line">    s = <span class="string">"  a  "</span></div><div class="line">    <span class="keyword">print</span> s.strip() <span class="comment"># 输出："a"</span></div><div class="line">    <span class="keyword">print</span> s.lstrip() <span class="comment"># 输出："  a"</span></div><div class="line">    <span class="keyword">print</span> s.rstrip() <span class="comment"># 输出："  a"</span></div><div class="line"></div><div class="line">    <span class="comment">#   去除字符串中含有序列的每个元素</span></div><div class="line">    s = <span class="string">"abcdeffedbca"</span></div><div class="line">    <span class="keyword">print</span> s.strip(<span class="string">"ab"</span>) <span class="comment"># 输出：cdeffedbc</span></div><div class="line"></div><div class="line">    <span class="comment">#3、反转，同样也可用于列表</span></div><div class="line">    s = <span class="string">"abcdefg"</span></div><div class="line">    <span class="keyword">print</span> s[::<span class="number">-1</span>] <span class="comment"># 输出：gfedcba</span></div><div class="line"></div><div class="line">    <span class="comment">#4、判断、测试字符串</span></div><div class="line">    <span class="comment">#4.1 是空格</span></div><div class="line">    <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"“ ”是否为空格:"</span>, <span class="string">" "</span>.isspace(),<span class="string">"\n“aaa”是否为空格:"</span>,<span class="string">"aaa"</span>.isspace()</div><div class="line">    <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"注意，空字符不为空格，“”是否为空格:"</span>, <span class="string">""</span>.isspace()</div><div class="line">    <span class="comment">#4.2 判断开始结束</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcd以ab开头吗？"</span>,<span class="string">"abcd"</span>.startswith(<span class="string">"ab"</span>),<span class="string">"\nabcd以b开头吗？"</span>,<span class="string">"abcd"</span>.startswith(<span class="string">"b"</span>)</div><div class="line">    <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcd以cd结尾吗？"</span>,<span class="string">"abcd"</span>.endswith(<span class="string">"cd"</span>),<span class="string">"\nabcd以c结尾吗？"</span>,<span class="string">"abcd"</span>.endswith(<span class="string">"c"</span>)</div><div class="line">    <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcd从第2个字符开始是以b开头吗？"</span>,<span class="string">"abcd"</span>.startswith(<span class="string">"b"</span>,<span class="number">1</span>)</div><div class="line">    <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcd从第2个字符到第3个字符的字符串是以c结尾吗？"</span>,<span class="string">"abcd"</span>.endswith(<span class="string">"c"</span>,<span class="number">1</span>,<span class="number">3</span>)</div><div class="line">    <span class="comment">#4.3 是否全是字母和数字，并至少有一个字符 </span></div><div class="line">    <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcdef123是否全为数字和字母："</span>,<span class="string">"abcdef123"</span>.isalnum()</div><div class="line">    <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcdef,,123是否全为数字和字母："</span>,<span class="string">"abcdef,,123"</span>.isalnum()</div><div class="line">    <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"“”是否全为数字和字母,并且至少有一个字母："</span>,<span class="string">""</span>.isalnum()</div><div class="line">    <span class="comment">#4.4 是否全为字母</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaa"</span>.isalpha() <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aa1"</span>.isalpha() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aa,"</span>.isalpha() <span class="comment"># 输出：False</span></div><div class="line">    <span class="comment">#4.5 是否全为数字</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaa"</span>.isdigit() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"221"</span>.isdigit() <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"22,"</span>.isdigit() <span class="comment"># 输出：False</span></div><div class="line">    <span class="comment">#4.6 大小写判断</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaa"</span>.islower() <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"AAA"</span>.islower() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaa"</span>.isupper() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"ABC"</span>.isupper() <span class="comment"># 输出：True</span></div><div class="line">    <span class="comment">#4.7 是否首字母大写，其他小写</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"ABC"</span>.istitle() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"Abc"</span>.istitle() <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"123"</span>.istitle() <span class="comment"># 输出：False</span></div><div class="line"></div><div class="line">    <span class="comment">#5、字符转换</span></div><div class="line">    <span class="comment">#大小写转换</span></div><div class="line">    s = <span class="string">"ABC"</span></div><div class="line">    <span class="keyword">print</span> s.lower() <span class="comment">#小写  输出：abc</span></div><div class="line">    <span class="keyword">print</span> s <span class="comment">#原字符不变 输出：ABC</span></div><div class="line">    <span class="keyword">print</span> s.upper() <span class="comment">#大写  输出：ABC</span></div><div class="line">    <span class="keyword">print</span> s.swapcase() <span class="comment">#大小写互换  输出：abc</span></div><div class="line">    <span class="keyword">print</span> s.capitalize() <span class="comment">#首字母大写  输出：Abc</span></div><div class="line"></div><div class="line">    <span class="comment">#6、比较字符串,也可以比较数字</span></div><div class="line">    <span class="keyword">print</span> cmp(<span class="string">"aaa"</span>,<span class="string">"bbb"</span>) <span class="comment"># 输出：-1</span></div><div class="line">    <span class="keyword">print</span> cmp(<span class="string">"ccc"</span>,<span class="string">"bbb"</span>) <span class="comment"># 输出：1</span></div><div class="line">    <span class="keyword">print</span> cmp(<span class="number">1</span>,<span class="number">2</span>) <span class="comment"># 输出：-1</span></div><div class="line"></div><div class="line">    <span class="comment">#7、字符串切片</span></div><div class="line">    s = <span class="string">"1234567890"</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">1</span>] <span class="comment">#截取第二个字符 输出：2</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">-1</span>] <span class="comment">#截取最后一个字符 输出：0</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">-3</span>] <span class="comment">#截取倒数第三个字符 输出：8</span></div><div class="line">    <span class="keyword">print</span> s[::] <span class="comment">#可用于克隆字符串 输出：1234567890</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">2</span>:] <span class="comment">#从第三个字符开始截取 输出：34567890</span></div><div class="line">    <span class="keyword">print</span> s[:<span class="number">9</span>] <span class="comment">#从头截取到第9个字符 输出：123456789</span></div><div class="line">    <span class="keyword">print</span> s[::<span class="number">2</span>] <span class="comment">#从头截取，每取一次间隔一个字符 输出：13579</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">10</span>::<span class="number">-1</span>] <span class="comment">#反向截取，输出：0987654321</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">-1</span>:<span class="number">-11</span>:<span class="number">-1</span>] <span class="comment">#与s[10::-1]结果相同 输出：0987654321</span></div><div class="line"></div><div class="line">    <span class="comment">#8、扫描字符串 输出1 2 3 4 5 6 7 8 9 0</span></div><div class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> s:<span class="keyword">print</span> char,</div><div class="line">    <span class="keyword">print</span></div><div class="line">    <span class="comment">#9、分割字符串</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"12,34,5,678,9,0"</span>.split(<span class="string">","</span>) <span class="comment"># 输出['12', '34', '5', '678', '9', '0']</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"   12    34  5  "</span>.split()<span class="comment">#默认按空格分割 输出['12', '34', '5']</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"   12    34  5  "</span>.split(<span class="string">" "</span>)<span class="comment">#但是不同的是，默认的方法会先strip 输出['', '', '', '12', '', '', '', '34', '', '5', '', '']</span></div><div class="line"></div><div class="line">    <span class="comment">#10、连接集合中的字符串</span></div><div class="line">    <span class="keyword">print</span> <span class="string">""</span>.join([<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>,<span class="string">"d"</span>]) <span class="comment"># 输出abcd</span></div><div class="line">    <span class="keyword">print</span> <span class="string">","</span>.join([<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>,<span class="string">"d"</span>]) <span class="comment"># 输出a,b,c,d</span></div><div class="line"></div><div class="line">    <span class="comment">#11、filter 结合lambda 输出：AmanaplanacanalPanama</span></div><div class="line">    <span class="comment"># lambda即为小函数</span></div><div class="line">    <span class="comment"># filter(function,sequence) sequence可为字符串、列表、tupple ，范围经过function过滤后返回true的相应类型结果</span></div><div class="line">    <span class="keyword">print</span> filter((<span class="keyword">lambda</span> x:x.isalnum()),<span class="string">"A man, a plan, a canal: Panama"</span>)</div><div class="line"></div><div class="line">    <span class="comment">#12、map操作</span></div><div class="line">    <span class="keyword">print</span> map((<span class="keyword">lambda</span> x,y:x+y),[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>,<span class="number">40</span>])</div><div class="line"></div><div class="line">    <span class="comment">#13、reduce操作 reduce(function,sequence,startNum)startNum默认为0</span></div><div class="line">    <span class="keyword">print</span>  reduce((<span class="keyword">lambda</span> x,y:x+y),[<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>],<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="comment">#14、补齐</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"\""</span>+<span class="string">"abcde"</span>.ljust(<span class="number">10</span>)+<span class="string">"\""</span> <span class="comment">#右边补 输出: "abcde     "</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"\""</span>+<span class="string">"abcde"</span>.rjust(<span class="number">10</span>)+<span class="string">"\""</span> <span class="comment"># 输出: "     abcde"</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"\""</span>+<span class="string">"abcde"</span>.center(<span class="number">10</span>)+<span class="string">"\""</span> <span class="comment">#中间对齐  输出:"  abcde   "</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"\""</span>+<span class="string">"abcde"</span>.center(<span class="number">10</span>,<span class="string">"-"</span>)+<span class="string">"\""</span> <span class="comment">#用-补齐  输出:"--abcde---"</span></div><div class="line"></div><div class="line">    <span class="comment">#15、编码解码</span></div><div class="line">    <span class="comment"># s="中文" </span></div><div class="line">    <span class="comment"># printUnicode(s) # 输出 ：普通字符： 中文</span></div><div class="line">    <span class="comment"># s=u"中文2" # 带u定义为unicode编码</span></div><div class="line">    <span class="comment"># printUnicode(s) # 输出 ：unicode字符： 中文2</span></div></pre></td></tr></table></figure>
-<p>#总结<br>python好神奇啊。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1659,7 +1615,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">107</span>
+              <span class="site-state-item-count">108</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

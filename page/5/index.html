@@ -226,6 +226,157 @@
             
               
                 
+                <a class="post-title-link" href="/2014/12/03/2014-12-03-python-str-related-set-of-operations/" itemprop="url">
+                  python的str相关操作集合
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-12-03T09:06:00+08:00" content="2014-12-03">
+              2014-12-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/字符串/" itemprop="url" rel="index">
+                    <span itemprop="name">字符串</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/字符串/str/" itemprop="url" rel="index">
+                    <span itemprop="name">str</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Python/字符串/str/基础/" itemprop="url" rel="index">
+                    <span itemprop="name">基础</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>结合做leetcode这些时间对python的字符串的了解，做了一下代码的总结，注释全写代码里了，看代码就好了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># coding:utf-8</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">printUnicode</span><span class="params">(s)</span>:</span></div><div class="line">    <span class="keyword">if</span> isinstance(s, unicode): </div><div class="line">        <span class="comment">#s=u"中文" </span></div><div class="line">        <span class="keyword">print</span> <span class="string">u"unicode字符："</span>,s.encode(<span class="string">'gb2312'</span>) </div><div class="line">    <span class="keyword">else</span>: </div><div class="line">        <span class="comment">#s="中文" </span></div><div class="line">        <span class="keyword">print</span> <span class="string">u"普通字符："</span>,s.decode(<span class="string">'utf-8'</span>).encode(<span class="string">'gb2312'</span>)</div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    <span class="comment">#1、查找元素find index，计算出现次数count，替换replace</span></div><div class="line">    <span class="comment">#   find和index区别,前者找不到返回-1，后者找不到报错</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.find(<span class="string">"9"</span>) <span class="comment"># 输出：-1</span></div><div class="line">    <span class="comment">#   print "aaab".index("9") # 抛出异常</span></div><div class="line">    <span class="comment">#   加r从右开始找</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.rfind(<span class="string">"a"</span>) <span class="comment"># 输出：2</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.rindex(<span class="string">"a"</span>) <span class="comment"># 输出：2</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.count(<span class="string">"a"</span>) <span class="comment"># 计算出现次数， 输出：3</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaab"</span>.replace(<span class="string">"a"</span>,<span class="string">"c"</span>,<span class="number">2</span>) <span class="comment"># 将a替换成c，替换2次，输出：ccab</span></div><div class="line"></div><div class="line">    <span class="comment">#2、去除元素 strip</span></div><div class="line">    <span class="comment">#   默认去除 \t\n，l从消除左边，r是消除右边</span></div><div class="line">    s = <span class="string">"  a  "</span></div><div class="line">    <span class="keyword">print</span> s.strip() <span class="comment"># 输出："a"</span></div><div class="line">    <span class="keyword">print</span> s.lstrip() <span class="comment"># 输出："  a"</span></div><div class="line">    <span class="keyword">print</span> s.rstrip() <span class="comment"># 输出："  a"</span></div><div class="line"></div><div class="line">    <span class="comment">#   去除字符串中含有序列的每个元素</span></div><div class="line">    s = <span class="string">"abcdeffedbca"</span></div><div class="line">    <span class="keyword">print</span> s.strip(<span class="string">"ab"</span>) <span class="comment"># 输出：cdeffedbc</span></div><div class="line"></div><div class="line">    <span class="comment">#3、反转，同样也可用于列表</span></div><div class="line">    s = <span class="string">"abcdefg"</span></div><div class="line">    <span class="keyword">print</span> s[::<span class="number">-1</span>] <span class="comment"># 输出：gfedcba</span></div><div class="line"></div><div class="line">    <span class="comment">#4、判断、测试字符串</span></div><div class="line">    <span class="comment">#4.1 是空格</span></div><div class="line">    <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"“ ”是否为空格:"</span>, <span class="string">" "</span>.isspace(),<span class="string">"\n“aaa”是否为空格:"</span>,<span class="string">"aaa"</span>.isspace()</div><div class="line">    <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"注意，空字符不为空格，“”是否为空格:"</span>, <span class="string">""</span>.isspace()</div><div class="line">    <span class="comment">#4.2 判断开始结束</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcd以ab开头吗？"</span>,<span class="string">"abcd"</span>.startswith(<span class="string">"ab"</span>),<span class="string">"\nabcd以b开头吗？"</span>,<span class="string">"abcd"</span>.startswith(<span class="string">"b"</span>)</div><div class="line">    <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcd以cd结尾吗？"</span>,<span class="string">"abcd"</span>.endswith(<span class="string">"cd"</span>),<span class="string">"\nabcd以c结尾吗？"</span>,<span class="string">"abcd"</span>.endswith(<span class="string">"c"</span>)</div><div class="line">    <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcd从第2个字符开始是以b开头吗？"</span>,<span class="string">"abcd"</span>.startswith(<span class="string">"b"</span>,<span class="number">1</span>)</div><div class="line">    <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcd从第2个字符到第3个字符的字符串是以c结尾吗？"</span>,<span class="string">"abcd"</span>.endswith(<span class="string">"c"</span>,<span class="number">1</span>,<span class="number">3</span>)</div><div class="line">    <span class="comment">#4.3 是否全是字母和数字，并至少有一个字符 </span></div><div class="line">    <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcdef123是否全为数字和字母："</span>,<span class="string">"abcdef123"</span>.isalnum()</div><div class="line">    <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"abcdef,,123是否全为数字和字母："</span>,<span class="string">"abcdef,,123"</span>.isalnum()</div><div class="line">    <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"“”是否全为数字和字母,并且至少有一个字母："</span>,<span class="string">""</span>.isalnum()</div><div class="line">    <span class="comment">#4.4 是否全为字母</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaa"</span>.isalpha() <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aa1"</span>.isalpha() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aa,"</span>.isalpha() <span class="comment"># 输出：False</span></div><div class="line">    <span class="comment">#4.5 是否全为数字</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaa"</span>.isdigit() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"221"</span>.isdigit() <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"22,"</span>.isdigit() <span class="comment"># 输出：False</span></div><div class="line">    <span class="comment">#4.6 大小写判断</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaa"</span>.islower() <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"AAA"</span>.islower() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"aaa"</span>.isupper() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"ABC"</span>.isupper() <span class="comment"># 输出：True</span></div><div class="line">    <span class="comment">#4.7 是否首字母大写，其他小写</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"ABC"</span>.istitle() <span class="comment"># 输出：False</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"Abc"</span>.istitle() <span class="comment"># 输出：True</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"123"</span>.istitle() <span class="comment"># 输出：False</span></div><div class="line"></div><div class="line">    <span class="comment">#5、字符转换</span></div><div class="line">    <span class="comment">#大小写转换</span></div><div class="line">    s = <span class="string">"ABC"</span></div><div class="line">    <span class="keyword">print</span> s.lower() <span class="comment">#小写  输出：abc</span></div><div class="line">    <span class="keyword">print</span> s <span class="comment">#原字符不变 输出：ABC</span></div><div class="line">    <span class="keyword">print</span> s.upper() <span class="comment">#大写  输出：ABC</span></div><div class="line">    <span class="keyword">print</span> s.swapcase() <span class="comment">#大小写互换  输出：abc</span></div><div class="line">    <span class="keyword">print</span> s.capitalize() <span class="comment">#首字母大写  输出：Abc</span></div><div class="line"></div><div class="line">    <span class="comment">#6、比较字符串,也可以比较数字</span></div><div class="line">    <span class="keyword">print</span> cmp(<span class="string">"aaa"</span>,<span class="string">"bbb"</span>) <span class="comment"># 输出：-1</span></div><div class="line">    <span class="keyword">print</span> cmp(<span class="string">"ccc"</span>,<span class="string">"bbb"</span>) <span class="comment"># 输出：1</span></div><div class="line">    <span class="keyword">print</span> cmp(<span class="number">1</span>,<span class="number">2</span>) <span class="comment"># 输出：-1</span></div><div class="line"></div><div class="line">    <span class="comment">#7、字符串切片</span></div><div class="line">    s = <span class="string">"1234567890"</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">1</span>] <span class="comment">#截取第二个字符 输出：2</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">-1</span>] <span class="comment">#截取最后一个字符 输出：0</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">-3</span>] <span class="comment">#截取倒数第三个字符 输出：8</span></div><div class="line">    <span class="keyword">print</span> s[::] <span class="comment">#可用于克隆字符串 输出：1234567890</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">2</span>:] <span class="comment">#从第三个字符开始截取 输出：34567890</span></div><div class="line">    <span class="keyword">print</span> s[:<span class="number">9</span>] <span class="comment">#从头截取到第9个字符 输出：123456789</span></div><div class="line">    <span class="keyword">print</span> s[::<span class="number">2</span>] <span class="comment">#从头截取，每取一次间隔一个字符 输出：13579</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">10</span>::<span class="number">-1</span>] <span class="comment">#反向截取，输出：0987654321</span></div><div class="line">    <span class="keyword">print</span> s[<span class="number">-1</span>:<span class="number">-11</span>:<span class="number">-1</span>] <span class="comment">#与s[10::-1]结果相同 输出：0987654321</span></div><div class="line"></div><div class="line">    <span class="comment">#8、扫描字符串 输出1 2 3 4 5 6 7 8 9 0</span></div><div class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> s:<span class="keyword">print</span> char,</div><div class="line">    <span class="keyword">print</span></div><div class="line">    <span class="comment">#9、分割字符串</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"12,34,5,678,9,0"</span>.split(<span class="string">","</span>) <span class="comment"># 输出['12', '34', '5', '678', '9', '0']</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"   12    34  5  "</span>.split()<span class="comment">#默认按空格分割 输出['12', '34', '5']</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"   12    34  5  "</span>.split(<span class="string">" "</span>)<span class="comment">#但是不同的是，默认的方法会先strip 输出['', '', '', '12', '', '', '', '34', '', '5', '', '']</span></div><div class="line"></div><div class="line">    <span class="comment">#10、连接集合中的字符串</span></div><div class="line">    <span class="keyword">print</span> <span class="string">""</span>.join([<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>,<span class="string">"d"</span>]) <span class="comment"># 输出abcd</span></div><div class="line">    <span class="keyword">print</span> <span class="string">","</span>.join([<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>,<span class="string">"d"</span>]) <span class="comment"># 输出a,b,c,d</span></div><div class="line"></div><div class="line">    <span class="comment">#11、filter 结合lambda 输出：AmanaplanacanalPanama</span></div><div class="line">    <span class="comment"># lambda即为小函数</span></div><div class="line">    <span class="comment"># filter(function,sequence) sequence可为字符串、列表、tupple ，范围经过function过滤后返回true的相应类型结果</span></div><div class="line">    <span class="keyword">print</span> filter((<span class="keyword">lambda</span> x:x.isalnum()),<span class="string">"A man, a plan, a canal: Panama"</span>)</div><div class="line"></div><div class="line">    <span class="comment">#12、map操作</span></div><div class="line">    <span class="keyword">print</span> map((<span class="keyword">lambda</span> x,y:x+y),[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>,<span class="number">40</span>])</div><div class="line"></div><div class="line">    <span class="comment">#13、reduce操作 reduce(function,sequence,startNum)startNum默认为0</span></div><div class="line">    <span class="keyword">print</span>  reduce((<span class="keyword">lambda</span> x,y:x+y),[<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>],<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="comment">#14、补齐</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"\""</span>+<span class="string">"abcde"</span>.ljust(<span class="number">10</span>)+<span class="string">"\""</span> <span class="comment">#右边补 输出: "abcde     "</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"\""</span>+<span class="string">"abcde"</span>.rjust(<span class="number">10</span>)+<span class="string">"\""</span> <span class="comment"># 输出: "     abcde"</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"\""</span>+<span class="string">"abcde"</span>.center(<span class="number">10</span>)+<span class="string">"\""</span> <span class="comment">#中间对齐  输出:"  abcde   "</span></div><div class="line">    <span class="keyword">print</span> <span class="string">"\""</span>+<span class="string">"abcde"</span>.center(<span class="number">10</span>,<span class="string">"-"</span>)+<span class="string">"\""</span> <span class="comment">#用-补齐  输出:"--abcde---"</span></div><div class="line"></div><div class="line">    <span class="comment">#15、编码解码</span></div><div class="line">    <span class="comment"># s="中文" </span></div><div class="line">    <span class="comment"># printUnicode(s) # 输出 ：普通字符： 中文</span></div><div class="line">    <span class="comment"># s=u"中文2" # 带u定义为unicode编码</span></div><div class="line">    <span class="comment"># printUnicode(s) # 输出 ：unicode字符： 中文2</span></div></pre></td></tr></table></figure>
+<p>#总结<br>python好神奇啊。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/12/01/2014-12-01-wonderful-programming/" itemprop="url">
                   编程的奇妙
                 </a>
@@ -1515,103 +1666,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/11/11/2014-11-11-installation-and-initialization-of-the-django-framework-in-windows-projects/" itemprop="url">
-                  Django框架在Windows的安装及初始化项目
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-11-11T15:14:00+08:00" content="2014-11-11">
-              2014-11-11
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>这里就是笔者自己记录过程中犯的错误，并没有详细阐述过程及原理。</p>
-<p>#Django安装时出现No module named setuptools的问题<br>在windows在安装Python时（笔者安装为2.7），是不会将setuptools外部包安装工具一起安装的，因此在Django目录执行python setup.py install会出现 <figure class="highlight plain"><figcaption><span>No module named setuptools） ``` 的异常。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div></pre></td><td class="code"><pre><div class="line">当然去安装setuptools也行，当然也有个快速便捷的方法。复制以下代码保存后在文件所在目录执行 ```python ez_setup.py``` 。</div><div class="line">```python ez_setup.py</div><div class="line">#!python</div><div class="line">&quot;&quot;&quot;Bootstrap setuptools installation</div><div class="line"></div><div class="line">If you want to use setuptools in your package&apos;s setup.py, just include this</div><div class="line">file in the same directory with it, and add this to the top of your setup.py::</div><div class="line"></div><div class="line">    from ez_setup import use_setuptools</div><div class="line">    use_setuptools()</div><div class="line"></div><div class="line">If you want to require a specific version of setuptools, set a download</div><div class="line">mirror, or use an alternate download directory, you can do so by supplying</div><div class="line">the appropriate options to ``use_setuptools()``.</div><div class="line"></div><div class="line">This file can also be run as a script to install or upgrade setuptools.</div><div class="line">&quot;&quot;&quot;</div><div class="line">import sys</div><div class="line">DEFAULT_VERSION = &quot;0.6c11&quot;</div><div class="line">DEFAULT_URL     = &quot;http://pypi.python.org/packages/%s/s/setuptools/&quot; % sys.version[:3]</div><div class="line"></div><div class="line">md5_data = &#123;</div><div class="line">    &apos;setuptools-0.6b1-py2.3.egg&apos;: &apos;8822caf901250d848b996b7f25c6e6ca&apos;,</div><div class="line">    &apos;setuptools-0.6b1-py2.4.egg&apos;: &apos;b79a8a403e4502fbb85ee3f1941735cb&apos;,</div><div class="line">    &apos;setuptools-0.6b2-py2.3.egg&apos;: &apos;5657759d8a6d8fc44070a9d07272d99b&apos;,</div><div class="line">    &apos;setuptools-0.6b2-py2.4.egg&apos;: &apos;4996a8d169d2be661fa32a6e52e4f82a&apos;,</div><div class="line">    &apos;setuptools-0.6b3-py2.3.egg&apos;: &apos;bb31c0fc7399a63579975cad9f5a0618&apos;,</div><div class="line">    &apos;setuptools-0.6b3-py2.4.egg&apos;: &apos;38a8c6b3d6ecd22247f179f7da669fac&apos;,</div><div class="line">    &apos;setuptools-0.6b4-py2.3.egg&apos;: &apos;62045a24ed4e1ebc77fe039aa4e6f7e5&apos;,</div><div class="line">    &apos;setuptools-0.6b4-py2.4.egg&apos;: &apos;4cb2a185d228dacffb2d17f103b3b1c4&apos;,</div><div class="line">    &apos;setuptools-0.6c1-py2.3.egg&apos;: &apos;b3f2b5539d65cb7f74ad79127f1a908c&apos;,</div><div class="line">    &apos;setuptools-0.6c1-py2.4.egg&apos;: &apos;b45adeda0667d2d2ffe14009364f2a4b&apos;,</div><div class="line">    &apos;setuptools-0.6c10-py2.3.egg&apos;: &apos;ce1e2ab5d3a0256456d9fc13800a7090&apos;,</div><div class="line">    &apos;setuptools-0.6c10-py2.4.egg&apos;: &apos;57d6d9d6e9b80772c59a53a8433a5dd4&apos;,</div><div class="line">    &apos;setuptools-0.6c10-py2.5.egg&apos;: &apos;de46ac8b1c97c895572e5e8596aeb8c7&apos;,</div><div class="line">    &apos;setuptools-0.6c10-py2.6.egg&apos;: &apos;58ea40aef06da02ce641495523a0b7f5&apos;,</div><div class="line">    &apos;setuptools-0.6c11-py2.3.egg&apos;: &apos;2baeac6e13d414a9d28e7ba5b5a596de&apos;,</div><div class="line">    &apos;setuptools-0.6c11-py2.4.egg&apos;: &apos;bd639f9b0eac4c42497034dec2ec0c2b&apos;,</div><div class="line">    &apos;setuptools-0.6c11-py2.5.egg&apos;: &apos;64c94f3bf7a72a13ec83e0b24f2749b2&apos;,</div><div class="line">    &apos;setuptools-0.6c11-py2.6.egg&apos;: &apos;bfa92100bd772d5a213eedd356d64086&apos;,</div><div class="line">    &apos;setuptools-0.6c2-py2.3.egg&apos;: &apos;f0064bf6aa2b7d0f3ba0b43f20817c27&apos;,</div><div class="line">    &apos;setuptools-0.6c2-py2.4.egg&apos;: &apos;616192eec35f47e8ea16cd6a122b7277&apos;,</div><div class="line">    &apos;setuptools-0.6c3-py2.3.egg&apos;: &apos;f181fa125dfe85a259c9cd6f1d7b78fa&apos;,</div><div class="line">    &apos;setuptools-0.6c3-py2.4.egg&apos;: &apos;e0ed74682c998bfb73bf803a50e7b71e&apos;,</div><div class="line">    &apos;setuptools-0.6c3-py2.5.egg&apos;: &apos;abef16fdd61955514841c7c6bd98965e&apos;,</div><div class="line">    &apos;setuptools-0.6c4-py2.3.egg&apos;: &apos;b0b9131acab32022bfac7f44c5d7971f&apos;,</div><div class="line">    &apos;setuptools-0.6c4-py2.4.egg&apos;: &apos;2a1f9656d4fbf3c97bf946c0a124e6e2&apos;,</div><div class="line">    &apos;setuptools-0.6c4-py2.5.egg&apos;: &apos;8f5a052e32cdb9c72bcf4b5526f28afc&apos;,</div><div class="line">    &apos;setuptools-0.6c5-py2.3.egg&apos;: &apos;ee9fd80965da04f2f3e6b3576e9d8167&apos;,</div><div class="line">    &apos;setuptools-0.6c5-py2.4.egg&apos;: &apos;afe2adf1c01701ee841761f5bcd8aa64&apos;,</div><div class="line">    &apos;setuptools-0.6c5-py2.5.egg&apos;: &apos;a8d3f61494ccaa8714dfed37bccd3d5d&apos;,</div><div class="line">    &apos;setuptools-0.6c6-py2.3.egg&apos;: &apos;35686b78116a668847237b69d549ec20&apos;,</div><div class="line">    &apos;setuptools-0.6c6-py2.4.egg&apos;: &apos;3c56af57be3225019260a644430065ab&apos;,</div><div class="line">    &apos;setuptools-0.6c6-py2.5.egg&apos;: &apos;b2f8a7520709a5b34f80946de5f02f53&apos;,</div><div class="line">    &apos;setuptools-0.6c7-py2.3.egg&apos;: &apos;209fdf9adc3a615e5115b725658e13e2&apos;,</div><div class="line">    &apos;setuptools-0.6c7-py2.4.egg&apos;: &apos;5a8f954807d46a0fb67cf1f26c55a82e&apos;,</div><div class="line">    &apos;setuptools-0.6c7-py2.5.egg&apos;: &apos;45d2ad28f9750e7434111fde831e8372&apos;,</div><div class="line">    &apos;setuptools-0.6c8-py2.3.egg&apos;: &apos;50759d29b349db8cfd807ba8303f1902&apos;,</div><div class="line">    &apos;setuptools-0.6c8-py2.4.egg&apos;: &apos;cba38d74f7d483c06e9daa6070cce6de&apos;,</div><div class="line">    &apos;setuptools-0.6c8-py2.5.egg&apos;: &apos;1721747ee329dc150590a58b3e1ac95b&apos;,</div><div class="line">    &apos;setuptools-0.6c9-py2.3.egg&apos;: &apos;a83c4020414807b496e4cfbe08507c03&apos;,</div><div class="line">    &apos;setuptools-0.6c9-py2.4.egg&apos;: &apos;260a2be2e5388d66bdaee06abec6342a&apos;,</div><div class="line">    &apos;setuptools-0.6c9-py2.5.egg&apos;: &apos;fe67c3e5a17b12c0e7c541b7ea43a8e6&apos;,</div><div class="line">    &apos;setuptools-0.6c9-py2.6.egg&apos;: &apos;ca37b1ff16fa2ede6e19383e7b59245a&apos;,</div><div class="line">&#125;</div><div class="line"></div><div class="line">import sys, os</div><div class="line">try: from hashlib import md5</div><div class="line">except ImportError: from md5 import md5</div><div class="line"></div><div class="line">def _validate_md5(egg_name, data):</div><div class="line">    if egg_name in md5_data:</div><div class="line">        digest = md5(data).hexdigest()</div><div class="line">        if digest != md5_data[egg_name]:</div><div class="line">            print &gt;&gt;sys.stderr, (</div><div class="line">                &quot;md5 validation of %s failed!  (Possible download problem?)&quot;</div><div class="line">                % egg_name</div><div class="line">            )</div><div class="line">            sys.exit(2)</div><div class="line">    return data</div><div class="line"></div><div class="line">def use_setuptools(</div><div class="line">    version=DEFAULT_VERSION, download_base=DEFAULT_URL, to_dir=os.curdir,</div><div class="line">    download_delay=15</div><div class="line">):</div><div class="line">    &quot;&quot;&quot;Automatically find/download setuptools and make it available on sys.path</div><div class="line"></div><div class="line">    `version` should be a valid setuptools version number that is available</div><div class="line">    as an egg for download under the `download_base` URL (which should end with</div><div class="line">    a &apos;/&apos;).  `to_dir` is the directory where setuptools will be downloaded, if</div><div class="line">    it is not already available.  If `download_delay` is specified, it should</div><div class="line">    be the number of seconds that will be paused before initiating a download,</div><div class="line">    should one be required.  If an older version of setuptools is installed,</div><div class="line">    this routine will print a message to ``sys.stderr`` and raise SystemExit in</div><div class="line">    an attempt to abort the calling script.</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    was_imported = &apos;pkg_resources&apos; in sys.modules or &apos;setuptools&apos; in sys.modules</div><div class="line">    def do_download():</div><div class="line">        egg = download_setuptools(version, download_base, to_dir, download_delay)</div><div class="line">        sys.path.insert(0, egg)</div><div class="line">        import setuptools; setuptools.bootstrap_install_from = egg</div><div class="line">    try:</div><div class="line">        import pkg_resources</div><div class="line">    except ImportError:</div><div class="line">        return do_download()       </div><div class="line">    try:</div><div class="line">        pkg_resources.require(&quot;setuptools&gt;=&quot;+version); return</div><div class="line">    except pkg_resources.VersionConflict, e:</div><div class="line">        if was_imported:</div><div class="line">            print &gt;&gt;sys.stderr, (</div><div class="line">            &quot;The required version of setuptools (&gt;=%s) is not available, and\n&quot;</div><div class="line">            &quot;can&apos;t be installed while this script is running. Please install\n&quot;</div><div class="line">            &quot; a more recent version first, using &apos;easy_install -U setuptools&apos;.&quot;</div><div class="line">            &quot;\n\n(Currently using %r)&quot;</div><div class="line">            ) % (version, e.args[0])</div><div class="line">            sys.exit(2)</div><div class="line">    except pkg_resources.DistributionNotFound:</div><div class="line">        pass</div><div class="line"></div><div class="line">    del pkg_resources, sys.modules[&apos;pkg_resources&apos;]    # reload ok</div><div class="line">    return do_download()</div><div class="line"></div><div class="line">def download_setuptools(</div><div class="line">    version=DEFAULT_VERSION, download_base=DEFAULT_URL, to_dir=os.curdir,</div><div class="line">    delay = 15</div><div class="line">):</div><div class="line">    &quot;&quot;&quot;Download setuptools from a specified location and return its filename</div><div class="line"></div><div class="line">    `version` should be a valid setuptools version number that is available</div><div class="line">    as an egg for download under the `download_base` URL (which should end</div><div class="line">    with a &apos;/&apos;). `to_dir` is the directory where the egg will be downloaded.</div><div class="line">    `delay` is the number of seconds to pause before an actual download attempt.</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    import urllib2, shutil</div><div class="line">    egg_name = &quot;setuptools-%s-py%s.egg&quot; % (version,sys.version[:3])</div><div class="line">    url = download_base + egg_name</div><div class="line">    saveto = os.path.join(to_dir, egg_name)</div><div class="line">    src = dst = None</div><div class="line">    if not os.path.exists(saveto):  # Avoid repeated downloads</div><div class="line">        try:</div><div class="line">            from distutils import log</div><div class="line">            if delay:</div><div class="line">                log.warn(&quot;&quot;&quot;</div><div class="line">---------------------------------------------------------------------------</div><div class="line">This script requires setuptools version %s to run (even to display</div><div class="line">help).  I will attempt to download it for you (from</div><div class="line">%s), but</div><div class="line">you may need to enable firewall access for this script first.</div><div class="line">I will start the download in %d seconds.</div><div class="line"></div><div class="line">(Note: if this machine does not have network access, please obtain the file</div><div class="line"></div><div class="line">   %s</div><div class="line"></div><div class="line">and place it in this directory before rerunning this script.)</div><div class="line">---------------------------------------------------------------------------&quot;&quot;&quot;,</div><div class="line">                    version, download_base, delay, url</div><div class="line">                ); from time import sleep; sleep(delay)</div><div class="line">            log.warn(&quot;Downloading %s&quot;, url)</div><div class="line">            src = urllib2.urlopen(url)</div><div class="line">            # Read/write all in one block, so we don&apos;t create a corrupt file</div><div class="line">            # if the download is interrupted.</div><div class="line">            data = _validate_md5(egg_name, src.read())</div><div class="line">            dst = open(saveto,&quot;wb&quot;); dst.write(data)</div><div class="line">        finally:</div><div class="line">            if src: src.close()</div><div class="line">            if dst: dst.close()</div><div class="line">    return os.path.realpath(saveto)</div><div class="line"></div><div class="line">def main(argv, version=DEFAULT_VERSION):</div><div class="line">    &quot;&quot;&quot;Install or upgrade setuptools and EasyInstall&quot;&quot;&quot;</div><div class="line">    try:</div><div class="line">        import setuptools</div><div class="line">    except ImportError:</div><div class="line">        egg = None</div><div class="line">        try:</div><div class="line">            egg = download_setuptools(version, delay=0)</div><div class="line">            sys.path.insert(0,egg)</div><div class="line">            from setuptools.command.easy_install import main</div><div class="line">            return main(list(argv)+[egg])   # we&apos;re done here</div><div class="line">        finally:</div><div class="line">            if egg and os.path.exists(egg):</div><div class="line">                os.unlink(egg)</div><div class="line">    else:</div><div class="line">        if setuptools.__version__ == &apos;0.0.1&apos;:</div><div class="line">            print &gt;&gt;sys.stderr, (</div><div class="line">            &quot;You have an obsolete version of setuptools installed.  Please\n&quot;</div><div class="line">            &quot;remove it from your system entirely before rerunning this script.&quot;</div><div class="line">            )</div><div class="line">            sys.exit(2)</div><div class="line"></div><div class="line">    req = &quot;setuptools&gt;=&quot;+version</div><div class="line">    import pkg_resources</div><div class="line">    try:</div><div class="line">        pkg_resources.require(req)</div><div class="line">    except pkg_resources.VersionConflict:</div><div class="line">        try:</div><div class="line">            from setuptools.command.easy_install import main</div><div class="line">        except ImportError:</div><div class="line">            from easy_install import main</div><div class="line">        main(list(argv)+[download_setuptools(delay=0)])</div><div class="line">        sys.exit(0) # try to force an exit</div><div class="line">    else:</div><div class="line">        if argv:</div><div class="line">            from setuptools.command.easy_install import main</div><div class="line">            main(argv)</div><div class="line">        else:</div><div class="line">            print &quot;Setuptools version&quot;,version,&quot;or greater has been installed.&quot;</div><div class="line">            print &apos;(Run &quot;ez_setup.py -U setuptools&quot; to reinstall or upgrade.)&apos;</div><div class="line"></div><div class="line">def update_md5(filenames):</div><div class="line">    &quot;&quot;&quot;Update our built-in md5 registry&quot;&quot;&quot;</div><div class="line"></div><div class="line">    import re</div><div class="line"></div><div class="line">    for name in filenames:</div><div class="line">        base = os.path.basename(name)</div><div class="line">        f = open(name,&apos;rb&apos;)</div><div class="line">        md5_data[base] = md5(f.read()).hexdigest()</div><div class="line">        f.close()</div><div class="line"></div><div class="line">    data = [&quot;    %r: %r,\n&quot; % it for it in md5_data.items()]</div><div class="line">    data.sort()</div><div class="line">    repl = &quot;&quot;.join(data)</div><div class="line"></div><div class="line">    import inspect</div><div class="line">    srcfile = inspect.getsourcefile(sys.modules[__name__])</div><div class="line">    f = open(srcfile, &apos;rb&apos;); src = f.read(); f.close()</div><div class="line"></div><div class="line">    match = re.search(&quot;\nmd5_data = &#123;\n([^&#125;]+)&#125;&quot;, src)</div><div class="line">    if not match:</div><div class="line">        print &gt;&gt;sys.stderr, &quot;Internal error!&quot;</div><div class="line">        sys.exit(2)</div><div class="line"></div><div class="line">    src = src[:match.start(1)] + repl + src[match.end(1):]</div><div class="line">    f = open(srcfile,&apos;w&apos;)</div><div class="line">    f.write(src)</div><div class="line">    f.close()</div><div class="line"></div><div class="line"></div><div class="line">if __name__==&apos;__main__&apos;:</div><div class="line">    if len(sys.argv)&gt;2 and sys.argv[1]==&apos;--md5update&apos;:</div><div class="line">        update_md5(sys.argv[2:])</div><div class="line">    else:</div><div class="line">        main(sys.argv[1:])</div></pre></td></tr></table></figure></p>
-<p>然后再去安装Django就没问题了。</p>
-<p>#创建Django项目<br>输入命令django-admin.py startproject mysite 用来创建一个网站项目mysite。<br>当然，执行该命令你需要先将Django的Bin添加到path中去。再进入目录输入manage.py runserver 开启网站。可以指定端口，默认为8000，如果想使用90端口，就写成 manage.py runserver 90。最后我们打开浏览器在地址栏里输入地址 <a href="http://localhost:8000" target="_blank" rel="external">http://localhost:8000</a> 就可以看到初始化项目自动生成好了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1657,7 +1711,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">107</span>
+              <span class="site-state-item-count">108</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
