@@ -1,0 +1,559 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="这是一个标题题外话开始恢复写文章，不过都写的都好仓促，写文章的目的其实是为了自己通过写出来能增加自己的理解，现在这样确实有点偏离初衷了。现在大多是6点下班后，7点开始加班前把早上地铁上看的东西自己敲代码理解下，顺便记录下，时间仓促。但是不当天就写，隔天基本就懒得写了，去年基本是这个样，所以先坚持做起来再增加质量吧。 动态成员查找这是个Swift4.2添加的特性，不过官方在当时的Session里并没">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift投毒利器dynamicMemberLookup">
+<meta property="og:url" content="http://yoursite.com/2020/05/28/SwiftCodePoisoningManual/index.html">
+<meta property="og:site_name" content="大胃吴的闲话唠嗑">
+<meta property="og:description" content="这是一个标题题外话开始恢复写文章，不过都写的都好仓促，写文章的目的其实是为了自己通过写出来能增加自己的理解，现在这样确实有点偏离初衷了。现在大多是6点下班后，7点开始加班前把早上地铁上看的东西自己敲代码理解下，顺便记录下，时间仓促。但是不当天就写，隔天基本就懒得写了，去年基本是这个样，所以先坚持做起来再增加质量吧。 动态成员查找这是个Swift4.2添加的特性，不过官方在当时的Session里并没">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-05-28T12:21:27.091Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Swift投毒利器dynamicMemberLookup">
+<meta name="twitter:description" content="这是一个标题题外话开始恢复写文章，不过都写的都好仓促，写文章的目的其实是为了自己通过写出来能增加自己的理解，现在这样确实有点偏离初衷了。现在大多是6点下班后，7点开始加班前把早上地铁上看的东西自己敲代码理解下，顺便记录下，时间仓促。但是不当天就写，隔天基本就懒得写了，去年基本是这个样，所以先坚持做起来再增加质量吧。 动态成员查找这是个Swift4.2添加的特性，不过官方在当时的Session里并没">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/28/SwiftCodePoisoningManual/"/>
+
+  <title> Swift投毒利器dynamicMemberLookup | 大胃吴的闲话唠嗑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大胃吴的闲话唠嗑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">扯扯技术，唠唠闲话 交流email-xiao303178394@gmail.com</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            menu.首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            menu.文章
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Swift投毒利器dynamicMemberLookup
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-05-28T19:02:36+08:00" content="2020-05-28">
+              2020-05-28
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="这是一个标题"><a href="#这是一个标题" class="headerlink" title="这是一个标题"></a>这是一个标题</h1><h2 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h2><p>开始恢复写文章，不过都写的都好仓促，写文章的目的其实是为了自己通过写出来能增加自己的理解，现在这样确实有点偏离初衷了。<br>现在大多是6点下班后，7点开始加班前把早上地铁上看的东西自己敲代码理解下，顺便记录下，时间仓促。但是不当天就写，隔天基本就懒得写了，去年基本是这个样，所以先坚持做起来再增加质量吧。</p>
+<h2 id="动态成员查找"><a href="#动态成员查找" class="headerlink" title="动态成员查找"></a>动态成员查找</h2><p>这是个Swift4.2添加的特性，不过官方在当时的Session里并没有提到他，可能也是考虑到这大大降低了Swift的安全性，会导致编译器根本没法在编译期间检查出调用错误，也会让你在编写代码时候，没有coding错误的提示。<br>做过JavaScript的同学应该是很熟悉这个特性的，通过.的调用方式替代[]的方式。</p>
+<h3 id="Hello-DynamicMemberLookup"><a href="#Hello-DynamicMemberLookup" class="headerlink" title="Hello DynamicMemberLookup"></a>Hello DynamicMemberLookup</h3><p>给类、结构体、枚举添加这个注解。<br>添加后，通过.xxx的都会进入到subscript函数。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@dynamicMemberLookup</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Person</span> </span>&#123;</div><div class="line">    <span class="keyword">subscript</span>(dynamicMember member: <span class="type">String</span>) -&gt; <span class="type">String</span> &#123;</div><div class="line">        <span class="keyword">let</span> properties = [<span class="string">"nickName"</span>: <span class="string">"David_Woo"</span>, <span class="string">"hoby"</span>: <span class="string">"marathon"</span>]</div><div class="line">        <span class="keyword">return</span> properties[member, <span class="keyword">default</span>: <span class="string">"不，你没有"</span>]</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> me = <span class="type">Person</span>()</div><div class="line"><span class="built_in">print</span>(me.nickName) <span class="comment">//David_Woo</span></div><div class="line"><span class="built_in">print</span>(me.hoby) <span class="comment">// marathon</span></div><div class="line"><span class="built_in">print</span>(me.villa) <span class="comment">//不，你没有</span></div></pre></td></tr></table></figure>
+<p>其实他就是编译时把me.xxx变成了me[xxx]，然后就是你熟悉的下标知识点了。</p>
+<h3 id="One-More"><a href="#One-More" class="headerlink" title="One More"></a>One More</h3><p>与下标一样，也可以编译多个，通过返回值来区分。不过定义多个以后调用就变麻烦了，如果你在调用处明确类型，那编译器就不知道匹配到那个脚本了，就会编译报错。</p>
+<p>有个好的就是可以通过他来返回函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@dynamicMemberLookup</div><div class="line">struct Person &#123;</div><div class="line">    subscript(dynamicMember member: String) -&gt; String &#123;</div><div class="line">        let properties = [&quot;nickName&quot;: &quot;David_Woo&quot;, &quot;hoby&quot;: &quot;marathon&quot;]</div><div class="line">        return properties[member, default: &quot;something unexpected&quot;]</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    subscript(dynamicMember member: String) -&gt; () -&gt; () &#123;</div><div class="line">        return &#123;</div><div class="line">            print(&quot;This is fun&quot;)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let me = Person()</div><div class="line"></div><div class="line">let nickName: String = me.nickName</div><div class="line">let hoby: String = me.hoby</div><div class="line">let villa: String = me.villa</div><div class="line"></div><div class="line">me.a() // This is fun</div></pre></td></tr></table></figure>
+<h3 id="重点来了，如何投毒"><a href="#重点来了，如何投毒" class="headerlink" title="重点来了，如何投毒"></a>重点来了，如何投毒</h3><p>可怕的来了，这个特性是可以继承的。也就是说基类上定义了，那么所有继承的子类也都有这个特性了，这样不小心一些属性调用敲错键盘编译器都不会提示你了。</p>
+<font color="red">尽可能不要在基类上使用这个特性</font>
+
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">@dynamicMemberLookup</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</div><div class="line">    <span class="keyword">subscript</span>(dynamicMember member: <span class="type">String</span>) -&gt; <span class="type">String</span> &#123;</div><div class="line">        <span class="keyword">let</span> properties = [<span class="string">"nickName"</span>: <span class="string">"David_Woo"</span>, <span class="string">"hoby"</span>: <span class="string">"marathon"</span>]</div><div class="line">        <span class="keyword">return</span> properties[member, <span class="keyword">default</span>: <span class="string">"something unexpected"</span>]</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span>: <span class="title">Person</span> </span>&#123;</div><div class="line">    <span class="comment">// 为什么工资是不可变类型，那你得问老板</span></div><div class="line">    <span class="keyword">let</span> salary: <span class="type">Int</span></div><div class="line">    </div><div class="line">    <span class="keyword">override</span> <span class="keyword">init</span>() &#123;</div><div class="line">        salary = <span class="number">0</span></div><div class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>()</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">init</span>(<span class="number">_</span> salary: <span class="type">Int</span>) &#123;</div><div class="line">        <span class="keyword">self</span>.salary = salary</div><div class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>()</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> me = <span class="type">Employee</span>(<span class="number">0</span>)</div><div class="line"><span class="built_in">print</span>(me.nickName)</div><div class="line"><span class="built_in">print</span>(me.hoby)</div><div class="line"><span class="built_in">print</span>(me.villa) <span class="comment">// 编译器不会提示错误</span></div><div class="line"><span class="built_in">print</span>(me.salary) <span class="comment">// 但是IDE还是会自动提示的</span></div><div class="line"></div><div class="line"><span class="comment">// 在此投毒</span></div><div class="line">@dynamicMemberLookup</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">VVBaseViewController</span> : <span class="title">UIViewController</span> </span>&#123;</div><div class="line">    <span class="keyword">subscript</span>(dynamicMember member: <span class="type">String</span>) -&gt; <span class="type">String</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"Congratulations! U will be fired!"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="不可以用来满足协议"><a href="#不可以用来满足协议" class="headerlink" title="不可以用来满足协议"></a>不可以用来满足协议</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">protocol Namable &#123;</div><div class="line">    var nickName: String &#123; get &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@dynamicMemberLookup</div><div class="line">class Person &#123;</div><div class="line">    subscript(dynamicMember member: String) -&gt; String &#123;</div><div class="line">        let properties = [&quot;nickName&quot;: &quot;David_Woo&quot;, &quot;hoby&quot;: &quot;marathon&quot;]</div><div class="line">        return properties[member, default: &quot;something unexpected&quot;]</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 会编译出错，还是要手动实现nickName</div><div class="line">class Employee: Person, Namable &#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/28/HelloSwiftPropertyWrappers/" rel="next" title="Swift的属性装饰器">
+                <i class="fa fa-chevron-left"></i> Swift的属性装饰器
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="David Woo" />
+          <p class="site-author-name" itemprop="name">David Woo</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">109</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#这是一个标题"><span class="nav-number">1.</span> <span class="nav-text">这是一个标题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#题外话"><span class="nav-number">1.1.</span> <span class="nav-text">题外话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态成员查找"><span class="nav-number">1.2.</span> <span class="nav-text">动态成员查找</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hello-DynamicMemberLookup"><span class="nav-number">1.2.1.</span> <span class="nav-text">Hello DynamicMemberLookup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#One-More"><span class="nav-number">1.2.2.</span> <span class="nav-text">One More</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重点来了，如何投毒"><span class="nav-number">1.2.3.</span> <span class="nav-text">重点来了，如何投毒</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不可以用来满足协议"><span class="nav-number">1.2.4.</span> <span class="nav-text">不可以用来满足协议</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Woo</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

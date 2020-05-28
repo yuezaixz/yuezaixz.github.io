@@ -226,6 +226,150 @@
             
               
                 
+                <a class="post-title-link" href="/2014/12/11/2014-12-11-properties-of-the-ios-obj-c-from-scratch/" itemprop="url">
+                  IOS从头开始之Obj-C的属性
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-12-11T14:48:00+08:00" content="2014-12-11">
+              2014-12-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/属性/" itemprop="url" rel="index">
+                    <span itemprop="name">属性</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/属性/obj-c/" itemprop="url" rel="index">
+                    <span itemprop="name">obj-c</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#学习开始<br>开始学习obj-c了，最近工作的事情也挺忙的，只能抓住一点点的休息时间来看书。Mac机器还没弄起来，就按看书的理解瞎写点文章，看看之后敲代码后会不会觉得之前理解的偏差太大了。<br>今天就先随便写一点对属性的理解吧。</p>
+<p>#属性</p>
+<h2 id="什么是属性"><a href="#什么是属性" class="headerlink" title="什么是属性"></a>什么是属性</h2><p>对象是一个类的实例，而封装在一个对象中的数据在Java中常称为数据、状态、特性、成员变量或者属性，而在Obj-c中属性有另外一番意义。<br>在Obj-c中属性主要用于声明类的数据成员的存取方法，有了他们就不必使用很多标准代码（如Java中就需要定义getter &amp; setter）。</p>
+<h2 id="如何声明"><a href="#如何声明" class="headerlink" title="如何声明"></a>如何声明</h2><p>@property，在头文件中的数据前加这个标志，就可以让编译好器自动编写一个与数据成员同名的方法声明来省去读写方法的声明。<br>例如：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> <span class="keyword">int</span> count;</div></pre></td></tr></table></figure></p>
+<p>等同于<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> <span class="keyword">int</span> count;</div><div class="line">- (<span class="keyword">void</span>)setCount:(<span class="keyword">int</span>)inCount;</div><div class="line">- (<span class="keyword">int</span>)count;</div></pre></td></tr></table></figure></p>
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>如下面代码，property的完整语法是：@property (参数1,参数2,…) 类型 属性1名,属性2名;<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) <span class="keyword">IBOutlet</span> <span class="built_in">UIBarButtonItem</span> \*clearButtonItem;</div></pre></td></tr></table></figure></p>
+<h2 id="nonatomic"><a href="#nonatomic" class="headerlink" title="# nonatomic"></a># nonatomic</h2><p>指定生成的存取器函数是非原子性的，即线程安全的。默认为原子性。<br>书中是建议如果不需要多线程，不要使用原子性。我也这么认为，毕竟在取属性前都加一个锁的开销也是挺大的。</p>
+<h2 id="readwrite"><a href="#readwrite" class="headerlink" title="# readwrite"></a># readwrite</h2><p>既生成setter和getter方法，默认为readwrite</p>
+<h2 id="readonly"><a href="#readonly" class="headerlink" title="# readonly"></a># readonly</h2><p>即只生成getter方法</p>
+<h2 id="assign"><a href="#assign" class="headerlink" title="# assign"></a># assign</h2><p>既生成赋值函数只是简单的变量赋值，就当做java中的set方法好了，毕竟java中没有内存管理。看旧的书说默认为assign，但是看新的书说已经改成默认strong了。这点暂不确定，有疑问。</p>
+<h2 id="retain"><a href="#retain" class="headerlink" title="# retain"></a># retain</h2><p>既生成的赋值函数在赋值到变量前，会对参数进行release旧值，再retain新值。这个开始我不是和理解，但结合后面学习的引用计数器就理解了，retain方法会给实例的引用计数器+1，而release会-1，那么set操作就需要把旧值的引用先去了，再将新值的引用+1.<br>但是，这个属性在ARC下编译就可以去掉了，ARC会在编译的时候在适当的地方加retain和release。</p>
+<h2 id="copy"><a href="#copy" class="headerlink" title="# copy"></a># copy</h2><p>生成的存取函数会复制传入值到数据成员，初始计数为1.<br>对于NSString、NSArray等非可变类，书中是推荐用copy来声明的。</p>
+<h2 id="strong"><a href="#strong" class="headerlink" title="# strong"></a># strong</h2><p>该属性值对应 __strong 关键字，即该属性所声明的变量将成为对象的持有者。</p>
+<h2 id="weak"><a href="#weak" class="headerlink" title="# weak"></a># weak</h2><p>该属性对应 <strong>weak 关键字，与 </strong>weak 定义的变量一致，该属性所声明的变量将没有对象的所有权，并且当对象被破弃之后，对象将被自动赋值nil。</p>
+<p>并且，delegate 和 Outlet 应该用 weak 属性来声明。同时，如上一回介绍的 iOS 5 之前的版本是没有 __weak 关键字的，所以 weak 属性是不能使用的。这种情况我们使用 unsafe_unretained。</p>
+<p>#如何实现<br>关在同文件中声明可不行，还得在实现文件中对属性的处理方式进行声明。</p>
+<p>#synthesize和dynamic<br>在实现文件中用前者就不用为实现文件中的属性写任何代码，而用后者编译器就会希望你为属性创建一对合适的getter &amp; setter。<br>但是，在Obj-c2.0后，已经不需要使用@synthesize关键字了，书中是这么建议的<strong>在以后的编程中都使用属性和自动合成的实例变量，在头文件中声明公用的属性，在实现文件的类扩展部分声明私有属性。</strong><br><figure class="highlight objc"><figcaption><span>MyClass.h</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyClass</span> : <span class="title">NSObject</span></span></div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">readwrite</span>,week) <span class="keyword">id</span> delegate;</div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">readonly</span>,<span class="keyword">strong</span>) <span class="built_in">NSString</span> \*readonlyString;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight objc"><figcaption><span>MyClass.m</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyClass</span> ()</span></div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">readwrite</span>,<span class="keyword">strong</span>)  <span class="built_in">NSString</span> \*privateString;</div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">readwrite</span>,<span class="keyword">strong</span>) <span class="built_in">NSString</span> \*readonlyString;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>注意：<strong>readonlyString在实现时候重定义使用了readwrite，那么他就有一个私用的setter方法。</strong></p>
+<h2 id="隐藏的实例变量"><a href="#隐藏的实例变量" class="headerlink" title="隐藏的实例变量"></a>隐藏的实例变量</h2><p>如上代码会自动创建几个实例变量：_readonlyString ,_delegate,\privateString。最右在init、dealloc和覆盖的存取器中才应该使用这些实例变量。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/12/03/2014-12-03-python-str-related-set-of-operations/" itemprop="url">
                   python的str相关操作集合
                 </a>
@@ -1564,108 +1708,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/11/13/2014-11-13-problems-in-learning-django-framework-ii/" itemprop="url">
-                  Django框架学习中的问题（二）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-11-13T15:19:00+08:00" content="2014-11-13">
-              2014-11-13
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#Django的工作原理<br>感觉大多数框架形形色色的思路基本都是一致的，就是哪些框架更灵活，哪些框架的去侵入性做的更好，哪些框架的中间件的拔插方式更方便，哪些框架的语法糖更易用，哪些框架带来了更大的生产力。<br>像Java中的SSH，基本都是带侵入式的，比如你要把Hibernate换成Mybatis基本上会头疼致死，而Django只需要修改下settings.py文件。<br>像Java中你需要添加很多拦截器来起到中间件效果，通过拦截器也使这些拦截器不再耦合，不过这些中间件基本上要针对你MVC各层框架，及持久化层框架，及业务来编写。而Django中这些基本的中间件基本上都有成熟的库，只需要针对业务做一些自己实现的中间件，这点很类似于node.js的express框架。<br>像Java中的路由控制，你需要通过struts或者SpringMVC，都需要编写Action（或者controller），经常会把业务集成在Action中，Django就更简单了点，urls.py只负责正则映射，调用指定的方法去做处理。职责更分明，做的事情也自然单一了。<br>而数据库的访问Django已经封装好了，只需要调用Model的相应方法即可，而业务逻辑也应当封装在Model中，Views中的函数只负责完成程序逻辑。<br>而视图层其实在各种框架中都差不多，基本都是模板加程序语言去实现。比如Django中有Django的模板方法，而ejs、jade、velocity、freemaker、jsp都有相应的方法。<br>Django的大致工作原理如下图：<br><img src="http://chuantu.biz/t/17/1415892562x-1376440137.jpg" alt=""></p>
-<p>#几个命令<br>创建Django工程：django-admin.py startproject projectname<br>工程中创建新的APP：mange.py startapp appname<br>运行工程：mange.py runserver (None port or 0.0.0.0:prot)<br>在工程中同步数据库：mange.py syncdb</p>
-<p>#python对应的数据库模块未安装<br><figure class="highlight python"><figcaption><span>settings.py</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">DATABASES = &#123;</div><div class="line">    <span class="string">'default'</span>: &#123;</div><div class="line">        <span class="string">'ENGINE'</span>: <span class="string">'django.db.backends.mysql'</span>,</div><div class="line">        <span class="string">'NAME'</span>: <span class="string">'TestDjango'</span>,</div><div class="line">        <span class="string">'PASSWORD'</span>: <span class="string">'123'</span>,</div><div class="line">        <span class="string">'HOST'</span>:<span class="string">''</span>,</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>运行命令后报错为： windows Error loading MySQLdb module: No module named MySQLdb<br>原因：python2.7不会自动安装对应的MySQLdb<br><a href="http://www.codegood.com/download/11/" target="_blank" rel="external">下载地址</a><br>安装到python的site-package目录下就OK了。</p>
-<p>#用户漏了配置<br>配置后Access denied for user ‘ODBC’@’localhost’ (using password: YES)”)<br>原因：漏了配置用户名<br>改成如下代码就能正常了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">DATABASES = &#123;</div><div class="line">    &apos;default&apos;: &#123;</div><div class="line">        &apos;ENGINE&apos;: &apos;django.db.backends.mysql&apos;,</div><div class="line">        &apos;USER&apos;: &apos;root&apos;,</div><div class="line">        &apos;NAME&apos;: &apos;TestDjango&apos;,</div><div class="line">        &apos;PASSWORD&apos;: &apos;123&apos;,</div><div class="line">        &apos;HOST&apos;:&apos;&apos;,</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>#POST提交表单，action需要/结尾<br>报错：You called this URL via POST, but the URL doesn’t end in a slash and you have APPEND_SLASH set<br>原因：action属性没有结尾，如下，/login/，最后的斜杠不能漏</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">class</span>=<span class="string">"navbar-form navbar-right"</span> <span class="attr">action</span>=<span class="string">"/login/"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">role</span>=<span class="string">"form"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">placeholder</span>=<span class="string">"用户名"</span> <span class="attr">class</span>=<span class="string">"form-control"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">placeholder</span>=<span class="string">"密码"</span> <span class="attr">class</span>=<span class="string">"form-control"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">class</span>=<span class="string">"btn btn-success"</span>&gt;</span>登 录<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>#还是提交表单，又报错了<br>报错：CSRF verification failed. Request aborted.<br>原因：这是一个跨单访问的错误，去掉相应的中间件即可,看下列代码注释<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">MIDDLEWARE_CLASSES = (</div><div class="line">    &apos;django.contrib.sessions.middleware.SessionMiddleware&apos;,</div><div class="line">    &apos;django.middleware.common.CommonMiddleware&apos;,</div><div class="line">    #&apos;django.middleware.csrf.CsrfViewMiddleware&apos;,</div><div class="line">    &apos;django.contrib.auth.middleware.AuthenticationMiddleware&apos;,</div><div class="line">    &apos;django.contrib.auth.middleware.SessionAuthenticationMiddleware&apos;,</div><div class="line">    &apos;django.contrib.messages.middleware.MessageMiddleware&apos;,</div><div class="line">    &apos;django.middleware.clickjacking.XFrameOptionsMiddleware&apos;,</div><div class="line">    &apos;django.middleware.security.SecurityMiddleware&apos;,</div><div class="line">)</div></pre></td></tr></table></figure></p>
-<p>如果需要使用跨单访问保护，又不想报错，那就需要在表单中加{\% csrf_token \%}，我没试过，先记下来需要时方便查询。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1711,7 +1753,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">108</span>
+              <span class="site-state-item-count">109</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
