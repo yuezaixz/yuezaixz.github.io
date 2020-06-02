@@ -226,6 +226,160 @@
             
               
                 
+                <a class="post-title-link" href="/2020/04/05/native-app-flutter-hybrid-in-flutter-boost/" itemprop="url">
+                  移动端的flutter_boost混编实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-04-05T00:11:22+08:00" content="2020-04-05">
+              2020-04-05
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="移动端的flutter-boost混编实现"><a href="#移动端的flutter-boost混编实现" class="headerlink" title="移动端的flutter_boost混编实现"></a>移动端的flutter_boost混编实现</h1><h2 id="Flutter简介"><a href="#Flutter简介" class="headerlink" title="Flutter简介"></a>Flutter简介</h2><p>Flutter是谷歌的全平台UI框架，使用dart语法，在移动端通过Skia渲染，可以快速在iOS和Android上构建高质量的原生用户界面，其优势在于</p>
+<ul>
+<li>极高的开发与交付效率，良好的开发体验</li>
+<li>优秀的跨多端多平台能力</li>
+<li>极强的UI表现力</li>
+</ul>
+<p><a href="https://flutterchina.club/get-started/install/" target="_blank" rel="external">环境搭建参考</a></p>
+<h2 id="flutter混编架构方案"><a href="#flutter混编架构方案" class="headerlink" title="flutter混编架构方案"></a>flutter混编架构方案</h2><p>VV iOS组目前已完成了较好的组件化架构，很多通用业务层都已经组件化了，比如Login等。Flutter模块再自己在实现就难免重复造轮子了，因此，我们可以创建<a href="https://flutter.dev/docs/development/packages-and-plugins/developing-packages" target="_blank" rel="external">flutter plugin</a>与原生的交互，类似于一种C-S模型。其中Flutter为Client层，原生为Server层，两者通过MethodChannel进行消息通信，原生端向Flutter提供已有的Native组件功能。<br>然后将Flutter Plugin上传到私有<a href="https://flutter.dev/docs/development/packages-and-plugins/using-packages" target="_blank" rel="external">pub</a>库。<br>这时候创建<a href="https://flutter.dev/docs/development/add-to-app/ios/project-setup" target="_blank" rel="external">flutter module</a>，依赖需要的plugin，并添加<a href="https://github.com/alibaba/flutter_boost" target="_blank" rel="external">flutter boost</a>依赖，再在原生工程中依赖这个module就好了。<br>当flutter开发已经有一定规模时候，module甚至可以按业务再拆分成多个业务module混编入Native App。<br><img src="http://image.runmaf.com/2020-04-05-15860110916044.jpg" alt=""></p>
+<h3 id="Hello-VV-First-Flutter-Module"><a href="#Hello-VV-First-Flutter-Module" class="headerlink" title="Hello VV First Flutter Module"></a>Hello VV First Flutter Module</h3><p>本文只描述如何创建flutter module并添加flutter_boost依赖，然后嵌入原生工程。module中会依赖一个plugin（webview_flutter）来模拟方案中的架构。<br>本文以VVLife iOS App中嵌入Flutter实现的登陆和我的模块举例（安卓上的实现也由庄宏展验证可成功嵌入）。</p>
+<h4 id="1、Create-Module"><a href="#1、Create-Module" class="headerlink" title="1、Create Module"></a>1、Create Module</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">flutter create -t module vv_demo_flutter_module</div></pre></td></tr></table></figure>
+<p><img src="http://image.runmaf.com/2020-04-05-15855645220209.jpg" alt=""></p>
+<h4 id="2、创建anroid和ios文件"><a href="#2、创建anroid和ios文件" class="headerlink" title="2、创建anroid和ios文件"></a>2、创建anroid和ios文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">flutter make-host-app-editable</div></pre></td></tr></table></figure>
+<p><img src="http://image.runmaf.com/2020-04-05-15855649980991.jpg" alt=""></p>
+<h4 id="3、修改bundle-id及profile"><a href="#3、修改bundle-id及profile" class="headerlink" title="3、修改bundle_id及profile"></a>3、修改bundle_id及profile</h4><p>这里需要创建出来的iOS项目中，修改下bundle_id，否则之后的module编译会出现错误。</p>
+<p><img src="http://image.runmaf.com/2020-04-05-15855650416465.jpg" alt=""><br><img src="http://image.runmaf.com/2020-04-05-15855651593446.jpg" alt=""></p>
+<p>否则build时候会提示错误<br><img src="http://image.runmaf.com/2020-04-05-15855650858821.jpg" alt=""></p>
+<h4 id="4、添加flutter-boost依赖"><a href="#4、添加flutter-boost依赖" class="headerlink" title="4、添加flutter_boost依赖"></a>4、添加flutter_boost依赖</h4><p> 打开pubspec.yaml并将以下行添加到依赖项，然后  flutter packages get一下</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">flutter_boost: ^1.12.13</div></pre></td></tr></table></figure>
+<p>flutter_boost的介绍可以看<a href="https://mp.weixin.qq.com/s?__biz=MzU4MDUxOTI5NA==&amp;mid=2247484367&amp;idx=1&amp;sn=fcbc485f068dae5de9f68d52607ea08f&amp;chksm=fd54d7deca235ec86249a9e3714ec18be8b2d6dc580cae19e4e5113533a6c5b44dfa5813c4c3&amp;scene=0&amp;subscene=131&amp;clicktime=1551942425&amp;ascene=7&amp;devicetype=android-28&amp;version=2700033b&amp;nettype=ctnet&amp;abtest_cookie=BAABAAoACwASABMABAAklx4AVpkeAMSZHgDWmR4AAAA%3D&amp;lang=zh_CN&amp;pass_ticket=1qvHqOsbLBHv3wwAcw577EHhNjg6EKXqTfnOiFbbbaw%3D&amp;wx_header=1" target="_blank" rel="external">闲鱼APP团队的技术文章</a></p>
+<p><img src="http://image.runmaf.com/2020-04-05-15860114455529.jpg" alt=""></p>
+<h4 id="5、创建Widget并注册到路由"><a href="#5、创建Widget并注册到路由" class="headerlink" title="5、创建Widget并注册到路由"></a>5、创建Widget并注册到路由</h4><p>在main.dart中注册一下路由，过程和使用命名路由相似</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">FlutterBoost.singleton.registerPageBuilders(&#123;</div><div class="line">      &apos;flutter_login&apos;: (pageName, params, _) =&gt; VVLoginPage(),</div><div class="line">      &apos;flutter_mine&apos;: (pageName, params, _) =&gt; VVHomeMinePage(userName: params[&quot;name&quot;], imageUrl: params[&quot;imageUrl&quot;],),</div><div class="line">      &apos;flutter_customer_service&apos;: (pageName, params, _) =&gt;</div><div class="line">          CustomerServicePage(),</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<h4 id="6、build"><a href="#6、build" class="headerlink" title="6、build"></a>6、build</h4><p>执行 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">flutter build ios --debug  </div><div class="line">// 或</div><div class="line">flutter build ios --release --no-codesign</div></pre></td></tr></table></figure>
+<p><img src="http://image.runmaf.com/2020-04-05-15855653044387.jpg" alt=""></p>
+<h4 id="7、在VVLife-App工程中添加依赖"><a href="#7、在VVLife-App工程中添加依赖" class="headerlink" title="7、在VVLife App工程中添加依赖"></a>7、在VVLife App工程中添加依赖</h4><p>修改VVLife工程的Podfile文件，添加对module的引入。修改后执行 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">pod install</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">flutter_application_path = &apos;../../Demo/vv_demo_flutter_module/&apos;</div><div class="line">load File.join(flutter_application_path, &apos;.ios&apos;, &apos;Flutter&apos;, &apos;podhelper.rb&apos;)</div><div class="line"></div><div class="line">target &apos;VVLife&apos; do</div><div class="line"></div><div class="line">  use_frameworks!</div><div class="line">  </div><div class="line">  commonPod_Tag</div><div class="line">  thirdPod</div><div class="line">  install_all_flutter_pods flutter_application_path</div><div class="line">#  hawkeye</div><div class="line">  </div><div class="line">  target &apos;VVLifeTests&apos; do</div><div class="line">    inherit! :search_paths</div><div class="line">    </div><div class="line">  end</div><div class="line">  </div><div class="line">end</div></pre></td></tr></table></figure>
+<p>这里暂时使用相对路径方式引用，真正工程应用得换个方式。<br>考虑有两种方式：</p>
+<ul>
+<li>在APP工程根目录中引用flutter module项目，这样相对路径就一定是根目录下。然后通过 build Phases脚本来对flutter进行构建</li>
+<li>将flutter module编译后的framework都进行pod库创建，发布到VV私有Pod仓库</li>
+</ul>
+<p>前者灵活但需要原生开发者都要安装flutter开发环境，后者方便不需要环境依赖，特别在业务经常变更情况下，不过自动化构建可以解决该问题。</p>
+<h4 id="8、依赖是如何添加到Native-APP的"><a href="#8、依赖是如何添加到Native-APP的" class="headerlink" title="8、依赖是如何添加到Native APP的"></a>8、依赖是如何添加到Native APP的</h4><p>上一步骤中，起到引入作用核心在这句话</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># flutter_application_path是拼接后的podhelper.rb文件所在路径</div><div class="line"># install_all_flutter_pods该ruby脚本中需要执行的脚本函数</div><div class="line">install_all_flutter_pods flutter_application_path</div></pre></td></tr></table></figure>
+<p>那我们再来看看install_all_flutter_pods函数的实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">def install_all_flutter_pods(flutter_application_path = nil)</div><div class="line">  # flutter默认目录结构是 root-&gt;.iOS-&gt;Fluuter-&gt;podhelper.rb，所以向上两层则是根目录</div><div class="line">  flutter_application_path ||= File.join(&apos;..&apos;, &apos;..&apos;)</div><div class="line">  # 引入Flutter引擎依赖pod</div><div class="line">  # 他会在根目录下创建一个engine目录，将本地flutter环境中的Flutter.framework及Flutter.podspec复制过来</div><div class="line">  install_flutter_engine_pod	</div><div class="line">  </div><div class="line">  # 引入Flutter Plugin编译后的pod</div><div class="line">  install_flutter_plugin_pods(flutter_application_path)</div><div class="line">  </div><div class="line">  # 引入当前flutter module编译后的pod</div><div class="line">  install_flutter_application_pod(flutter_application_path)</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>具体执行流程比较复杂，参考该图，有兴趣可以去看看该ruby脚本，特别是fake framework那段真的很妙。</p>
+<p><img src="http://image.runmaf.com/2020-04-05-15860550737776.jpg" alt=""></p>
+<h4 id="9、原生端路由实现"><a href="#9、原生端路由实现" class="headerlink" title="9、原生端路由实现"></a>9、原生端路由实现</h4><p>原生端路由不想flutter端是注册方式实现。<br>原生端需要一个url解释器，他会收到flutter端传来的url，对其进行url解析及参数解析，然后根据这些信息跳转到相应的页面或者进行相应的操作。</p>
+<p>创建PlatformRouterImp.swift</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">class PlatformRouterImp: NSObject, FLBPlatform &#123;</div><div class="line">    func open(_ url: String, urlParams: [AnyHashable : Any], exts: [AnyHashable : Any], completion: @escaping (Bool) -&gt; Void) &#123;</div><div class="line">        // ...native端及flutter端调用open方法都会执行这里</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    func present(_ url: String, urlParams: [AnyHashable : Any], exts: [AnyHashable : Any], completion: @escaping (Bool) -&gt; Void) &#123;</div><div class="line">        // ...native端及flutter端调用present方法都会执行这里</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    func close(_ uid: String, result: [AnyHashable : Any], exts: [AnyHashable : Any], completion: @escaping (Bool) -&gt; Void) &#123;</div><div class="line">        // flutter端调用close方法都会执行这里</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    func navigationController() -&gt; UINavigationController &#123;</div><div class="line">        // native端及flutter端不管是open还是present都会执行这里</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="10、AppDelegate中初始并设置该解释器"><a href="#10、AppDelegate中初始并设置该解释器" class="headerlink" title="10、AppDelegate中初始并设置该解释器"></a>10、AppDelegate中初始并设置该解释器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">let router = PlatformRouterImp.init();</div><div class="line">FlutterBoostPlugin.sharedInstance().startFlutter(with: router, onStart: &#123; (engine) in</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h4 id="11、调用并push到flutter端的模块"><a href="#11、调用并push到flutter端的模块" class="headerlink" title="11、调用并push到flutter端的模块"></a>11、调用并push到flutter端的模块</h4><p>调用在flutter端的登陆页面。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">let loginController = FLBFlutterViewContainer()</div><div class="line">loginController.setName(&quot;flutter_login&quot;, params: [:])</div><div class="line">let flutterLoginController = VLLoginFlutterController()</div><div class="line">flutterLoginController.registerNativeListener()</div></pre></td></tr></table></figure>
+<p>这里我还创建了一个flutterLoginController，它作用相当于MVC中的Controller，来实现与Flutter页面的交互。<br>当然，这是建立在这个flutter页面只负责呈现，M和C的作用还是由原生来实现的前提下。<br>如果这个业务组件纯粹由flutter端掌控的话，原生只需要监听flutter端的open和close事件及时作出页面跳转操作即可。</p>
+<h4 id="12、flutter端调用native端模块"><a href="#12、flutter端调用native端模块" class="headerlink" title="12、flutter端调用native端模块"></a>12、flutter端调用native端模块</h4><p>如果flutter端该页面的生命周期结束了，准备将页面导航的控制权交回给native，那么可以使用open方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">FlutterBoost.singleton.open(&quot;vvlife://guidepage&quot;, urlParams: &#123;&quot;autoPlay&quot;: true&#125;, exts: &#123;&quot;native&quot;: true&#125;)</div></pre></td></tr></table></figure>
+<ul>
+<li>url 打开页面的url，最好可以和原生的路由一致，这样native端可以和flutter端维护同一份路由，否则还需要一份映射表，将增加本来已经很多的hard code</li>
+<li>urlParams  传递给native端的信息，如这里的含义就是guide页面进行自动播放方式打开。</li>
+<li>exts  是附加信息，这里含义是打开的将是一个原生界面。</li>
+</ul>
+<p>然后在 <code>PlatformRouterImp.swift</code> 的open函数中根据传递的信息进行跳转即可。</p>
+<h4 id="0、结束"><a href="#0、结束" class="headerlink" title="0、结束"></a>0、结束</h4><p>一个简单的module嵌入原生的例子就完成了，实际使用还会有需要细节需要研究。比如一个linsten关闭的时机及生命周期维护等，本文只是flutter混编的一个引子，具体实际应用还需要整个团队一起摸索。</p>
+<h2 id="一些思考"><a href="#一些思考" class="headerlink" title="一些思考"></a>一些思考</h2><p>flutter混编现在还是有许多不足的地方，比如hard code如何标准化，比如复杂模型如何传递，比如动态特性如何实现等。</p>
+<h3 id="hard-code"><a href="#hard-code" class="headerlink" title="hard code"></a>hard code</h3><p>在多端交互中，hard code一直都是一个难题。像客户端与服务端的请求访问，其实也都一直是硬编码，所以才会产生的RESTFULL API来标准化接口试hard code尽量标准化。<br>所以只能通过协议和规范约束flutter和native端。</p>
+<p>其实在客户端组件化方案中，其实也一直都有hard code的问题，像当前VVLife、VVParner中依赖的SWRouter。虽然通过常量减少了这种问题，但是传递参数这方面并没有解决，新人来后如果使用到旧页面，要不得自己翻代码，要不就只能问老前辈了。老前辈时间久了肯定也记不到之前的param需要什么。</p>
+<h3 id="复杂模型"><a href="#复杂模型" class="headerlink" title="复杂模型"></a>复杂模型</h3><p>例如商品模型，它包含几十个字段。如果是传字典或传 json, 那么数据提供方（native）和使用方（flutter）都需要专门理解并实现一下这种模型的各种字段，对开发效率影响很大。暂时也没什么好的办法规避。</p>
+<h3 id="动态化"><a href="#动态化" class="headerlink" title="动态化"></a>动态化</h3><p>其实前两点都是小问题，动态化才是限制flutter的关键。<br>实现动态化是交付效率提升的重要方式。对于VV上线后必将强运营强时效性特性来说，动态化几乎是一个必备的诉求，但从技术上看也是一个非常敏感的需求，苹果一直在抑制应用方在动态化，像JSPatch就是过于“为所欲为”被喊停了。<br>当前flutter动态化成熟商用的方案一种是自己实现Dart SDK及相应DSL解释器，一个是大厂自己用的不开源得自己实现开发维护成本巨大，另一个是自定义的模板引擎对新人需要学习成本。<br>另一种方案是Web on Flutter，其UI表现一般。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/03/26/React-Native-Animated-划重点：两个细节排查两个小时/" itemprop="url">
                   React-Native Animated 划重点：两个细节排查两个小时
                 </a>
@@ -1471,103 +1625,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/07/13/2015-07-13-beginning-ios-pit-over-those-years-i/" itemprop="url">
-                  初学IOS那些年踩过的坑（十）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2015-07-13T16:01:53+08:00" content="2015-07-13">
-              2015-07-13
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="页面间pop和push导致的问题"><a href="#页面间pop和push导致的问题" class="headerlink" title="页面间pop和push导致的问题"></a>页面间pop和push导致的问题</h2><p>问题描述：问题大概是这样，一个运动中页面RunningViewController，一个首页IndexViewController，一个结果页RunResultViewController<br>运动：IndexViewController–Push–&gt;RunningViewController<br>结束：RunningViewController –Pop–&gt;IndexViewController–push–&gt;</p>
-<p>结果IndexViewController的ViewWillAppear会弹出个UIAlertView，其逻辑会造成影响，在IOS8情况下UIAlertView不会弹出（应该是弹出后立马跳到了RunResultViewController），而IOS7情况下到RunResultViewController才弹出该UIAlertView。</p>
-<p>该问题很简单，该逻辑其实放错位置了，应该放在ViewDidLoad中，但是从UIAlertView造成的错误逻辑去排查到该问题比较麻烦。</p>
-<h2 id="TableView的load时机"><a href="#TableView的load时机" class="headerlink" title="TableView的load时机"></a>TableView的load时机</h2><p>问题描述：在使用FXForm做表单时候，在viewDidLoad中进行了初始化，但是初始化内容无效（同样也是排查比较麻烦，开始没怀疑这个问题）。IOS8是在ViewWillAppear之后（除非你调用了tableView.tableFooterView = … 之类方法，调用后）再进行loadView的操作，而IOS7则是在[super viewDidLoad]之后。最安全的做法就是在ViewWillAppear之后重新调用一次 [tableView reloadData];</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1613,7 +1670,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">109</span>
+              <span class="site-state-item-count">110</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

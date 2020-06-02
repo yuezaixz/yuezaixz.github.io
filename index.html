@@ -226,6 +226,124 @@
             
               
                 
+                <a class="post-title-link" href="/2020/06/02/SwiftMagicInLeetCode/" itemprop="url">
+                  Swift刷LeetCode时候的一些方便的API
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-06-02T18:29:20+08:00" content="2020-06-02">
+              2020-06-02
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Swift刷LeetCode时候的一些方便的API"><a href="#Swift刷LeetCode时候的一些方便的API" class="headerlink" title="Swift刷LeetCode时候的一些方便的API"></a>Swift刷LeetCode时候的一些方便的API</h1><p>用Swift刷了1个月LeetCode，一些函数库、API、数据结构相比Python确实有点差距，不过还是发现了一些以前不知道的小技巧，这里总结一下。</p>
+<h2 id="ObjectIdentifier"><a href="#ObjectIdentifier" class="headerlink" title="ObjectIdentifier"></a>ObjectIdentifier</h2><p>字典缓存结果是一个常用的空间换时间的技巧，但是TreeNode或ListNode这种，如果他们的val不是唯一存在的，那么用什么作为字典的key呢？<br>这时候就是英雄出场的时候了。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> <span class="keyword">left</span>: <span class="type">TreeNode</span>?</div><div class="line">    <span class="keyword">var</span> <span class="keyword">right</span>: <span class="type">TreeNode</span>?</div><div class="line">    <span class="keyword">var</span> val: <span class="type">Int</span></div><div class="line">    </div><div class="line">    <span class="keyword">init</span>(<span class="number">_</span> val: <span class="type">Int</span>) &#123;</div><div class="line">        <span class="keyword">self</span>.val = val</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> empty = <span class="type">TreeNode</span>(-<span class="number">1</span>)</div><div class="line"></div><div class="line"><span class="keyword">let</span> root = <span class="type">TreeNode</span>(<span class="number">0</span>)</div><div class="line">root.<span class="keyword">left</span> = <span class="type">TreeNode</span>(<span class="number">1</span>)</div><div class="line">root.<span class="keyword">right</span> = <span class="type">TreeNode</span>(<span class="number">2</span>)</div><div class="line"></div><div class="line"><span class="keyword">var</span> dict = [<span class="type">ObjectIdentifier</span>: <span class="type">TreeNode</span>]()</div><div class="line">dict[<span class="type">ObjectIdentifier</span>(root)] = root</div><div class="line"><span class="built_in">print</span>(dict)</div><div class="line"><span class="built_in">print</span>(dict[<span class="type">ObjectIdentifier</span>(root), <span class="keyword">default</span>: empty].val)</div><div class="line"><span class="comment">//[ObjectIdentifier(0x0000600002d32b80): __lldb_expr_15.TreeNode]</span></div><div class="line"><span class="comment">//0</span></div></pre></td></tr></table></figure>
+<p>厉害了吧，直接可以用ObjectIdentifier做key，不知道它之前，我还自己写个hash函数去实现Hashable。</p>
+<h3 id="ObjectIdentifier的原理"><a href="#ObjectIdentifier的原理" class="headerlink" title="ObjectIdentifier的原理"></a>ObjectIdentifier的原理</h3><p>那么他怎么实现的呢？看下面代码你就知道了，其实他就是用指针地址来做的。然后再给他实现Hashable和Equatable接口。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">struct</span> <span class="title">ObjectIdentifier</span> </span>&#123;</div><div class="line">  <span class="keyword">internal</span> <span class="keyword">let</span> _value: <span class="type">Builtin</span>.<span class="type">RawPointer</span></div><div class="line">  <span class="keyword">public</span> <span class="keyword">init</span>(<span class="number">_</span> x: <span class="type">AnyObject</span>) &#123;</div><div class="line">    <span class="keyword">self</span>._value = <span class="type">Builtin</span>.bridgeToRawPointer(x)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">public</span> <span class="keyword">init</span>(<span class="number">_</span> x: <span class="type">Any</span>.<span class="type">Type</span>) &#123;</div><div class="line">    <span class="keyword">self</span>._value = <span class="built_in">unsafeBitCast</span>(x, to: <span class="type">Builtin</span>.<span class="type">RawPointer</span>.<span class="keyword">self</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">ObjectIdentifier</span>: <span class="title">Equatable</span> </span>&#123;</div><div class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> == <span class="params">(x: ObjectIdentifier, y: ObjectIdentifier)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="type">Bool</span>(<span class="type">Builtin</span>.cmp_eq_RawPointer(x._value, y._value))</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">ObjectIdentifier</span>: <span class="title">Hashable</span> </span>&#123;</div><div class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">hash</span><span class="params">(into hasher: <span class="keyword">inout</span> Hasher)</span></span> &#123;</div><div class="line">    hasher.combine(<span class="type">Int</span>(<span class="type">Builtin</span>.ptrtoint_Word(_value)))</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>如果项目中需要使用到这个的话，可以添加一个方便的协议扩展。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">protocol</span> <span class="title">Identifiable</span> </span>&#123;</div><div class="line">  associatedtype <span class="type">ID</span>: <span class="type">Hashable</span></div><div class="line">  <span class="keyword">var</span> id: <span class="type">ID</span> &#123; <span class="keyword">get</span> &#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Identifiable</span> <span class="title">where</span> <span class="title">Self</span>: <span class="title">AnyObject</span> </span>&#123;</div><div class="line">  <span class="keyword">public</span> <span class="keyword">var</span> id: <span class="type">ObjectIdentifier</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="type">ObjectIdentifier</span>(<span class="keyword">self</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="dump-函数"><a href="#dump-函数" class="headerlink" title="dump 函数"></a>dump 函数</h2><p>print打印对象的话，无法打印出对象的层次结构，刷LeetCode出错的时候，调试就不方便了，有时候需要为了调试信息写很长的print代码。<br>这时候有dump你接方便了，接前面的TreeNode对象，对他进行输出。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">print</span>(root)</div><div class="line"><span class="comment">// __lldb_expr_31.TreeNode</span></div><div class="line"></div><div class="line"><span class="built_in">dump</span>(root)</div><div class="line"><span class="comment">//▿ __lldb_expr_17.TreeNode #0</span></div><div class="line"><span class="comment">//▿ left: Optional(__lldb_expr_17.TreeNode)</span></div><div class="line"><span class="comment">//  ▿ some: __lldb_expr_17.TreeNode #1</span></div><div class="line"><span class="comment">//    - left: nil</span></div><div class="line"><span class="comment">//    - right: nil</span></div><div class="line"><span class="comment">//    - val: 1</span></div><div class="line"><span class="comment">//▿ right: Optional(__lldb_expr_17.TreeNode)</span></div><div class="line"><span class="comment">//  ▿ some: __lldb_expr_17.TreeNode #2</span></div><div class="line"><span class="comment">//    - left: nil</span></div><div class="line"><span class="comment">//    - right: nil</span></div><div class="line"><span class="comment">//    - val: 2</span></div><div class="line"><span class="comment">//- val: 0</span></div></pre></td></tr></table></figure>
+<p>是不是很好用？</p>
+<h2 id="sequence"><a href="#sequence" class="headerlink" title="sequence"></a>sequence</h2><p>做链表题时候经常有这个需求，遍历所有节点，需要用while，然后用个临时对象一层一层的往下走。<br>结果是一样，个人认为代码可读性上比较差，可以换成sequence来做。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">let</span> firstNode = <span class="type">ListNode</span>(<span class="number">0</span>)</div><div class="line">firstNode.next = <span class="type">ListNode</span>(<span class="number">1</span>)</div><div class="line">firstNode.next?.next = <span class="type">ListNode</span>(<span class="number">2</span>)</div><div class="line">firstNode.next?.next?.next = <span class="type">ListNode</span>(<span class="number">3</span>)</div><div class="line"></div><div class="line"><span class="keyword">var</span> curr: <span class="type">ListNode</span>? = firstNode</div><div class="line"><span class="keyword">while</span> curr != <span class="literal">nil</span> &#123;</div><div class="line">    <span class="built_in">print</span>(curr!.val)</div><div class="line">    curr = curr?.next</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 效果一样</span></div><div class="line"></div><div class="line"><span class="keyword">for</span> curr <span class="keyword">in</span> sequence(first: firstNode, next: &#123; $<span class="number">0</span>.next &#125; ) &#123;</div><div class="line">    <span class="built_in">print</span>(curr.val)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//0</span></div><div class="line"><span class="comment">//1</span></div><div class="line"><span class="comment">//2</span></div><div class="line"><span class="comment">//3</span></div></pre></td></tr></table></figure>
+<h2 id="swap"><a href="#swap" class="headerlink" title="swap"></a>swap</h2><p>这个也主要是可读性，不然tupple方式就可以搞定了。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> a = <span class="string">"a"</span></div><div class="line"><span class="keyword">var</span> b = <span class="string">"b"</span></div><div class="line"></div><div class="line">(a, b) = (b, a)</div><div class="line"><span class="built_in">print</span>(a, b)</div><div class="line"></div><div class="line"><span class="comment">// 效果相同</span></div><div class="line"></div><div class="line"><span class="built_in">swap</span>(&amp;a, &amp;b)</div><div class="line"><span class="built_in">print</span>(a, b)</div><div class="line"><span class="comment">// b a</span></div></pre></td></tr></table></figure>
+<h2 id="repeating-和-Repeated"><a href="#repeating-和-Repeated" class="headerlink" title="repeating 和 Repeated"></a>repeating 和 Repeated</h2><p>快速创建同样元素数组的两个方法。</p>
+<p>快捷创建动规二元数组或者做批量替换时候特别好用。</p>
+<font color="red">要注意的是，重复的值如果是对象的话，是同一个引用的哦。</font>
+
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</div><div class="line"><span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="type">Array</span>(repeating: <span class="number">0</span>, <span class="built_in">count</span>: nums.<span class="built_in">count</span>), <span class="built_in">count</span>: nums.<span class="built_in">count</span>)</div><div class="line"><span class="built_in">print</span>(dp)</div><div class="line"><span class="comment">// [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]</span></div><div class="line"></div><div class="line"><span class="keyword">let</span> repeated: <span class="type">Repeated</span>&lt;<span class="type">String</span>&gt; = repeatElement(<span class="string">"SwiftRocks"</span>, <span class="built_in">count</span>: <span class="number">3</span>)</div><div class="line"><span class="keyword">for</span> value <span class="keyword">in</span> repeated &#123;</div><div class="line">    <span class="built_in">print</span>(value)</div><div class="line">&#125;</div><div class="line"><span class="comment">//SwiftRocks</span></div><div class="line"><span class="comment">//SwiftRocks</span></div><div class="line"><span class="comment">//SwiftRocks</span></div><div class="line"></div><div class="line">nums.replaceSubrange(<span class="number">2</span>...<span class="number">5</span>, with: [<span class="type">Int</span>](repeating: <span class="number">1</span>, <span class="built_in">count</span>: <span class="number">4</span>))</div><div class="line"><span class="built_in">print</span>(nums)</div><div class="line"><span class="comment">//[1, 2, 1, 1, 1, 1]</span></div><div class="line">nums.replaceSubrange(<span class="number">2</span>...<span class="number">5</span>, with: repeatElement(<span class="number">3</span>, <span class="built_in">count</span>: <span class="number">4</span>))</div><div class="line"><span class="built_in">print</span>(nums)</div><div class="line"><span class="comment">//[1, 2, 3, 3, 3, 3]</span></div></pre></td></tr></table></figure>
+<h2 id="zip"><a href="#zip" class="headerlink" title="zip"></a>zip</h2><p>把两个数组压到一起，题目有两个同样长度的数组需要一起遍历，这个就很好用了</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</div><div class="line"></div><div class="line"><span class="keyword">var</span> strs = [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>]</div><div class="line"></div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> <span class="built_in">zip</span>(nums, strs) &#123;</div><div class="line">    <span class="built_in">print</span>(item)</div><div class="line">&#125;</div><div class="line"><span class="comment">//(1, "a")</span></div><div class="line"><span class="comment">//(2, "b")</span></div><div class="line"><span class="comment">//(3, "c")</span></div></pre></td></tr></table></figure>
+<h2 id="stride"><a href="#stride" class="headerlink" title="stride"></a>stride</h2><p>反向遍历，跳跃遍历。注意，to不包含哦。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// 反向遍历，to不包含，所以要到-1</div><div class="line">for i in stride(from: 10, to: -1, by: -1) &#123;</div><div class="line">    print(i)</div><div class="line">&#125;</div><div class="line">// 跳跃遍历</div><div class="line">for i in stride(from: 0, to: 10, by: 2) &#123;</div><div class="line">    print(i)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>max min pow abs，比较基础，基本没人不知道了，就不说了。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2020/05/28/SwiftCodePoisoningManual/" itemprop="url">
                   Swift投毒利器dynamicMemberLookup
                 </a>
@@ -1294,160 +1412,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/04/05/native-app-flutter-hybrid-in-flutter-boost/" itemprop="url">
-                  移动端的flutter_boost混编实现
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2020-04-05T00:11:22+08:00" content="2020-04-05">
-              2020-04-05
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="移动端的flutter-boost混编实现"><a href="#移动端的flutter-boost混编实现" class="headerlink" title="移动端的flutter_boost混编实现"></a>移动端的flutter_boost混编实现</h1><h2 id="Flutter简介"><a href="#Flutter简介" class="headerlink" title="Flutter简介"></a>Flutter简介</h2><p>Flutter是谷歌的全平台UI框架，使用dart语法，在移动端通过Skia渲染，可以快速在iOS和Android上构建高质量的原生用户界面，其优势在于</p>
-<ul>
-<li>极高的开发与交付效率，良好的开发体验</li>
-<li>优秀的跨多端多平台能力</li>
-<li>极强的UI表现力</li>
-</ul>
-<p><a href="https://flutterchina.club/get-started/install/" target="_blank" rel="external">环境搭建参考</a></p>
-<h2 id="flutter混编架构方案"><a href="#flutter混编架构方案" class="headerlink" title="flutter混编架构方案"></a>flutter混编架构方案</h2><p>VV iOS组目前已完成了较好的组件化架构，很多通用业务层都已经组件化了，比如Login等。Flutter模块再自己在实现就难免重复造轮子了，因此，我们可以创建<a href="https://flutter.dev/docs/development/packages-and-plugins/developing-packages" target="_blank" rel="external">flutter plugin</a>与原生的交互，类似于一种C-S模型。其中Flutter为Client层，原生为Server层，两者通过MethodChannel进行消息通信，原生端向Flutter提供已有的Native组件功能。<br>然后将Flutter Plugin上传到私有<a href="https://flutter.dev/docs/development/packages-and-plugins/using-packages" target="_blank" rel="external">pub</a>库。<br>这时候创建<a href="https://flutter.dev/docs/development/add-to-app/ios/project-setup" target="_blank" rel="external">flutter module</a>，依赖需要的plugin，并添加<a href="https://github.com/alibaba/flutter_boost" target="_blank" rel="external">flutter boost</a>依赖，再在原生工程中依赖这个module就好了。<br>当flutter开发已经有一定规模时候，module甚至可以按业务再拆分成多个业务module混编入Native App。<br><img src="http://image.runmaf.com/2020-04-05-15860110916044.jpg" alt=""></p>
-<h3 id="Hello-VV-First-Flutter-Module"><a href="#Hello-VV-First-Flutter-Module" class="headerlink" title="Hello VV First Flutter Module"></a>Hello VV First Flutter Module</h3><p>本文只描述如何创建flutter module并添加flutter_boost依赖，然后嵌入原生工程。module中会依赖一个plugin（webview_flutter）来模拟方案中的架构。<br>本文以VVLife iOS App中嵌入Flutter实现的登陆和我的模块举例（安卓上的实现也由庄宏展验证可成功嵌入）。</p>
-<h4 id="1、Create-Module"><a href="#1、Create-Module" class="headerlink" title="1、Create Module"></a>1、Create Module</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">flutter create -t module vv_demo_flutter_module</div></pre></td></tr></table></figure>
-<p><img src="http://image.runmaf.com/2020-04-05-15855645220209.jpg" alt=""></p>
-<h4 id="2、创建anroid和ios文件"><a href="#2、创建anroid和ios文件" class="headerlink" title="2、创建anroid和ios文件"></a>2、创建anroid和ios文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">flutter make-host-app-editable</div></pre></td></tr></table></figure>
-<p><img src="http://image.runmaf.com/2020-04-05-15855649980991.jpg" alt=""></p>
-<h4 id="3、修改bundle-id及profile"><a href="#3、修改bundle-id及profile" class="headerlink" title="3、修改bundle_id及profile"></a>3、修改bundle_id及profile</h4><p>这里需要创建出来的iOS项目中，修改下bundle_id，否则之后的module编译会出现错误。</p>
-<p><img src="http://image.runmaf.com/2020-04-05-15855650416465.jpg" alt=""><br><img src="http://image.runmaf.com/2020-04-05-15855651593446.jpg" alt=""></p>
-<p>否则build时候会提示错误<br><img src="http://image.runmaf.com/2020-04-05-15855650858821.jpg" alt=""></p>
-<h4 id="4、添加flutter-boost依赖"><a href="#4、添加flutter-boost依赖" class="headerlink" title="4、添加flutter_boost依赖"></a>4、添加flutter_boost依赖</h4><p> 打开pubspec.yaml并将以下行添加到依赖项，然后  flutter packages get一下</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">flutter_boost: ^1.12.13</div></pre></td></tr></table></figure>
-<p>flutter_boost的介绍可以看<a href="https://mp.weixin.qq.com/s?__biz=MzU4MDUxOTI5NA==&amp;mid=2247484367&amp;idx=1&amp;sn=fcbc485f068dae5de9f68d52607ea08f&amp;chksm=fd54d7deca235ec86249a9e3714ec18be8b2d6dc580cae19e4e5113533a6c5b44dfa5813c4c3&amp;scene=0&amp;subscene=131&amp;clicktime=1551942425&amp;ascene=7&amp;devicetype=android-28&amp;version=2700033b&amp;nettype=ctnet&amp;abtest_cookie=BAABAAoACwASABMABAAklx4AVpkeAMSZHgDWmR4AAAA%3D&amp;lang=zh_CN&amp;pass_ticket=1qvHqOsbLBHv3wwAcw577EHhNjg6EKXqTfnOiFbbbaw%3D&amp;wx_header=1" target="_blank" rel="external">闲鱼APP团队的技术文章</a></p>
-<p><img src="http://image.runmaf.com/2020-04-05-15860114455529.jpg" alt=""></p>
-<h4 id="5、创建Widget并注册到路由"><a href="#5、创建Widget并注册到路由" class="headerlink" title="5、创建Widget并注册到路由"></a>5、创建Widget并注册到路由</h4><p>在main.dart中注册一下路由，过程和使用命名路由相似</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">FlutterBoost.singleton.registerPageBuilders(&#123;</div><div class="line">      &apos;flutter_login&apos;: (pageName, params, _) =&gt; VVLoginPage(),</div><div class="line">      &apos;flutter_mine&apos;: (pageName, params, _) =&gt; VVHomeMinePage(userName: params[&quot;name&quot;], imageUrl: params[&quot;imageUrl&quot;],),</div><div class="line">      &apos;flutter_customer_service&apos;: (pageName, params, _) =&gt;</div><div class="line">          CustomerServicePage(),</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
-<h4 id="6、build"><a href="#6、build" class="headerlink" title="6、build"></a>6、build</h4><p>执行 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">flutter build ios --debug  </div><div class="line">// 或</div><div class="line">flutter build ios --release --no-codesign</div></pre></td></tr></table></figure>
-<p><img src="http://image.runmaf.com/2020-04-05-15855653044387.jpg" alt=""></p>
-<h4 id="7、在VVLife-App工程中添加依赖"><a href="#7、在VVLife-App工程中添加依赖" class="headerlink" title="7、在VVLife App工程中添加依赖"></a>7、在VVLife App工程中添加依赖</h4><p>修改VVLife工程的Podfile文件，添加对module的引入。修改后执行 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">pod install</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">flutter_application_path = &apos;../../Demo/vv_demo_flutter_module/&apos;</div><div class="line">load File.join(flutter_application_path, &apos;.ios&apos;, &apos;Flutter&apos;, &apos;podhelper.rb&apos;)</div><div class="line"></div><div class="line">target &apos;VVLife&apos; do</div><div class="line"></div><div class="line">  use_frameworks!</div><div class="line">  </div><div class="line">  commonPod_Tag</div><div class="line">  thirdPod</div><div class="line">  install_all_flutter_pods flutter_application_path</div><div class="line">#  hawkeye</div><div class="line">  </div><div class="line">  target &apos;VVLifeTests&apos; do</div><div class="line">    inherit! :search_paths</div><div class="line">    </div><div class="line">  end</div><div class="line">  </div><div class="line">end</div></pre></td></tr></table></figure>
-<p>这里暂时使用相对路径方式引用，真正工程应用得换个方式。<br>考虑有两种方式：</p>
-<ul>
-<li>在APP工程根目录中引用flutter module项目，这样相对路径就一定是根目录下。然后通过 build Phases脚本来对flutter进行构建</li>
-<li>将flutter module编译后的framework都进行pod库创建，发布到VV私有Pod仓库</li>
-</ul>
-<p>前者灵活但需要原生开发者都要安装flutter开发环境，后者方便不需要环境依赖，特别在业务经常变更情况下，不过自动化构建可以解决该问题。</p>
-<h4 id="8、依赖是如何添加到Native-APP的"><a href="#8、依赖是如何添加到Native-APP的" class="headerlink" title="8、依赖是如何添加到Native APP的"></a>8、依赖是如何添加到Native APP的</h4><p>上一步骤中，起到引入作用核心在这句话</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># flutter_application_path是拼接后的podhelper.rb文件所在路径</div><div class="line"># install_all_flutter_pods该ruby脚本中需要执行的脚本函数</div><div class="line">install_all_flutter_pods flutter_application_path</div></pre></td></tr></table></figure>
-<p>那我们再来看看install_all_flutter_pods函数的实现</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">def install_all_flutter_pods(flutter_application_path = nil)</div><div class="line">  # flutter默认目录结构是 root-&gt;.iOS-&gt;Fluuter-&gt;podhelper.rb，所以向上两层则是根目录</div><div class="line">  flutter_application_path ||= File.join(&apos;..&apos;, &apos;..&apos;)</div><div class="line">  # 引入Flutter引擎依赖pod</div><div class="line">  # 他会在根目录下创建一个engine目录，将本地flutter环境中的Flutter.framework及Flutter.podspec复制过来</div><div class="line">  install_flutter_engine_pod	</div><div class="line">  </div><div class="line">  # 引入Flutter Plugin编译后的pod</div><div class="line">  install_flutter_plugin_pods(flutter_application_path)</div><div class="line">  </div><div class="line">  # 引入当前flutter module编译后的pod</div><div class="line">  install_flutter_application_pod(flutter_application_path)</div><div class="line">end</div></pre></td></tr></table></figure>
-<p>具体执行流程比较复杂，参考该图，有兴趣可以去看看该ruby脚本，特别是fake framework那段真的很妙。</p>
-<p><img src="http://image.runmaf.com/2020-04-05-15860550737776.jpg" alt=""></p>
-<h4 id="9、原生端路由实现"><a href="#9、原生端路由实现" class="headerlink" title="9、原生端路由实现"></a>9、原生端路由实现</h4><p>原生端路由不想flutter端是注册方式实现。<br>原生端需要一个url解释器，他会收到flutter端传来的url，对其进行url解析及参数解析，然后根据这些信息跳转到相应的页面或者进行相应的操作。</p>
-<p>创建PlatformRouterImp.swift</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">class PlatformRouterImp: NSObject, FLBPlatform &#123;</div><div class="line">    func open(_ url: String, urlParams: [AnyHashable : Any], exts: [AnyHashable : Any], completion: @escaping (Bool) -&gt; Void) &#123;</div><div class="line">        // ...native端及flutter端调用open方法都会执行这里</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    func present(_ url: String, urlParams: [AnyHashable : Any], exts: [AnyHashable : Any], completion: @escaping (Bool) -&gt; Void) &#123;</div><div class="line">        // ...native端及flutter端调用present方法都会执行这里</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    func close(_ uid: String, result: [AnyHashable : Any], exts: [AnyHashable : Any], completion: @escaping (Bool) -&gt; Void) &#123;</div><div class="line">        // flutter端调用close方法都会执行这里</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    func navigationController() -&gt; UINavigationController &#123;</div><div class="line">        // native端及flutter端不管是open还是present都会执行这里</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="10、AppDelegate中初始并设置该解释器"><a href="#10、AppDelegate中初始并设置该解释器" class="headerlink" title="10、AppDelegate中初始并设置该解释器"></a>10、AppDelegate中初始并设置该解释器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">let router = PlatformRouterImp.init();</div><div class="line">FlutterBoostPlugin.sharedInstance().startFlutter(with: router, onStart: &#123; (engine) in</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h4 id="11、调用并push到flutter端的模块"><a href="#11、调用并push到flutter端的模块" class="headerlink" title="11、调用并push到flutter端的模块"></a>11、调用并push到flutter端的模块</h4><p>调用在flutter端的登陆页面。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">let loginController = FLBFlutterViewContainer()</div><div class="line">loginController.setName(&quot;flutter_login&quot;, params: [:])</div><div class="line">let flutterLoginController = VLLoginFlutterController()</div><div class="line">flutterLoginController.registerNativeListener()</div></pre></td></tr></table></figure>
-<p>这里我还创建了一个flutterLoginController，它作用相当于MVC中的Controller，来实现与Flutter页面的交互。<br>当然，这是建立在这个flutter页面只负责呈现，M和C的作用还是由原生来实现的前提下。<br>如果这个业务组件纯粹由flutter端掌控的话，原生只需要监听flutter端的open和close事件及时作出页面跳转操作即可。</p>
-<h4 id="12、flutter端调用native端模块"><a href="#12、flutter端调用native端模块" class="headerlink" title="12、flutter端调用native端模块"></a>12、flutter端调用native端模块</h4><p>如果flutter端该页面的生命周期结束了，准备将页面导航的控制权交回给native，那么可以使用open方法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">FlutterBoost.singleton.open(&quot;vvlife://guidepage&quot;, urlParams: &#123;&quot;autoPlay&quot;: true&#125;, exts: &#123;&quot;native&quot;: true&#125;)</div></pre></td></tr></table></figure>
-<ul>
-<li>url 打开页面的url，最好可以和原生的路由一致，这样native端可以和flutter端维护同一份路由，否则还需要一份映射表，将增加本来已经很多的hard code</li>
-<li>urlParams  传递给native端的信息，如这里的含义就是guide页面进行自动播放方式打开。</li>
-<li>exts  是附加信息，这里含义是打开的将是一个原生界面。</li>
-</ul>
-<p>然后在 <code>PlatformRouterImp.swift</code> 的open函数中根据传递的信息进行跳转即可。</p>
-<h4 id="0、结束"><a href="#0、结束" class="headerlink" title="0、结束"></a>0、结束</h4><p>一个简单的module嵌入原生的例子就完成了，实际使用还会有需要细节需要研究。比如一个linsten关闭的时机及生命周期维护等，本文只是flutter混编的一个引子，具体实际应用还需要整个团队一起摸索。</p>
-<h2 id="一些思考"><a href="#一些思考" class="headerlink" title="一些思考"></a>一些思考</h2><p>flutter混编现在还是有许多不足的地方，比如hard code如何标准化，比如复杂模型如何传递，比如动态特性如何实现等。</p>
-<h3 id="hard-code"><a href="#hard-code" class="headerlink" title="hard code"></a>hard code</h3><p>在多端交互中，hard code一直都是一个难题。像客户端与服务端的请求访问，其实也都一直是硬编码，所以才会产生的RESTFULL API来标准化接口试hard code尽量标准化。<br>所以只能通过协议和规范约束flutter和native端。</p>
-<p>其实在客户端组件化方案中，其实也一直都有hard code的问题，像当前VVLife、VVParner中依赖的SWRouter。虽然通过常量减少了这种问题，但是传递参数这方面并没有解决，新人来后如果使用到旧页面，要不得自己翻代码，要不就只能问老前辈了。老前辈时间久了肯定也记不到之前的param需要什么。</p>
-<h3 id="复杂模型"><a href="#复杂模型" class="headerlink" title="复杂模型"></a>复杂模型</h3><p>例如商品模型，它包含几十个字段。如果是传字典或传 json, 那么数据提供方（native）和使用方（flutter）都需要专门理解并实现一下这种模型的各种字段，对开发效率影响很大。暂时也没什么好的办法规避。</p>
-<h3 id="动态化"><a href="#动态化" class="headerlink" title="动态化"></a>动态化</h3><p>其实前两点都是小问题，动态化才是限制flutter的关键。<br>实现动态化是交付效率提升的重要方式。对于VV上线后必将强运营强时效性特性来说，动态化几乎是一个必备的诉求，但从技术上看也是一个非常敏感的需求，苹果一直在抑制应用方在动态化，像JSPatch就是过于“为所欲为”被喊停了。<br>当前flutter动态化成熟商用的方案一种是自己实现Dart SDK及相应DSL解释器，一个是大厂自己用的不开源得自己实现开发维护成本巨大，另一个是自定义的模板引擎对新人需要学习成本。<br>另一种方案是Web on Flutter，其UI表现一般。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1493,7 +1457,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">109</span>
+              <span class="site-state-item-count">110</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

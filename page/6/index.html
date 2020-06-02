@@ -226,6 +226,106 @@
             
               
                 
+                <a class="post-title-link" href="/2014/11/14/2014-11-14-yield-function-to-resolve-function-returns-a-list-of-all-the-questions/" itemprop="url">
+                  yield函数，解决函数返回列表时的种种问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-11-14T07:37:00+08:00" content="2014-11-14">
+              2014-11-14
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在开发中可能经常碰到这样的问题，举个比较简单的场景描述，比如我要获取1-100的整数集合，那么我第一反应会这样想这个函数。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getNumList</span><span class="params">(<span class="keyword">int</span> max)</span></span>&#123;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; max; i++) &#123;</div><div class="line">		System.out.println(i);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>那么这么写的缺点有哪些呢？就是我无法获得这个集合，那么好吧，我就修改下这个函数。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> List&lt;IntegergetNumList(<span class="keyword">int</span> max)&#123;</div><div class="line">	List&lt;IntegernumList = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; max; i++) &#123;</div><div class="line">		numList.add(i);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> numList;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>好了，这样是不是问题解决了，这篇博文就到这了呢？不是，这样还有个问题，就是当列表元素占用内存过大，并且列表元素过多时，这样操作是非常占用内存的。<br>好吧，有人说，他知道这么解决这个问题，多简单，看如下代码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">NumList</span> <span class="keyword">implements</span> <span class="title">Iterable</span>&lt;<span class="title">Integer</span>&gt;</span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> index;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> max;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">NumList</span><span class="params">(<span class="keyword">int</span> max)</span></span>&#123;</div><div class="line">		index = <span class="number">1</span>;</div><div class="line">		<span class="keyword">this</span>.max = max;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">public</span> Iterator&lt;Integeriterator() &#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">new</span> NumIterator();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="class"><span class="keyword">class</span> <span class="title">NumIterator</span> <span class="keyword">implements</span> <span class="title">Iterator</span>&lt;<span class="title">Integer</span></span>&#123;</div><div class="line">		</div><div class="line">		</div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> index != max;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		<span class="function"><span class="keyword">public</span> Integer <span class="title">next</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> ++index;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">()</span> </span>&#123;</div><div class="line">			index++;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>没错，用迭代器这问题是解决了，但是，这样的设计有点过于复杂。感觉小题大做了。在JAVA中有没有方法可以快速解决这个问题呢？我感觉是没有啦，那就让我们看看今天的主角，yield在python中是如何使用的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">def numList(max): </div><div class="line">    n = 1</div><div class="line">    while n &lt;= max: </div><div class="line">    		# print n</div><div class="line">        yield n </div><div class="line">        n = n + 1</div><div class="line">def read_file(fpath): </div><div class="line">    BLOCK_SIZE = 1024 </div><div class="line">    with open(fpath, &apos;rb&apos;) as f: </div><div class="line">        while True: </div><div class="line">            block = f.read(BLOCK_SIZE) </div><div class="line">            if block: </div><div class="line">                yield block </div><div class="line">            else: </div><div class="line">                return</div><div class="line">def main():</div><div class="line">    for num in numList(10):</div><div class="line">        print num</div><div class="line"></div><div class="line">    for content in read_file(&apos;../README.md&apos;):</div><div class="line">        print content</div></pre></td></tr></table></figure></p>
+<p>两个函数，第一个函数就是返回数列，是不是很神奇。简单地讲，yield 的作用就是把一个函数变成一个 generator，带有 yield 的函数不再是一个普通函数，Python 解释器会将其视为一个 generator，调用 fab(5) 不会执行 fab 函数，而是返回一个 iterable 对象！在 for 循环执行时，每次循环都会执行 fab 函数内部的代码，执行到 yield b 时，fab 函数就返回一个迭代值，下次迭代时，代码从 yield b 的下一条语句继续执行，而函数的本地变量看起来和上次中断执行前是完全一样的，于是函数继续执行，直到再次遇到 yield。也可以手动调用 fab(5) 的 next() 方法（因为 fab(5) 是一个 generator 对象，该对象具有 next() 方法），这样我们就可以更清楚地看到 fab 的执行流程：<br>在一个 generator function 中，如果没有 return，则默认执行至函数完毕，如果在执行过程中 return，则直接抛出 StopIteration 终止迭代。<br>一个带有 yield 的函数就是一个 generator，它和普通函数不同，生成一个 generator 看起来像函数调用，但不会执行任何函数代码，直到对其调用 next()（在 for 循环中会自动调用 next()）才开始执行。虽然执行流程仍按函数的流程执行，但每执行到一个 yield 语句就会中断，并返回一个迭代值，下次执行时从 yield 的下一个语句继续执行。看起来就好像一个函数在正常执行的过程中被 yield 中断了数次，每次中断都会通过 yield 返回当前的迭代值。</p>
+<p>yield 的好处是显而易见的，把一个函数改写为一个 generator 就获得了迭代能力，比起用类的实例保存状态来计算下一个 next() 的值，不仅代码简洁，而且执行流程异常清晰。</p>
+<p>如何判断一个函数是否是一个特殊的 generator 函数？可以利用 isgeneratorfunction 判断：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> inspect <span class="keyword">import</span> isgeneratorfunction </div><div class="line"><span class="keyword">print</span> isgeneratorfunction(numList)</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/11/13/2014-11-13-problems-in-learning-django-framework-ii/" itemprop="url">
                   Django框架学习中的问题（二）
                 </a>
@@ -1481,193 +1581,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/06/30/2014-06-30-chinese-style-project-management-reading-record/" itemprop="url">
-                  《中国式项目管理》读记
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-06-30T00:02:00+08:00" content="2014-06-30">
-              2014-06-30
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/项目管理/" itemprop="url" rel="index">
-                    <span itemprop="name">项目管理</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/项目管理/读记/" itemprop="url" rel="index">
-                    <span itemprop="name">读记</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="《中国式项目管理》读记"><a href="#《中国式项目管理》读记" class="headerlink" title="#《中国式项目管理》读记"></a>#《中国式项目管理》读记</h2><p>#1 概述</p>
-<h2 id="1-1-什么样的项目是成功的"><a href="#1-1-什么样的项目是成功的" class="headerlink" title="1.1 什么样的项目是成功的"></a>1.1 什么样的项目是成功的</h2><p>该问题的关键不在于费用是否超支，是否超出进度，而在于， <strong>老板（客户）为什么要花钱做这件事 </strong> ，必须从业务角度去思考，而不是从技术实现上思考。 <strong>理解业务动机是项目成功的关键</strong> 。</p>
-<h2 id="1-2-什么有PMP这么复杂的一整套管理理论"><a href="#1-2-什么有PMP这么复杂的一整套管理理论" class="headerlink" title="1.2 什么有PMP这么复杂的一整套管理理论"></a>1.2 什么有PMP这么复杂的一整套管理理论</h2><p>之前我也一直思考这个问题，项目管理的理论相对于敏捷来说，他过于复杂了，为什么还有人照搬这一套。这本书里很好的解释了这个道理，因为这样的项目成功是可以复制的。<br>也许靠一些牛人，他们用自己独特的管理方式可以实现敏捷，但是这种靠人的工作存在很大的风险。而且一个公司一般不只有一个项目再跑，如果只有一个，完全不需要所谓的流程，但大量的项目，很难保证对每个人的能力和每一个细节都有所把握，那一整套成熟的机制和理论就显得安全可靠。<br><strong>把牛人们的经验转化成流程，这才最有价值</strong> 。敏捷极限编程中的Scrum就是一种比较容易复制、成熟可靠的流程。</p>
-<h2 id="1-3-面对严重技术问题时候怎么办？"><a href="#1-3-面对严重技术问题时候怎么办？" class="headerlink" title="1.3 面对严重技术问题时候怎么办？"></a>1.3 面对严重技术问题时候怎么办？</h2><p>组织技术人员进行讨论？需找可能的解决方案？找更有经验的专家寻求帮助？这些当然都需要，当然作为一个项目经理，你还必须 <strong>专业地评估、有效的沟通、有力的执行</strong> 。<br>先评估该问题可能造成的影响，成本超支？进度延误？重要的里程碑受到影响？对于客户、下包方、合作伙伴的影响？<br>然后是沟通，这也是评估的目的，比如你可以把你评估的结果和老板沟通，出了什么事，为什么会出，有什么影响，打算怎么做，计划是什么，当前情况什么样，需求什么资源，最重要的是你需要老板出面帮你做什么。<br>最后是执行，执行过程中切记每个事情都必须有人做，但一定不都是你在做，作为项目经理更应该做的是从业务、管理、团队、项目计划、资源协调等层面对项目进行控制。</p>
-<p>#2 项目需求</p>
-<h2 id="2-1-需求必须是业务导向的"><a href="#2-1-需求必须是业务导向的" class="headerlink" title="2.1 需求必须是业务导向的"></a>2.1 需求必须是业务导向的</h2><p>认真思考你的项目目标到底解决了用户哪方面的问题，然后再选择技术方案、指定项目规划、确定验收标准。</p>
-<h2 id="2-2-老板不一定正确"><a href="#2-2-老板不一定正确" class="headerlink" title="2.2 老板不一定正确"></a>2.2 老板不一定正确</h2><p>老板告诉你的只是一个思路，他所说的想法不一定正确，如果一成不变的按着老板说的走，那么必将走很多弯路。而你需要帮老板去验证他的想法是否正确，然后把自己的想法委婉的说出来，最后一定要说，请问我的想法是否正确。</p>
-<h2 id="2-3-需求是需要确认的"><a href="#2-3-需求是需要确认的" class="headerlink" title="2.3 需求是需要确认的"></a>2.3 需求是需要确认的</h2><p>虽然没有不变的需求，但是至少在项目启动阶段之前，就必须把需求确认好。如果老板把这事情拖着，那么你要主动推进。</p>
-<h2 id="2-4-弄清楚谁是项目干系人"><a href="#2-4-弄清楚谁是项目干系人" class="headerlink" title="2.4 弄清楚谁是项目干系人"></a>2.4 弄清楚谁是项目干系人</h2><p>弄清楚谁是项目干系人，需求到底要找谁谈。你必须保证项目干系人在需求上达成一致，而且别弄错了项目干系人。</p>
-<h2 id="2-5-争吵"><a href="#2-5-争吵" class="headerlink" title="2.5 争吵"></a>2.5 争吵</h2><p>在需求阶段有争吵是难免的，别把事情藏着掖着，有问题就必须提出来，毕竟在需求阶段更改的成本还是最低的。</p>
-<h2 id="2-6-必须需求中有模糊的概念"><a href="#2-6-必须需求中有模糊的概念" class="headerlink" title="2.6 必须需求中有模糊的概念"></a>2.6 必须需求中有模糊的概念</h2><p>比如，系统很大很安全，那什么程度能达到“很”呢，需要斟酌。</p>
-<h2 id="2-7-引导和聆听"><a href="#2-7-引导和聆听" class="headerlink" title="2.7 引导和聆听"></a>2.7 引导和聆听</h2><p>在需求讨论中，引导和聆听是必须的沟通技巧，阐述自己的观点只是辅助性的。</p>
-<p>#3 项目计划</p>
-<h2 id="3-1-开始阶段必须做好论证和规划"><a href="#3-1-开始阶段必须做好论证和规划" class="headerlink" title="3.1 开始阶段必须做好论证和规划"></a>3.1 开始阶段必须做好论证和规划</h2><p>在开始阶段，舍得花时间进行论证和规划，不厌其烦的把项目干系人抓来沟通，要顶得住压力把模糊的问题谈清楚。在这个阶段修改方案和项目计划还是来得急的。</p>
-<h2 id="3-2-里程碑节点比验收节点更重要"><a href="#3-2-里程碑节点比验收节点更重要" class="headerlink" title="3.2 里程碑节点比验收节点更重要"></a>3.2 里程碑节点比验收节点更重要</h2><p>里程碑节点是一个一个的检查点，他并不像验收节点那样是硬性的，但是必须更看重，做好进度上的控制。</p>
-<h2 id="3-3-项目计划必须是现实的"><a href="#3-3-项目计划必须是现实的" class="headerlink" title="3.3 项目计划必须是现实的"></a>3.3 项目计划必须是现实的</h2><p>必须站在现实的角度上去做计划，不要用太多的假设，什么如果资源满足的情况下，如果客户不变更需求，这些都必须考虑在内，做好风险清单。</p>
-<h2 id="3-4-资源的争取"><a href="#3-4-资源的争取" class="headerlink" title="3.4 资源的争取"></a>3.4 资源的争取</h2><p>资源冲突在职能型组织是常见的，把资源落实到人头上，要到具体的人，而不是虚席以待，而且需要做好沟通，争取更优更多的资源。</p>
-<h2 id="3-5-达成共识"><a href="#3-5-达成共识" class="headerlink" title="3.5 达成共识"></a>3.5 达成共识</h2><p>项目计划不能是你认为正确的，还必须和项目干系人、协作部门打成一致，你认为正确的并不是他们认为正确的，站在他们的角度可能有更重要的事情要处理。</p>
-<h2 id="3-6-计划要简洁"><a href="#3-6-计划要简洁" class="headerlink" title="3.6 计划要简洁"></a>3.6 计划要简洁</h2><p>视图用最小的篇幅、最短的额时间让客户（老板）理解你的意图。</p>
-<h2 id="3-7-风险一定要落实到计划"><a href="#3-7-风险一定要落实到计划" class="headerlink" title="3.7 风险一定要落实到计划"></a>3.7 风险一定要落实到计划</h2><p>形成风险清单，落实到计划，每周例会检查，确保风险都在控制当中，并且做好风险应对措施。</p>
-<p>#4 项目控制</p>
-<h2 id="4-1-风险控制必须是持续的过程"><a href="#4-1-风险控制必须是持续的过程" class="headerlink" title="4.1 风险控制必须是持续的过程"></a>4.1 风险控制必须是持续的过程</h2><p>当识别到一个风险的时候，把他列入项目风险清单中，每周周会都拿出来讨论，这是安全而有效的方法。<br>当你的老板每周都询问你这个事情的时候，你想忘记他都会很难，你都会去确定该风险<br>当前是否在控制当中。</p>
-<h2 id="4-2-项目启动阶段项目经理的工作"><a href="#4-2-项目启动阶段项目经理的工作" class="headerlink" title="4.2 项目启动阶段项目经理的工作"></a>4.2 项目启动阶段项目经理的工作</h2><p>在这个阶段，项目经理必须确认的三个事情是需求、方案与工作模式。<br>首先，把需求搞清楚，做什么，为什么做，如何验收，验收的标准是什么？<br>然后，要拿到授权，确认工作团队，把资源落实到位；<br>最后，理清内部分工、工作机制与流程。</p>
-<h2 id="4-3-项目整体计划阶段项目经理的工作"><a href="#4-3-项目整体计划阶段项目经理的工作" class="headerlink" title="4.3 项目整体计划阶段项目经理的工作"></a>4.3 项目整体计划阶段项目经理的工作</h2><p>在这个阶段。要做的不仅仅是开会和写文档，而是要协调沟通与妥协。例如客户方要求采用新的开发平台，那么这个决定将导致进度延期，那么你必须去了解他有这个想法的初衷、根本想法是什么，是否可以协调沟通呢？<br>还有，你预估的一个里程碑点被领导残忍的压缩了，你也必须去沟通了解这个里程碑点有这个要求的原因是什么？市场需要还是什么？这时候你就可以计划在指定时间内完成需要的交付物，剩下一些东西可以在里程碑后去完善。</p>
-<h2 id="4-4-项目执行阶段项目经理的工作"><a href="#4-4-项目执行阶段项目经理的工作" class="headerlink" title="4.4 项目执行阶段项目经理的工作"></a>4.4 项目执行阶段项目经理的工作</h2><p>在执行阶段，会有诸多问题，但是切记不要被事情推着走，要主动推进事情。</p>
-<ul>
-<li>要在过程中寻找节奏感，这节奏感长期考里程碑，短期靠例会。</li>
-<li>后看一，前看三，每次例会了解上周做了什么以及之后三周要做什么。</li>
-<li><p><strong>周会必须有两周表要讨论，风险清单和问题清单</strong> 。确保问题都在风险表上而不是问题表上。</p>
-<h2 id="4-5-关于项目文档"><a href="#4-5-关于项目文档" class="headerlink" title="4.5 关于项目文档"></a>4.5 关于项目文档</h2><p>很多项目文档在工人层面确实是没有用的东西，但是对于组织来说就是宝贵的过程资产。<br>写文档必须搞清楚写给谁看，目的是什么，管理层最希望看到的文档是什么样的。<br>善于使用一些图标，更易于理解。</p>
-<h2 id="4-6-关于协作沟通"><a href="#4-6-关于协作沟通" class="headerlink" title="4.6 关于协作沟通"></a>4.6 关于协作沟通</h2><p>在中国这个讲人情的地方，并不是你得到了授权，你把老板搬出来就能让别人就范。很多时候还是需要一些应酬，人际沟通是一种润滑剂，缺少了这，你就会被流程卡住的。</p>
-<h2 id="4-7-项目成员的跨部门管理"><a href="#4-7-项目成员的跨部门管理" class="headerlink" title="4.7 项目成员的跨部门管理"></a>4.7 项目成员的跨部门管理</h2><p>项目经理在人的晋升、涨薪方面是很弱势的，所以要让别人听你的，必须有一些手段：</p>
-</li>
-<li><p>理清楚这个项目能带给他们什么，有时候一个人的意愿比经验更重要；</p>
-</li>
-<li>要让大家信服你，包括你的技能、处事态度和人品；</li>
-<li>和管理层保持沟通（不要直接用老板压别人，要先从道理上让别人知道这是你应该做的事，再用柔性的办法去沟通）</li>
-</ul>
-<p>项目经理不一定是资源的管理者，但一定是业务的推动者，你的价值，需要靠你自己去证明，不要总抱怨没有资源，必须证明自己的价值。</p>
-<h2 id="4-8-对于项目变更"><a href="#4-8-对于项目变更" class="headerlink" title="4.8 对于项目变更"></a>4.8 对于项目变更</h2><p>完全没有变更的项目是不存在的，能做的是：</p>
-<ul>
-<li>在项目需求阶段，尽可能的把需求理清楚；</li>
-<li>在项目执行阶段，对一切需求变更做变更流程，如把变更造成的进度影响告知领导，在这种影响的前提下，变更是否审核；</li>
-<li>变更后要相应的调整计划与文档。</li>
-</ul>
-<p>#5 项目团队与沟通</p>
-<h2 id="5-1-项目经理的一天"><a href="#5-1-项目经理的一天" class="headerlink" title="5.1 项目经理的一天"></a>5.1 项目经理的一天</h2><p>项目经理应该面向全局但同时也要关注细节，一定要找对感觉，闷头做事一定会出问题的。到晚上想及同年做了什么，发现想不起来，那真是“忙晕了”。那什么最重要呢？</p>
-<ul>
-<li>首先，如果流程除了问题，必须首先解决；</li>
-<li>与重要的干系人沟通、协调、妥协……向管理层争取资源</li>
-<li>写文档（这同样是非常重要的，必须保证文档与项目现状保持一致）</li>
-</ul>
-<h2 id="5-2-工作热情比工作经验更重要"><a href="#5-2-工作热情比工作经验更重要" class="headerlink" title="5.2 工作热情比工作经验更重要"></a>5.2 工作热情比工作经验更重要</h2><p>调动每一个成员的工作热情，是项目经理必须做的工作，但是这很难。作为一个弱势的管理者，有意愿往往比有经验更重要。<br>有经验的人可以降低项目的技术风险，但是成本高且不容易管理。</p>
-<h2 id="5-3-项目经理在沟通中的作用"><a href="#5-3-项目经理在沟通中的作用" class="headerlink" title="5.3 项目经理在沟通中的作用"></a>5.3 项目经理在沟通中的作用</h2><p>明确目标、理清模式，是项目经理在沟通中的主要工作。<br>项目团队是临时的，是一个多样性的团队，文化、技能、性格、地域可能都不同，你不可能改变别人，更不可能改变环境，你能做的只是适应环境。</p>
-<h2 id="5-4-沟通中要因人而异"><a href="#5-4-沟通中要因人而异" class="headerlink" title="5.4 沟通中要因人而异"></a>5.4 沟通中要因人而异</h2><p>当要说服一个技术骨干接手一个项目，但是非常抵触。你应该做什么？画饼？给实际利益？晓之以理（这个项目就你最合适了）？动之以情（兄弟，你一定要帮我一把啊）？都不是，最重要的是你要知道他觉得什么是最重要的，比如原因是他刚结婚，想和媳妇在一起，那么，能不能说服他，让他觉得去的地方也不错，带上媳妇一起去呢？</p>
-<h2 id="5-5-MBTI理论"><a href="#5-5-MBTI理论" class="headerlink" title="5.5 MBTI理论"></a>5.5 MBTI理论</h2><p>迈尔斯-布里格斯类型指标。</p>
-<h2 id="5-5-1-认知与判断"><a href="#5-5-1-认知与判断" class="headerlink" title="# 5.5.1 认知与判断"></a># 5.5.1 认知与判断</h2><p>判断型（J）    知觉型（P）<br>做了决定后最为高兴    当各种选择都存在时，感到高兴<br>有“工作原则”：工作第一，玩其次（如果有时间的话）    “玩的原则”：现在享受，然后再完成工作（如果有时间的话）<br>建立目标，准时地完成    随着新信息的获取，不断改变目标<br>愿意知道它们将面对的情况    喜欢适应新情况<br>着重结果（重点在于完成任务）    着重过程（重点在于如何完成工作）<br>满足感来源于完成计划    满足感来源于计划的开始<br>把时间看作有限的资源，认真地对待最后期限    认为时间是可更新的资源，而且最后期限也是有收缩的<br>理论上讲，判断是项目控制的基础，J类型的人在项目管理上有很大的又是，而且大多数人也都会喜欢判断性的人，但是，这样的人在中国的商业环境中却很痛苦，很难将事情处于绝对控制中，应该不变是相对的，变化是绝对的。P型的人才往往有更大的灵活性，能在突发情况的时候能力越强。</p>
-<h2 id="5-5-2-感觉与直觉"><a href="#5-5-2-感觉与直觉" class="headerlink" title="# 5.5.2 感觉与直觉"></a># 5.5.2 感觉与直觉</h2><p>感觉型（S）    直觉型（N）<br>相信确定和有形的东西    相信灵感或推理<br>对概念和理论兴趣不大，除非它们有着实际的效用    对概念和理论感兴趣<br>重视现实性和常情    重视可能性和独创性<br>喜欢使用和琢磨已知的技能    喜欢学习新技能，但掌握之后很容易就厌倦了<br>留意具体的、特定的事物；进行细节描述    留意事物的整体概况、普遍规律及象征含义；用概括、隐喻等方式进行表述<br>循序渐进地讲述有关情况    跳跃性地展现事实<br>着眼于现实    着眼于未来，留意事物的变化趋势，惯于从长远角度看待事物<br>直觉型的人，相信直觉、关注大局、更加在意时期你发招的趋势和各种可能性。S型的人，相信经验、关注细节、更加在意眼前发生的具体的事情。<br>当你说服一个感觉型人的时候，不能画饼，要讲实际的效益，比如这个项目存在补助，而对于直觉型的人，画饼往往更好。他们看重未来。<br>当你和一个直觉型的老板汇报项目，那么，你把要点说清楚就够了，而和一个感觉型的老板汇报，那么你最好把细节都想清楚了，时刻防止被刨根问底。</p>
-<h2 id="5-5-3-内向与外向"><a href="#5-5-3-内向与外向" class="headerlink" title="# 5.5.3 内向与外向"></a># 5.5.3 内向与外向</h2><p>外倾型（E）    内倾型(I)<br>与他人相处时精力充沛    独处时精力充沛<br>行动先于思考    思考先于行动<br>喜欢边想边说出声    在心中思考问题<br>易于“读”和了解；随意地分享个人情况    更封闭，更愿意在经挑选的小群体中分享个人的情况<br>说的多于听的    听的比说的多<br>高度热情地社交    不把兴奋说出来<br>反应快，喜欢快节奏    仔细考虑后，才有所反应<br>重于广度而不是深度    喜欢深度而不是广度<br>内向的人，往往需要在心里把事情想清楚，才愿意和别人进行沟通，对于不是很清晰的事情，他未必会和你深入地交流。而对于外向型的人，讨论有时只是进行思考的一种方式，没有充分的讨论，他们很难理清自己的思路。<br>所以当你和一个内向型的人打交道时，最好就是提前把所有资料发给他，总之，你要为对方留出思考的时间，而不要在开会时强求对方表态。</p>
-<h2 id="5-5-4-思维与情感"><a href="#5-5-4-思维与情感" class="headerlink" title="# 5.5.4 思维与情感"></a># 5.5.4 思维与情感</h2><p>思维型（T）    情感型（F）<br>退后一步思考，对问题进行客观的、非个人立场的分析    超前思考，考虑行为对他人的影响<br>重视符合逻辑、公正、公平的价值；一视同仁    重视同情与和睦：重视准则的例外性<br>被认为冷酷、麻木、漠不关心    被认为感情过多，缺少逻辑性，软弱<br>认为坦率比圆通更重要    认为圆通比坦率更重要<br>只有当情感符合逻辑时，才认为它可取    无论是否有意义，认为任何感情都可取<br>被“获取成就”所激励    被“获得欣赏”所激励<br>很自然地看到缺点，倾向于批评    惯于迎合他人，着重维护人脉资源<br>这是从作决策的方式来看。仅看这个维度的名称，也许你会觉得，思维型的人是理性的，而情感性的人是非理性的，事实上并非如此。两类人都有理性思考的成分，但作决定或下结论的主要依据不一样。情感型的人常从自我的价值观念出发，变通地贯彻规章制度，做出一些自己认定是对的决策，比较关注决策可能给他人带来的情绪体验，人情味较浓。思维型的人则比较注重依据客观事实的分析，一以贯之、一视同仁地贯彻规章制度，不太习惯根据人情因素变通，哪怕做出的决定并不令人舒服。<br>思维型的人说话有时候不会顾及别人的感受，只说在说一个正确的事情，就像贝索斯小时候计算他外婆因为抽烟减寿多少，这是一个可以说是正确的结论，但是，他没有顾及外婆外公的感受，他外公和他说，天赋是天生的，而善良更为重要。<br>思维型的人考虑问题道理很重要，他们关注正确性而不是对方的感受。而情感型的人关注人，他们关注情感，有时候甚至可以在原则上做出让步。</p>
-<h2 id="5-6-问题解决了吗？"><a href="#5-6-问题解决了吗？" class="headerlink" title="5.6 问题解决了吗？"></a>5.6 问题解决了吗？</h2><p>有时候，让步这个解决问题的方式并不有效。虽然在结果上出于各方压力做出了让步，但是情绪上的问题并没有解决，同样会在情绪上反击你。所以，解决问题的关键在于 <strong>先情绪，后问题</strong> 。</p>
-<h2 id="5-7-学会说No，但必须有技巧"><a href="#5-7-学会说No，但必须有技巧" class="headerlink" title="5.7 学会说No，但必须有技巧"></a>5.7 学会说No，但必须有技巧</h2><p>刚从事项目经理，为了让干系人都满意，基本上对于别人提出的事情都不会说No，但是，这样往往把自己搞的很累，也把小组的人也都搞的很累。要适当的学会说No，而且还要有技巧，有时候坚持自己的原则，做正确的事，更容易赢得别人的信任。</p>
-<p>#6 后记<br>项目经理是一个权力小，责任大的职位，他作为一个职业转型期，是自我价值的重新定位。并从专家转变为业务导向的推进者，他对人在计划、沟通、控制、处理冲突等技能有很好的锻炼。并且能锻炼一个很好的心态和心里素质。<br>一定不要抱怨，你要有强健的内心，为团队传递正能量，你必须让自己有价值。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1713,7 +1626,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">109</span>
+              <span class="site-state-item-count">110</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

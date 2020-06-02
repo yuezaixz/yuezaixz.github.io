@@ -1,0 +1,571 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Swift刷LeetCode时候的一些方便的API用Swift刷了1个月LeetCode，一些函数库、API、数据结构相比Python确实有点差距，不过还是发现了一些以前不知道的小技巧，这里总结一下。 ObjectIdentifier字典缓存结果是一个常用的空间换时间的技巧，但是TreeNode或ListNode这种，如果他们的val不是唯一存在的，那么用什么作为字典的key呢？这时候就是英雄出场">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift刷LeetCode时候的一些方便的API">
+<meta property="og:url" content="http://yoursite.com/2020/06/02/SwiftMagicInLeetCode/index.html">
+<meta property="og:site_name" content="大胃吴的闲话唠嗑">
+<meta property="og:description" content="Swift刷LeetCode时候的一些方便的API用Swift刷了1个月LeetCode，一些函数库、API、数据结构相比Python确实有点差距，不过还是发现了一些以前不知道的小技巧，这里总结一下。 ObjectIdentifier字典缓存结果是一个常用的空间换时间的技巧，但是TreeNode或ListNode这种，如果他们的val不是唯一存在的，那么用什么作为字典的key呢？这时候就是英雄出场">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-06-02T11:33:43.900Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Swift刷LeetCode时候的一些方便的API">
+<meta name="twitter:description" content="Swift刷LeetCode时候的一些方便的API用Swift刷了1个月LeetCode，一些函数库、API、数据结构相比Python确实有点差距，不过还是发现了一些以前不知道的小技巧，这里总结一下。 ObjectIdentifier字典缓存结果是一个常用的空间换时间的技巧，但是TreeNode或ListNode这种，如果他们的val不是唯一存在的，那么用什么作为字典的key呢？这时候就是英雄出场">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/02/SwiftMagicInLeetCode/"/>
+
+  <title> Swift刷LeetCode时候的一些方便的API | 大胃吴的闲话唠嗑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大胃吴的闲话唠嗑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">扯扯技术，唠唠闲话 交流email-xiao303178394@gmail.com</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            menu.首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            menu.文章
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Swift刷LeetCode时候的一些方便的API
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-06-02T18:29:20+08:00" content="2020-06-02">
+              2020-06-02
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Swift刷LeetCode时候的一些方便的API"><a href="#Swift刷LeetCode时候的一些方便的API" class="headerlink" title="Swift刷LeetCode时候的一些方便的API"></a>Swift刷LeetCode时候的一些方便的API</h1><p>用Swift刷了1个月LeetCode，一些函数库、API、数据结构相比Python确实有点差距，不过还是发现了一些以前不知道的小技巧，这里总结一下。</p>
+<h2 id="ObjectIdentifier"><a href="#ObjectIdentifier" class="headerlink" title="ObjectIdentifier"></a>ObjectIdentifier</h2><p>字典缓存结果是一个常用的空间换时间的技巧，但是TreeNode或ListNode这种，如果他们的val不是唯一存在的，那么用什么作为字典的key呢？<br>这时候就是英雄出场的时候了。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</div><div class="line">    <span class="keyword">var</span> <span class="keyword">left</span>: <span class="type">TreeNode</span>?</div><div class="line">    <span class="keyword">var</span> <span class="keyword">right</span>: <span class="type">TreeNode</span>?</div><div class="line">    <span class="keyword">var</span> val: <span class="type">Int</span></div><div class="line">    </div><div class="line">    <span class="keyword">init</span>(<span class="number">_</span> val: <span class="type">Int</span>) &#123;</div><div class="line">        <span class="keyword">self</span>.val = val</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> empty = <span class="type">TreeNode</span>(-<span class="number">1</span>)</div><div class="line"></div><div class="line"><span class="keyword">let</span> root = <span class="type">TreeNode</span>(<span class="number">0</span>)</div><div class="line">root.<span class="keyword">left</span> = <span class="type">TreeNode</span>(<span class="number">1</span>)</div><div class="line">root.<span class="keyword">right</span> = <span class="type">TreeNode</span>(<span class="number">2</span>)</div><div class="line"></div><div class="line"><span class="keyword">var</span> dict = [<span class="type">ObjectIdentifier</span>: <span class="type">TreeNode</span>]()</div><div class="line">dict[<span class="type">ObjectIdentifier</span>(root)] = root</div><div class="line"><span class="built_in">print</span>(dict)</div><div class="line"><span class="built_in">print</span>(dict[<span class="type">ObjectIdentifier</span>(root), <span class="keyword">default</span>: empty].val)</div><div class="line"><span class="comment">//[ObjectIdentifier(0x0000600002d32b80): __lldb_expr_15.TreeNode]</span></div><div class="line"><span class="comment">//0</span></div></pre></td></tr></table></figure>
+<p>厉害了吧，直接可以用ObjectIdentifier做key，不知道它之前，我还自己写个hash函数去实现Hashable。</p>
+<h3 id="ObjectIdentifier的原理"><a href="#ObjectIdentifier的原理" class="headerlink" title="ObjectIdentifier的原理"></a>ObjectIdentifier的原理</h3><p>那么他怎么实现的呢？看下面代码你就知道了，其实他就是用指针地址来做的。然后再给他实现Hashable和Equatable接口。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">struct</span> <span class="title">ObjectIdentifier</span> </span>&#123;</div><div class="line">  <span class="keyword">internal</span> <span class="keyword">let</span> _value: <span class="type">Builtin</span>.<span class="type">RawPointer</span></div><div class="line">  <span class="keyword">public</span> <span class="keyword">init</span>(<span class="number">_</span> x: <span class="type">AnyObject</span>) &#123;</div><div class="line">    <span class="keyword">self</span>._value = <span class="type">Builtin</span>.bridgeToRawPointer(x)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">public</span> <span class="keyword">init</span>(<span class="number">_</span> x: <span class="type">Any</span>.<span class="type">Type</span>) &#123;</div><div class="line">    <span class="keyword">self</span>._value = <span class="built_in">unsafeBitCast</span>(x, to: <span class="type">Builtin</span>.<span class="type">RawPointer</span>.<span class="keyword">self</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">ObjectIdentifier</span>: <span class="title">Equatable</span> </span>&#123;</div><div class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> == <span class="params">(x: ObjectIdentifier, y: ObjectIdentifier)</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="type">Bool</span>(<span class="type">Builtin</span>.cmp_eq_RawPointer(x._value, y._value))</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">ObjectIdentifier</span>: <span class="title">Hashable</span> </span>&#123;</div><div class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">hash</span><span class="params">(into hasher: <span class="keyword">inout</span> Hasher)</span></span> &#123;</div><div class="line">    hasher.combine(<span class="type">Int</span>(<span class="type">Builtin</span>.ptrtoint_Word(_value)))</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>如果项目中需要使用到这个的话，可以添加一个方便的协议扩展。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">protocol</span> <span class="title">Identifiable</span> </span>&#123;</div><div class="line">  associatedtype <span class="type">ID</span>: <span class="type">Hashable</span></div><div class="line">  <span class="keyword">var</span> id: <span class="type">ID</span> &#123; <span class="keyword">get</span> &#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Identifiable</span> <span class="title">where</span> <span class="title">Self</span>: <span class="title">AnyObject</span> </span>&#123;</div><div class="line">  <span class="keyword">public</span> <span class="keyword">var</span> id: <span class="type">ObjectIdentifier</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="type">ObjectIdentifier</span>(<span class="keyword">self</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="dump-函数"><a href="#dump-函数" class="headerlink" title="dump 函数"></a>dump 函数</h2><p>print打印对象的话，无法打印出对象的层次结构，刷LeetCode出错的时候，调试就不方便了，有时候需要为了调试信息写很长的print代码。<br>这时候有dump你接方便了，接前面的TreeNode对象，对他进行输出。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">print</span>(root)</div><div class="line"><span class="comment">// __lldb_expr_31.TreeNode</span></div><div class="line"></div><div class="line"><span class="built_in">dump</span>(root)</div><div class="line"><span class="comment">//▿ __lldb_expr_17.TreeNode #0</span></div><div class="line"><span class="comment">//▿ left: Optional(__lldb_expr_17.TreeNode)</span></div><div class="line"><span class="comment">//  ▿ some: __lldb_expr_17.TreeNode #1</span></div><div class="line"><span class="comment">//    - left: nil</span></div><div class="line"><span class="comment">//    - right: nil</span></div><div class="line"><span class="comment">//    - val: 1</span></div><div class="line"><span class="comment">//▿ right: Optional(__lldb_expr_17.TreeNode)</span></div><div class="line"><span class="comment">//  ▿ some: __lldb_expr_17.TreeNode #2</span></div><div class="line"><span class="comment">//    - left: nil</span></div><div class="line"><span class="comment">//    - right: nil</span></div><div class="line"><span class="comment">//    - val: 2</span></div><div class="line"><span class="comment">//- val: 0</span></div></pre></td></tr></table></figure>
+<p>是不是很好用？</p>
+<h2 id="sequence"><a href="#sequence" class="headerlink" title="sequence"></a>sequence</h2><p>做链表题时候经常有这个需求，遍历所有节点，需要用while，然后用个临时对象一层一层的往下走。<br>结果是一样，个人认为代码可读性上比较差，可以换成sequence来做。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">let</span> firstNode = <span class="type">ListNode</span>(<span class="number">0</span>)</div><div class="line">firstNode.next = <span class="type">ListNode</span>(<span class="number">1</span>)</div><div class="line">firstNode.next?.next = <span class="type">ListNode</span>(<span class="number">2</span>)</div><div class="line">firstNode.next?.next?.next = <span class="type">ListNode</span>(<span class="number">3</span>)</div><div class="line"></div><div class="line"><span class="keyword">var</span> curr: <span class="type">ListNode</span>? = firstNode</div><div class="line"><span class="keyword">while</span> curr != <span class="literal">nil</span> &#123;</div><div class="line">    <span class="built_in">print</span>(curr!.val)</div><div class="line">    curr = curr?.next</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 效果一样</span></div><div class="line"></div><div class="line"><span class="keyword">for</span> curr <span class="keyword">in</span> sequence(first: firstNode, next: &#123; $<span class="number">0</span>.next &#125; ) &#123;</div><div class="line">    <span class="built_in">print</span>(curr.val)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//0</span></div><div class="line"><span class="comment">//1</span></div><div class="line"><span class="comment">//2</span></div><div class="line"><span class="comment">//3</span></div></pre></td></tr></table></figure>
+<h2 id="swap"><a href="#swap" class="headerlink" title="swap"></a>swap</h2><p>这个也主要是可读性，不然tupple方式就可以搞定了。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> a = <span class="string">"a"</span></div><div class="line"><span class="keyword">var</span> b = <span class="string">"b"</span></div><div class="line"></div><div class="line">(a, b) = (b, a)</div><div class="line"><span class="built_in">print</span>(a, b)</div><div class="line"></div><div class="line"><span class="comment">// 效果相同</span></div><div class="line"></div><div class="line"><span class="built_in">swap</span>(&amp;a, &amp;b)</div><div class="line"><span class="built_in">print</span>(a, b)</div><div class="line"><span class="comment">// b a</span></div></pre></td></tr></table></figure>
+<h2 id="repeating-和-Repeated"><a href="#repeating-和-Repeated" class="headerlink" title="repeating 和 Repeated"></a>repeating 和 Repeated</h2><p>快速创建同样元素数组的两个方法。</p>
+<p>快捷创建动规二元数组或者做批量替换时候特别好用。</p>
+<font color="red">要注意的是，重复的值如果是对象的话，是同一个引用的哦。</font>
+
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</div><div class="line"><span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="type">Array</span>(repeating: <span class="number">0</span>, <span class="built_in">count</span>: nums.<span class="built_in">count</span>), <span class="built_in">count</span>: nums.<span class="built_in">count</span>)</div><div class="line"><span class="built_in">print</span>(dp)</div><div class="line"><span class="comment">// [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]</span></div><div class="line"></div><div class="line"><span class="keyword">let</span> repeated: <span class="type">Repeated</span>&lt;<span class="type">String</span>&gt; = repeatElement(<span class="string">"SwiftRocks"</span>, <span class="built_in">count</span>: <span class="number">3</span>)</div><div class="line"><span class="keyword">for</span> value <span class="keyword">in</span> repeated &#123;</div><div class="line">    <span class="built_in">print</span>(value)</div><div class="line">&#125;</div><div class="line"><span class="comment">//SwiftRocks</span></div><div class="line"><span class="comment">//SwiftRocks</span></div><div class="line"><span class="comment">//SwiftRocks</span></div><div class="line"></div><div class="line">nums.replaceSubrange(<span class="number">2</span>...<span class="number">5</span>, with: [<span class="type">Int</span>](repeating: <span class="number">1</span>, <span class="built_in">count</span>: <span class="number">4</span>))</div><div class="line"><span class="built_in">print</span>(nums)</div><div class="line"><span class="comment">//[1, 2, 1, 1, 1, 1]</span></div><div class="line">nums.replaceSubrange(<span class="number">2</span>...<span class="number">5</span>, with: repeatElement(<span class="number">3</span>, <span class="built_in">count</span>: <span class="number">4</span>))</div><div class="line"><span class="built_in">print</span>(nums)</div><div class="line"><span class="comment">//[1, 2, 3, 3, 3, 3]</span></div></pre></td></tr></table></figure>
+<h2 id="zip"><a href="#zip" class="headerlink" title="zip"></a>zip</h2><p>把两个数组压到一起，题目有两个同样长度的数组需要一起遍历，这个就很好用了</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</div><div class="line"></div><div class="line"><span class="keyword">var</span> strs = [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>]</div><div class="line"></div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> <span class="built_in">zip</span>(nums, strs) &#123;</div><div class="line">    <span class="built_in">print</span>(item)</div><div class="line">&#125;</div><div class="line"><span class="comment">//(1, "a")</span></div><div class="line"><span class="comment">//(2, "b")</span></div><div class="line"><span class="comment">//(3, "c")</span></div></pre></td></tr></table></figure>
+<h2 id="stride"><a href="#stride" class="headerlink" title="stride"></a>stride</h2><p>反向遍历，跳跃遍历。注意，to不包含哦。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// 反向遍历，to不包含，所以要到-1</div><div class="line">for i in stride(from: 10, to: -1, by: -1) &#123;</div><div class="line">    print(i)</div><div class="line">&#125;</div><div class="line">// 跳跃遍历</div><div class="line">for i in stride(from: 0, to: 10, by: 2) &#123;</div><div class="line">    print(i)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>max min pow abs，比较基础，基本没人不知道了，就不说了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/28/SwiftCodePoisoningManual/" rel="next" title="Swift投毒利器dynamicMemberLookup">
+                <i class="fa fa-chevron-left"></i> Swift投毒利器dynamicMemberLookup
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="David Woo" />
+          <p class="site-author-name" itemprop="name">David Woo</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">110</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Swift刷LeetCode时候的一些方便的API"><span class="nav-number">1.</span> <span class="nav-text">Swift刷LeetCode时候的一些方便的API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ObjectIdentifier"><span class="nav-number">1.1.</span> <span class="nav-text">ObjectIdentifier</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ObjectIdentifier的原理"><span class="nav-number">1.1.1.</span> <span class="nav-text">ObjectIdentifier的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展"><span class="nav-number">1.1.2.</span> <span class="nav-text">扩展</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dump-函数"><span class="nav-number">1.2.</span> <span class="nav-text">dump 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sequence"><span class="nav-number">1.3.</span> <span class="nav-text">sequence</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#swap"><span class="nav-number">1.4.</span> <span class="nav-text">swap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#repeating-和-Repeated"><span class="nav-number">1.5.</span> <span class="nav-text">repeating 和 Repeated</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zip"><span class="nav-number">1.6.</span> <span class="nav-text">zip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stride"><span class="nav-number">1.7.</span> <span class="nav-text">stride</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">1.8.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Woo</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

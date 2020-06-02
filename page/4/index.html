@@ -226,6 +226,106 @@
             
               
                 
+                <a class="post-title-link" href="/2015/02/28/2015-02-28-beginning-ios-pit-over-those-years-d/" itemprop="url">
+                  初学IOS那些年踩过的坑(四)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-02-28T02:47:00+08:00" content="2015-02-28">
+              2015-02-28
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#集成友盟后报错<br>错误日志如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">15-02-12 09:26:47.206 Runmove[2532:13249] NSScanner: nil string argument</div><div class="line">2015-02-12 09:26:47.206 Runmove[2532:13249] Umeng: Read binary image info failed!</div></pre></td></tr></table></figure></p>
+<p>分析：其实不是友盟问题，是自己程序中有了个错误，只是打开了友盟的调试开关，所以报了友盟错误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">//    [MobClick setLogEnabled:YES];</div></pre></td></tr></table></figure></p>
+<p>解决：注释该行代码后可以正常报告出程序中的异常</p>
+<p>#tableview下方空白处的seprator line去除<br>tableview的黑魔法<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.tableView.tableFooterView = [<span class="built_in">UIView</span> new];</div></pre></td></tr></table></figure></p>
+<p>#navigationbar的左滑返回<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    <span class="keyword">self</span>.navigationItem.leftBarButtonItem = [[<span class="built_in">UIBarButtonItem</span> alloc]</div><div class="line">                                         initWithImage:img</div><div class="line">                                         style:<span class="built_in">UIBarButtonItemStylePlain</span></div><div class="line">                                         target:<span class="keyword">self</span></div><div class="line">                                         action:<span class="keyword">@selector</span>(onBack:)];</div><div class="line"><span class="keyword">self</span>.navigationController.interactivePopGestureRecognizer.delegate = (<span class="keyword">id</span>)<span class="keyword">self</span>;</div></pre></td></tr></table></figure></p>
+<p>#autolayout的nib和手写并用的实践<br>使用nib做界面，但是layoutAttribute有些又需要根据适配来适配，nib+手写混写好烦恼啊，感觉睡不着觉了<br>其实错了，混写其实很简单的，可以像拉button一样的拉你的约束.nslayoutattribute也是可以拉线的，这样一切都太平了</p>
+<p>#画面不流畅<br>画面不流畅可能是因为一些透明视图影响了fps，可以去掉这些透明视图<br>方法：Product-&gt;Profile-&gt;Core Animation-&gt;右下第二个选项卡中勾上Color Blended Layers<br>然后看到红色的就都是透明的视图，不需要透明效果的可以去掉透明</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/02/05/2015-02-05-sql-table-from-the-record-by-the-time-to-calculate-the-continuous-days/" itemprop="url">
                   用SQL从记录表中根据时间算出连击天数
                 </a>
@@ -1374,202 +1474,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/12/13/2014-12-13-ios-syntax-block-from-scratch/" itemprop="url">
-                  IOS从头开始之Block语法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-12-13T02:41:00+08:00" content="2014-12-13">
-              2014-12-13
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS/cocoa/" itemprop="url" rel="index">
-                    <span itemprop="name">cocoa</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS/cocoa/block/" itemprop="url" rel="index">
-                    <span itemprop="name">block</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS/cocoa/block/obj-c/" itemprop="url" rel="index">
-                    <span itemprop="name">obj-c</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS/cocoa/block/obj-c/代码块/" itemprop="url" rel="index">
-                    <span itemprop="name">代码块</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/iOS/cocoa/block/obj-c/代码块/闭包/" itemprop="url" rel="index">
-                    <span itemprop="name">闭包</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#Block<br>我认为block（代码块）语法算是给Obj-c增加了很多优秀的特性，它类似于函数式编程中的闭包，通过他你可以像对待对象一样的对待函数，即函数成了面向对象中的头等公民，可以在方法和函数中定义及传递，这个是在Java中绝对无法想象的（在Java8之前必须在要传递的函数上套一层类，且无法在函数中定义）。<br>总之，通过这个特性，你可以创建比之前更灵活、可复用性更高的代码。</p>
-<p>#特性<br>对javascript比较熟悉的人都知道，回调函数除了事件循环异步IO的好处外，还有一个就是可以通过传递回调函数实现很多优秀的特性，比如以下代码中通过传入回调函数实现了打印和过滤。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//遍历并打印</span></div><div class="line">[<span class="string">"one"</span>,<span class="string">"two"</span>,<span class="string">"three"</span>].forEach(<span class="function"><span class="keyword">function</span>(<span class="params">element ,index</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(index+<span class="string">":"</span>+element);</div><div class="line">&#125;);</div><div class="line"><span class="comment">//过滤数组中含有wu的</span></div><div class="line"><span class="built_in">console</span>.log([<span class="string">"david-wu"</span>,<span class="string">"ying-tang"</span>,<span class="string">"lily-wu"</span>].filter(<span class="function"><span class="keyword">function</span>(<span class="params">element</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> element.indexOf(<span class="string">"wu"</span>) &gt;= <span class="number">0</span>;</div><div class="line">&#125;));</div></pre></td></tr></table></figure>
-<p>那么，通过block就可以实现代码段的复用，而且这种复用很灵活，不像普通函数那样，在Java中一个函数中不确定的逻辑经常是使用钩子方法，在函数中把不确定的逻辑抽象在钩子方法中，通过之类实现来达到多态的效果，但是这样的限制导致的应用场景非常有限，如果可以直接将函数作为参数传递，既可以充分的将函数抽象后高度复用。</p>
-<p>#声明与定义<br>如下代码，void (^firstBlock)(NSSring *x)声明了变量，void为返回类型。^则声明这是一个block，把他当做定义指针时候的*就好了。^为block的变量名，变量名和^一起用刮号刮起来。刮号后又是一个刮号，那个刮号中为参数，多个参数用“,”间隔。如果无参数则直接带一对刮号即可。注意，参数名字可以省略，但是书中建议最好不要这样，我也这么认为，因为这样很可能会造成迷惑，特别对于我这样的新手。<br>之后就是等号，等号后即为代码块的定义，也是以^开头，之后跟着刮号，刮号中为参数，参数如果为空可以省略该刮号及其内部内容，刮号之后就是花刮号包裹的代码块，可以在一行上定义，也可以跨多行，总之就和定义正常函数时候一样。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">void</span> (^firstBlock)(<span class="built_in">NSSring</span> \*x) = ^(<span class="built_in">NSString</span> \*x)&#123;</div><div class="line">	<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,x);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>其他定义</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//不带参数且一行内定义</span></div><div class="line"><span class="keyword">void</span> (^aVoidBlock)() = ^&#123;<span class="built_in">NSLog</span>(<span class="string">@"Hello Workld!"</span>)&#125;</div><div class="line"><span class="comment">//直接内联的定义，传入其他函数</span></div><div class="line">doIt(^(<span class="built_in">NSString</span> \*x)&#123;<span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,x);&#125;)</div></pre></td></tr></table></figure>
-<p>#使用<br>首先，要了解如何声明一个使用代码块的函数。定义时注意不同于其他参数，他需要返回值，需要(^)声明他是变量，他需要参数列表，也可以把(NSComparisonResult (^)(NSString *value))里的都当做是定义这个参数的类型。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)userCodeBlock:(<span class="built_in">NSComparisonResult</span> (^)(<span class="built_in">NSString</span> \*value)) theBlock;</div></pre></td></tr></table></figure></p>
-<p>再来看看实现类中如何写<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">-(<span class="keyword">void</span>)userCodeBlock:(<span class="built_in">NSComparisonResult</span> (^)(<span class="built_in">NSString</span> \*value)) theBlock&#123;</div><div class="line">	<span class="keyword">if</span>(<span class="built_in">NSOrderedSame</span> == theBlock(<span class="string">@"foo"</span>))</div><div class="line">  	doSomethingIfSame();</div><div class="line">  <span class="keyword">else</span></div><div class="line">  	doSomethingElse();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>#作用域<br>这点我感觉和大多数函数式变成，如Javascript一样，block的作用域除了传入的参数外，还有他<strong>定义时</strong>作用域的变量栈的只读副本，即代码块拥有对所定义位置程序的完整状态的只读访问权限。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSString</span> \*formatStr = <span class="string">@"%s"</span>;</div><div class="line"><span class="keyword">void</span> (^firstBlock)(<span class="built_in">NSSring</span> \*x) = ^(<span class="built_in">NSString</span> \*x)&#123;<span class="built_in">NSLog</span>(formatStr,x)&#125;;</div><div class="line">doIt(firstBlock);</div></pre></td></tr></table></figure></p>
-<p>注意，如果想对变量进行读写，那么可以在声明变量时通过 __block显示地将变量声明为可读写的。<br><strong>由于代码块具备了给应用状态拍快照的能力，并通过这种方式使其在应用的其他地方可用，这样就提供了一种可以封装和操作数据的及其强大的机制。</strong></p>
-<p>#内存管理<br>其内存管理和其他对象类似，由于它是在栈上分配的空间，因此传入的代码块对象需要使用-copy而不是retain，如果需要保留它就必须在对上得到一个副本。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span>:<span class="title">NSObject</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">void</span> (^myBlock)(<span class="built_in">NSString</span> *);</div><div class="line">&#125;</div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">readonly</span>,<span class="keyword">copy</span>) ((^)(<span class="built_in">NSString</span> \*)) \*myBlock;</div><div class="line"></div><div class="line">  -(<span class="keyword">void</span>)doSomethingWithBlock;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Person</span></span></div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)doSomethingWithBlock&#123;</div><div class="line">  myBlock(<span class="string">@"foo"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
-<p>#类型定义<br>使用typedef关键字进行代码块定义，可以使代码块的定义更加易读。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">void</span> (^BlockWithCHarArg)(<span class="keyword">char</span> \*)</div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span>:<span class="title">NSObject</span></span></div><div class="line">&#123;</div><div class="line">	BlockWithCHarArg myBlock;</div><div class="line">&#125;</div><div class="line">  <span class="keyword">@property</span> (<span class="keyword">readonly</span>,<span class="keyword">copy</span>) BlockWithCHarArg myBlock;</div><div class="line">  -(<span class="keyword">void</span>)doSomethingWithBlock;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure></p>
-<p>#代码块的用处</p>
-<h2 id="GCD中的应用"><a href="#GCD中的应用" class="headerlink" title="GCD中的应用"></a>GCD中的应用</h2><p>GCD是一个Obj-c的框架，他提供了易用的抽象层，这样开发者不需要处理底层的线程管理就可以充分利用多处理器和多核架构。<br>这样开发者只需要提供代码块，GCD可以提供同步和异步的执行方式。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dispatch\_async(dispatch\_get\_global\_queue(<span class="number">0</span>, <span class="number">0</span>),^&#123;doSomethingSlow();&#125;);</div></pre></td></tr></table></figure></p>
-<p>dispatch_get_global_queue方法可以获得全局队列，第二个参数就是一个代码块，这样我们就不需要关心线程应该开多少，都可以交给GCD来完成，队列也可以通过dispatch_queue_create函数来创建一个私有的顺序执行的队列。如下代码<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> myQueue = dispatch_queue_create(<span class="string">"david.queue"</span>, DISPATCH_QUEUE_SERIAL);</div><div class="line"><span class="built_in">dispatch_async</span>(_captureQueue, ^&#123;</div><div class="line">	doSomething();</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
-<h2 id="过滤、映射、处理"><a href="#过滤、映射、处理" class="headerlink" title="过滤、映射、处理"></a>过滤、映射、处理</h2><p>如前面javascript的代码段的.filter函数对数组进行过滤，Obj-c也可以通过代码块来实现相应功能，这里就拿映射来举个例子。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> \*map(<span class="built_in">NSArray</span> \*items,<span class="keyword">id</span> (^block)(<span class="keyword">id</span> item))&#123;</div><div class="line">	<span class="built_in">NSMutableArray</span> \*result = [<span class="built_in">NSMutableArray</span> array];</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">id</span> item <span class="keyword">in</span> items)&#123;</div><div class="line">  	[result addObject:block(item)];</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="标准API中的代码块"><a href="#标准API中的代码块" class="headerlink" title="标准API中的代码块"></a>标准API中的代码块</h2><p>常见的类NsArray，NSDictionary、NSIndexSet和NSSet中，都用使用代码块的函数，NSString、NSAttributeString中也提供了使用代码块逐行逐个遍历的方法。</p>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>比如说闭包教程中最常举的例子–计数器，先来看看JavaScript中如何做。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function getCounter()&#123;</div><div class="line">    var counter = <span class="number">0</span>;</div><div class="line">    <span class="keyword">return</span> function()&#123;</div><div class="line">        <span class="keyword">return</span> ++counter;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line">counter = getCounter();</div><div class="line">counter2 = getCounter();</div><div class="line">console.log(counter());<span class="comment">//1</span></div><div class="line">console.log(counter2());<span class="comment">//1</span></div><div class="line">console.log(counter());<span class="comment">//2</span></div><div class="line">console.log(counter());<span class="comment">//3</span></div><div class="line">console.log(counter2());<span class="comment">//2</span></div></pre></td></tr></table></figure></p>
-<p>正如前面所说，代码块（闭包）可以保存函数定义时候的状态，利用这种状态就实现了计数器的创建方法。那么Obj-c中能不能这样做呢？还是等我Mac机器弄起来后再试试吧，现在也只能敲敲代码。</p>
-<p>还有一些作用比如CPU复杂性的运算，可以通过GCD来完成多线程处理，这个也等Mac搞定后动手试一试。</p>
-<p>#不足<br>但是，Obj-c中的block不像函数式编程（JavaScript、Ruby、Python）中那么的灵活，但是至少是比Java灵活的多了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1615,7 +1519,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">109</span>
+              <span class="site-state-item-count">110</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

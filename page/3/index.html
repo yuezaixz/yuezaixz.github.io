@@ -226,6 +226,103 @@
             
               
                 
+                <a class="post-title-link" href="/2015/07/13/2015-07-13-beginning-ios-pit-over-those-years-i/" itemprop="url">
+                  初学IOS那些年踩过的坑（十）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2015-07-13T16:01:53+08:00" content="2015-07-13">
+              2015-07-13
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="页面间pop和push导致的问题"><a href="#页面间pop和push导致的问题" class="headerlink" title="页面间pop和push导致的问题"></a>页面间pop和push导致的问题</h2><p>问题描述：问题大概是这样，一个运动中页面RunningViewController，一个首页IndexViewController，一个结果页RunResultViewController<br>运动：IndexViewController–Push–&gt;RunningViewController<br>结束：RunningViewController –Pop–&gt;IndexViewController–push–&gt;</p>
+<p>结果IndexViewController的ViewWillAppear会弹出个UIAlertView，其逻辑会造成影响，在IOS8情况下UIAlertView不会弹出（应该是弹出后立马跳到了RunResultViewController），而IOS7情况下到RunResultViewController才弹出该UIAlertView。</p>
+<p>该问题很简单，该逻辑其实放错位置了，应该放在ViewDidLoad中，但是从UIAlertView造成的错误逻辑去排查到该问题比较麻烦。</p>
+<h2 id="TableView的load时机"><a href="#TableView的load时机" class="headerlink" title="TableView的load时机"></a>TableView的load时机</h2><p>问题描述：在使用FXForm做表单时候，在viewDidLoad中进行了初始化，但是初始化内容无效（同样也是排查比较麻烦，开始没怀疑这个问题）。IOS8是在ViewWillAppear之后（除非你调用了tableView.tableFooterView = … 之类方法，调用后）再进行loadView的操作，而IOS7则是在[super viewDidLoad]之后。最安全的做法就是在ViewWillAppear之后重新调用一次 [tableView reloadData];</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/06/29/2015-06-29-beginning-ios-pit-over-those-years-h/" itemprop="url">
                   初学IOS那些年踩过的坑（九）
                 </a>
@@ -1137,106 +1234,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/02/28/2015-02-28-beginning-ios-pit-over-those-years-d/" itemprop="url">
-                  初学IOS那些年踩过的坑(四)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2015-02-28T02:47:00+08:00" content="2015-02-28">
-              2015-02-28
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#集成友盟后报错<br>错误日志如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">15-02-12 09:26:47.206 Runmove[2532:13249] NSScanner: nil string argument</div><div class="line">2015-02-12 09:26:47.206 Runmove[2532:13249] Umeng: Read binary image info failed!</div></pre></td></tr></table></figure></p>
-<p>分析：其实不是友盟问题，是自己程序中有了个错误，只是打开了友盟的调试开关，所以报了友盟错误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">//    [MobClick setLogEnabled:YES];</div></pre></td></tr></table></figure></p>
-<p>解决：注释该行代码后可以正常报告出程序中的异常</p>
-<p>#tableview下方空白处的seprator line去除<br>tableview的黑魔法<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.tableView.tableFooterView = [<span class="built_in">UIView</span> new];</div></pre></td></tr></table></figure></p>
-<p>#navigationbar的左滑返回<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    <span class="keyword">self</span>.navigationItem.leftBarButtonItem = [[<span class="built_in">UIBarButtonItem</span> alloc]</div><div class="line">                                         initWithImage:img</div><div class="line">                                         style:<span class="built_in">UIBarButtonItemStylePlain</span></div><div class="line">                                         target:<span class="keyword">self</span></div><div class="line">                                         action:<span class="keyword">@selector</span>(onBack:)];</div><div class="line"><span class="keyword">self</span>.navigationController.interactivePopGestureRecognizer.delegate = (<span class="keyword">id</span>)<span class="keyword">self</span>;</div></pre></td></tr></table></figure></p>
-<p>#autolayout的nib和手写并用的实践<br>使用nib做界面，但是layoutAttribute有些又需要根据适配来适配，nib+手写混写好烦恼啊，感觉睡不着觉了<br>其实错了，混写其实很简单的，可以像拉button一样的拉你的约束.nslayoutattribute也是可以拉线的，这样一切都太平了</p>
-<p>#画面不流畅<br>画面不流畅可能是因为一些透明视图影响了fps，可以去掉这些透明视图<br>方法：Product-&gt;Profile-&gt;Core Animation-&gt;右下第二个选项卡中勾上Color Blended Layers<br>然后看到红色的就都是透明的视图，不需要透明效果的可以去掉透明</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1282,7 +1279,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">109</span>
+              <span class="site-state-item-count">110</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
