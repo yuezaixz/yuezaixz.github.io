@@ -1,0 +1,594 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="学渣的线性动规线性DP比较好的例子就是 三角形最小路径和，LIS，LCS问题了。 LIS给定一个无序的整数数组，找到其中最长上升子序列的长度。 直达链接 问题描述给定n个整数A1,A2,A3…An。按照从左往右的顺序选择尽可能多的整数，组成一个上升子序列，其中相邻元素不能相等 转移方程12dp[i]=max&amp;#123;1+dp[j]&amp;#125;(0&amp;lt;=j&amp;lt;i,s[j]&amp;lt;s[i])">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学渣的线性动规">
+<meta property="og:url" content="http://yoursite.com/2020/05/04/stupid-man-s-linear-dp/index.html">
+<meta property="og:site_name" content="大胃吴的闲话唠嗑">
+<meta property="og:description" content="学渣的线性动规线性DP比较好的例子就是 三角形最小路径和，LIS，LCS问题了。 LIS给定一个无序的整数数组，找到其中最长上升子序列的长度。 直达链接 问题描述给定n个整数A1,A2,A3…An。按照从左往右的顺序选择尽可能多的整数，组成一个上升子序列，其中相邻元素不能相等 转移方程12dp[i]=max&amp;#123;1+dp[j]&amp;#125;(0&amp;lt;=j&amp;lt;i,s[j]&amp;lt;s[i])">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://image.runmaf.com/2020-05-17-15896421497757.jpg">
+<meta property="og:image" content="http://image.runmaf.com/2020-05-17-15896455723167.jpg">
+<meta property="og:updated_time" content="2020-06-03T04:31:43.559Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="学渣的线性动规">
+<meta name="twitter:description" content="学渣的线性动规线性DP比较好的例子就是 三角形最小路径和，LIS，LCS问题了。 LIS给定一个无序的整数数组，找到其中最长上升子序列的长度。 直达链接 问题描述给定n个整数A1,A2,A3…An。按照从左往右的顺序选择尽可能多的整数，组成一个上升子序列，其中相邻元素不能相等 转移方程12dp[i]=max&amp;#123;1+dp[j]&amp;#125;(0&amp;lt;=j&amp;lt;i,s[j]&amp;lt;s[i])">
+<meta name="twitter:image" content="http://image.runmaf.com/2020-05-17-15896421497757.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/04/stupid-man-s-linear-dp/"/>
+
+  <title> 学渣的线性动规 | 大胃吴的闲话唠嗑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大胃吴的闲话唠嗑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">扯扯技术，唠唠闲话 交流email-xiao303178394@gmail.com</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            menu.首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            menu.文章
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                学渣的线性动规
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-05-04T00:20:33+08:00" content="2020-05-04">
+              2020-05-04
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="学渣的线性动规"><a href="#学渣的线性动规" class="headerlink" title="学渣的线性动规"></a>学渣的线性动规</h1><p>线性DP比较好的例子就是 三角形最小路径和，LIS，LCS问题了。</p>
+<h2 id="LIS"><a href="#LIS" class="headerlink" title="LIS"></a>LIS</h2><p>给定一个无序的整数数组，找到其中最长上升子序列的长度。</p>
+<p><a href="https://leetcode-cn.com/problems/longest-increasing-subsequence/" target="_blank" rel="external">直达链接</a></p>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>给定n个整数A1,A2,A3…An。按照从左往右的顺序选择尽可能多的整数，组成一个上升子序列，其中相邻元素不能相等</p>
+<h3 id="转移方程"><a href="#转移方程" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[i]=max&#123;1+dp[j]&#125;(0&lt;=j&lt;i,s[j]&lt;s[i])</div></pre></td></tr></table></figure>
+<h3 id="边界"><a href="#边界" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[0] = 1</div></pre></td></tr></table></figure>
+<h3 id="状态标识"><a href="#状态标识" class="headerlink" title="状态标识"></a>状态标识</h3><p>s 为输入数列<br>dp[i]表示以s[i]为结尾的“最大上升子序列长度”</p>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>max{dp[i]}(0&lt;=i&lt;n)</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">lis</span><span class="params">(<span class="number">_</span> s: [Int])</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="number">1</span>, <span class="built_in">count</span>: s.<span class="built_in">count</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> result = <span class="number">0</span></div><div class="line">        </div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span> ..&lt; dp.<span class="built_in">count</span> &#123;</div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">0</span> ..&lt; i &#123;</div><div class="line">                <span class="keyword">if</span> s[j] &lt; s[i] &#123;</div><div class="line">                    dp[i] = <span class="built_in">max</span>(dp[i], dp[j] + <span class="number">1</span>)</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            result = <span class="built_in">max</span>(dp[i], result)</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> result</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="LCS解1，二位数组"><a href="#LCS解1，二位数组" class="headerlink" title="LCS解1，二位数组"></a>LCS解1，二位数组</h2><p>给定两个字符串 text1 和 text2，返回这两个字符串的最长公共子序列的长度。</p>
+<p><a href="https://leetcode-cn.com/problems/longest-common-subsequence/" target="_blank" rel="external">直达链接</a></p>
+<h3 id="问题描述-1"><a href="#问题描述-1" class="headerlink" title="问题描述"></a>问题描述</h3><p>给定两个长度分别为n,m的字符串a,b,求既是a的子序列，又是b的子序列的字符串的长度最长是多少</p>
+<h3 id="转移方程-1"><a href="#转移方程-1" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">if a[i] == b[j]:</div><div class="line">	dp[i][j] = dp[i - 1][j - 1] + 1</div><div class="line">else:</div><div class="line">	dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])</div></pre></td></tr></table></figure>
+<h3 id="边界-1"><a href="#边界-1" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[i][0] = 0</div><div class="line">dp[0][j] = 0</div></pre></td></tr></table></figure>
+<h3 id="状态标识-1"><a href="#状态标识-1" class="headerlink" title="状态标识"></a>状态标识</h3><p>a,b 为输入字符串<br>n,m 为a,b的长度</p>
+<p>dp[i][j]表示a[0 ..&lt; i]与b[0 ..&lt; j]的最长公共子序列的长度</p>
+<h3 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h3><p>dp[n][m]</p>
+<h3 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">longestCommonSubsequence</span><span class="params">(<span class="number">_</span> a: String, <span class="number">_</span> b: String)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">let</span> m = a.<span class="built_in">count</span></div><div class="line">        <span class="keyword">let</span> n = b.<span class="built_in">count</span></div><div class="line">        <span class="keyword">if</span> m == <span class="number">0</span> || n == <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="type">Array</span>(repeating: <span class="number">0</span>, <span class="built_in">count</span>: n + <span class="number">1</span>), <span class="built_in">count</span>: m + <span class="number">1</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span> ... m &#123;</div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">1</span> ... n &#123;</div><div class="line">                <span class="keyword">if</span> a[a.index(a.startIndex, offsetBy: i - <span class="number">1</span>)] == b[b.index(b.startIndex, offsetBy: j - <span class="number">1</span>)] &#123;</div><div class="line">                    dp[i][j] = dp[i - <span class="number">1</span>][j - <span class="number">1</span>] + <span class="number">1</span></div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    dp[i][j] = <span class="built_in">max</span>(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>])</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> dp[m][n]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>但是用二位数组，时间复杂度在leetcode上过不了关，所以得考虑其他动态方案的方式。</p>
+<h2 id="LCS解2，一维数组"><a href="#LCS解2，一维数组" class="headerlink" title="LCS解2，一维数组"></a>LCS解2，一维数组</h2><p>几个优化的点</p>
+<ul>
+<li>一个是用一维数组</li>
+<li>二是不用String而是一开始就把String转成Array<character>，加快查询和修改的效率</character></li>
+</ul>
+<h3 id="转移方程-2"><a href="#转移方程-2" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// a.count &gt; b.count</div><div class="line"></div><div class="line">if a[j] == b[i]:</div><div class="line">	dp[j] = dp[j - 1] + 1</div><div class="line">else:</div><div class="line">	dp[j] = max(dp[j - 1], dp[j])</div></pre></td></tr></table></figure>
+<h3 id="边界-2"><a href="#边界-2" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[0] = 0</div></pre></td></tr></table></figure>
+<h3 id="状态标识-2"><a href="#状态标识-2" class="headerlink" title="状态标识"></a>状态标识</h3><p>a,b 为输入字符串转换的数组<br>m, n 为a,b的长度， m &gt;= n</p>
+<p>dp[j]表示a[0 ..&lt; j]与b的最长公共子序列的长度</p>
+<h3 id="目标-2"><a href="#目标-2" class="headerlink" title="目标"></a>目标</h3><p>dp[m]</p>
+<h3 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">longestCommonSubsequence</span><span class="params">(<span class="number">_</span> text1: String, <span class="number">_</span> text2: String)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">var</span> a = text1</div><div class="line">        <span class="keyword">var</span> b = text2</div><div class="line">        <span class="keyword">var</span> m = a.<span class="built_in">count</span></div><div class="line">        <span class="keyword">var</span> n = b.<span class="built_in">count</span></div><div class="line">        </div><div class="line">        <span class="keyword">if</span> m == <span class="number">0</span> || n == <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> m &lt; n &#123;</div><div class="line">            <span class="keyword">let</span> temp = m</div><div class="line">            m = n</div><div class="line">            n = temp</div><div class="line">            a = text2</div><div class="line">            b = text1</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="number">0</span>, <span class="built_in">count</span>: m + <span class="number">1</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span> ... n &#123;</div><div class="line">            <span class="keyword">var</span> cur = <span class="number">0</span></div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">1</span> ... m &#123;</div><div class="line">                <span class="keyword">let</span> leftTop = cur</div><div class="line">                cur = dp[j]</div><div class="line">                <span class="keyword">if</span> a[a.index(a.startIndex, offsetBy: j - <span class="number">1</span>)] == b[b.index(b.startIndex, offsetBy: i - <span class="number">1</span>)] &#123;</div><div class="line">                    dp[j] = leftTop + <span class="number">1</span></div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    dp[j] = <span class="built_in">max</span>(dp[j - <span class="number">1</span>], dp[j])</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">            </div><div class="line">        <span class="keyword">return</span> dp[m]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="double-100"><a href="#double-100" class="headerlink" title="double 100%"></a>double 100%</h3><p><img src="http://image.runmaf.com/2020-05-17-15896421497757.jpg" alt=""></p>
+<h2 id="三角形最小路径和"><a href="#三角形最小路径和" class="headerlink" title="三角形最小路径和"></a>三角形最小路径和</h2><p>给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。</p>
+<p>相邻的结点 在这里指的是 下标 与 上一层结点下标 相同或者等于 上一层结点下标 + 1 的两个结点。</p>
+<p><a href="https://leetcode-cn.com/problems/triangle" target="_blank" rel="external">直达链接</a></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>题目有表示用空间复杂度为O(n)有加分，那么肯定要考虑用一位数组来动态规划了。</p>
+<h3 id="转移方程-3"><a href="#转移方程-3" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[j] = triangle[i][j] + min(dp[j], dp[i])</div></pre></td></tr></table></figure>
+<h3 id="边界-3"><a href="#边界-3" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[0] = triangle[0][0]</div></pre></td></tr></table></figure>
+<h3 id="状态标识-3"><a href="#状态标识-3" class="headerlink" title="状态标识"></a>状态标识</h3><p>triangle 为三角形的二维数组<br>m为行数，n为最后一行列数<br>i为行索引，j为列索引</p>
+<h3 id="目标-3"><a href="#目标-3" class="headerlink" title="目标"></a>目标</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">min&#123;dp[0 ..&lt; n]&#125;</div></pre></td></tr></table></figure>
+<h3 id="实现-3"><a href="#实现-3" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">minimumTotal</span><span class="params">(<span class="number">_</span> triangle: [[Int]])</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">let</span> columnCount = triangle.<span class="built_in">count</span></div><div class="line">        </div><div class="line">        <span class="keyword">if</span> columnCount &lt;= <span class="number">1</span> &#123;</div><div class="line">            <span class="keyword">return</span> triangle.first?.first ?? <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="type">Int</span>.<span class="built_in">max</span>, <span class="built_in">count</span>: triangle.last?.<span class="built_in">count</span> ?? <span class="number">0</span>)</div><div class="line">        dp[<span class="number">0</span>] = triangle.first?.first ?? <span class="number">0</span></div><div class="line">        </div><div class="line">        <span class="keyword">for</span> columnIndex <span class="keyword">in</span> <span class="number">1</span> ..&lt; columnCount &#123;</div><div class="line">            <span class="keyword">let</span> row = triangle[columnIndex]</div><div class="line">            <span class="keyword">let</span> rowCount = row.<span class="built_in">count</span></div><div class="line">            </div><div class="line">            <span class="keyword">var</span> lastLeft = <span class="type">Int</span>.<span class="built_in">max</span></div><div class="line">            </div><div class="line">            <span class="keyword">for</span> rowIndex <span class="keyword">in</span> <span class="number">0</span> ..&lt; rowCount &#123;</div><div class="line">                <span class="keyword">let</span> temp = lastLeft</div><div class="line">                lastLeft = dp[rowIndex]</div><div class="line">                dp[rowIndex] = row[rowIndex] + <span class="built_in">min</span>(temp, dp[rowIndex])</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp.<span class="built_in">min</span>() ?? <span class="number">0</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">assert</span>(<span class="type">Solution</span>().minimumTotal([[<span class="number">2</span>],[<span class="number">3</span>, <span class="number">4</span>],[<span class="number">6</span>, <span class="number">5</span>, <span class="number">7</span>],[<span class="number">4</span>,<span class="number">1</span>,<span class="number">8</span>,<span class="number">3</span>]]) == <span class="number">11</span>)</div></pre></td></tr></table></figure>
+<h3 id="double-100-1"><a href="#double-100-1" class="headerlink" title="double 100%"></a>double 100%</h3><p><img src="http://image.runmaf.com/2020-05-17-15896455723167.jpg" alt=""></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/02/stupid-man-s-dp/" rel="next" title="学渣的DP动态规划算法">
+                <i class="fa fa-chevron-left"></i> 学渣的DP动态规划算法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/05/stupid-man-s-area-dp/" rel="prev" title="学渣的区域动规">
+                学渣的区域动规 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="David Woo" />
+          <p class="site-author-name" itemprop="name">David Woo</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">110</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#学渣的线性动规"><span class="nav-number">1.</span> <span class="nav-text">学渣的线性动规</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LIS"><span class="nav-number">1.1.</span> <span class="nav-text">LIS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">1.1.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转移方程"><span class="nav-number">1.1.2.</span> <span class="nav-text">转移方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#边界"><span class="nav-number">1.1.3.</span> <span class="nav-text">边界</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态标识"><span class="nav-number">1.1.4.</span> <span class="nav-text">状态标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标"><span class="nav-number">1.1.5.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">1.1.6.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LCS解1，二位数组"><span class="nav-number">1.2.</span> <span class="nav-text">LCS解1，二位数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转移方程-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">转移方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#边界-1"><span class="nav-number">1.2.3.</span> <span class="nav-text">边界</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态标识-1"><span class="nav-number">1.2.4.</span> <span class="nav-text">状态标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标-1"><span class="nav-number">1.2.5.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现-1"><span class="nav-number">1.2.6.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">1.2.7.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LCS解2，一维数组"><span class="nav-number">1.3.</span> <span class="nav-text">LCS解2，一维数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#转移方程-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">转移方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#边界-2"><span class="nav-number">1.3.2.</span> <span class="nav-text">边界</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态标识-2"><span class="nav-number">1.3.3.</span> <span class="nav-text">状态标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标-2"><span class="nav-number">1.3.4.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现-2"><span class="nav-number">1.3.5.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#double-100"><span class="nav-number">1.3.6.</span> <span class="nav-text">double 100%</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三角形最小路径和"><span class="nav-number">1.4.</span> <span class="nav-text">三角形最小路径和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">1.5.</span> <span class="nav-text">分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#转移方程-3"><span class="nav-number">1.5.1.</span> <span class="nav-text">转移方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#边界-3"><span class="nav-number">1.5.2.</span> <span class="nav-text">边界</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#状态标识-3"><span class="nav-number">1.5.3.</span> <span class="nav-text">状态标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标-3"><span class="nav-number">1.5.4.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现-3"><span class="nav-number">1.5.5.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#double-100-1"><span class="nav-number">1.5.6.</span> <span class="nav-text">double 100%</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Woo</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

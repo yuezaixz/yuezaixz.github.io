@@ -683,7 +683,7 @@
             
               
                 
-                <a class="post-title-link" href="/2020/05/18/stupid-man-s-Greedy-algo/" itemprop="url">
+                <a class="post-title-link" href="/2020/05/17/stupid-man-s-Greedy-algo/" itemprop="url">
                   学渣的贪婪算法
                 </a>
               
@@ -697,8 +697,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2020-05-18T22:24:39+08:00" content="2020-05-18">
-              2020-05-18
+            <time itemprop="dateCreated" datetime="2020-05-17T22:24:39+08:00" content="2020-05-17">
+              2020-05-17
             </time>
           </span>
 
@@ -799,7 +799,119 @@
             
               
                 
-                <a class="post-title-link" href="/2020/05/18/stupid-man-s-dfs-bfs/" itemprop="url">
+                <a class="post-title-link" href="/2020/05/11/stupid-man-s-dfs/" itemprop="url">
+                  学渣的分治算法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-05-11T17:25:30+08:00" content="2020-05-11">
+              2020-05-11
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="学渣的分治算法"><a href="#学渣的分治算法" class="headerlink" title="学渣的分治算法"></a>学渣的分治算法</h1><p>个人感觉分治算法和区域动规很像，都是把一个大问题拆解成很多小问题。<br>不同的是区域动规是从上往下。<br>而分治算法是从下往上。</p>
+<h2 id="一般步骤："><a href="#一般步骤：" class="headerlink" title="一般步骤："></a>一般步骤：</h2><ul>
+<li>分解，将问题划分成若干规模较小的同类问题</li>
+<li>求解，当子问题足够小，就可以很容易的得到答案</li>
+<li>合并，按原问题的要求，将子问题的解逐层合并构成原问题的解</li>
+</ul>
+<h2 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h2><p>分治算法所需时间取决于分解后子问题的个数、子问题的复杂度等。<br>而二分法，其划分简单、均匀，是经常采用的一种有效的方法，如二分检索</p>
+<h2 id="解题-输出二叉树"><a href="#解题-输出二叉树" class="headerlink" title="解题-输出二叉树"></a>解题-输出二叉树</h2><p>在一个 m*n 的二维字符串数组中输出二叉树，并遵守以下规则：</p>
+<ul>
+<li>行数 m 应当等于给定二叉树的高度。</li>
+<li>列数 n 应当总是奇数。</li>
+<li>根节点的值（以字符串格式给出）应当放在可放置的第一行正中间。根节点所在的行与列会将剩余空间划分为两部分（左下部分和右下部分）。你应该将左子树输出在左下部分，右子树输出在右下部分。左下和右下部分应当有相同的大小。即使一个子树为空而另一个非空，你不需要为空的子树输出任何东西，但仍需要为另一个子树留出足够的空间。然而，如果两个子树都为空则不需要为它们留出任何空间。</li>
+<li>每个未使用的空间应包含一个空的字符串””。</li>
+<li>使用相同的规则输出子树。</li>
+</ul>
+<p><a href="https://leetcode-cn.com/problems/print-binary-tree" target="_blank" rel="external">直达链接</a></p>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>这道题需要先构建二位数组，所以需要先递归获取到高度，通过高度计算出宽度。<br>然后就可以简单的通过二分搜索来填充这个二位数组了。</p>
+<h3 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> val: <span class="type">Int</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> <span class="keyword">left</span>: <span class="type">TreeNode</span>?</div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> <span class="keyword">right</span>: <span class="type">TreeNode</span>?</div><div class="line">    <span class="keyword">public</span> <span class="keyword">init</span>(<span class="number">_</span> val: <span class="type">Int</span>) &#123;</div><div class="line">        <span class="keyword">self</span>.val = val</div><div class="line">        <span class="keyword">self</span>.<span class="keyword">left</span> = <span class="literal">nil</span></div><div class="line">        <span class="keyword">self</span>.<span class="keyword">right</span> = <span class="literal">nil</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">printTree</span><span class="params">(<span class="number">_</span> root: TreeNode?)</span></span> -&gt; [[<span class="type">String</span>]] &#123;</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> root = root <span class="keyword">else</span> &#123; <span class="keyword">return</span> [] &#125;</div><div class="line">        <span class="keyword">if</span> root.<span class="keyword">left</span> == <span class="literal">nil</span> &amp;&amp; root.<span class="keyword">right</span> == <span class="literal">nil</span> &#123; <span class="keyword">return</span> [[<span class="type">String</span>(root.val)]] &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">let</span> height = treeHeight(root)</div><div class="line">        <span class="keyword">let</span> width = <span class="number">2</span> &lt;&lt; (height - <span class="number">1</span>) - <span class="number">1</span></div><div class="line">        <span class="built_in">print</span>(height, width)</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> result = <span class="type">Array</span>(repeating: <span class="type">Array</span>(repeating: <span class="string">""</span>, <span class="built_in">count</span>: width), <span class="built_in">count</span>: height)</div><div class="line">        </div><div class="line">        dfs(root, result: &amp;result, start: <span class="number">0</span>, end: width - <span class="number">1</span>, deep: <span class="number">0</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> result</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">dfs</span><span class="params">(<span class="number">_</span> root: TreeNode?, result: <span class="keyword">inout</span> [[String]] ,start: Int, end: Int, deep: Int)</span></span> &#123;</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> root = root <span class="keyword">else</span> &#123; <span class="keyword">return</span> &#125;</div><div class="line">        <span class="keyword">let</span> mid = (start + end) &gt;&gt; <span class="number">1</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> <span class="keyword">left</span> = root.<span class="keyword">left</span> &#123;</div><div class="line">            dfs(<span class="keyword">left</span>, result: &amp;result, start: start, end: mid - <span class="number">1</span>, deep: deep + <span class="number">1</span>)</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> <span class="keyword">right</span> = root.<span class="keyword">right</span> &#123;</div><div class="line">            dfs(<span class="keyword">right</span>, result: &amp;result, start: mid + <span class="number">1</span>, end: end, deep: deep + <span class="number">1</span>)</div><div class="line">        &#125;</div><div class="line">        result[deep][mid] = <span class="type">String</span>(root.val)</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">treeHeight</span><span class="params">(<span class="number">_</span> root: TreeNode?)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> root = root <span class="keyword">else</span> &#123; <span class="keyword">return</span> <span class="number">0</span> &#125;</div><div class="line">        <span class="keyword">if</span> root.<span class="keyword">left</span> == <span class="literal">nil</span> &amp;&amp; root.<span class="keyword">right</span> == <span class="literal">nil</span> &#123; <span class="keyword">return</span> <span class="number">1</span> &#125;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(treeHeight(root.<span class="keyword">left</span>), treeHeight(root.<span class="keyword">right</span>)) + <span class="number">1</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="double-100"><a href="#double-100" class="headerlink" title="double 100%"></a>double 100%</h3><p><img src="http://image.runmaf.com/2020-05-17-15897074475037.jpg" alt=""></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/05/09/stupid-man-s-dfs-bfs/" itemprop="url">
                   学渣的拓扑排序
                 </a>
               
@@ -813,8 +925,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2020-05-18T19:53:43+08:00" content="2020-05-18">
-              2020-05-18
+            <time itemprop="dateCreated" datetime="2020-05-09T19:53:43+08:00" content="2020-05-09">
+              2020-05-09
             </time>
           </span>
 
@@ -960,119 +1072,7 @@
             
               
                 
-                <a class="post-title-link" href="/2020/05/17/stupid-man-s-dfs/" itemprop="url">
-                  学渣的分治算法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2020-05-17T17:25:30+08:00" content="2020-05-17">
-              2020-05-17
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="学渣的分治算法"><a href="#学渣的分治算法" class="headerlink" title="学渣的分治算法"></a>学渣的分治算法</h1><p>个人感觉分治算法和区域动规很像，都是把一个大问题拆解成很多小问题。<br>不同的是区域动规是从上往下。<br>而分治算法是从下往上。</p>
-<h2 id="一般步骤："><a href="#一般步骤：" class="headerlink" title="一般步骤："></a>一般步骤：</h2><ul>
-<li>分解，将问题划分成若干规模较小的同类问题</li>
-<li>求解，当子问题足够小，就可以很容易的得到答案</li>
-<li>合并，按原问题的要求，将子问题的解逐层合并构成原问题的解</li>
-</ul>
-<h2 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h2><p>分治算法所需时间取决于分解后子问题的个数、子问题的复杂度等。<br>而二分法，其划分简单、均匀，是经常采用的一种有效的方法，如二分检索</p>
-<h2 id="解题-输出二叉树"><a href="#解题-输出二叉树" class="headerlink" title="解题-输出二叉树"></a>解题-输出二叉树</h2><p>在一个 m*n 的二维字符串数组中输出二叉树，并遵守以下规则：</p>
-<ul>
-<li>行数 m 应当等于给定二叉树的高度。</li>
-<li>列数 n 应当总是奇数。</li>
-<li>根节点的值（以字符串格式给出）应当放在可放置的第一行正中间。根节点所在的行与列会将剩余空间划分为两部分（左下部分和右下部分）。你应该将左子树输出在左下部分，右子树输出在右下部分。左下和右下部分应当有相同的大小。即使一个子树为空而另一个非空，你不需要为空的子树输出任何东西，但仍需要为另一个子树留出足够的空间。然而，如果两个子树都为空则不需要为它们留出任何空间。</li>
-<li>每个未使用的空间应包含一个空的字符串””。</li>
-<li>使用相同的规则输出子树。</li>
-</ul>
-<p><a href="https://leetcode-cn.com/problems/print-binary-tree" target="_blank" rel="external">直达链接</a></p>
-<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>这道题需要先构建二位数组，所以需要先递归获取到高度，通过高度计算出宽度。<br>然后就可以简单的通过二分搜索来填充这个二位数组了。</p>
-<h3 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> val: <span class="type">Int</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> <span class="keyword">left</span>: <span class="type">TreeNode</span>?</div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> <span class="keyword">right</span>: <span class="type">TreeNode</span>?</div><div class="line">    <span class="keyword">public</span> <span class="keyword">init</span>(<span class="number">_</span> val: <span class="type">Int</span>) &#123;</div><div class="line">        <span class="keyword">self</span>.val = val</div><div class="line">        <span class="keyword">self</span>.<span class="keyword">left</span> = <span class="literal">nil</span></div><div class="line">        <span class="keyword">self</span>.<span class="keyword">right</span> = <span class="literal">nil</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">printTree</span><span class="params">(<span class="number">_</span> root: TreeNode?)</span></span> -&gt; [[<span class="type">String</span>]] &#123;</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> root = root <span class="keyword">else</span> &#123; <span class="keyword">return</span> [] &#125;</div><div class="line">        <span class="keyword">if</span> root.<span class="keyword">left</span> == <span class="literal">nil</span> &amp;&amp; root.<span class="keyword">right</span> == <span class="literal">nil</span> &#123; <span class="keyword">return</span> [[<span class="type">String</span>(root.val)]] &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">let</span> height = treeHeight(root)</div><div class="line">        <span class="keyword">let</span> width = <span class="number">2</span> &lt;&lt; (height - <span class="number">1</span>) - <span class="number">1</span></div><div class="line">        <span class="built_in">print</span>(height, width)</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> result = <span class="type">Array</span>(repeating: <span class="type">Array</span>(repeating: <span class="string">""</span>, <span class="built_in">count</span>: width), <span class="built_in">count</span>: height)</div><div class="line">        </div><div class="line">        dfs(root, result: &amp;result, start: <span class="number">0</span>, end: width - <span class="number">1</span>, deep: <span class="number">0</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> result</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">dfs</span><span class="params">(<span class="number">_</span> root: TreeNode?, result: <span class="keyword">inout</span> [[String]] ,start: Int, end: Int, deep: Int)</span></span> &#123;</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> root = root <span class="keyword">else</span> &#123; <span class="keyword">return</span> &#125;</div><div class="line">        <span class="keyword">let</span> mid = (start + end) &gt;&gt; <span class="number">1</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> <span class="keyword">left</span> = root.<span class="keyword">left</span> &#123;</div><div class="line">            dfs(<span class="keyword">left</span>, result: &amp;result, start: start, end: mid - <span class="number">1</span>, deep: deep + <span class="number">1</span>)</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> <span class="keyword">right</span> = root.<span class="keyword">right</span> &#123;</div><div class="line">            dfs(<span class="keyword">right</span>, result: &amp;result, start: mid + <span class="number">1</span>, end: end, deep: deep + <span class="number">1</span>)</div><div class="line">        &#125;</div><div class="line">        result[deep][mid] = <span class="type">String</span>(root.val)</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">treeHeight</span><span class="params">(<span class="number">_</span> root: TreeNode?)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> root = root <span class="keyword">else</span> &#123; <span class="keyword">return</span> <span class="number">0</span> &#125;</div><div class="line">        <span class="keyword">if</span> root.<span class="keyword">left</span> == <span class="literal">nil</span> &amp;&amp; root.<span class="keyword">right</span> == <span class="literal">nil</span> &#123; <span class="keyword">return</span> <span class="number">1</span> &#125;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(treeHeight(root.<span class="keyword">left</span>), treeHeight(root.<span class="keyword">right</span>)) + <span class="number">1</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="double-100"><a href="#double-100" class="headerlink" title="double 100%"></a>double 100%</h3><p><img src="http://image.runmaf.com/2020-05-17-15897074475037.jpg" alt=""></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/05/17/stupid-man-s-area-dp/" itemprop="url">
+                <a class="post-title-link" href="/2020/05/05/stupid-man-s-area-dp/" itemprop="url">
                   学渣的区域动规
                 </a>
               
@@ -1086,8 +1086,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2020-05-17T11:07:41+08:00" content="2020-05-17">
-              2020-05-17
+            <time itemprop="dateCreated" datetime="2020-05-05T11:07:41+08:00" content="2020-05-05">
+              2020-05-05
             </time>
           </span>
 
@@ -1186,7 +1186,7 @@
             
               
                 
-                <a class="post-title-link" href="/2020/05/17/stupid-man-s-linear-dp/" itemprop="url">
+                <a class="post-title-link" href="/2020/05/04/stupid-man-s-linear-dp/" itemprop="url">
                   学渣的线性动规
                 </a>
               
@@ -1200,8 +1200,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2020-05-17T00:20:33+08:00" content="2020-05-17">
-              2020-05-17
+            <time itemprop="dateCreated" datetime="2020-05-04T00:20:33+08:00" content="2020-05-04">
+              2020-05-04
             </time>
           </span>
 
@@ -1320,7 +1320,7 @@
             
               
                 
-                <a class="post-title-link" href="/2020/05/16/stupid-man-s-dp/" itemprop="url">
+                <a class="post-title-link" href="/2020/05/02/stupid-man-s-dp/" itemprop="url">
                   学渣的DP动态规划算法
                 </a>
               
@@ -1334,8 +1334,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2020-05-16T00:19:18+08:00" content="2020-05-16">
-              2020-05-16
+            <time itemprop="dateCreated" datetime="2020-05-02T00:19:18+08:00" content="2020-05-02">
+              2020-05-02
             </time>
           </span>
 

@@ -1,0 +1,571 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="学渣的分治算法个人感觉分治算法和区域动规很像，都是把一个大问题拆解成很多小问题。不同的是区域动规是从上往下。而分治算法是从下往上。 一般步骤： 分解，将问题划分成若干规模较小的同类问题 求解，当子问题足够小，就可以很容易的得到答案 合并，按原问题的要求，将子问题的解逐层合并构成原问题的解  二分法分治算法所需时间取决于分解后子问题的个数、子问题的复杂度等。而二分法，其划分简单、均匀，是经常采用的一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学渣的分治算法">
+<meta property="og:url" content="http://yoursite.com/2020/05/11/stupid-man-s-dfs/index.html">
+<meta property="og:site_name" content="大胃吴的闲话唠嗑">
+<meta property="og:description" content="学渣的分治算法个人感觉分治算法和区域动规很像，都是把一个大问题拆解成很多小问题。不同的是区域动规是从上往下。而分治算法是从下往上。 一般步骤： 分解，将问题划分成若干规模较小的同类问题 求解，当子问题足够小，就可以很容易的得到答案 合并，按原问题的要求，将子问题的解逐层合并构成原问题的解  二分法分治算法所需时间取决于分解后子问题的个数、子问题的复杂度等。而二分法，其划分简单、均匀，是经常采用的一">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://image.runmaf.com/2020-05-17-15897074475037.jpg">
+<meta property="og:updated_time" content="2020-06-03T04:31:43.564Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="学渣的分治算法">
+<meta name="twitter:description" content="学渣的分治算法个人感觉分治算法和区域动规很像，都是把一个大问题拆解成很多小问题。不同的是区域动规是从上往下。而分治算法是从下往上。 一般步骤： 分解，将问题划分成若干规模较小的同类问题 求解，当子问题足够小，就可以很容易的得到答案 合并，按原问题的要求，将子问题的解逐层合并构成原问题的解  二分法分治算法所需时间取决于分解后子问题的个数、子问题的复杂度等。而二分法，其划分简单、均匀，是经常采用的一">
+<meta name="twitter:image" content="http://image.runmaf.com/2020-05-17-15897074475037.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/11/stupid-man-s-dfs/"/>
+
+  <title> 学渣的分治算法 | 大胃吴的闲话唠嗑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大胃吴的闲话唠嗑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">扯扯技术，唠唠闲话 交流email-xiao303178394@gmail.com</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            menu.首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            menu.文章
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                学渣的分治算法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-05-11T17:25:30+08:00" content="2020-05-11">
+              2020-05-11
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="学渣的分治算法"><a href="#学渣的分治算法" class="headerlink" title="学渣的分治算法"></a>学渣的分治算法</h1><p>个人感觉分治算法和区域动规很像，都是把一个大问题拆解成很多小问题。<br>不同的是区域动规是从上往下。<br>而分治算法是从下往上。</p>
+<h2 id="一般步骤："><a href="#一般步骤：" class="headerlink" title="一般步骤："></a>一般步骤：</h2><ul>
+<li>分解，将问题划分成若干规模较小的同类问题</li>
+<li>求解，当子问题足够小，就可以很容易的得到答案</li>
+<li>合并，按原问题的要求，将子问题的解逐层合并构成原问题的解</li>
+</ul>
+<h2 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h2><p>分治算法所需时间取决于分解后子问题的个数、子问题的复杂度等。<br>而二分法，其划分简单、均匀，是经常采用的一种有效的方法，如二分检索</p>
+<h2 id="解题-输出二叉树"><a href="#解题-输出二叉树" class="headerlink" title="解题-输出二叉树"></a>解题-输出二叉树</h2><p>在一个 m*n 的二维字符串数组中输出二叉树，并遵守以下规则：</p>
+<ul>
+<li>行数 m 应当等于给定二叉树的高度。</li>
+<li>列数 n 应当总是奇数。</li>
+<li>根节点的值（以字符串格式给出）应当放在可放置的第一行正中间。根节点所在的行与列会将剩余空间划分为两部分（左下部分和右下部分）。你应该将左子树输出在左下部分，右子树输出在右下部分。左下和右下部分应当有相同的大小。即使一个子树为空而另一个非空，你不需要为空的子树输出任何东西，但仍需要为另一个子树留出足够的空间。然而，如果两个子树都为空则不需要为它们留出任何空间。</li>
+<li>每个未使用的空间应包含一个空的字符串””。</li>
+<li>使用相同的规则输出子树。</li>
+</ul>
+<p><a href="https://leetcode-cn.com/problems/print-binary-tree" target="_blank" rel="external">直达链接</a></p>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>这道题需要先构建二位数组，所以需要先递归获取到高度，通过高度计算出宽度。<br>然后就可以简单的通过二分搜索来填充这个二位数组了。</p>
+<h3 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> val: <span class="type">Int</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> <span class="keyword">left</span>: <span class="type">TreeNode</span>?</div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> <span class="keyword">right</span>: <span class="type">TreeNode</span>?</div><div class="line">    <span class="keyword">public</span> <span class="keyword">init</span>(<span class="number">_</span> val: <span class="type">Int</span>) &#123;</div><div class="line">        <span class="keyword">self</span>.val = val</div><div class="line">        <span class="keyword">self</span>.<span class="keyword">left</span> = <span class="literal">nil</span></div><div class="line">        <span class="keyword">self</span>.<span class="keyword">right</span> = <span class="literal">nil</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">printTree</span><span class="params">(<span class="number">_</span> root: TreeNode?)</span></span> -&gt; [[<span class="type">String</span>]] &#123;</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> root = root <span class="keyword">else</span> &#123; <span class="keyword">return</span> [] &#125;</div><div class="line">        <span class="keyword">if</span> root.<span class="keyword">left</span> == <span class="literal">nil</span> &amp;&amp; root.<span class="keyword">right</span> == <span class="literal">nil</span> &#123; <span class="keyword">return</span> [[<span class="type">String</span>(root.val)]] &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">let</span> height = treeHeight(root)</div><div class="line">        <span class="keyword">let</span> width = <span class="number">2</span> &lt;&lt; (height - <span class="number">1</span>) - <span class="number">1</span></div><div class="line">        <span class="built_in">print</span>(height, width)</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> result = <span class="type">Array</span>(repeating: <span class="type">Array</span>(repeating: <span class="string">""</span>, <span class="built_in">count</span>: width), <span class="built_in">count</span>: height)</div><div class="line">        </div><div class="line">        dfs(root, result: &amp;result, start: <span class="number">0</span>, end: width - <span class="number">1</span>, deep: <span class="number">0</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> result</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">dfs</span><span class="params">(<span class="number">_</span> root: TreeNode?, result: <span class="keyword">inout</span> [[String]] ,start: Int, end: Int, deep: Int)</span></span> &#123;</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> root = root <span class="keyword">else</span> &#123; <span class="keyword">return</span> &#125;</div><div class="line">        <span class="keyword">let</span> mid = (start + end) &gt;&gt; <span class="number">1</span></div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> <span class="keyword">left</span> = root.<span class="keyword">left</span> &#123;</div><div class="line">            dfs(<span class="keyword">left</span>, result: &amp;result, start: start, end: mid - <span class="number">1</span>, deep: deep + <span class="number">1</span>)</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> <span class="keyword">let</span> <span class="keyword">right</span> = root.<span class="keyword">right</span> &#123;</div><div class="line">            dfs(<span class="keyword">right</span>, result: &amp;result, start: mid + <span class="number">1</span>, end: end, deep: deep + <span class="number">1</span>)</div><div class="line">        &#125;</div><div class="line">        result[deep][mid] = <span class="type">String</span>(root.val)</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">treeHeight</span><span class="params">(<span class="number">_</span> root: TreeNode?)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> root = root <span class="keyword">else</span> &#123; <span class="keyword">return</span> <span class="number">0</span> &#125;</div><div class="line">        <span class="keyword">if</span> root.<span class="keyword">left</span> == <span class="literal">nil</span> &amp;&amp; root.<span class="keyword">right</span> == <span class="literal">nil</span> &#123; <span class="keyword">return</span> <span class="number">1</span> &#125;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">max</span>(treeHeight(root.<span class="keyword">left</span>), treeHeight(root.<span class="keyword">right</span>)) + <span class="number">1</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="double-100"><a href="#double-100" class="headerlink" title="double 100%"></a>double 100%</h3><p><img src="http://image.runmaf.com/2020-05-17-15897074475037.jpg" alt=""></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/09/stupid-man-s-dfs-bfs/" rel="next" title="学渣的拓扑排序">
+                <i class="fa fa-chevron-left"></i> 学渣的拓扑排序
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/17/stupid-man-s-Greedy-algo/" rel="prev" title="学渣的贪婪算法">
+                学渣的贪婪算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="David Woo" />
+          <p class="site-author-name" itemprop="name">David Woo</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">110</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#学渣的分治算法"><span class="nav-number">1.</span> <span class="nav-text">学渣的分治算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一般步骤："><span class="nav-number">1.1.</span> <span class="nav-text">一般步骤：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二分法"><span class="nav-number">1.2.</span> <span class="nav-text">二分法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解题-输出二叉树"><span class="nav-number">1.3.</span> <span class="nav-text">解题-输出二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">1.3.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题"><span class="nav-number">1.3.2.</span> <span class="nav-text">解题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#double-100"><span class="nav-number">1.3.3.</span> <span class="nav-text">double 100%</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Woo</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
