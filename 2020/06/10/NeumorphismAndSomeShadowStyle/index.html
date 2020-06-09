@@ -1,0 +1,579 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="DEMO地址:https://github.com/yuezaixz/DwShadowDemo 最近应用中用到的阴影比较多，加上自己独立开发的应用也尝试了今年流行的拟态Neumorphism设计，所以稍微研究了下常见的集中阴影在设计和开发实现上形式。 iOS的阴影APIshadowColor自定义阴影的颜色。默认颜色是UIColor.black.cgColor，它会产生深色阴影，但您也可以设置浅色">
+<meta property="og:type" content="article">
+<meta property="og:title" content="今年流行的拟态Neumorphism与常见的集中阴影形式">
+<meta property="og:url" content="http://yoursite.com/2020/06/10/NeumorphismAndSomeShadowStyle/index.html">
+<meta property="og:site_name" content="大胃吴的闲话唠嗑">
+<meta property="og:description" content="DEMO地址:https://github.com/yuezaixz/DwShadowDemo 最近应用中用到的阴影比较多，加上自己独立开发的应用也尝试了今年流行的拟态Neumorphism设计，所以稍微研究了下常见的集中阴影在设计和开发实现上形式。 iOS的阴影APIshadowColor自定义阴影的颜色。默认颜色是UIColor.black.cgColor，它会产生深色阴影，但您也可以设置浅色">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://image.runmaf.com/2020-06-10-15917206259996.jpg">
+<meta property="og:image" content="http://image.runmaf.com/2020-06-10-15917209241272.jpg">
+<meta property="og:image" content="http://image.runmaf.com/2020-06-10-15917212274721.jpg">
+<meta property="og:image" content="http://image.runmaf.com/2020-06-10-15917214247257.jpg">
+<meta property="og:image" content="http://image.runmaf.com/2020-06-10-15917217072946.jpg">
+<meta property="og:image" content="http://image.runmaf.com/2020-06-10-15917216653737.jpg">
+<meta property="og:updated_time" content="2020-06-09T16:59:58.245Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="今年流行的拟态Neumorphism与常见的集中阴影形式">
+<meta name="twitter:description" content="DEMO地址:https://github.com/yuezaixz/DwShadowDemo 最近应用中用到的阴影比较多，加上自己独立开发的应用也尝试了今年流行的拟态Neumorphism设计，所以稍微研究了下常见的集中阴影在设计和开发实现上形式。 iOS的阴影APIshadowColor自定义阴影的颜色。默认颜色是UIColor.black.cgColor，它会产生深色阴影，但您也可以设置浅色">
+<meta name="twitter:image" content="http://image.runmaf.com/2020-06-10-15917206259996.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/10/NeumorphismAndSomeShadowStyle/"/>
+
+  <title> 今年流行的拟态Neumorphism与常见的集中阴影形式 | 大胃吴的闲话唠嗑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大胃吴的闲话唠嗑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">扯扯技术，唠唠闲话 交流email-xiao303178394@gmail.com</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            menu.首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            menu.文章
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                今年流行的拟态Neumorphism与常见的集中阴影形式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-06-10T00:23:55+08:00" content="2020-06-10">
+              2020-06-10
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://github.com/yuezaixz/DwShadowDemo" target="_blank" rel="external">DEMO地址:https://github.com/yuezaixz/DwShadowDemo</a></p>
+<p>最近应用中用到的阴影比较多，加上自己独立开发的应用也尝试了今年流行的拟态Neumorphism设计，所以稍微研究了下常见的集中阴影在设计和开发实现上形式。</p>
+<h2 id="iOS的阴影API"><a href="#iOS的阴影API" class="headerlink" title="iOS的阴影API"></a>iOS的阴影API</h2><h3 id="shadowColor"><a href="#shadowColor" class="headerlink" title="shadowColor"></a>shadowColor</h3><p>自定义阴影的颜色。默认颜色是UIColor.black.cgColor，它会产生深色阴影，但您也可以设置浅色以创建发光效果，或其他任何颜色。</p>
+<h3 id="shadowOpacity"><a href="#shadowOpacity" class="headerlink" title="shadowOpacity"></a>shadowOpacity</h3><p>自定义阴影的不透明度，介于0和1之间。值为0表示阴影将不可见。</p>
+<h3 id="shadowRadius"><a href="#shadowRadius" class="headerlink" title="shadowRadius"></a>shadowRadius</h3><p>自定义阴影的模糊度。0表示阴影完全不会模糊。</p>
+<h3 id="shadowOffset"><a href="#shadowOffset" class="headerlink" title="shadowOffset"></a>shadowOffset</h3><p>从视图中自定义阴影的位置。如果要向界面添加深度，此属性特别有用。 CGSize.zero值表示阴影将与其父视图完美对齐。默认为-3，在iOS上表现是向上偏移3个点，在macOS上是向下偏移，应该是因为macOS的原因，正常感觉，阴影应该是在下方的，因为现实世界中，很少光源处于低视角。</p>
+<h3 id="shadowPath"><a href="#shadowPath" class="headerlink" title="shadowPath"></a>shadowPath</h3><p>自定义阴影的形状。此属性的默认值为nil，这意味着UIKit将自行确定父视图的形状。<br>不设置shadowPath会实时计算阴影，这会是一个非常消耗资源的，尤其是图层有多个子图层，每个图层还有一个有透明效果的寄宿图的时候。<br>因此，如果形状是可控的话，尽量设置他。</p>
+<h2 id="阴影的常见形式"><a href="#阴影的常见形式" class="headerlink" title="阴影的常见形式"></a>阴影的常见形式</h2><h3 id="拟态Neumorphism"><a href="#拟态Neumorphism" class="headerlink" title="拟态Neumorphism"></a>拟态Neumorphism</h3><p>竟然今天这篇文章因他而起，就先说他吧。<br>拟态是今年比较火的一种设计形式，dribble和一些个人应用开发上比较常见。商业应用由于风格统一问题，暂时应该还很难看到。<br><a href="https://uxdesign.cc/neumorphism-in-user-interfaces-b47cef3bf3a6" target="_blank" rel="external">有兴趣了解的话，可以看看这篇文章</a></p>
+<p>个人开发应用中，我已经尝试起这种形式了。</p>
+<p><img src="http://image.runmaf.com/2020-06-10-15917206259996.jpg" alt=""></p>
+<p>其实他的原理就是两段式的阴影组合，左侧和上侧用暗色阴影，右侧和下侧用亮色阴影，组合其他就是一个凹陷的效果。反之，就是一个凸出的效果。</p>
+<h3 id="正面投影（光源较远）"><a href="#正面投影（光源较远）" class="headerlink" title="正面投影（光源较远）"></a>正面投影（光源较远）</h3><p>正面投影应该是最经典阴影了，也是最常见的阴影。通过从View的Bounds创建UIBezierPath来为此基本阴影指定路径，加上偏移、模糊、颜色等，就快速实现了阴影。</p>
+<p><img src="http://image.runmaf.com/2020-06-10-15917209241272.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">imageView.layer.shadowRadius = 10</div><div class="line">imageView.layer.shadowOffset = .zero</div><div class="line">imageView.layer.shadowOpacity = 0.5</div><div class="line">imageView.layer.shadowColor = UIColor.black.cgColor</div><div class="line">imageView.layer.shadowPath = UIBezierPath(rect: imageView.bounds).cgPath</div><div class="line">imageView.layer.masksToBounds = false</div></pre></td></tr></table></figure>
+<h3 id="高处投影"><a href="#高处投影" class="headerlink" title="高处投影"></a>高处投影</h3><p>当光源在高处试物体产生投影。产生的阴影是一个椭圆形。这种阴影很像太阳光使各种物体产生的阴影效果。</p>
+<p><img src="http://image.runmaf.com/2020-06-10-15917212274721.jpg" alt=""></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 阴影的厚度</span></div><div class="line"><span class="keyword">let</span> size: <span class="type">CGFloat</span> = <span class="number">20</span></div><div class="line"><span class="comment">// 阴影在下方的距离</span></div><div class="line"><span class="keyword">let</span> <span class="built_in">distance</span>: <span class="type">CGFloat</span> = <span class="number">80</span></div><div class="line"><span class="keyword">let</span> rect = <span class="type">CGRect</span>(</div><div class="line">    x: -size,</div><div class="line">    y: imageView.frame.height - (size * <span class="number">0.4</span>) + <span class="built_in">distance</span>,</div><div class="line">    width: imageView.frame.width + size * <span class="number">2</span>,</div><div class="line">    height: size</div><div class="line">)</div><div class="line"></div><div class="line">imageView.layer.shadowColor = <span class="type">UIColor</span>.black.cgColor</div><div class="line">imageView.layer.shadowRadius = <span class="number">7</span></div><div class="line">imageView.layer.shadowOpacity = <span class="number">0.5</span></div><div class="line">imageView.layer.shadowPath = <span class="type">UIBezierPath</span>(ovalIn: rect).cgPath</div><div class="line">imageView.layer.masksToBounds = <span class="literal">false</span></div></pre></td></tr></table></figure>
+<h3 id="正面阴影（较近且可以水平移动光源）"><a href="#正面阴影（较近且可以水平移动光源）" class="headerlink" title="正面阴影（较近且可以水平移动光源）"></a>正面阴影（较近且可以水平移动光源）</h3><p>当光源在你正面或背面，且可以水平移动，那么就会产生以后正面或背面的投影。有点像晚上在马路上，远处路灯产生的投影效果。</p>
+<p><img src="http://image.runmaf.com/2020-06-10-15917214247257.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// height 负数，光源在正面，阴影绘制在背影。正数，光源在背面，阴影绘制在前影</div><div class="line">let scale = CGSize(width: 0.8, height: -0.6)</div><div class="line">// 光源水平位置</div><div class="line">let offsetX: CGFloat = 100</div><div class="line"></div><div class="line">let shadowPath = UIBezierPath()</div><div class="line">shadowPath.move(to:</div><div class="line">    CGPoint(</div><div class="line">        x: 0,</div><div class="line">        y: imageView.frame.height</div><div class="line">    )</div><div class="line">)</div><div class="line">shadowPath.addLine(to:</div><div class="line">    CGPoint(</div><div class="line">        x: imageView.frame.width,</div><div class="line">        y: imageView.frame.height</div><div class="line">    )</div><div class="line">)</div><div class="line">shadowPath.addLine(to:</div><div class="line">    CGPoint(</div><div class="line">        x: imageView.frame.width * scale.width + offsetX,</div><div class="line">        y: imageView.frame.height * (1 + scale.height)</div><div class="line">    )</div><div class="line">)</div><div class="line">shadowPath.addLine(to:</div><div class="line">    CGPoint(</div><div class="line">        x: imageView.frame.width * (1 - scale.width) + offsetX,</div><div class="line">        y: imageView.frame.height * (1 + scale.height)</div><div class="line">    )</div><div class="line">)</div><div class="line">imageView.layer.shadowColor = UIColor.black.cgColor</div><div class="line">imageView.layer.shadowRadius = 7</div><div class="line">imageView.layer.shadowOpacity = 0.5</div><div class="line">imageView.layer.shadowPath = shadowPath.cgPath</div><div class="line">imageView.layer.masksToBounds = false</div></pre></td></tr></table></figure>
+<h3 id="弧形阴影"><a href="#弧形阴影" class="headerlink" title="弧形阴影"></a>弧形阴影</h3><p>弧形阴影算我比较喜欢的阴影效果之一了。一是圆滑的曲线显得不会那么生硬，然后整体立体感也比较好。<br>可以调节弧度和模糊度来让弧度更明显，不过我觉得自然点更重要。</p>
+<p><img src="http://image.runmaf.com/2020-06-10-15917217072946.jpg" alt=""></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 曲形阴影的曲度</span></div><div class="line"><span class="keyword">let</span> curve: <span class="type">CGFloat</span> = <span class="number">15</span></div><div class="line"></div><div class="line"><span class="keyword">let</span> shadowPath = <span class="type">UIBezierPath</span>()</div><div class="line">shadowPath.move(to: <span class="type">CGPoint</span>.zero)</div><div class="line">shadowPath.addLine(to: <span class="type">CGPoint</span>(</div><div class="line">    x: imageView.frame.width,</div><div class="line">    y: <span class="number">0</span></div><div class="line">))</div><div class="line">shadowPath.addLine(to: <span class="type">CGPoint</span>(</div><div class="line">    x: imageView.frame.width,</div><div class="line">    y: imageView.frame.height + curve</div><div class="line">))</div><div class="line">shadowPath.addCurve(</div><div class="line">    to: <span class="type">CGPoint</span>(</div><div class="line">        x: <span class="number">0</span>,</div><div class="line">        y: imageView.frame.height + curve</div><div class="line">    ),</div><div class="line">    controlPoint1: <span class="type">CGPoint</span>(</div><div class="line">        x: imageView.frame.width,</div><div class="line">        y: imageView.frame.height</div><div class="line">    ),</div><div class="line">    controlPoint2: <span class="type">CGPoint</span>(</div><div class="line">        x: <span class="number">0</span>,</div><div class="line">        y: imageView.frame.height</div><div class="line">    )</div><div class="line">)</div><div class="line">imageView.layer.shadowPath = shadowPath.cgPath</div><div class="line">imageView.layer.shadowRadius = <span class="number">10</span></div><div class="line">imageView.layer.shadowOffset = <span class="type">CGSize</span>(width: <span class="number">0</span>, height: <span class="number">10</span>)</div><div class="line">imageView.layer.shadowOpacity = <span class="number">0.5</span></div><div class="line">imageView.layer.shadowColor = <span class="type">UIColor</span>.black.cgColor</div><div class="line">imageView.layer.masksToBounds = <span class="literal">false</span></div></pre></td></tr></table></figure>
+<h3 id="扁平阴影"><a href="#扁平阴影" class="headerlink" title="扁平阴影"></a>扁平阴影</h3><p>这种阴影用的很少，简单看看效果带过吧。</p>
+<p><img src="http://image.runmaf.com/2020-06-10-15917216653737.jpg" alt=""></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">let</span> scale = <span class="type">CGSize</span>(width: <span class="number">1.5</span>, height: <span class="number">1.5</span>)</div><div class="line"><span class="keyword">let</span> offset = <span class="type">CGPoint</span>(x: imageView.frame.width, y: -imageView.frame.height)</div><div class="line"></div><div class="line"><span class="keyword">let</span> shadowPath = <span class="type">UIBezierPath</span>()</div><div class="line">shadowPath.move(to:</div><div class="line">    <span class="type">CGPoint</span>(</div><div class="line">        x: <span class="number">0</span>,</div><div class="line">        y: imageView.frame.height + (copysign(<span class="number">1</span>, scale.height) * copysign(<span class="number">1</span>, offset.x) == <span class="number">1</span> ? <span class="number">0</span> : offset.y)</div><div class="line">    )</div><div class="line">)</div><div class="line">shadowPath.addLine(to:</div><div class="line">    <span class="type">CGPoint</span>(</div><div class="line">        x: imageView.frame.width,</div><div class="line">        y: imageView.frame.height + (copysign(<span class="number">1</span>, scale.height) * copysign(<span class="number">1</span>, offset.x) == -<span class="number">1</span> ? <span class="number">0</span> : offset.y)</div><div class="line">    )</div><div class="line">)</div><div class="line">shadowPath.addLine(to:</div><div class="line">    <span class="type">CGPoint</span>(</div><div class="line">        x: imageView.frame.width * scale.width + offset.x,</div><div class="line">        y: imageView.frame.height * (<span class="number">1</span> + scale.height) + offset.y</div><div class="line">    )</div><div class="line">)</div><div class="line">shadowPath.addLine(to:</div><div class="line">    <span class="type">CGPoint</span>(</div><div class="line">        x: imageView.frame.width * (<span class="number">1</span> - scale.width) + offset.x,</div><div class="line">        y: imageView.frame.height * (<span class="number">1</span> + scale.height) + offset.y</div><div class="line">    )</div><div class="line">)</div><div class="line">imageView.layer.shadowPath = shadowPath.cgPath</div><div class="line">imageView.layer.shadowRadius = <span class="number">0</span></div><div class="line">imageView.layer.shadowOffset = .zero</div><div class="line">imageView.layer.shadowOpacity = <span class="number">0.2</span></div><div class="line">imageView.layer.shadowColor = <span class="type">UIColor</span>.black.cgColor</div><div class="line">imageView.layer.masksToBounds = <span class="literal">false</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/02/SwiftMagicInLeetCode/" rel="next" title="Swift刷LeetCode时候的一些方便的API">
+                <i class="fa fa-chevron-left"></i> Swift刷LeetCode时候的一些方便的API
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="David Woo" />
+          <p class="site-author-name" itemprop="name">David Woo</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">111</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">Tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS的阴影API"><span class="nav-number">1.</span> <span class="nav-text">iOS的阴影API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shadowColor"><span class="nav-number">1.1.</span> <span class="nav-text">shadowColor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shadowOpacity"><span class="nav-number">1.2.</span> <span class="nav-text">shadowOpacity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shadowRadius"><span class="nav-number">1.3.</span> <span class="nav-text">shadowRadius</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shadowOffset"><span class="nav-number">1.4.</span> <span class="nav-text">shadowOffset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shadowPath"><span class="nav-number">1.5.</span> <span class="nav-text">shadowPath</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#阴影的常见形式"><span class="nav-number">2.</span> <span class="nav-text">阴影的常见形式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#拟态Neumorphism"><span class="nav-number">2.1.</span> <span class="nav-text">拟态Neumorphism</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正面投影（光源较远）"><span class="nav-number">2.2.</span> <span class="nav-text">正面投影（光源较远）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高处投影"><span class="nav-number">2.3.</span> <span class="nav-text">高处投影</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正面阴影（较近且可以水平移动光源）"><span class="nav-number">2.4.</span> <span class="nav-text">正面阴影（较近且可以水平移动光源）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#弧形阴影"><span class="nav-number">2.5.</span> <span class="nav-text">弧形阴影</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扁平阴影"><span class="nav-number">2.6.</span> <span class="nav-text">扁平阴影</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Woo</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

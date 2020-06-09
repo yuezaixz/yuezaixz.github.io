@@ -226,6 +226,164 @@
             
               
                 
+                <a class="post-title-link" href="/2014/12/15/2014-12-15-ios-gcd-method-from-scratch-introduction/" itemprop="url">
+                  IOS从头开始之GCD基本方法介绍
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-12-15T09:04:00+08:00" content="2014-12-15">
+              2014-12-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/GCD/" itemprop="url" rel="index">
+                    <span itemprop="name">GCD</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/iOS/GCD/obj-c/" itemprop="url" rel="index">
+                    <span itemprop="name">obj-c</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#概述<br>任务支持函数和块，GCD比NSOperation更底层，可以是并发的或串行的。他是纯C语言编写，性能很好，而是是对象化的，内存也是通过计数管理。</p>
+<p>#队列类型</p>
+<ul>
+<li>主线程队列：提交到该队列的任务会在主线程中执行。可以调用dispatch_get_main_queue()来获得。因为main queue是与主线程相关的，所以这是一个串行队列</li>
+<li><p>全局队列：是并发队列，并由整个进程共享。存在4个全局队列：高（DISPATCH_QUEUE_PRIORITY_HIGH ）、中（默认，DISPATCH_QUEUE_PRIORITY_DEFAULT ）、低（DISPATCH_QUEUE_PRIORITY_LOW ）、后台（DISPATCH_QUEUE_PRIORITY_BACKGROUND ）四个优先级队列。可以调用dispatch_get_global_queue函数传入优先级来访问队列。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);</div></pre></td></tr></table></figure>
+</li>
+<li><p>自创建队列：该队列是用函数 dispatch_queue_create 创建的队列，提交到队列中的任务是串行的，各个队列间是串行的。dispatch_queue_create 函数的第一个参数是一个标签，是提供唯一标示方便调试。官方建议我倒置包名来命名队列，比如“com.dragonsoft.subsystem.task”。这些名字会在崩溃日志中被显示出来，也可以被调试器调用，这在调试中会很有用。第二个参数是queue的类型，设为NULL时默认是DISPATCH_QUEUE_SERIAL，将创建串行队列，在必要情况下，你可以将其设置为DISPATCH_QUEUE_CONCURRENT来创建自定义并行队列。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> firstSerialQueue = dispatch_queue_create(<span class="string">"com.pixolity.GCD.serialQueue1"</span>, <span class="number">0</span>);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意：全局的队列，不用retain或release，自创建通过ARC进行，也不需要，如果想保留，就需要。</p>
+<p>#dispatch_async<br>将任务推到子线程中异步执行，注册的任务完成时间是随机不确定的。该函数会立即返回，任务会在后台异步执行。<br>该方法使用场景按我理解类似做Web前端开发时候，可能会有一个操作需要去后台请求数据，然后再对主页面进行局部刷新。在Web开发可以利用Ajax和Javascript的事件循环异步机制来轻松实现回调而在IOS程序中，这就意味着需要将数据的获取交给子线程去做，数据返回后再把任务推回到主线程来执行一些代码。使用GCD的dispatch_async可以简单地完成这个任务。使用嵌套的dispatch，在外层中执行后台任务，在内层中将任务dispatch到main queue，以下代码为网上拔来的示例。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_async</span>(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>), ^&#123;</div><div class="line">    <span class="built_in">NSURL</span> * url = [<span class="built_in">NSURL</span> URLWithString:<span class="string">@"http://avatar.csdn.net/2/C/D/1_totogo2010.jpg"</span>];</div><div class="line">    <span class="built_in">NSData</span> * data = [[<span class="built_in">NSData</span> alloc]initWithContentsOfURL:url];</div><div class="line">    <span class="built_in">UIImage</span> *image = [[<span class="built_in">UIImage</span> alloc]initWithData:data];</div><div class="line">    <span class="keyword">if</span> (data != <span class="literal">nil</span>) &#123;</div><div class="line">        <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;</div><div class="line">            <span class="keyword">self</span>.imageView.image = image;</div><div class="line">         &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>还有一个场景他的应用会比较有效，比如要计算1000以内的素数，那就要循环1000次，每次都是同步执行的，性能很差。可以应用如下代码，doSomethingIntensiveWith:obj改为判断当前循环到的数字是否为素数，是就添加到一个集合中。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);</div><div class="line"><span class="keyword">for</span>(<span class="keyword">id</span> obj <span class="keyword">in</span> array)</div><div class="line">    <span class="built_in">dispatch_async</span>(queue,^&#123;[<span class="keyword">self</span> doSomethingIntensiveWith:obj];&#125;);</div></pre></td></tr></table></figure></p>
+<p>#dispatch_sync<br>该函数干的事和dispatch<em>async相同，差异就是它不会立即返回，它会等待传入的block中的代码执行完成并返回。结合\</em>_block类型修饰符，可以用来从执行中的block获取一个值。例如，你可能有一段代码在后台执行，而它需要从界面控制层获取一个值。那么你可以使用dispatch_sync简单办到。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">__block <span class="built_in">NSString</span> *stringValue;</div><div class="line"><span class="built_in">dispatch_sync</span>(dispatch_get_main_queue(), ^&#123;</div><div class="line">        stringValue = [[textField stringValue] <span class="keyword">copy</span>];</div><div class="line">&#125;);</div><div class="line">[stringValue autorelease];</div><div class="line"><span class="comment">// 操作stringValue</span></div></pre></td></tr></table></figure></p>
+<p>有一个使用的例子就是替换锁。以下代码为something属性的getter&amp;setter，具体可以看程序中的注释。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">id</span>)something</div><div class="line">&#123;</div><div class="line">    __block <span class="keyword">id</span> localSomething;</div><div class="line">    <span class="comment">//会等待传入的block执行完后才返回，但是由于自定义队列是FIFO执行的，所以如果前面有多个setter操作，那么现在就在等待中。</span></div><div class="line">    <span class="built_in">dispatch_sync</span>(queue, ^&#123;</div><div class="line">        localSomething = [something <span class="keyword">retain</span>];</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> [localSomething autorelease];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)setSomething:(<span class="keyword">id</span>)newSomething</div><div class="line">&#123;</div><div class="line">      <span class="comment">//直接返回，把任务添加到队列中执行。</span></div><div class="line">    <span class="built_in">dispatch_async</span>(queue, ^&#123;</div><div class="line">        <span class="keyword">if</span>(newSomething != something)</div><div class="line">        &#123;</div><div class="line">            [something release];</div><div class="line">            something = [newSomething <span class="keyword">retain</span>];</div><div class="line">           <span class="comment">//修改缓存可能非常耗时间，所以立即返回完全不影响性能</span></div><div class="line">            [<span class="keyword">self</span> updateSomethingCaches];</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>不过这里要注意，小心有代码会造成互斥锁，导致getter中的dispatch_sync一直无法返回。</p>
+<p>#dispatch_group_async<br>它可以实现监听一组任务是否完成，完成后得到通知执行其他的操作。<br>可以想象这么一个场景，比如你执行10下载任务，然后程序将每个下载任务又分成了2步操作，第二步合并必须在第一步完成后才能进行，那么前面dispatch_async的那个循环的例子就不管用了。看以下代码<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_qeueue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);</div><div class="line">dispatch_group_t group = dispatch_group_create();</div><div class="line"><span class="keyword">for</span>(<span class="keyword">id</span> obj <span class="keyword">in</span> array)&#123;</div><div class="line">  dispatch_group_async(group,queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadIntensiveWith:obj];</div><div class="line">  &#125;);</div><div class="line">   <span class="comment">//group中的任务都结束了，就会去通知该block中的任务去执行</span></div><div class="line">  dispatch_group_notify(group,queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadCombaineWith:obj];</div><div class="line">  &#125;);</div><div class="line">  <span class="comment">//IOS 6.0后不需要自己去释放，函数的变量栈在函数退出时候会自己释放。这个释放不同于ARC，他是在运行时</span></div><div class="line">  dispatch_release(group);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>#dispatch_barrier_async<br>在前面的任务执行结束后它才执行，而且它后面的任务等它执行完成之后才会执行<br>还是前面那个场景，比如下载必须等前面的任务完成后才进行合并操作，合并结束后才进行提示操作，那么dispatch_group_async又不是很好用了，看以下代码</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_queue_create(<span class="string">"com.dragonsoft.queue1"</span>, DISPATCH_QUEUE_CONCURRENT);</div><div class="line"><span class="keyword">for</span>(<span class="keyword">id</span> obj <span class="keyword">in</span> array)&#123;</div><div class="line"><span class="built_in">dispatch_async</span>(queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadIntensiveWith:obj];</div><div class="line">&#125;);</div><div class="line"><span class="built_in">dispatch_async</span>(queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownload2IntensiveWith:obj];</div><div class="line">&#125;);</div><div class="line">dispatch_barrier_async(queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadCombaineWith:obj];</div><div class="line">&#125;);</div><div class="line"><span class="built_in">dispatch_async</span>(queue, ^&#123;</div><div class="line">    [<span class="keyword">self</span> doNoticeWith:obj];</div><div class="line">&#125;);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>#dispatch_apply<br>执行某个代码片段N<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">dispatch_apply(<span class="number">5</span>, globalQ, ^(size_t index) &#123;</div><div class="line">    <span class="comment">// 执行5次</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>使用场景还是刚刚那个下载，这下连循环都省了<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_qeueue(DISPATCH_QUEUE_PRIORITY_DEFAULT,  <span class="number">0</span>);</div><div class="line"><span class="comment">//推到后台去</span></div><div class="line"><span class="built_in">dispatch_async</span>(queue,^&#123;</div><div class="line">  dispatch_apply([array count], queue, ^(size_t index)&#123;</div><div class="line">    [<span class="keyword">self</span> doDownloadIntensiveWith:obj];</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/12/13/2014-12-13-ios-syntax-block-from-scratch/" itemprop="url">
                   IOS从头开始之Block语法
                 </a>
@@ -1659,156 +1817,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/11/17/2014-11-17-my-resume/" itemprop="url">
-                  我的简历
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-11-17T14:49:00+08:00" content="2014-11-17">
-              2014-11-17
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/个人简历/" itemprop="url" rel="index">
-                    <span itemprop="name">个人简历</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="基础资料"><a href="#基础资料" class="headerlink" title="#基础资料"></a>#基础资料</h2><h2 id="吴迪玮"><a href="#吴迪玮" class="headerlink" title="吴迪玮"></a>吴迪玮</h2><p>男 | 本科 | 厦门理工学院 07~11 | 计算机科学与技术 | 三年工作经验<br>13599915039 | xiao303178394@gmail.com<br>Blog: <a href="http://yuezaixz.logdown.com/" target="_blank" rel="external">http://yuezaixz.logdown.com/</a><br>Github:<a href="https://github.com/yuezaixz" target="_blank" rel="external">https://github.com/yuezaixz</a></p>
-<h2 id="工作经历"><a href="#工作经历" class="headerlink" title="#工作经历"></a>#工作经历</h2><h2 id="厦门巨龙信息科技有限公司-运维平台研发组组长-2012-11-现在"><a href="#厦门巨龙信息科技有限公司-运维平台研发组组长-2012-11-现在" class="headerlink" title="厦门巨龙信息科技有限公司 | 运维平台研发组组长 | 2012-11 - 现在"></a>厦门巨龙信息科技有限公司 | 运维平台研发组组长 | 2012-11 - 现在</h2><h2 id="厦门海迈科技股份有限公司-V3产品JAVA工程师-2011-02-2012-07"><a href="#厦门海迈科技股份有限公司-V3产品JAVA工程师-2011-02-2012-07" class="headerlink" title="厦门海迈科技股份有限公司 | V3产品JAVA工程师 | 2011-02 - 2012-07"></a>厦门海迈科技股份有限公司 | V3产品JAVA工程师 | 2011-02 - 2012-07</h2><h2 id="技术技能"><a href="#技术技能" class="headerlink" title="#技术技能"></a>#技术技能</h2><ul>
-<li>在当前项目中负责架构设计、产品设计等工作，有一定相关经验；</li>
-<li>熟练Java，3年的生产开发经验，由于所在团队一直采用敏捷开发，所以对设计接触的也较早较多，对于面对对象开发及设计模式、主流框架使用设计都有较深入掌握；</li>
-<li>熟练Javascript，有一定基于jQuery、原型的组件开发经验，也熟悉Javascript的服务器端开发，如Node.js；</li>
-<li>对Python及其Django框架通过自学有一定了解；</li>
-<li>熟悉Sublime、Eclipse等开发，对IntelliJ、Vim使用也有过一些尝试；</li>
-<li>熟悉敏捷Scrum开发，并有过组织敏捷转型经验，也有一年的敏捷项目管理经验；</li>
-</ul>
-<h2 id="主要项目经历"><a href="#主要项目经历" class="headerlink" title="#主要项目经历"></a>#主要项目经历</h2><p>#巨龙综合运维平台<br>2013年9月，由于该产品原定研发经理临时被调剂去协助另一个项目，所以在部门资源比较紧缺的情况下我申请负责该项目。接手之前由于原项目经理主要为兼职，推动的速度较慢，当时只完成了前期策划评估调研阶段。之后我推动了研发团队组建、需求分析、原型设计、架构框架设计、规范过程设计等。<br>该产品解决的主要问题为传统运维存在技术门槛高、无标准化、效率低、不及时性、无规范流程、成果不容易体现、无法考核等问题，该产品提供自动化的设备（如服务器、数据库）、应用、业务监控报警，产生运维工作并通过流程流转处置，处置的情况及运维情况都会是考核依据，处置的内容会归纳入知识库，最后通过报表、档案和图表的方式进行展现。</p>
-<h2 id="用到的技术"><a href="#用到的技术" class="headerlink" title="用到的技术"></a>用到的技术</h2><ul>
-<li>基于JAVA的S1SH，在S1基础上封装了一层，在实现Struts2基本功能同时又保持着比较好的轻量级、可裁剪、可扩展等功能；</li>
-<li>基于Oracle数据库，由于一些业务数据的监控，数据库压力较大，因此使用Oracle比较合适；</li>
-<li>基于Websphere6.1，这点取决于公司运维团队在该技术上有较好的基础，方便现场部署实施；</li>
-<li>自己设计开发了一些JS组件，功能包括页面加载、弹窗、表单校验、Ajax方法封装、分页组件、模板引擎、自定义标签、气泡提示信息、所见即所得的调试、可视化关系图、可视化流程配置等；</li>
-</ul>
-<h2 id="技术细节"><a href="#技术细节" class="headerlink" title="技术细节"></a>技术细节</h2><p>该产品我参与了大多数核心模块的设计及开发，比如Struts1封装改造、JS组件开发、监控引擎、两级平台业务数据比对、设备关系预览页面、可视化流程页面、数据分析展现等。<br>项目迭代中也不断重构，比如监控模块的重构，当时写了一篇博文来总结，<a href="http://yuezaixz.logdown.com/posts/200757-jobs-and-bezos-product-monitoring-subsystem-module-refactoring" target="_blank" rel="external">地址</a>。<br>也做了一些组件开发，比如分页组件，在后端是定义了一个PageInfo的类，该类中有单页展现数量、当前页、最大页、排序字段、排序方式、数据列表等字段。封装的BaseDao采用策略模式，根据配置不同的数据库类型会组装不同的分页查询方法来修改PageInfo的值。页面上记录PageInfo中的相关属性，比如修改了单页跳数就会发起一个请求，根据当前页面的数据服务url，带上PageInfo中的相关参数发起刷新页面的请求。</p>
-<p>#海迈清单造价平台V3</p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>2011年我作为实习生参与了海迈清单造价系列产品的开发，该项目为C/S架构，该产品采用敏捷Scrum开发，把持动态经营、有损服务的策略，加入开发组时该产品差不多已经发布了10来个版本了，每个迭代版本都是在完善旧功能和实现新需求。<br>该产品的主要功能为根据手动填入清单定额或者导入海迈算量文件来生成工程造价，解决了以往造价工程投标中计算复杂、门槛高、效率低、成果无法复用、结果不准确等问题。</p>
-<h2 id="用到的技术-1"><a href="#用到的技术-1" class="headerlink" title="用到的技术"></a>用到的技术</h2><ul>
-<li>基于JAVA的Spring框架，自己通过DB-Util封装了持久化层；</li>
-<li>基于RCP插件式开发，前端为SWT技术，数据库为DB2；</li>
-<li>报表是使用IReport，在之上自己封装了数据字典等功能；</li>
-</ul>
-<h2 id="技术细节-1"><a href="#技术细节-1" class="headerlink" title="技术细节"></a>技术细节</h2><p>比如在该项目中做过的一个比较大的模块为撤销重做，主要用了命令模式，首先要把所有需要撤销重做的功能都重构成Command的实现类，Command接口有do、redo、undo函数，do和redo都会记录执行前需要记录的状态，undo则是将数据返回到那个记录的状态。另外用了一个堆栈CommandHistory去记录操作，do或redo后Command入栈，撤销则将顶层的command出栈执行undo操作。另外通过一个CommandManger类作为控制器，做一些命令的管理操作。比如根据配置的最大可撤销重做步数来限制堆栈的长度（不限制长度可能会内存溢出，因为有的command记录的数据量较多）。</p>
-<h2 id="自我评价"><a href="#自我评价" class="headerlink" title="#自我评价"></a>#自我评价</h2><ul>
-<li>善于思考总结，但在落地上执行力度不足，努力在试错中成长，不让错误重现；</li>
-<li>乐爱编程，对于新技术保持好奇心，也不断巩固已掌握的知识；</li>
-<li>崇尚工具，乐于学习新工具来提高效率，也相信方法论，特别是在时间管理上；</li>
-<li>乐于分享，也乐于把学习、总结、工作中的经验写成博客；</li>
-<li>擅长沟通，也通过项目组管理的经验对解决项目组成员沟通问题有一定经验；</li>
-<li>乐爱运动，有时间都会去进行篮球、足球、羽毛球运动，没时间时候也会抽空跑跑步；</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1849,7 +1862,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">110</span>
+              <span class="site-state-item-count">111</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
