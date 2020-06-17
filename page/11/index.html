@@ -226,6 +226,107 @@
             
               
                 
+                <a class="post-title-link" href="/2014/01/22/2014-01-22-web-age-of-venture-nodejs-util-module-a/" itemprop="url">
+                  互联网时代如何创业----Node.js的Util模块（一）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-01-22T13:18:00+08:00" content="2014-01-22">
+              2014-01-22
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近打车应用的斗争已经从群雄逐鹿，到现在快的和滴滴打车双雄争霸的市场格局了。但是，两家创业公司的斗争实际并没有那么简单，他们背后是“财付通VS支付宝”，“微信VS来往”，“理财通VS余额包”，最幕后的黑手就是“腾讯VS阿里巴巴”。<br>本文不想过多篇幅来写两家巨头是如何烧钱大战的，不过他们把补贴做到了一种极端上，靠着疯狂砸广告、大力补贴司机、变态似的补贴用户等行为，可以说把整个市场都占据了。打车软件作为最容易被市场接受的LBS服务之一，是巨头们测试其O2O能力和渗透率的绝佳工具，也为未来更多O2O业务提供接口，所以才这么的疯狂。<br>因此，对于两家初创公司，都靠着背后的干爹烧着钱，让别的创业公司基本上没活路，但是别忘了黄花梨做的椅子终究是要让人坐在屁股底下的。也预示着大多数创业公司的最终结果——被收购。<br>那么，在巨头们垄断式的市场里，如何脱颖而出呢？以下的内容基本上是读KK（凯文凯利）的文章的个人理解，理解有误的话请见谅。<br>KK说了，最具有破坏力的竞争来自于边缘而非中心。边缘是不被看好的市场。赢利低、不稳定、未经验证、市场狭小、风险系数极高。小公司不得不进入这样的市场。<br>就像上篇博文中提到的，蒸汽船开始时候故障多、昂贵等等原因都一度是他成为了摆设，但是经过几十年的改造，他把原来的造船行业全部打败了。60年代底特律的第一代汽车被一个叫本田的日本人用自动化的汽车打败了。IBM作为电脑公司也被微软这样做软件的公司不断蚕食，而微软如今又不得不面对一个做搜索引擎的公司（谷歌）的竞争。这些边缘公司却可以逐步打败那些老家伙，都是因为他们没有从正面进行较量，而是从老家伙们没有涉足的边缘进行发展（因为老家伙们需要完善现有产品，强化现有优势）。<br>作为一个赛车游戏的忠实粉丝，我深刻的知道想要超车必须从弯道，所有追赶都是没用的（除非你用外挂，你的车比别人快的多，也就是你有干爹的意思）。微创新这会，就是大公司用来扼杀小公司的手段，一定不是小公司用来颠覆大公司的武器。<br>360是从瑞星看不上眼的免费杀毒市场起家的，苹果是从IBM看不上眼的PC机起家的，微软也是从IBM看不上眼的操作系统起家，谷歌是从微软看不上眼的网络服务起家。但是现在的大公司都聪明了，像打车市场一出现点苗头，就被他们盯上了，所以，在这个时代想要从巨头们的眼皮底下做出点雷声大雨点更大的事情，就是一个字，难！<br>03年有几家闷声做大事的互联网公司是有起色，不过那真的就是巨头们不愿意涉及的边缘行业。谁能扎到下一个缝隙，爬到巨头们的头上呢？2014，让我们拭目以待。<br>————————–分割线—————————</p>
+<h1 id="常用工具Util"><a href="#常用工具Util" class="headerlink" title="常用工具Util"></a>常用工具Util</h1><p>util 是一个 Node.js 核心模块，提供常用函数的集合，用于弥补核心 JavaScript 的功能过于精简的不足。Util模块的函数比较多，今天先说两个。</p>
+<h2 id="1-util-inherits"><a href="#1-util-inherits" class="headerlink" title="1 util.inherits"></a>1 util.inherits</h2><p>util.inherits(constructor, superConstructor)是一个实现对象间原型继承的原型复制函数。JavaScript 的面向对象特性是基于原型的，与常见的基于类的不同。不像Java中的对面对象特性是基于类的，可以用extends来实现继承，Javascript中需要通过原型复制来实现。这个问题可能要牵扯到javascript的原型概念，下次专门写一篇博文介绍javascript的原型。<br>先简单的打个比方，类就相当于一个模具，通过模具产生对象。而原型就好比达芬奇的蒙娜丽莎，其他艺术家通过高超的技艺复杂成一个一个对象。<br>看下面继承的例子：<br><figure class="highlight javascript"><figcaption><span>testInherits.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Base</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">this</span>.name = <span class="string">'base'</span>;</div><div class="line"><span class="keyword">this</span>.base = <span class="number">1991</span>;</div><div class="line"><span class="keyword">this</span>.sayHello = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Hello '</span> + <span class="keyword">this</span>.name);</div><div class="line">&#125;;</div><div class="line">&#125;</div><div class="line">Base.prototype.showName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Sub</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">this</span>.name = <span class="string">'sub'</span>;</div><div class="line">&#125;</div><div class="line">util.inherits(Sub, Base);</div><div class="line"><span class="keyword">var</span> objBase = <span class="keyword">new</span> Base();</div><div class="line">objBase.showName();</div><div class="line">objBase.sayHello();</div><div class="line"><span class="built_in">console</span>.log(objBase);</div><div class="line"><span class="keyword">var</span> objSub = <span class="keyword">new</span> Sub();</div><div class="line">objSub.showName();</div><div class="line"><span class="comment">//objSub.sayHello();</span></div><div class="line"><span class="built_in">console</span>.log(objSub);</div></pre></td></tr></table></figure></p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[David@localhost javascriptStudy]$ node testInherits.js</div><div class="line">base</div><div class="line">Hello base</div><div class="line">&#123; name: 'base', base: 1991, sayHello: [Function] &#125;</div><div class="line">sub</div><div class="line">&#123; name: 'sub' &#125;</div></pre></td></tr></table></figure>
+<p>Javascript的对象分三种：原型对象、构造对象、实例对象。<br>objSub是实例对象，如果//objSub.sayHello();不注释则会报错，因为只能继承Base原型的属性，不能继承Base构造对象的属性。<br>具体关于原型，还是请看之后写的关于原型的博文吧，想简单的解释实在太绕了。</p>
+<h2 id="2-util-inspect"><a href="#2-util-inspect" class="headerlink" title="2 util.inspect"></a>2 util.inspect</h2><p>util.inspect(object,[showHidden],[depth],[colors])是一个将任意对象转换为字符串的方法，通常用于调试和错误输出。它至少接受一个参数 object，即要转换的对象。<br>showHidden 是一个可选参数，如果值为 true，将会输出更多隐藏信息。<br>depth 表示最大递归的层数，如果对象很复杂，你可以指定层数以控制输出信息的多少。如果不指定depth，默认会递归2层，指定为 null 表示将不限递归层数完整遍历对象。<br>如果color 值为 true，输出格式将会以 ANSI 颜色编码，通常用于在终端显示更漂亮的效果。<br>从下面例子可以看出，就算有toString方法，也不会直接调用他来转换对象。<br><figure class="highlight javascript"><figcaption><span>testInspect.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">this</span>.name = <span class="string">'byvoid'</span>;</div><div class="line"><span class="keyword">this</span>.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="keyword">return</span> <span class="keyword">this</span>.name;</div><div class="line">&#125;;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> Person();</div><div class="line"><span class="built_in">console</span>.log(util.inspect(obj));</div><div class="line"><span class="built_in">console</span>.log(util.inspect(obj, <span class="literal">true</span>));</div></pre></td></tr></table></figure></p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[David@localhost javascriptStudy]$ node testInspect.js</div><div class="line">&#123; name: 'byvoid', toString: [Function] &#125;</div><div class="line">&#123; toString:</div><div class="line">   &#123; [Function]</div><div class="line">     [caller]: null,</div><div class="line">     [arguments]: null,</div><div class="line">     [length]: 0,</div><div class="line">     [prototype]: &#123; [constructor]: [Circular] &#125;,</div><div class="line">     [name]: '' &#125;,</div><div class="line">  name: 'byvoid' &#125;</div></pre></td></tr></table></figure>
+<h2 id="3-其他"><a href="#3-其他" class="headerlink" title="3 其他"></a>3 其他</h2><p>util还提供了util.isArray()、util.isRegExp()、util.isDate()、util.isError() 四个类型测试工具，以及 util.format()、util.debug() 等工具。有兴趣的读者可以访问 <a href="http://javascript.org/api/util.html" target="_blank" rel="external">API</a>了解详细内容。有空我也会把util这个工具继续写下去。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/01/21/2014-01-21-a-message-reply-department-manager/" itemprop="url">
                   一封回复部门经理的邮件
                 </a>
@@ -1755,105 +1856,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/01/02/2014-01-02-the-internet-thinking/" itemprop="url">
-                  互联网思维
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-01-02T23:44:00+08:00" content="2014-01-02">
-              2014-01-02
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#何为互联网精神</p>
-<h2 id="大人物的解释"><a href="#大人物的解释" class="headerlink" title="大人物的解释"></a>大人物的解释</h2><p>马化腾说过这样一句话：互联网改变了媒体、零售和金融行业，未来将改变每一个行业，传统企业现在即使还想不不出怎么结合互联网，但一定要具备互联网思维。</p>
-<h2 id="小人物的瞎扯"><a href="#小人物的瞎扯" class="headerlink" title="小人物的瞎扯"></a>小人物的瞎扯</h2><p>我觉得这句话很好的诠释了互联网思维这个新兴的词汇。现在传统行业中，是还有暂时无法实现在互联网复制，但在未来的几年，伴随着互联网行业的扩展与创新，肯定将出现互联网对传统行业的大洗牌。现在很多公司也接着传统行业在互联网的创新一跃而起。</p>
-<p>#互联网思维改变传统行业<br>比如神州鹰，把传统的安防搬到了互联网，实现了让老板在家里就通过互联网看到所有门店的情况，让父母随时随地就能用手机看孩子在幼儿园的情况，这就是互联网带来的创新，这就是互联网思维。互联网思维就是你必须思考着你所在行业移植到互联网的话，运营模式、商业模式会是什么样的（纯属个人理解与解释，认为我说的完全不着边的，博您一笑我也满足了）。</p>
-<p>#传统行业怎么办<br>我所在的公安行业一定算传统行业中的传统行业，该行业是否被互联网颠覆，也不是我们弄控制的，所以，我们也只能不断地思考着互联网思维，为互联网时代的到来做好准备。最近几年，社会也不断地提倡政府内务透明化，也许很快，政务内网将接入互联网。如果没有互联网思维，一定浪潮到来，也很难乘上浪潮。</p>
-<p>#互联网的浪潮之巅<br>中国是全球最大的互联网用户群体，中国人群密集程度又非常高，互联网时代才刚刚拉开帷幕，未来10年乃至20年都是互联网和移动互联网改变世界的大航海时代。生逢盛世，乘上浪潮才成就了乔布斯的伟大，而我们不求像乔布斯那样名垂千古，但能参与这人类历史上伟大的时代，顺着浪潮朝时代的巅峰顺流而上，也不遗憾此生了。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1899,7 +1901,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">111</span>
+              <span class="site-state-item-count">112</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

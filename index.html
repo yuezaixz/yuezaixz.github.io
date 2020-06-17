@@ -226,6 +226,123 @@
             
               
                 
+                <a class="post-title-link" href="/2020/06/17/HelloOpenGLAndMetal/" itemprop="url">
+                  Hello OpenGL ES
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-06-17T06:46:47+08:00" content="2020-06-17">
+              2020-06-17
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>要换工作了，美图秀秀是图像、音视频方面相关的应用，所以赶紧学习点点这方面的基础知识，就先从图像渲染开始了。</p>
+</blockquote>
+<p><strong>OpenGL(Open Graphics Library)</strong> 是一种应用程序编程接口，它是一种可以对图形硬件设备特性进行访问的软件库规范，它是硬件无关的。它主要为我们定义了用来操作图形和图片的一系列函数的 API，OpenGL 本身并非 API。<br><strong>OpenGL ES(OpenGL for Embedded Systems)</strong> 是 OpenGL 的子集，为手机等嵌入式设备而设计。它去除了四边形、多边形等复杂图元等一些非绝对必要特性，算是OpenGL在移动端上的精简规范。<br><strong>Metal</strong> 是一个和 OpenGL ES 类似的面向底层的图形编程接口，通过使用相关的 api 可以直接操作 GPU， 是 iOS 平台独有的，意味着它不能像 OpenGL ES 那样支持跨平台，但是它能最大的挖掘苹果移动设备的 GPU 能力，进行复杂的运算，像 Unity 等游戏引擎都通过 Metal 对 3D 能力进行了优化， App Store 还有相应的运用 Metal 技术的游戏专题。<br><strong>GLSL</strong> (OpenGL Shading Language) 是OpenGL的着色器语言，Metal也是用该语法。它C的子集，语法与C类似，有了自己独特的一些数据结构及状态控制流程。</p>
+<h2 id="iOS渲染的过程"><a href="#iOS渲染的过程" class="headerlink" title="iOS渲染的过程"></a>iOS渲染的过程</h2><p><a href="https://github.com/RickeyBoy/Rickey-iOS-Notes/blob/master/%E7%AC%94%E8%AE%B0/iOS%20Rendering.md" target="_blank" rel="external">具体关于iOS GPU渲染的知识，可以看瓜神的这篇文章就够了。</a></p>
+<p>不管是OpenGL 还是Metal，在图元渲染过程，顶点着色器和片段着色器是可编程的部分。</p>
+<p><img src="https://lymanli-1258009115.cos.ap-guangzhou.myqcloud.com/image/blog/render-texture-image-3.jpg" alt=""></p>
+<p>这里不展开说渲染，具体还是看瓜神的文章吧。</p>
+<h2 id="渲染一个三角形的编写流程"><a href="#渲染一个三角形的编写流程" class="headerlink" title="渲染一个三角形的编写流程"></a>渲染一个三角形的编写流程</h2><p><a href="https://github.com/yuezaixz/DwGPUImageLearning" target="_blank" rel="external">本例DEMO代码仓库</a></p>
+<h3 id="OpenGL-ES-渲染一个三角形的编写流程"><a href="#OpenGL-ES-渲染一个三角形的编写流程" class="headerlink" title="OpenGL ES 渲染一个三角形的编写流程"></a>OpenGL ES 渲染一个三角形的编写流程</h3><p>苹果通过GLKit提供了一些列方便使用OpenGL的API，本实例为了学习底层渲染流程，所以不引入该库。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// 引入最基础的GL库</div><div class="line">import OpenGLES</div></pre></td></tr></table></figure>
+<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><ul>
+<li>context，OpenGL ES 是一个状态机，相关的配置信息会被保存在一个上下文（Context）中，这个些值会被一直保存，直到被修改。但我们可以配置多个上下文，通过调用 EAGLContext.setCurrent(self.eagContext) 来切换。</li>
+<li>程序挂载标识 program，挂载着色器的progarm</li>
+<li>帧缓存 frameBuffer，一个接收渲染结果的缓冲区，为 GPU 指定存储渲染结果的区域。更通俗点，可以理解成存储屏幕上最终显示的一帧画面的区域。我们需要将它挂在到渲染缓冲对象上，再最后展示到屏幕上。</li>
+<li>渲染缓冲对象 renderBuffer，是最后要展示的结果通过 renderbufferStorage:fromDrawable:进行渲染层绑定，再presentRenderbuffer呈现到屏幕上。</li>
+</ul>
+<p>具体代码如下，过程如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">private func commonInit() &#123;</div><div class="line">       // 创建OpenGL ES2 的上下文</div><div class="line">       eagContext = EAGLContext(api: .openGLES2)</div><div class="line">       // 初始化OpenGL绘制Layer的一些属性</div><div class="line">       self.metalLayer.frame = self.bounds</div><div class="line">       self.metalLayer.isOpaque = true</div><div class="line">       metalLayer.drawableProperties = [kEAGLDrawablePropertyRetainedBacking : false,</div><div class="line">                                              kEAGLDrawablePropertyColorFormat : kEAGLColorFormatRGBA8]</div><div class="line">       // 初始化一下renderBuffer和FrameBuffer</div><div class="line">       genBuffer()</div><div class="line">       // 初始化着色器程序</div><div class="line">       loadShader()</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   func genBuffer() &#123;</div><div class="line">       EAGLContext.setCurrent(self.eagContext)</div><div class="line">       </div><div class="line">       // 生成缓冲区</div><div class="line">       glGenFramebuffers(1, &amp;self.frameBuffer)</div><div class="line">       glGenRenderbuffers(1, &amp;self.renderBuffer)</div><div class="line">       </div><div class="line">       // 绑定缓冲区</div><div class="line">       glBindFramebuffer(GLenum(GL_FRAMEBUFFER), self.frameBuffer)</div><div class="line">       glBindRenderbuffer(GLenum(GL_RENDERBUFFER), self.renderBuffer)</div><div class="line">       </div><div class="line">       // 渲染层绑定</div><div class="line">       self.eagContext?.renderbufferStorage(Int(GL_RENDERBUFFER), from: self.metalLayer)</div><div class="line">       </div><div class="line">       // 将渲染缓存绑定到帧缓存上</div><div class="line">       glFramebufferRenderbuffer(GLenum(GL_FRAMEBUFFER), GLenum(GL_COLOR_ATTACHMENT0), GLenum(GL_RENDERBUFFER), self.renderBuffer)</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   func loadShader() &#123;</div><div class="line">       // 已加载则删除</div><div class="line">       if self.program &gt; 0 &#123;</div><div class="line">           glDeleteProgram(self.program)</div><div class="line">       &#125;</div><div class="line">       </div><div class="line">       // 顶点着色器，简单的传递</div><div class="line">       let vertexSources =</div><div class="line">           &quot;attribute vec3 position;&quot; +</div><div class="line">           &quot;void main() &#123;&quot; +</div><div class="line">           &quot;  gl_Position = vec4(position, 1.0);&quot; +</div><div class="line">           &quot;&#125;&quot;</div><div class="line">       // 片段着色器，简单的用红色着色</div><div class="line">       let fragmentSources =</div><div class="line">           &quot;precision mediump float;&quot; +</div><div class="line">           &quot;void main() &#123;&quot; +</div><div class="line">           &quot;  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);&quot; +</div><div class="line">           &quot;&#125;&quot;</div><div class="line">       // 编译两个着色器</div><div class="line">       let vertexShader = compilerShader(GLenum(GL_VERTEX_SHADER), vertexSources)</div><div class="line">       let fragmentShader = compilerShader(GLenum(GL_FRAGMENT_SHADER), fragmentSources)</div><div class="line">       </div><div class="line">       // 创建着色器程序标识</div><div class="line">       self.program = glCreateProgram()</div><div class="line">       </div><div class="line">       // 绑定上相应着色器</div><div class="line">       glAttachShader(self.program, vertexShader)</div><div class="line">       glAttachShader(self.program, fragmentShader)</div><div class="line">       </div><div class="line">       // 设置索引和变量之间的对应关系，当前着色器传入的就是一个position，索引为3，与后面用到的glVertexAttribPointer相关联</div><div class="line">       glBindAttribLocation(self.program, 3, (&quot;position&quot; as NSString).utf8String)</div><div class="line">       </div><div class="line">       // 将程序连接到OpenGL</div><div class="line">       glLinkProgram(self.program)</div><div class="line">       </div><div class="line">       var linkSuccess: GLint = 1</div><div class="line">       glGetProgramiv(self.program, GLenum(GL_LINK_STATUS), &amp;linkSuccess)</div><div class="line">       </div><div class="line">       if linkSuccess == GL_FALSE &#123;</div><div class="line">           // 链接失败</div><div class="line">           var message = [GLchar](repeating: GLchar(0), count: 256)</div><div class="line">           var len = GLsizei(0)</div><div class="line">           glGetProgramInfoLog(self.program, 256, &amp;len, &amp;message)</div><div class="line">           let log = String.init(utf8String: message)</div><div class="line">           print(&quot;program link error is \(String(describing: log))&quot;)</div><div class="line">       &#125;</div><div class="line">       </div><div class="line">       // 清除已经绑定了的着色器</div><div class="line">       glDeleteShader(vertexShader)</div><div class="line">       glDeleteShader(fragmentShader)</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   func compilerShader(_ shaderType: GLenum, _ sources: String) -&gt; GLuint &#123;</div><div class="line">       let shader = glCreateShader(shaderType)</div><div class="line">       var sourcePointer = (sources as NSString).utf8String</div><div class="line">       var len = GLint((sources as NSString).length)</div><div class="line">       glShaderSource(shader, 1, &amp;sourcePointer, &amp;len)</div><div class="line">       </div><div class="line">       glCompileShader(shader)</div><div class="line">       </div><div class="line">       var success: GLint = 1</div><div class="line">       glGetShaderiv(shader, GLenum(GL_COMPILE_STATUS), &amp;success)</div><div class="line">       </div><div class="line">       if success == GL_FALSE &#123;</div><div class="line">           var message = [GLchar](repeating: GLchar(0), count: 256)</div><div class="line">           var len = GLsizei(0)</div><div class="line">           glGetShaderInfoLog(shader, 256, &amp;len, &amp;message)</div><div class="line">           let log = String.init(utf8String: message)</div><div class="line">           print(&quot;shader:\(shaderType) compile error is \(String(describing: log))&quot;)</div><div class="line">       &#125;</div><div class="line">       </div><div class="line">       return shader</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<h4 id="渲染"><a href="#渲染" class="headerlink" title="渲染"></a>渲染</h4><p>需要的着色器、缓冲区、上下文、渲染Layer都准备好了，那剩下的就是进行渲染了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">	override func didMoveToWindow() &#123;</div><div class="line">        super.didMoveToWindow()</div><div class="line">        render()</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    func render() &#123;</div><div class="line">        // 设置上下文</div><div class="line">        EAGLContext.setCurrent(self.eagContext)</div><div class="line">        </div><div class="line">        // 引入程序库</div><div class="line">        glUseProgram(self.program)</div><div class="line">        // 绑定帧缓冲区</div><div class="line">        glBindFramebuffer(GLenum(GL_FRAMEBUFFER), self.frameBuffer)</div><div class="line">        </div><div class="line">        // 用黑色清除背景色，clear设置背景色会比较快，大概认为 clear 改的是 cache 里的值，并不会真得写到显存里，所以特别快。cache 和 shader 的执行单元离得近，显存和 shader 的执行单元离得远，能少走点路就少走点路。</div><div class="line">        glClearColor(0, 0, 0, 1.0)</div><div class="line">        glClear(GLbitfield(GL_COLOR_BUFFER_BIT))</div><div class="line">        </div><div class="line">        // x，y 以像素为单位，指定了视口的左下角位置。</div><div class="line">        // width，height 表示这个视口矩形的宽度和高度，根据窗口的实时变化重绘窗口</div><div class="line">        glViewport(0, 0, GLsizei(self.frame.width), GLsizei(self.frame.height))</div><div class="line">        </div><div class="line">        // 这里只使用位置，不使用颜色变量。位置的索引为3</div><div class="line">        let positionLocaltion: GLuint = 3</div><div class="line">//        let colorLocation: GLuint = 4</div><div class="line">        </div><div class="line">        let vertices:[GLfloat] =</div><div class="line">            [-0.5, -0.5, 0.0,</div><div class="line">             0.5, -0.5, 0.0,</div><div class="line">             0.0, 0.5, 0.0]</div><div class="line">        // 在内存中采用交叉模式存储，向gpu传入顶点数据的方法</div><div class="line">        // 第一个参数是索引，第二个参数是长度，后面是类型</div><div class="line">        glVertexAttribPointer(positionLocaltion, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), 0, vertices)</div><div class="line">        glEnableVertexAttribArray(positionLocaltion)</div><div class="line">        </div><div class="line">        // 使用缓存的数据进行绘制</div><div class="line">        glDrawArrays(GLenum(GL_TRIANGLES), 0, 3)</div><div class="line">        </div><div class="line">        // 将绑定的渲染缓存呈现到屏幕上</div><div class="line">        let finished = eagContext?.presentRenderbuffer(Int(GL_RENDERBUFFER)) ?? false</div><div class="line">        print(&quot;finished is: \(finished)&quot;)</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h4 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h4><p><img src="http://image.runmaf.com/2020-06-17-15923569380658.jpg" alt=""></p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>初学，或许有一些理解上偏差。</p>
+<p>下一篇用Metal实现个一样的。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2020/06/10/NeumorphismAndSomeShadowStyle/" itemprop="url">
                   今年流行的拟态Neumorphism与常见的几种阴影形式
                 </a>
@@ -1284,140 +1401,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/05/04/stupid-man-s-linear-dp/" itemprop="url">
-                  学渣的线性动规
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2020-05-04T00:20:33+08:00" content="2020-05-04">
-              2020-05-04
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="学渣的线性动规"><a href="#学渣的线性动规" class="headerlink" title="学渣的线性动规"></a>学渣的线性动规</h1><p>线性DP比较好的例子就是 三角形最小路径和，LIS，LCS问题了。</p>
-<h2 id="LIS"><a href="#LIS" class="headerlink" title="LIS"></a>LIS</h2><p>给定一个无序的整数数组，找到其中最长上升子序列的长度。</p>
-<p><a href="https://leetcode-cn.com/problems/longest-increasing-subsequence/" target="_blank" rel="external">直达链接</a></p>
-<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>给定n个整数A1,A2,A3…An。按照从左往右的顺序选择尽可能多的整数，组成一个上升子序列，其中相邻元素不能相等</p>
-<h3 id="转移方程"><a href="#转移方程" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[i]=max&#123;1+dp[j]&#125;(0&lt;=j&lt;i,s[j]&lt;s[i])</div></pre></td></tr></table></figure>
-<h3 id="边界"><a href="#边界" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[0] = 1</div></pre></td></tr></table></figure>
-<h3 id="状态标识"><a href="#状态标识" class="headerlink" title="状态标识"></a>状态标识</h3><p>s 为输入数列<br>dp[i]表示以s[i]为结尾的“最大上升子序列长度”</p>
-<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>max{dp[i]}(0&lt;=i&lt;n)</p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">lis</span><span class="params">(<span class="number">_</span> s: [Int])</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="number">1</span>, <span class="built_in">count</span>: s.<span class="built_in">count</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> result = <span class="number">0</span></div><div class="line">        </div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span> ..&lt; dp.<span class="built_in">count</span> &#123;</div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">0</span> ..&lt; i &#123;</div><div class="line">                <span class="keyword">if</span> s[j] &lt; s[i] &#123;</div><div class="line">                    dp[i] = <span class="built_in">max</span>(dp[i], dp[j] + <span class="number">1</span>)</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            result = <span class="built_in">max</span>(dp[i], result)</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> result</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="LCS解1，二位数组"><a href="#LCS解1，二位数组" class="headerlink" title="LCS解1，二位数组"></a>LCS解1，二位数组</h2><p>给定两个字符串 text1 和 text2，返回这两个字符串的最长公共子序列的长度。</p>
-<p><a href="https://leetcode-cn.com/problems/longest-common-subsequence/" target="_blank" rel="external">直达链接</a></p>
-<h3 id="问题描述-1"><a href="#问题描述-1" class="headerlink" title="问题描述"></a>问题描述</h3><p>给定两个长度分别为n,m的字符串a,b,求既是a的子序列，又是b的子序列的字符串的长度最长是多少</p>
-<h3 id="转移方程-1"><a href="#转移方程-1" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">if a[i] == b[j]:</div><div class="line">	dp[i][j] = dp[i - 1][j - 1] + 1</div><div class="line">else:</div><div class="line">	dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])</div></pre></td></tr></table></figure>
-<h3 id="边界-1"><a href="#边界-1" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[i][0] = 0</div><div class="line">dp[0][j] = 0</div></pre></td></tr></table></figure>
-<h3 id="状态标识-1"><a href="#状态标识-1" class="headerlink" title="状态标识"></a>状态标识</h3><p>a,b 为输入字符串<br>n,m 为a,b的长度</p>
-<p>dp[i][j]表示a[0 ..&lt; i]与b[0 ..&lt; j]的最长公共子序列的长度</p>
-<h3 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h3><p>dp[n][m]</p>
-<h3 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">longestCommonSubsequence</span><span class="params">(<span class="number">_</span> a: String, <span class="number">_</span> b: String)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">let</span> m = a.<span class="built_in">count</span></div><div class="line">        <span class="keyword">let</span> n = b.<span class="built_in">count</span></div><div class="line">        <span class="keyword">if</span> m == <span class="number">0</span> || n == <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="type">Array</span>(repeating: <span class="number">0</span>, <span class="built_in">count</span>: n + <span class="number">1</span>), <span class="built_in">count</span>: m + <span class="number">1</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span> ... m &#123;</div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">1</span> ... n &#123;</div><div class="line">                <span class="keyword">if</span> a[a.index(a.startIndex, offsetBy: i - <span class="number">1</span>)] == b[b.index(b.startIndex, offsetBy: j - <span class="number">1</span>)] &#123;</div><div class="line">                    dp[i][j] = dp[i - <span class="number">1</span>][j - <span class="number">1</span>] + <span class="number">1</span></div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    dp[i][j] = <span class="built_in">max</span>(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>])</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> dp[m][n]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>但是用二位数组，时间复杂度在leetcode上过不了关，所以得考虑其他动态方案的方式。</p>
-<h2 id="LCS解2，一维数组"><a href="#LCS解2，一维数组" class="headerlink" title="LCS解2，一维数组"></a>LCS解2，一维数组</h2><p>几个优化的点</p>
-<ul>
-<li>一个是用一维数组</li>
-<li>二是不用String而是一开始就把String转成Array<character>，加快查询和修改的效率</character></li>
-</ul>
-<h3 id="转移方程-2"><a href="#转移方程-2" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// a.count &gt; b.count</div><div class="line"></div><div class="line">if a[j] == b[i]:</div><div class="line">	dp[j] = dp[j - 1] + 1</div><div class="line">else:</div><div class="line">	dp[j] = max(dp[j - 1], dp[j])</div></pre></td></tr></table></figure>
-<h3 id="边界-2"><a href="#边界-2" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[0] = 0</div></pre></td></tr></table></figure>
-<h3 id="状态标识-2"><a href="#状态标识-2" class="headerlink" title="状态标识"></a>状态标识</h3><p>a,b 为输入字符串转换的数组<br>m, n 为a,b的长度， m &gt;= n</p>
-<p>dp[j]表示a[0 ..&lt; j]与b的最长公共子序列的长度</p>
-<h3 id="目标-2"><a href="#目标-2" class="headerlink" title="目标"></a>目标</h3><p>dp[m]</p>
-<h3 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">longestCommonSubsequence</span><span class="params">(<span class="number">_</span> text1: String, <span class="number">_</span> text2: String)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">var</span> a = text1</div><div class="line">        <span class="keyword">var</span> b = text2</div><div class="line">        <span class="keyword">var</span> m = a.<span class="built_in">count</span></div><div class="line">        <span class="keyword">var</span> n = b.<span class="built_in">count</span></div><div class="line">        </div><div class="line">        <span class="keyword">if</span> m == <span class="number">0</span> || n == <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> m &lt; n &#123;</div><div class="line">            <span class="keyword">let</span> temp = m</div><div class="line">            m = n</div><div class="line">            n = temp</div><div class="line">            a = text2</div><div class="line">            b = text1</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="number">0</span>, <span class="built_in">count</span>: m + <span class="number">1</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span> ... n &#123;</div><div class="line">            <span class="keyword">var</span> cur = <span class="number">0</span></div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">1</span> ... m &#123;</div><div class="line">                <span class="keyword">let</span> leftTop = cur</div><div class="line">                cur = dp[j]</div><div class="line">                <span class="keyword">if</span> a[a.index(a.startIndex, offsetBy: j - <span class="number">1</span>)] == b[b.index(b.startIndex, offsetBy: i - <span class="number">1</span>)] &#123;</div><div class="line">                    dp[j] = leftTop + <span class="number">1</span></div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    dp[j] = <span class="built_in">max</span>(dp[j - <span class="number">1</span>], dp[j])</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">            </div><div class="line">        <span class="keyword">return</span> dp[m]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="double-100"><a href="#double-100" class="headerlink" title="double 100%"></a>double 100%</h3><p><img src="http://image.runmaf.com/2020-05-17-15896421497757.jpg" alt=""></p>
-<h2 id="三角形最小路径和"><a href="#三角形最小路径和" class="headerlink" title="三角形最小路径和"></a>三角形最小路径和</h2><p>给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。</p>
-<p>相邻的结点 在这里指的是 下标 与 上一层结点下标 相同或者等于 上一层结点下标 + 1 的两个结点。</p>
-<p><a href="https://leetcode-cn.com/problems/triangle" target="_blank" rel="external">直达链接</a></p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>题目有表示用空间复杂度为O(n)有加分，那么肯定要考虑用一位数组来动态规划了。</p>
-<h3 id="转移方程-3"><a href="#转移方程-3" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[j] = triangle[i][j] + min(dp[j], dp[i])</div></pre></td></tr></table></figure>
-<h3 id="边界-3"><a href="#边界-3" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[0] = triangle[0][0]</div></pre></td></tr></table></figure>
-<h3 id="状态标识-3"><a href="#状态标识-3" class="headerlink" title="状态标识"></a>状态标识</h3><p>triangle 为三角形的二维数组<br>m为行数，n为最后一行列数<br>i为行索引，j为列索引</p>
-<h3 id="目标-3"><a href="#目标-3" class="headerlink" title="目标"></a>目标</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">min&#123;dp[0 ..&lt; n]&#125;</div></pre></td></tr></table></figure>
-<h3 id="实现-3"><a href="#实现-3" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">minimumTotal</span><span class="params">(<span class="number">_</span> triangle: [[Int]])</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">let</span> columnCount = triangle.<span class="built_in">count</span></div><div class="line">        </div><div class="line">        <span class="keyword">if</span> columnCount &lt;= <span class="number">1</span> &#123;</div><div class="line">            <span class="keyword">return</span> triangle.first?.first ?? <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="type">Int</span>.<span class="built_in">max</span>, <span class="built_in">count</span>: triangle.last?.<span class="built_in">count</span> ?? <span class="number">0</span>)</div><div class="line">        dp[<span class="number">0</span>] = triangle.first?.first ?? <span class="number">0</span></div><div class="line">        </div><div class="line">        <span class="keyword">for</span> columnIndex <span class="keyword">in</span> <span class="number">1</span> ..&lt; columnCount &#123;</div><div class="line">            <span class="keyword">let</span> row = triangle[columnIndex]</div><div class="line">            <span class="keyword">let</span> rowCount = row.<span class="built_in">count</span></div><div class="line">            </div><div class="line">            <span class="keyword">var</span> lastLeft = <span class="type">Int</span>.<span class="built_in">max</span></div><div class="line">            </div><div class="line">            <span class="keyword">for</span> rowIndex <span class="keyword">in</span> <span class="number">0</span> ..&lt; rowCount &#123;</div><div class="line">                <span class="keyword">let</span> temp = lastLeft</div><div class="line">                lastLeft = dp[rowIndex]</div><div class="line">                dp[rowIndex] = row[rowIndex] + <span class="built_in">min</span>(temp, dp[rowIndex])</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp.<span class="built_in">min</span>() ?? <span class="number">0</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">assert</span>(<span class="type">Solution</span>().minimumTotal([[<span class="number">2</span>],[<span class="number">3</span>, <span class="number">4</span>],[<span class="number">6</span>, <span class="number">5</span>, <span class="number">7</span>],[<span class="number">4</span>,<span class="number">1</span>,<span class="number">8</span>,<span class="number">3</span>]]) == <span class="number">11</span>)</div></pre></td></tr></table></figure>
-<h3 id="double-100-1"><a href="#double-100-1" class="headerlink" title="double 100%"></a>double 100%</h3><p><img src="http://image.runmaf.com/2020-05-17-15896455723167.jpg" alt=""></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1463,7 +1446,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">111</span>
+              <span class="site-state-item-count">112</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

@@ -226,6 +226,140 @@
             
               
                 
+                <a class="post-title-link" href="/2020/05/04/stupid-man-s-linear-dp/" itemprop="url">
+                  学渣的线性动规
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2020-05-04T00:20:33+08:00" content="2020-05-04">
+              2020-05-04
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="学渣的线性动规"><a href="#学渣的线性动规" class="headerlink" title="学渣的线性动规"></a>学渣的线性动规</h1><p>线性DP比较好的例子就是 三角形最小路径和，LIS，LCS问题了。</p>
+<h2 id="LIS"><a href="#LIS" class="headerlink" title="LIS"></a>LIS</h2><p>给定一个无序的整数数组，找到其中最长上升子序列的长度。</p>
+<p><a href="https://leetcode-cn.com/problems/longest-increasing-subsequence/" target="_blank" rel="external">直达链接</a></p>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>给定n个整数A1,A2,A3…An。按照从左往右的顺序选择尽可能多的整数，组成一个上升子序列，其中相邻元素不能相等</p>
+<h3 id="转移方程"><a href="#转移方程" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[i]=max&#123;1+dp[j]&#125;(0&lt;=j&lt;i,s[j]&lt;s[i])</div></pre></td></tr></table></figure>
+<h3 id="边界"><a href="#边界" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[0] = 1</div></pre></td></tr></table></figure>
+<h3 id="状态标识"><a href="#状态标识" class="headerlink" title="状态标识"></a>状态标识</h3><p>s 为输入数列<br>dp[i]表示以s[i]为结尾的“最大上升子序列长度”</p>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>max{dp[i]}(0&lt;=i&lt;n)</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">lis</span><span class="params">(<span class="number">_</span> s: [Int])</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="number">1</span>, <span class="built_in">count</span>: s.<span class="built_in">count</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> result = <span class="number">0</span></div><div class="line">        </div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span> ..&lt; dp.<span class="built_in">count</span> &#123;</div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">0</span> ..&lt; i &#123;</div><div class="line">                <span class="keyword">if</span> s[j] &lt; s[i] &#123;</div><div class="line">                    dp[i] = <span class="built_in">max</span>(dp[i], dp[j] + <span class="number">1</span>)</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            result = <span class="built_in">max</span>(dp[i], result)</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> result</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="LCS解1，二位数组"><a href="#LCS解1，二位数组" class="headerlink" title="LCS解1，二位数组"></a>LCS解1，二位数组</h2><p>给定两个字符串 text1 和 text2，返回这两个字符串的最长公共子序列的长度。</p>
+<p><a href="https://leetcode-cn.com/problems/longest-common-subsequence/" target="_blank" rel="external">直达链接</a></p>
+<h3 id="问题描述-1"><a href="#问题描述-1" class="headerlink" title="问题描述"></a>问题描述</h3><p>给定两个长度分别为n,m的字符串a,b,求既是a的子序列，又是b的子序列的字符串的长度最长是多少</p>
+<h3 id="转移方程-1"><a href="#转移方程-1" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">if a[i] == b[j]:</div><div class="line">	dp[i][j] = dp[i - 1][j - 1] + 1</div><div class="line">else:</div><div class="line">	dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])</div></pre></td></tr></table></figure>
+<h3 id="边界-1"><a href="#边界-1" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[i][0] = 0</div><div class="line">dp[0][j] = 0</div></pre></td></tr></table></figure>
+<h3 id="状态标识-1"><a href="#状态标识-1" class="headerlink" title="状态标识"></a>状态标识</h3><p>a,b 为输入字符串<br>n,m 为a,b的长度</p>
+<p>dp[i][j]表示a[0 ..&lt; i]与b[0 ..&lt; j]的最长公共子序列的长度</p>
+<h3 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h3><p>dp[n][m]</p>
+<h3 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">longestCommonSubsequence</span><span class="params">(<span class="number">_</span> a: String, <span class="number">_</span> b: String)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">let</span> m = a.<span class="built_in">count</span></div><div class="line">        <span class="keyword">let</span> n = b.<span class="built_in">count</span></div><div class="line">        <span class="keyword">if</span> m == <span class="number">0</span> || n == <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="type">Array</span>(repeating: <span class="number">0</span>, <span class="built_in">count</span>: n + <span class="number">1</span>), <span class="built_in">count</span>: m + <span class="number">1</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span> ... m &#123;</div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">1</span> ... n &#123;</div><div class="line">                <span class="keyword">if</span> a[a.index(a.startIndex, offsetBy: i - <span class="number">1</span>)] == b[b.index(b.startIndex, offsetBy: j - <span class="number">1</span>)] &#123;</div><div class="line">                    dp[i][j] = dp[i - <span class="number">1</span>][j - <span class="number">1</span>] + <span class="number">1</span></div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    dp[i][j] = <span class="built_in">max</span>(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>])</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> dp[m][n]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>但是用二位数组，时间复杂度在leetcode上过不了关，所以得考虑其他动态方案的方式。</p>
+<h2 id="LCS解2，一维数组"><a href="#LCS解2，一维数组" class="headerlink" title="LCS解2，一维数组"></a>LCS解2，一维数组</h2><p>几个优化的点</p>
+<ul>
+<li>一个是用一维数组</li>
+<li>二是不用String而是一开始就把String转成Array<character>，加快查询和修改的效率</character></li>
+</ul>
+<h3 id="转移方程-2"><a href="#转移方程-2" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// a.count &gt; b.count</div><div class="line"></div><div class="line">if a[j] == b[i]:</div><div class="line">	dp[j] = dp[j - 1] + 1</div><div class="line">else:</div><div class="line">	dp[j] = max(dp[j - 1], dp[j])</div></pre></td></tr></table></figure>
+<h3 id="边界-2"><a href="#边界-2" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[0] = 0</div></pre></td></tr></table></figure>
+<h3 id="状态标识-2"><a href="#状态标识-2" class="headerlink" title="状态标识"></a>状态标识</h3><p>a,b 为输入字符串转换的数组<br>m, n 为a,b的长度， m &gt;= n</p>
+<p>dp[j]表示a[0 ..&lt; j]与b的最长公共子序列的长度</p>
+<h3 id="目标-2"><a href="#目标-2" class="headerlink" title="目标"></a>目标</h3><p>dp[m]</p>
+<h3 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">longestCommonSubsequence</span><span class="params">(<span class="number">_</span> text1: String, <span class="number">_</span> text2: String)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">var</span> a = text1</div><div class="line">        <span class="keyword">var</span> b = text2</div><div class="line">        <span class="keyword">var</span> m = a.<span class="built_in">count</span></div><div class="line">        <span class="keyword">var</span> n = b.<span class="built_in">count</span></div><div class="line">        </div><div class="line">        <span class="keyword">if</span> m == <span class="number">0</span> || n == <span class="number">0</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> m &lt; n &#123;</div><div class="line">            <span class="keyword">let</span> temp = m</div><div class="line">            m = n</div><div class="line">            n = temp</div><div class="line">            a = text2</div><div class="line">            b = text1</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="number">0</span>, <span class="built_in">count</span>: m + <span class="number">1</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span> ... n &#123;</div><div class="line">            <span class="keyword">var</span> cur = <span class="number">0</span></div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="number">1</span> ... m &#123;</div><div class="line">                <span class="keyword">let</span> leftTop = cur</div><div class="line">                cur = dp[j]</div><div class="line">                <span class="keyword">if</span> a[a.index(a.startIndex, offsetBy: j - <span class="number">1</span>)] == b[b.index(b.startIndex, offsetBy: i - <span class="number">1</span>)] &#123;</div><div class="line">                    dp[j] = leftTop + <span class="number">1</span></div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    dp[j] = <span class="built_in">max</span>(dp[j - <span class="number">1</span>], dp[j])</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">            </div><div class="line">        <span class="keyword">return</span> dp[m]</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="double-100"><a href="#double-100" class="headerlink" title="double 100%"></a>double 100%</h3><p><img src="http://image.runmaf.com/2020-05-17-15896421497757.jpg" alt=""></p>
+<h2 id="三角形最小路径和"><a href="#三角形最小路径和" class="headerlink" title="三角形最小路径和"></a>三角形最小路径和</h2><p>给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。</p>
+<p>相邻的结点 在这里指的是 下标 与 上一层结点下标 相同或者等于 上一层结点下标 + 1 的两个结点。</p>
+<p><a href="https://leetcode-cn.com/problems/triangle" target="_blank" rel="external">直达链接</a></p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>题目有表示用空间复杂度为O(n)有加分，那么肯定要考虑用一位数组来动态规划了。</p>
+<h3 id="转移方程-3"><a href="#转移方程-3" class="headerlink" title="转移方程"></a>转移方程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[j] = triangle[i][j] + min(dp[j], dp[i])</div></pre></td></tr></table></figure>
+<h3 id="边界-3"><a href="#边界-3" class="headerlink" title="边界"></a>边界</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">dp[0] = triangle[0][0]</div></pre></td></tr></table></figure>
+<h3 id="状态标识-3"><a href="#状态标识-3" class="headerlink" title="状态标识"></a>状态标识</h3><p>triangle 为三角形的二维数组<br>m为行数，n为最后一行列数<br>i为行索引，j为列索引</p>
+<h3 id="目标-3"><a href="#目标-3" class="headerlink" title="目标"></a>目标</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">min&#123;dp[0 ..&lt; n]&#125;</div></pre></td></tr></table></figure>
+<h3 id="实现-3"><a href="#实现-3" class="headerlink" title="实现"></a>实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">minimumTotal</span><span class="params">(<span class="number">_</span> triangle: [[Int]])</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">let</span> columnCount = triangle.<span class="built_in">count</span></div><div class="line">        </div><div class="line">        <span class="keyword">if</span> columnCount &lt;= <span class="number">1</span> &#123;</div><div class="line">            <span class="keyword">return</span> triangle.first?.first ?? <span class="number">0</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> dp = <span class="type">Array</span>(repeating: <span class="type">Int</span>.<span class="built_in">max</span>, <span class="built_in">count</span>: triangle.last?.<span class="built_in">count</span> ?? <span class="number">0</span>)</div><div class="line">        dp[<span class="number">0</span>] = triangle.first?.first ?? <span class="number">0</span></div><div class="line">        </div><div class="line">        <span class="keyword">for</span> columnIndex <span class="keyword">in</span> <span class="number">1</span> ..&lt; columnCount &#123;</div><div class="line">            <span class="keyword">let</span> row = triangle[columnIndex]</div><div class="line">            <span class="keyword">let</span> rowCount = row.<span class="built_in">count</span></div><div class="line">            </div><div class="line">            <span class="keyword">var</span> lastLeft = <span class="type">Int</span>.<span class="built_in">max</span></div><div class="line">            </div><div class="line">            <span class="keyword">for</span> rowIndex <span class="keyword">in</span> <span class="number">0</span> ..&lt; rowCount &#123;</div><div class="line">                <span class="keyword">let</span> temp = lastLeft</div><div class="line">                lastLeft = dp[rowIndex]</div><div class="line">                dp[rowIndex] = row[rowIndex] + <span class="built_in">min</span>(temp, dp[rowIndex])</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp.<span class="built_in">min</span>() ?? <span class="number">0</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">assert</span>(<span class="type">Solution</span>().minimumTotal([[<span class="number">2</span>],[<span class="number">3</span>, <span class="number">4</span>],[<span class="number">6</span>, <span class="number">5</span>, <span class="number">7</span>],[<span class="number">4</span>,<span class="number">1</span>,<span class="number">8</span>,<span class="number">3</span>]]) == <span class="number">11</span>)</div></pre></td></tr></table></figure>
+<h3 id="double-100-1"><a href="#double-100-1" class="headerlink" title="double 100%"></a>double 100%</h3><p><img src="http://image.runmaf.com/2020-05-17-15896455723167.jpg" alt=""></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2020/05/02/stupid-man-s-dp/" itemprop="url">
                   学渣的DP动态规划算法
                 </a>
@@ -1459,113 +1593,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/30/安卓蓝牙模块踩坑集合/" itemprop="url">
-                  安卓蓝牙模块踩坑集合
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2016-08-30T14:31:40+08:00" content="2016-08-30">
-              2016-08-30
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="安卓蓝牙模块踩坑集合"><a href="#安卓蓝牙模块踩坑集合" class="headerlink" title="安卓蓝牙模块踩坑集合"></a>安卓蓝牙模块踩坑集合</h1><h2 id="对特定的设备进行搜索"><a href="#对特定的设备进行搜索" class="headerlink" title="对特定的设备进行搜索"></a>对特定的设备进行搜索</h2><p>API <figure class="highlight plain"><figcaption><span>BluetoothAdapter.LeScanCallback) ```是安卓系统特地提供出来对特定的设备进行搜索的，官方API说明</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">``` If you want to scan for only specific types of peripherals, you can instead call startLeScan(UUID[], BluetoothAdapter.LeScanCallback), providing an array of UUID objects that specify the GATT services your app supports.</div></pre></td></tr></table></figure></p>
-<p>故事听起来都是美好的，实际上，人生很艰难</p>
-<ul>
-<li>先是这个API设计的很有问题，他 <code>UUID[]</code>是并集而不是合集，就是说，我只能搜一个设备同时兼备两个UUID，而不是这两个UUID的设备都进行搜索，这点iOS API设计就合理很多了。</li>
-<li>然后是，这个API在安卓4.3 4.4压根不支持，这就是最坑爹的人，折腾了半天，最后不支持！</li>
-</ul>
-<h2 id="搜索的回调"><a href="#搜索的回调" class="headerlink" title="搜索的回调"></a>搜索的回调</h2><p>这点倒不算坑，就是要注意的地方<code>BluetoothAdapter.LeScanCallback.onLeScan()</code> 为搜索结果的回调，该方法尽可能尽快把负责的过滤、判断抛到其他线程去做，尽快将回调调用返回了。</p>
-<h2 id="同时只能对一个设备进行连接"><a href="#同时只能对一个设备进行连接" class="headerlink" title="同时只能对一个设备进行连接"></a>同时只能对一个设备进行连接</h2><p><code>BluetoothDevice.connectGatt()</code>方法要控制好，不能同时对多个设备进行连接，这点也就不能像iOS那样，进行预连接的根源坑。</p>
-<p>如果连接失败了（例如出错，或者连接超时失败），要马上调用 BluetoothGatt.disconnect() 来释放建立连接请求，然后处理下一个设备连接请求，否则就等133出现！</p>
-<h2 id="对于属性的操作，同时只能有一个"><a href="#对于属性的操作，同时只能有一个" class="headerlink" title="对于属性的操作，同时只能有一个"></a>对于属性的操作，同时只能有一个</h2><p>不管是<code>writeCharacteristic()</code>写数据，还是设置notify，都是异步的，同时只能有一个，否则可能串线，或者丢失。所以，一定要在上一个写成功的回调后才能进行下一个操作，就这样，还有可能会出现该问题，所以在一些有可能要同时操作的地方，我是等收到了数据才进行下一个操作。比如连接上Podoon鞋垫后要进行时间校正、读版本号、读批次号、读协议栈，就是在前一个notify数据后，才执行下一个，另外特地做了一个Timer循环的去检查。</p>
-<h2 id="搜索、连接、断开连接最好放在主线程"><a href="#搜索、连接、断开连接最好放在主线程" class="headerlink" title="搜索、连接、断开连接最好放在主线程"></a>搜索、连接、断开连接最好放在主线程</h2><p>这点看文档看到的，具体有没有效果不清楚，SDK是创建一个 <code>new Handler(context.getMainLooper());</code> ，把消息发送到这个 Handler 中。</p>
-<h2 id="连接过程很耗电，尽量时间短"><a href="#连接过程很耗电，尽量时间短" class="headerlink" title="连接过程很耗电，尽量时间短"></a>连接过程很耗电，尽量时间短</h2><p>对BLE设备连接，连接过程要尽量短，如果连接不上，不要盲目进行重连，否这你的电池会很快被消耗掉</p>
-<h2 id="作为中心设备，最多只能同时连6（不是非常确定，但是是有限的）个BLE设备"><a href="#作为中心设备，最多只能同时连6（不是非常确定，但是是有限的）个BLE设备" class="headerlink" title="作为中心设备，最多只能同时连6（不是非常确定，但是是有限的）个BLE设备"></a>作为中心设备，最多只能同时连6（不是非常确定，但是是有限的）个BLE设备</h2><p>超过了就很可能会连接失败。如果连接后资源未被释放，也会记做连接的设备进行计算。</p>
-<h2 id="资源未被释放导致133问题"><a href="#资源未被释放导致133问题" class="headerlink" title="资源未被释放导致133问题"></a>资源未被释放导致133问题</h2><p>连接蓝牙设备后，在断开时候尽可能对其进行close操作，否则就有可能因为资源未释放干净又连接同一个设备出现133的错误</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1611,7 +1638,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">111</span>
+              <span class="site-state-item-count">112</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
