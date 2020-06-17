@@ -226,6 +226,161 @@
             
               
                 
+                <a class="post-title-link" href="/2014/05/01/2014-05-01-spring-framework-core-source-code-analysis-ii-xmlwebapplicationcontext-introduction/" itemprop="url">
+                  Spring Framework的核心源码解读（二）-XmlWebApplicationContext介绍
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2014-05-01T15:29:00+08:00" content="2014-05-01">
+              2014-05-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/IoC/" itemprop="url" rel="index">
+                    <span itemprop="name">IoC</span>
+                  </a>
+                </span>
+
+                
+                
+                  . 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/IoC/XmlWebApplicationContext/" itemprop="url" rel="index">
+                    <span itemprop="name">XmlWebApplicationContext</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#3 XmlWebApplicationContext<br>XmlWebApplicationContext是开发web应用最常用的上下文环境。</p>
+<h2 id="3-1-XmlWebApplicationContext的特性"><a href="#3-1-XmlWebApplicationContext的特性" class="headerlink" title="3.1 XmlWebApplicationContext的特性"></a>3.1 XmlWebApplicationContext的特性</h2><p>XmlWebApplicationContext提供了IoC容器对Web环境ServletAPI的集成，并提供Xml解析器，从而可以从xml文件中获取BeanDefinition数据。<br> <img src="http://i1.tietuku.com/2ba01b6872beb1db.jpg" alt=""></p>
+<h2 id="3-2-XmlWebApplicationContext的加载"><a href="#3-2-XmlWebApplicationContext的加载" class="headerlink" title="3.2 XmlWebApplicationContext的加载"></a>3.2 XmlWebApplicationContext的加载</h2><p>在系统中通过配置servlet或者listener（如下代码）就能让web系统从xml中加载BeanDefinition数据。<br><figure class="highlight xml"><figcaption><span>web.xml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">listener</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">listener-class</span>&gt;</span></div><div class="line">        org.springframework.web.context.ContextLoaderListener</div><div class="line">    <span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">listener</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>那再让我们看看ContextLoaderListener的源码片段。从下面的代码可以看出，该监听会判断上下载加载器是否存在，不存在就进行初始化。<br><figure class="highlight java"><figcaption><span>ContextLoaderListener.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.contextLoader = createContextLoader();</div><div class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.contextLoader == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">this</span>.contextLoader = <span class="keyword">this</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">this</span>.contextLoader.initWebApplicationContext(event.getServletContext());</div></pre></td></tr></table></figure></p>
+<p>而initWebApplicationContext()方法中，又通过BeanUtils.instantiateClass(contextClass)来获取ApplicationContext，我们再继续寻找源头。在ContextLoader类中我们找到了determineContextClass()方法。<br><figure class="highlight java"><figcaption><span>ContextLoader.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> Class&lt;?determineContextClass(ServletContext servletContext) &#123;</div><div class="line">		String contextClassName = servletContext.getInitParameter(CONTEXT_CLASS_PARAM);</div><div class="line">		<span class="keyword">if</span> (contextClassName != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="comment">//通过类加载器加载该类并返回</span></div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			contextClassName = defaultStrategies.getProperty(WebApplicationContext.class.getName());</div><div class="line">			<span class="comment">//通过类加载器加载该类并返回</span></div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>servletContext.getInitParameter是取web.xml里的配置参数，意思就是先看看我们有没有自己定义context的类，如果我们定义了，直接返回这个class。否则，去defaultStrategies里去取,WebApplicationContext的类名作为key。这里我Ctry+O搜了下defaultStrategies，发现了源头。<br><figure class="highlight java"><figcaption><span>ContextLoader.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DEFAULT_STRATEGIES_PATH = <span class="string">"ContextLoader.properties"</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Properties defaultStrategies;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> &#123;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			ClassPathResource resource = <span class="keyword">new</span> ClassPathResource(DEFAULT_STRATEGIES_PATH, ContextLoader.class);</div><div class="line">			defaultStrategies = PropertiesLoaderUtils.loadProperties(resource);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (IOException ex) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Could not load 'ContextLoader.properties': "</span> + ex.getMessage());</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>这里定义的就是我们需要的类。<br><img src="http://i1.tietuku.com/5e8030512d81ede8.jpg" alt=""></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/05/01/2014-05-01-spring-framework-core-source-code-analysis-a-spring-the-overall-structure-and-the-overall-ioc-container-design-introduction/" itemprop="url">
                   Spring Framework的核心源码解读（一）-Spring整体结构以及IoC容器设计整体介绍
                 </a>
@@ -1587,147 +1742,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/03/10/2014-03-10-linux-shell-programming-study-notes-a-comparison-of-methods-for-executing-shell-scripts/" itemprop="url">
-                  Linux Shell编程学习笔记（一）执行SHELL脚本方法的比较
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-03-10T12:40:00+08:00" content="2014-03-10">
-              2014-03-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/bash/" itemprop="url" rel="index">
-                    <span itemprop="name">bash</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/bash/Shell/" itemprop="url" rel="index">
-                    <span itemprop="name">Shell</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>#近况<br>最近项目挺忙的，好久都没写博客技术分享了，这周五又是Deadline了。然后部门换了部门经理，挺有干劲的，因为特别有赶紧也对部门工作态度怠慢的人持裁人的想法。我是尽量为组内成员说些好话，虽然平时我自己也对他们的工作态度有些不满。但是裁人立马换人真不是解决问题的方法，至少不会短期内见效。<br>最近项目和linux Shell运维有关系，因此我也开始学习Shell脚本。最近的博文就更新这方面的吧。其实我还挺多料都拽着没时间整理发出来。等清闲下来，一定要好好整理一番。</p>
-<h1 id="执行Shell脚本的几种方法"><a href="#执行Shell脚本的几种方法" class="headerlink" title="执行Shell脚本的几种方法"></a>执行Shell脚本的几种方法</h1><h2 id="script-name"><a href="#script-name" class="headerlink" title="./script_name"></a>./script_name</h2><p>该方法执行必须让脚本有执行权限，并且脚本在当前路径下执行。</p>
-<h2 id="bash-sh-执行"><a href="#bash-sh-执行" class="headerlink" title="bash\sh 执行"></a>bash\sh 执行</h2><p>该方法执行可以不需要权限</p>
-<h2 id="Source"><a href="#Source" class="headerlink" title="Source/."></a>Source/.</h2><p>用sourcce 或者一个.的方式执行，可以让脚本在当前shell内执行，不会新创建一个子shell，这样当前shell就能调用脚本中的变量和函数。<br>注意，exec与source不同，exec会结束掉当前的shell，创建一个新的进程，pid会与当前的shell一致。</p>
-<h2 id="直接进入路径，输入脚本名运行（错误）"><a href="#直接进入路径，输入脚本名运行（错误）" class="headerlink" title="直接进入路径，输入脚本名运行（错误）"></a>直接进入路径，输入脚本名运行（错误）</h2><p>这样会无法执行，除非脚本在PATH下。比如node命令被我添加到了path中，那么就会执行。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1773,7 +1787,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">112</span>
+              <span class="site-state-item-count">113</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>

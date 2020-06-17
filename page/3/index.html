@@ -226,6 +226,142 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/12/从零搭建Flask-Celery-Redis后台任务服务器/" itemprop="url">
+                  从零搭建Flask+Celery+Redis后台任务服务器
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-09-12T11:27:16+08:00" content="2016-09-12">
+              2016-09-12
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="从零搭建Flask-Celery-Redis后台任务服务器"><a href="#从零搭建Flask-Celery-Redis后台任务服务器" class="headerlink" title="从零搭建Flask+Celery+Redis后台任务服务器"></a>从零搭建Flask+Celery+Redis后台任务服务器</h1><h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>记录运动轨迹，那么在记录上传服务器后，要根据轨迹生成几张所需要的轨迹热图，也就是根据传来的经纬度集合，抓取适合的瓦片图，在上面绘制轨迹以及加蒙版等， 生成的图片如下。</p>
+<p><img src="http://pathmap-10048881.file.myqcloud.com/pathmap/v0/colorline/RM/a0085622f4a26b1cb5912d82e97763bb/map.jpg" alt="热力图"></p>
+<p>本文并不是要说热力图生成的逻辑，只是说说整个服务的架构与配置实现。</p>
+<p><strong><em><font color="red">PS.本文主要用作自己记录，有兴趣的可以交流沟通，邮箱：xiao303178394@gmail.com</font></em></strong></p>
+<h2 id="大体架构"><a href="#大体架构" class="headerlink" title="大体架构"></a>大体架构</h2><p>手残画了画</p>
+<p><img src="http://7oxfjd.com2.z0.glb.qiniucdn.com/2016-10-26-1.jpg" alt="1"></p>
+<h2 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h2><p>环境：Ubuntu 14.04 Python 2.7</p>
+<h3 id="安装git以及下载源码"><a href="#安装git以及下载源码" class="headerlink" title="安装git以及下载源码"></a>安装git以及下载源码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get update</div><div class="line">$ sudo apt-get install git</div><div class="line">$ sudo git clone https://git.coding.net/David_woo/rm-map-api.git rm_api</div></pre></td></tr></table></figure>
+<h3 id="安装Pillow的一些底层依赖"><a href="#安装Pillow的一些底层依赖" class="headerlink" title="安装Pillow的一些底层依赖"></a>安装Pillow的一些底层依赖</h3><p>由于热图绘制用到Pillow，所以需要这部，不用Pillow可以无视</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install libjpeg-dev zlib1g*</div><div class="line">$ sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk</div></pre></td></tr></table></figure>
+<h3 id="安装Python的一些依赖库"><a href="#安装Python的一些依赖库" class="headerlink" title="安装Python的一些依赖库"></a>安装Python的一些依赖库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install -y python-pip python-dev build-essential</div><div class="line">$ sudo pip install -r requirements.txt</div><div class="line">$ sudo pip install gunicorn</div></pre></td></tr></table></figure>
+<h3 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install nginx</div></pre></td></tr></table></figure>
+<h2 id="配置后台服务"><a href="#配置后台服务" class="headerlink" title="配置后台服务"></a>配置后台服务</h2><p>这里用gunicorn做wsgi运行程序，然后nginx做服务器。</p>
+<h3 id="gunicorn运行程序"><a href="#gunicorn运行程序" class="headerlink" title="gunicorn运行程序"></a>gunicorn运行程序</h3><p>程序源码根目录下，创建wsgi.py文件，内容如下即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"></div><div class="line">__doc__ = <span class="string">"""</span></div><div class="line"><span class="string">"""</span></div><div class="line"></div><div class="line"><span class="keyword">from</span> api <span class="keyword">import</span> create_app</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># application = create_app('api/config_dev.cfg')</span></div><div class="line">application = create_app(<span class="string">'api/config_qcloud.cfg'</span>)`</div></pre></td></tr></table></figure>
+<p>同样在根目录下，创建gunicorn.cfg，内容如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> multiprocessing</div><div class="line"></div><div class="line">bind = <span class="string">"0.0.0.0:8092"</span></div><div class="line">daemon = <span class="keyword">True</span></div><div class="line">worker_class=<span class="string">"gevent"</span></div><div class="line">pidfile = <span class="string">"/var/run/gunicorn.pid"</span></div><div class="line">workers = multiprocessing.cpu_count() * <span class="number">2</span> + <span class="number">1</span></div><div class="line">worker_connections=<span class="number">1000</span></div><div class="line">backlog = <span class="number">2048</span></div><div class="line">errorlog = <span class="string">"/data/www/rm_api/gunicorn-error.log"</span></div><div class="line">loglevel = <span class="string">"info"</span></div></pre></td></tr></table></figure>
+<p>执行命令，就把程序在 127.0.0.1:8092上跑起来了，记住这个地址，之后在nginx的配置上要用到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[david@XXX rmserver]$ sudo /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">[david@XXX rmserver]$ ps aux | grep gunicorn</div><div class="line">root     30836  0.6  0.1 210704 12696 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30841  9.3  0.4 258636 35516 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30842 10.6  0.4 340304 37748 ?        Sl   17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30843 10.3  0.4 340308 37752 ?        Sl   17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30846  9.3  0.4 258660 35540 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30851  9.3  0.4 258668 35548 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30854  9.3  0.4 258684 35560 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30857  9.0  0.4 258688 35548 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30860  9.0  0.4 258700 35552 ?        S    17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">root     30863 10.0  0.4 340364 37676 ?        Sl   17:21   0:00 /usr/local/bin/python /usr/local/bin/gunicorn -c gunicorn.cfg wsgi:application</div><div class="line">david    30872  0.0  0.0 103248   848 pts/0    S+   17:21   0:00 grep gunicorn</div></pre></td></tr></table></figure>
+<h3 id="通过nginx作为服务器"><a href="#通过nginx作为服务器" class="headerlink" title="通过nginx作为服务器"></a>通过nginx作为服务器</h3><p>把nginx的配置放在源码根目录下，通过软链接到nginx/sites-enabled里，我觉得是一个比较好的方式，保证服务器的配置不会丢失。<br>当然，如果用Docker更好了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo ln -s rm_api_nginx.conf /etc/nginx/sites-enabled/</div></pre></td></tr></table></figure>
+<p>内容大概如下,127.0.0.1:8092这里就用到了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen 8552;</div><div class="line">    server_name  xxx.xxx.xxx.xxx;</div><div class="line"></div><div class="line">    access_log  logs/nginx_rm_api_https.access.log;</div><div class="line">    error_log  logs/nginx_rm_api_https.error.log;</div><div class="line">    root   html;</div><div class="line">    index  index.html index.htm index.php;</div><div class="line"></div><div class="line">    location ~*$ &#123;</div><div class="line">        resolver xxx.xxx.xxx.xxx;</div><div class="line"></div><div class="line">          proxy_pass            http://127.0.0.1:8092;</div><div class="line">          proxy_redirect        off;</div><div class="line">          proxy_set_header      Host             $host;</div><div class="line">          proxy_set_header      X-Real-IP        $remote_addr;</div><div class="line">          proxy_set_header      X-Forwarded-For  $proxy_add_x_forwarded_for;</div><div class="line">          client_max_body_size  30m;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">          proxy_pass            http://127.0.0.1:8092;</div><div class="line">          proxy_redirect        off;</div><div class="line">          proxy_set_header      Host             $host;</div><div class="line">          proxy_set_header      X-Real-IP        $remote_addr;</div><div class="line">          proxy_set_header      X-Forwarded-For  $proxy_add_x_forwarded_for;</div><div class="line">          client_max_body_size  10m;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h2><p>redis这里用到了腾讯的redis服务，一是用来做消息队列，而是用来做瓦片图的缓存。</p>
+<p>瓦片图缓存的相关。</p>
+<h3 id="消息队列的redis配置及woker的启动"><a href="#消息队列的redis配置及woker的启动" class="headerlink" title="消息队列的redis配置及woker的启动"></a>消息队列的redis配置及woker的启动</h3><p>在源码根目录创建celery_tasks.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"></div><div class="line"><span class="keyword">from</span> api <span class="keyword">import</span> create_app</div><div class="line"><span class="keyword">from</span> celery <span class="keyword">import</span> Celery, platforms</div><div class="line"><span class="keyword">from</span> celery.app.amqp <span class="keyword">import</span> Queue,Exchange</div><div class="line"></div><div class="line">app = create_app(<span class="string">'api/config_qcloud.cfg'</span>)</div><div class="line"><span class="comment"># app = create_app('api/config_dev.cfg')</span></div><div class="line"><span class="comment"># root执行任务，就必须开启</span></div><div class="line">platforms.C_FORCE_ROOT = <span class="keyword">True</span></div><div class="line"></div><div class="line">celery = Celery(app.import_name, broker=app.config[<span class="string">'CELERY_BROKER_URL'</span>])<span class="comment">#redis的url、密码</span></div><div class="line">celery.conf.update(app.config)</div><div class="line">celery.conf.CELERY_DEFAULT_QUEUE = <span class="string">'rm.map.api'</span></div><div class="line">celery.conf.CELERY_ENABLE_REMOTE_CONTROL = <span class="keyword">False</span></div></pre></td></tr></table></figure>
+<p>通过下面命令执行，就通过daemon方式启动了woker</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo celery -A celery_tasks.celery multi start worker  --loglevel=info -P processes -c 4</div></pre></td></tr></table></figure>
+<p>想要关闭的话</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo celery multi stopwait worker</div></pre></td></tr></table></figure>
+<p><a href="http://docs.celeryproject.org/en/latest/tutorials/daemonizing.html#service-file-celery-service" target="_blank" rel="external">官网参考文献</a></p>
+<p>这时候已经启动消息队列的消费者了，但是消息队列的生产者还没有说</p>
+<p>如下是extension.py，里面初始化了celery</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"></div><div class="line"><span class="keyword">from</span> utils.redis_utils <span class="keyword">import</span> RedisConnectionPool</div><div class="line"></div><div class="line"><span class="keyword">from</span> celery <span class="keyword">import</span> Celery</div><div class="line"></div><div class="line"></div><div class="line">__all__ = [<span class="string">'redis'</span>, <span class="string">'fds_client'</span> ,<span class="string">'celery'</span>]</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># 使用 Redis Cache 做缓存</span></div><div class="line">redis = RedisConnectionPool(<span class="string">'MAPCACHE'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 使用 celery 做分布式框架</span></div><div class="line">celery = Celery()</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_celery</span><span class="params">(app)</span>:</span></div><div class="line">    <span class="keyword">global</span> celery</div><div class="line">    <span class="comment">#TODO 改成redis</span></div><div class="line">    celery = Celery(app.import_name, broker=app.config[<span class="string">'CELERY_BROKER_URL'</span>])</div><div class="line">    celery.conf.update(app.config)</div><div class="line">    celery.conf.CELERY_DEFAULT_QUEUE = <span class="string">'rm.map.api'</span></div><div class="line">    celery.conf.CELERY_ENABLE_REMOTE_CONTROL = <span class="keyword">False</span></div><div class="line"></div><div class="line">    TaskBase = celery.Task</div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">ContextTask</span><span class="params">(TaskBase)</span>:</span></div><div class="line">        abstract = <span class="keyword">True</span></div><div class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span></div><div class="line">            <span class="keyword">with</span> app.app_context():</div><div class="line">                <span class="keyword">return</span> TaskBase.__call__(self, *args, **kwargs)</div><div class="line">    celery.Task = ContextTask</div><div class="line">    <span class="keyword">return</span> celery</div></pre></td></tr></table></figure>
+<p>然后在函数上通过装饰器方式修饰任务函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> ..extensions <span class="keyword">import</span> celery</div><div class="line"></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="string">生成矩形轨迹路线图</span></div><div class="line"><span class="string">'''</span></div><div class="line"><span class="meta">@celery.task(name='get_pathmap', acks_late=True)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_pathmap</span><span class="params">(path_map, heat_path)</span>:</span></div><div class="line">		<span class="comment">#......，任务代码</span></div></pre></td></tr></table></figure>
+<p>最后如下调用即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#通过配置决定是否用消息队列，方便调试功能</span></div><div class="line"><span class="keyword">if</span> current_app.config.get(<span class="string">'IS_CELERY_WORK'</span>):</div><div class="line">	get_pathmap.delay(path_map, heat_path)</div><div class="line"><span class="keyword">else</span>:</div><div class="line">	get_pathmap(path_map, heat_path)</div></pre></td></tr></table></figure>
+<h3 id="瓦片图的reids缓存"><a href="#瓦片图的reids缓存" class="headerlink" title="瓦片图的reids缓存"></a>瓦片图的reids缓存</h3><p>redis_utils.py内容如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> redis</div><div class="line"><span class="keyword">import</span> socket</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">RedisConnectionPool</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name=<span class="string">''</span>, app=None)</span>:</span></div><div class="line">        self.name = name</div><div class="line">        self._pool = <span class="keyword">None</span></div><div class="line">        self.max_try = <span class="number">3</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> app <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</div><div class="line">            self.app = app</div><div class="line">            self.init_app(self.app)</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            self.app = <span class="keyword">None</span></div><div class="line"></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init_app</span><span class="params">(self, app)</span>:</span></div><div class="line">        self._pool = redis.BlockingConnectionPool(</div><div class="line">            host=app.config.get(<span class="string">"REDIS_%s_HOST"</span>%self.name),</div><div class="line">            port=app.config.get(<span class="string">"REDIS_%s_PORT"</span>%self.name),</div><div class="line">            db=app.config.get(<span class="string">"REDIS_%s_DB"</span>%self.name),</div><div class="line">            password=app.config.get(<span class="string">"REDIS_%s_PASSWORD"</span>%self.name),</div><div class="line">            socket_timeout=app.config.get(<span class="string">"REDIS_%s_TIMEOUT"</span>%self.name),</div><div class="line">            max_connections=app.config.get(<span class="string">"REDIS_%s_POOL_MAX"</span>%self.name),</div><div class="line">            timeout=app.config.get(<span class="string">"REDIS_%s_POOL_MAXWAIT"</span>%self.name)</div><div class="line">        )</div><div class="line">        self.app = app</div><div class="line"></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_redis</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">return</span> redis.Redis(connection_pool=self._pool)</div><div class="line"></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getattr__</span><span class="params">(self, item)</span>:</span></div><div class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__call_with_retries</span><span class="params">(*args)</span>:</span></div><div class="line">            <span class="keyword">if</span> <span class="keyword">None</span> == self.app:</div><div class="line">                <span class="keyword">raise</span> Exception(<span class="string">'the redis client is not initial!'</span>)</div><div class="line"></div><div class="line">            retry = <span class="number">0</span></div><div class="line">            <span class="keyword">while</span> retry &lt; self.max_try:</div><div class="line">                <span class="keyword">try</span>:</div><div class="line">                  <span class="keyword">return</span> getattr(self.get_redis(), item)(*args)</div><div class="line">                <span class="keyword">except</span> socket.timeout, se:</div><div class="line">                  <span class="keyword">if</span> retry &lt; self.max_try:</div><div class="line">                    retry += <span class="number">1</span></div><div class="line">                  <span class="keyword">else</span>:</div><div class="line">                    <span class="keyword">raise</span> se</div><div class="line"></div><div class="line">        <span class="keyword">return</span> __call_with_retries</div></pre></td></tr></table></figure>
+<p>调用时候，判断是否命中即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> redis.exists(redis_key) <span class="keyword">and</span> <span class="keyword">not</span> force_refresh:</div><div class="line">   <span class="keyword">return</span> redis.get(redis_key)</div><div class="line"><span class="keyword">else</span>:</div><div class="line">   str_tile_data = download_tilemap_file(lang, tile_x, tile_y, zoom)</div><div class="line">   ex_dt = timedelta(days=<span class="number">60</span>)</div><div class="line">   redis.set(redis_key, str_tile_data, ex_dt)</div><div class="line">   <span class="keyword">return</span> str_tile_data</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/30/安卓蓝牙模块踩坑集合/" itemprop="url">
                   安卓蓝牙模块踩坑集合
                 </a>
@@ -1207,110 +1343,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/04/20/2015-04-20-beginning-ios-pit-over-those-years-e/" itemprop="url">
-                  初学IOS那些年踩过的坑（六）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2015-04-20T08:54:00+08:00" content="2015-04-20">
-              2015-04-20
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>0、实现类似Eclipse的cmd+shift+r打开指定函数<br>一直以为没这功能，今天算发现了。在Xcode中可以用control+6打开所有函数的导航，然后可以进行输入检索，也可以按control+a显示所有。</p>
-<p>1、用IOS自带NSJSONSerialization 去把Foundation对象转成JSON串在NSNumber转换精度上存在问题<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSMutableArray</span> *pointArray = [[<span class="built_in">NSMutableArray</span> alloc] init];</div><div class="line"><span class="keyword">for</span> (RunningPoint *point <span class="keyword">in</span> pointEnityArray) &#123;</div><div class="line">[pointArray addObject:@&#123;</div><div class="line"><span class="string">@"latitude"</span> : point.latitude,</div><div class="line"><span class="string">@"longitude"</span> : point.longitude,</div><div class="line"><span class="string">@"chinaLatitude"</span> : point.chinaLatitude,</div><div class="line"><span class="string">@"chinaLongitude"</span> : point.chinaLongitude,</div><div class="line"><span class="string">@"isCorrect"</span> : point.isCorrect,</div><div class="line"><span class="string">@"distance"</span> : point.distance,</div><div class="line"><span class="string">@"altitude"</span> : point.altitude,</div><div class="line"><span class="string">@"speed"</span> : point.speed,</div><div class="line"><span class="string">@"mark"</span> : point.mark,</div><div class="line"><span class="string">@"pause_mark"</span> : point.pauseMark,</div><div class="line"><span class="string">@"britishMark"</span> : point.britishMark,</div><div class="line"><span class="string">@"running_time"</span> : point.runningTime,</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"collect_time"</span> : [point.collectTime toString],</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"running_time"</span>: point.runningTime,</div><div class="line">&#125;];</div><div class="line">&#125;</div><div class="line">running.pointsData = [<span class="built_in">NSKeyedArchiver</span> archivedDataWithRootObject:pointArray];</div></pre></td></tr></table></figure></p>
-<p>改为<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (RunningPoint *point <span class="keyword">in</span> pointEnityArray) &#123;</div><div class="line">[pointArray addObject:@&#123;</div><div class="line"><span class="string">@"latitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.latitude.doubleValue],</div><div class="line"><span class="string">@"longitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.longitude.doubleValue],</div><div class="line"><span class="string">@"chinaLatitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.chinaLatitude.doubleValue],</div><div class="line"><span class="string">@"chinaLongitude"</span> : [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%f"</span>,point.chinaLongitude.doubleValue],</div><div class="line"><span class="string">@"isCorrect"</span> : point.isCorrect,</div><div class="line"><span class="string">@"distance"</span> : point.distance,</div><div class="line"><span class="string">@"altitude"</span> : point.altitude,</div><div class="line"><span class="string">@"speed"</span> : point.speed,</div><div class="line"><span class="string">@"mark"</span> : point.mark,</div><div class="line"><span class="string">@"pause_mark"</span> : point.pauseMark,</div><div class="line"><span class="string">@"britishMark"</span> : point.britishMark,</div><div class="line"><span class="string">@"running_time"</span> : point.runningTime,</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"collect_time"</span> : [point.collectTime toString],</div><div class="line"><span class="string">@"step_count"</span> : point.stepCount,</div><div class="line"><span class="string">@"running_time"</span>: point.runningTime,</div><div class="line">&#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>2、table header and footer的高度问题<br>问题描述：这几天在重构一个页面，那个页面有一个tableview，因为重构把它从漂浮出来改成了加在底部。<br>结果在底部的tableview最地上出现了一个空行，因为没遇到过这种问题，也不知道那个界面是什么引起的。<br>问题排查：经过有经验的同事提示，知道了这类问题的排查方式。就是用模拟器运行，然后如下图打开。<br><img src="http://chuantu.biz/t2/3/1429520293x-954497745.jpg" alt=""><br>然后在界面上找到不知来历的界面，就会看到提示这是啥。<br><img src="http://chuantu.biz/t2/3/1429520387x1822611348.jpg" alt=""><br>原来是下面这个tableView的HeaderFooterView啊。那么怎么去掉他呢<br>要排查两个方面，一是代码中<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">CGFloat</span>)tableView:(<span class="built_in">UITableView</span> *)tableView heightForHeaderInSection:(<span class="built_in">NSInteger</span>)section &#123;</div><div class="line"></div><div class="line"><span class="keyword">return</span> <span class="number">50.0</span>f;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>而是nib文件中设置，如下图。这样这个问题应该就解决了。<br><img src="http://chuantu.biz/t2/3/1429520410x1822611348.jpg" alt=""></p>
-<p>3、用了autolayout的界面中，要怎么实现位移动画呢？</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//x,y,z动画要偏移的量</span></div><div class="line"><span class="built_in">CATransform3D</span> transform = <span class="built_in">CATransform3DMakeTranslation</span>(x, y, z);</div><div class="line"><span class="built_in">CABasicAnimation</span> *animation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"transform"</span>];</div><div class="line"><span class="comment">//view为要进行动画的view</span></div><div class="line">animation.fromValue = [view.layer.presentationLayer valueForKey:animation.keyPath];</div><div class="line">animation.toValue = [<span class="built_in">NSValue</span> valueWithCATransform3D:transform];</div><div class="line"><span class="comment">//opacityAnimation.timingFunction 是用来控制动画线性发展。</span></div><div class="line"><span class="comment">//其中[CAMediaTimingFunction functionWithControlPoints:1.0 :0.0 :1.0 :0.1] 是一个贝塞尔曲线的控制方法。</span></div><div class="line"><span class="comment">//这也可以令动画做到先慢后快或先快后慢的结果。</span></div><div class="line"><span class="comment">//效果参考http://netcetera.org/camtf-playground.html</span></div><div class="line">animation.timingFunction = [<span class="built_in">CAMediaTimingFunction</span> functionWithControlPoints:<span class="number">0</span> :size :<span class="number">0</span> :size*<span class="number">2</span>];</div><div class="line">animation.duration = <span class="number">0.6</span>;</div><div class="line">view.layer.transform = transform;</div><div class="line">[view.layer addAnimation:animation forKey:animation.keyPath];</div></pre></td></tr></table></figure>
-<p>除此之外，用这种方式还可以做移动中大小变化<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">float</span> bigInfoViewScale = scale*<span class="number">0.6</span> + <span class="number">0.4</span>;</div><div class="line"><span class="keyword">float</span> bigInfoViewY = -GET(<span class="number">200</span>) + GET(<span class="number">200</span>) * scale;</div><div class="line"><span class="built_in">CATransform3D</span> scaleTransform = <span class="built_in">CATransform3DMakeScale</span>(bigInfoViewScale, bigInfoViewScale, <span class="number">1</span>);</div><div class="line"><span class="built_in">CATransform3D</span> transform = <span class="built_in">CATransform3DTranslate</span>(scaleTransform, <span class="number">0</span>, bigInfoViewY, <span class="number">0</span>);</div><div class="line"></div><div class="line"><span class="built_in">CABasicAnimation</span> *animation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"transform"</span>];</div><div class="line">animation.fromValue = [<span class="keyword">self</span>.bigInfoView.layer.presentationLayer valueForKey:animation.keyPath];</div><div class="line">animation.toValue = [<span class="built_in">NSValue</span> valueWithCATransform3D:transform];</div><div class="line">animation.timingFunction = [<span class="built_in">CAMediaTimingFunction</span> functionWithControlPoints:<span class="number">0.3</span> :<span class="number">0.5</span> :<span class="number">0.9</span> :<span class="number">1.275</span>];</div><div class="line">animation.duration = duration;</div><div class="line"></div><div class="line"><span class="keyword">self</span>.bigInfoView.layer.transform = transform;</div><div class="line">[<span class="keyword">self</span>.bigInfoView.layer addAnimation:animation forKey:animation.keyPath];</div></pre></td></tr></table></figure></p>
-<p>4、ViewController中，当一个界面只有一个scrollView时候，scrollView会自动偏移一个状态栏的高度<br>在ViewController的ViewDidLoad中加入下面代码可解决该问题。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.automaticallyAdjustsScrollViewInsets = <span class="literal">NO</span>;</div></pre></td></tr></table></figure></p>
-<p>5、IOS中做类似GIF的动画<br>其实只要为每一帧切一张图，然后用如下代码就Ok了。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">NSArray</span> *images = @[[<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step1"</span>], [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step2"</span>], [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"step3"</span>]];</div><div class="line"><span class="built_in">UIImage</span> *animateImage = [<span class="built_in">UIImage</span> animatedImageWithImages:images duration:<span class="number">1.2</span>];</div><div class="line"><span class="built_in">UIImageView</span> *imageView = [[<span class="built_in">UIImageView</span> alloc] initWithImage:animateImage];</div><div class="line"><span class="comment">// 默认是0 0代表无限循环</span></div><div class="line">imageView.animationRepeatCount = <span class="number">0</span>;</div><div class="line">[imageView startAnimating];</div></pre></td></tr></table></figure></p>
-<p>6、主界面使用scrollView后，nib文件有警告<br>has ambigous scrollable content height<br>原因：scrollView需要确定的contentSize，而subViews并没有足够的约束可以确定contentSize<br>解决：在scrollView中套一层view，设置如下图<br><img src="http://chuantu.biz/t2/3/1429520432x1822611348.jpg" alt=""></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1356,7 +1388,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">112</span>
+              <span class="site-state-item-count">113</span>
               <span class="site-state-item-name">Artikel</span>
             </a>
           </div>
