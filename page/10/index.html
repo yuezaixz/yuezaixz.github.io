@@ -226,6 +226,149 @@
             
               
                 
+                <a class="post-title-link" href="/2014/03/10/2014-03-10-linux-shell-programming-study-notes-b-global-variables/" itemprop="url">
+                  Linux Shell编程学习笔记（二）全局变量
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-03-10T12:46:00+08:00" content="2014-03-10">
+              2014-03-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/bash/" itemprop="url" rel="index">
+                    <span itemprop="name">bash</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/bash/Shell/" itemprop="url" rel="index">
+                    <span itemprop="name">Shell</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><h2 id="全局环境变量"><a href="#全局环境变量" class="headerlink" title="全局环境变量"></a>全局环境变量</h2><h2 id="文件"><a href="#文件" class="headerlink" title="#  文件"></a>#  文件</h2><p>/etc/profile 这个文件中预设了系统的环境变量。<br>修改后记得 . /etc/profile(中间有个空格)</p>
+<h2 id="启动执行路径"><a href="#启动执行路径" class="headerlink" title="#  启动执行路径"></a>#  启动执行路径</h2><p>/etc/profile.d 将脚本放到该目录下，登陆用户的时候就会自动执行脚本。</p>
+<h2 id="规范"><a href="#规范" class="headerlink" title="#  规范"></a>#  规范</h2><p>记得，传统上，所有全局环境变量要大写，注意，大小写是有区别的。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="#  定义"></a>#  定义</h2><p>export myname=’David’<br>export MYNAME=’David_Wu’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[David@localhost study]$ export MYNAME=&apos;David_Wu&apos;</div><div class="line">[David@localhost study]$ echo $MYNAME</div><div class="line">David_Wu</div><div class="line">[David@localhost study]$ echo $myname</div><div class="line">David</div></pre></td></tr></table></figure></p>
+<h2 id="常用的全局变量"><a href="#常用的全局变量" class="headerlink" title="#  常用的全局变量"></a>#  常用的全局变量</h2><p>HOME目录<br>UID登陆用户ID<br>USER登陆用户<br>OSTYPE操作系统类似<br>HISTSIZE历史操作大小<br>HISTFILESIZE历史文件行数<br>TMOUT 超时退出时间<br>IFS系统分隔符</p>
+<h2 id="取消全局变量"><a href="#取消全局变量" class="headerlink" title="#  取消全局变量"></a>#  取消全局变量</h2><p>unset MYNAME<br><figure class="highlight bash"><figcaption><span>控制台</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ <span class="built_in">export</span> MYNAME=David</div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$MYNAME</span></div><div class="line">David</div><div class="line">[David@localhost ~]$ <span class="built_in">unset</span> MYNAME</div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$MYNAME</span></div></pre></td></tr></table></figure></p>
+<h2 id="用户环境变量和系统环境变量"><a href="#用户环境变量和系统环境变量" class="headerlink" title="#  用户环境变量和系统环境变量"></a>#  用户环境变量和系统环境变量</h2><p>ll ~ -al命令可以看到家目录下隐藏的用户环境变量<br>etc/profile就是系统环境变量</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/03/10/2014-03-10-linux-shell-programming-study-notes-a-comparison-of-methods-for-executing-shell-scripts/" itemprop="url">
                   Linux Shell编程学习笔记（一）执行SHELL脚本方法的比较
                 </a>
@@ -239,7 +382,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-03-10T12:40:00+08:00" content="2014-03-10">
               2014-03-10
             </time>
@@ -251,7 +394,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Linux/" itemprop="url" rel="index">
@@ -261,7 +404,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -273,7 +416,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -380,7 +523,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-02-15T10:47:00+08:00" content="2014-02-15">
               2014-02-15
             </time>
@@ -392,7 +535,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Linux/" itemprop="url" rel="index">
@@ -505,7 +648,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-02-11T13:56:00+08:00" content="2014-02-11">
               2014-02-11
             </time>
@@ -517,7 +660,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/scrum/" itemprop="url" rel="index">
@@ -527,7 +670,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -646,7 +789,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-02-10T13:33:00+08:00" content="2014-02-10">
               2014-02-10
             </time>
@@ -658,7 +801,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/日记/" itemprop="url" rel="index">
@@ -668,7 +811,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -680,7 +823,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -692,7 +835,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -704,7 +847,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -815,7 +958,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-02-04T05:51:00+08:00" content="2014-02-04">
               2014-02-04
             </time>
@@ -827,7 +970,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -837,7 +980,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -849,7 +992,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -861,7 +1004,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -973,7 +1116,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-02-03T13:11:00+08:00" content="2014-02-03">
               2014-02-03
             </time>
@@ -985,7 +1128,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -995,7 +1138,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1007,7 +1150,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1019,7 +1162,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1031,7 +1174,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1409,7 +1552,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-01-30T03:41:00+08:00" content="2014-01-30">
               2014-01-30
             </time>
@@ -1421,7 +1564,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/个人随笔/" itemprop="url" rel="index">
@@ -1431,7 +1574,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1443,7 +1586,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1546,7 +1689,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-01-29T07:10:00+08:00" content="2014-01-29">
               2014-01-29
             </time>
@@ -1558,7 +1701,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -1568,7 +1711,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1580,7 +1723,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1592,7 +1735,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1604,7 +1747,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1616,7 +1759,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1628,7 +1771,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1740,7 +1883,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-01-29T03:53:00+08:00" content="2014-01-29">
               2014-01-29
             </time>
@@ -1752,7 +1895,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/javascript/" itemprop="url" rel="index">
@@ -1762,7 +1905,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1774,7 +1917,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1786,7 +1929,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1798,7 +1941,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1810,7 +1953,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1899,220 +2042,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/01/26/2014-01-26-an-array-of-negative-thinking-is-the-javascript-a/" itemprop="url">
-                  是否该持否定性思维---javascript中的数组（一）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-01-26T04:18:00+08:00" content="2014-01-26">
-              2014-01-26
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/javascript/" itemprop="url" rel="index">
-                    <span itemprop="name">javascript</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/javascript/javascript/" itemprop="url" rel="index">
-                    <span itemprop="name">javascript</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/javascript/javascript/个人随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">个人随笔</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/javascript/javascript/个人随笔/否定性思维/" itemprop="url" rel="index">
-                    <span itemprop="name">否定性思维</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/javascript/javascript/个人随笔/否定性思维/自我反思/" itemprop="url" rel="index">
-                    <span itemprop="name">自我反思</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/javascript/javascript/个人随笔/否定性思维/自我反思/数组/" itemprop="url" rel="index">
-                    <span itemprop="name">数组</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>总算回到家了，一下车立马和小伙伴们吃久违的邵武紫溪粉去，不说有多好吃，吃的是一种回忆，人们泛着小舟逆流而上时，浪水也不断把我们打回到过去，而我们也努力在这间歇体验那曾经的美好，之后又继续摇起船桨奋力前进，直到有一天我们再也回不到过去了。<br>成长总是伴随着一些忧伤的，就像曾经的我也考公务员，最终结果是进入面试后差了0.6分。这次回来各种亲戚还依然惦记着我的公务员，不断问我，什么时候再考啊。其实我心里已经不想考了，我对公务员想法已经转变了，我认为让一个社会的优秀人才都去做公务员本来就是一种时代的退步，更何况公务员消减一半也丝毫不会影响政府工作。<br>但是，当我不断对一个东西持否定态度的时候我就要开始考虑一个问题了，我这是陷入否定性思维的泥沼了吗？否定性思维就是一个人总喜欢对任何事物持否定态度。哎，这人这么有钱，一定是黑商；这女明星这么红，一定是给潜规则了，一定有干爹；互联网金融一定是泡沫，你们这些人就等着泡沫破灭吧……这种人喜欢用否定别人的方式来让自己的失败变的理顺当然。当一个事物出现，有些人很好，他们想办法应对这种改变；而又有一部分人就喜欢做否定者，不断的否定他们，就想把你的智商拉到和他一样的水平线上，然后以他丰富的白痴经验打败你。或许他们的否定是对的，但是，他们这样的人我认为是不会成功的。<br>所以我就陷入沉思了，我是因为自己没考上，然后才持否定态度吗？我觉得，真不是，至少不完全是。我没有继续考，也主要是因为这个公务员这个稳定的米缸在我看来一是很无趣，让生活失去目标，二是这个米缸的好日子也差不多到头了吧，米缸里面的米已经被大批大批的老鼠吃的差不多了哦。不想谈政治，只是突发奇想的思考了下自己是否变成了一个否定者了，很好的是，我还不完全是，但是，公务员怎么怎么样又关我何事要我去唠叨呢？所以避免言多有失，我还是少说话，多敲代码吧。</p>
-<p>————————————分割线———————————–<br>util篇的第二篇暂时不准备写，因为我觉得还有很多各重要的知识应该要先好好巩固下，比如javascript的数组对象。内容比较多，分几篇博文来写吧。<br>在Javascript中，我经常用[]的方式来便捷的创建数组（当然也可以用Array构造函数），但是我并不了解他。由于项目中有用到，所以特地找了一些资料学习了下。本文就是javascript数组的学习笔记。</p>
-<p>#1 概述<br>数组对象继承自Object.prototype，对数组执行typeof操作符返回‘object’而不是‘array’。然而执行[] instanceof Array返回true。此外，还有类数组对象使问题更复杂，如字符串对象，arguments对象。arguments对象不是Array的实例，但却有个length属性，并且值能通过索引获取，所以能像数组一样通过循环操作。</p>
-<p>#2 数组原型的方法</p>
-<ul>
-<li>循环.forEach</li>
-<li>断言.some和.every</li>
-<li>.join和.concat的区别</li>
-<li>栈和队列.pop，.push，.shift和.unshift</li>
-<li>模型映射.map</li>
-<li>查询.filter</li>
-<li>排序.sort</li>
-<li>计算.reduce和.reduceRight</li>
-<li>复制.slice</li>
-<li>万能的.splice</li>
-<li>查找.indexOf</li>
-<li>in操作符</li>
-<li>reverse</li>
-</ul>
-<h2 id="2-1-循环foreach"><a href="#2-1-循环foreach" class="headerlink" title="2.1 循环foreach"></a>2.1 循环foreach</h2><p>该方法IE9+上才支持。所以现在公司不允许使用该函数。<br>使用形式：[].foreach(callback)<br>回调函数传入三个参数如下：</p>
-<ul>
-<li>value 当前操作的数组元素</li>
-<li>index 当前操作元素的数组索引</li>
-<li>array 当前数组的引用</li>
-</ul>
-<figure class="highlight javascript"><figcaption><span>testForeach.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[<span class="string">'_'</span>, <span class="string">'t'</span>, <span class="string">'a'</span>, <span class="string">'n'</span>, <span class="string">'i'</span>, <span class="string">'f'</span>, <span class="string">']'</span>].forEach(<span class="function"><span class="keyword">function</span> (<span class="params">value, index, array</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.push(<span class="built_in">String</span>.fromCharCode(value.charCodeAt() + index + <span class="number">2</span>))</div><div class="line">    &#125;, out = [])</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(out.join(<span class="string">''</span>));</div><div class="line"><span class="built_in">console</span>.log(out);</div></pre></td></tr></table></figure>
-<figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[David@localhost arraytest]$ node testForeach.js</div><div class="line">awesome</div><div class="line">[ 'a', 'w', 'e', 's', 'o', 'm', 'e' ]</div></pre></td></tr></table></figure>
-<p>可以传递可选的第二个参数(上例中的out)，作为每个调用函数的上下文（this）。<br>我们不能打断foreach，如果需要打断，需要用到some和every，请继续往下看。</p>
-<h2 id="2-2-可退出循环some、every"><a href="#2-2-可退出循环some、every" class="headerlink" title="2.2 可退出循环some、every"></a>2.2 可退出循环some、every</h2><p>在java中，你可能会用到break去跳出循环，那么再javascript中要怎么做呢？<br>Some和every使用形式：[].some(callback)/ [].every(callback)，回调函数传入三个参数与foreach相同。当回调函数返回true时候some就会中断，some的返回结果也就会true，代表找到了寻找的元素，而every想法，当false时候中断，但是every要注意的是，如果要every返回true，需要所有的遍历元素都返回true。<br><figure class="highlight javascript"><figcaption><span>testSomevery.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">    <span class="keyword">if</span>(tempStr === value)&#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">excludeStr</span>(<span class="params">tempStr</span>)</span>&#123;</div><div class="line"><span class="keyword">return</span> tempArray.every(<span class="function"><span class="keyword">function</span>(<span class="params">value,index,array</span>)</span>&#123;</div><div class="line">    <span class="keyword">if</span>(tempStr === value)&#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> param = process.argv[<span class="number">2</span>];</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Array ["</span>+tempArray+<span class="string">"] contains string '"</span>+param+<span class="string">"'? "</span>+includeStr(param));</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Array ["</span>+tempArray+<span class="string">"] exclude string '"</span>+param+<span class="string">"'? "</span>+excludeStr(param));</div></pre></td></tr></table></figure></p>
-<figure class="highlight console"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[David@localhost arraytest]$ node testSomeEvery.js David</div><div class="line">Array [David,Wu,Love,TY,forever,hahaha] contains string 'David'? true</div><div class="line">Array [David,Wu,Love,TY,forever,hahaha] exclude string 'David'? false</div><div class="line">[David@localhost arraytest]$ node testSomeEvery.js ty</div><div class="line">Array [David,Wu,Love,TY,forever,hahaha] contains string 'ty'? false</div><div class="line">Array [David,Wu,Love,TY,forever,hahaha] exclude string 'ty'? true</div><div class="line">[David@localhost arraytest]$ node testSomeEvery.js Ty</div><div class="line">Array [David,Wu,Love,TY,forever,hahaha] contains string 'Ty'? false</div><div class="line">Array [David,Wu,Love,TY,forever,hahaha] exclude string 'Ty'? true</div></pre></td></tr></table></figure>
-<h2 id="2-3-Join，数组插入分隔符"><a href="#2-3-Join，数组插入分隔符" class="headerlink" title="2.3 Join，数组插入分隔符"></a>2.3 Join，数组插入分隔符</h2><p>join(分隔符)方法创建一个字符串，会将数组里面每个元素用分隔符连接。如果没有提供分隔符，默认的分隔符为“,”。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[David@localhost arraytest]$ node</div><div class="line"> var tempArray = [&apos;David&apos;,&apos;Wu&apos;,&apos;Love&apos;,&apos;TY&apos;,&apos;forever&apos;,&apos;hahaha&apos;];</div><div class="line">undefined</div><div class="line"> tempArray.join();</div><div class="line">&apos;David,Wu,Love,TY,forever,hahaha&apos;</div><div class="line"> tempArray.join(&apos;&apos;);</div><div class="line">&apos;DavidWuLoveTYforeverhahaha&apos;</div><div class="line"> tempArray.join(&apos; &apos;);</div><div class="line">&apos;David Wu Love TY forever hahaha&apos;</div></pre></td></tr></table></figure></p>
-<h2 id="2-4-Concat-数组浅复制"><a href="#2-4-Concat-数组浅复制" class="headerlink" title="2.4 Concat,数组浅复制"></a>2.4 Concat,数组浅复制</h2><p>concat方法创建一个新数组，其是对原数组的浅拷贝。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"> var David = &#123;firstname:&apos;david&apos;,lastname:&apos;wu&apos;&#125;</div><div class="line">undefined</div><div class="line">/ var src = [1,2,3,David]</div><div class="line">undefined</div><div class="line">/var target = src.concat()</div><div class="line">undefined</div><div class="line">/src === target</div><div class="line">false</div><div class="line">/src[3] === a</div><div class="line">/src[3] === David</div><div class="line">true</div><div class="line">/target[3] === David</div><div class="line">true</div></pre></td></tr></table></figure></p>
-<p>===在比较对象的时候是比较引用（值类型是比较值，比如number,string等是值类型，而一般对象都是引用类型，比较引用），就是是否为同一个指针的指向，也就是内存地址是否相同。所以拷贝后的target与src比较返回false，因为target是拷贝后的结果。<br>但是，因为是浅拷贝，所以数组内的元素还是用相同的指针指向，所以是相同的。<br>Concat还能加入不限制个数参数，参数可以是值，也可以是一个数组，都会把它加入到数组的末端。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">src.concat(target)</div><div class="line">[ <span class="number">1</span>,</div><div class="line">  <span class="number">2</span>,</div><div class="line">  <span class="number">3</span>,</div><div class="line">  &#123; <span class="attr">firstname</span>: <span class="string">'david'</span>, <span class="attr">lastname</span>: <span class="string">'wu'</span> &#125;,</div><div class="line">  <span class="number">1</span>,</div><div class="line">  <span class="number">2</span>,</div><div class="line">  <span class="number">3</span>,</div><div class="line">  &#123; <span class="attr">firstname</span>: <span class="string">'david'</span>, <span class="attr">lastname</span>: <span class="string">'wu'</span> &#125; ]</div><div class="line">src.concat(<span class="string">'tang'</span>,<span class="string">'ying'</span>,<span class="string">'hahaha'</span>)</div><div class="line">[ <span class="number">1</span>,</div><div class="line">  <span class="number">2</span>,</div><div class="line">  <span class="number">3</span>,</div><div class="line">  &#123; <span class="attr">firstname</span>: <span class="string">'david'</span>, <span class="attr">lastname</span>: <span class="string">'wu'</span> &#125;,</div><div class="line">  <span class="string">'tang'</span>,</div><div class="line">  <span class="string">'ying'</span>,</div><div class="line">  <span class="string">'hahaha'</span> ]</div></pre></td></tr></table></figure>
-<h2 id="2-5-Pop、push实现栈"><a href="#2-5-Pop、push实现栈" class="headerlink" title="2.5 Pop、push实现栈"></a>2.5 Pop、push实现栈</h2><p>使用push可以压入一个元素或者一个数组。<br>而用pop则移除数组的末尾元素，并移除。如果数组是空返回返回void 0（undefined）。用这两个方法可以实现LIFO的栈数据结构。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Stack</span>(<span class="params"></span>)</span>&#123;<span class="keyword">this</span>._statck=[]&#125;</div><div class="line">Undefined</div><div class="line">Stack.prototype.next = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="keyword">return</span> <span class="keyword">this</span>._statck.pop();&#125;</div><div class="line">[<span class="built_in">Function</span>]</div><div class="line">Stack.prototype.add = <span class="function"><span class="keyword">function</span>(<span class="params">arrayx</span>)</span>&#123;<span class="keyword">return</span> <span class="keyword">this</span>._statck.push(arrayx);&#125;</div><div class="line">[<span class="built_in">Function</span>]</div><div class="line">stack = <span class="keyword">new</span> Stack()</div><div class="line">&#123; <span class="attr">_statck</span>: [] &#125;</div><div class="line">stack</div><div class="line">&#123; <span class="attr">_statck</span>: [] &#125;</div><div class="line">stack.add(<span class="number">1</span>);</div><div class="line"><span class="number">1</span></div><div class="line">stack.add(<span class="string">'David'</span>);</div><div class="line"><span class="number">2</span></div><div class="line">stack.add(<span class="string">'Wu'</span>);</div><div class="line"><span class="number">3</span></div><div class="line">stack.add(<span class="string">'tang'</span>);</div><div class="line"><span class="number">4</span></div><div class="line">stack.add(<span class="string">'ying'</span>);</div><div class="line"><span class="number">5</span></div><div class="line">stack</div><div class="line">&#123; <span class="attr">_statck</span>:</div><div class="line">   [ <span class="number">1</span>,</div><div class="line">     <span class="string">'David'</span>,</div><div class="line">     <span class="string">'Wu'</span>,</div><div class="line">     <span class="string">'tang'</span>,</div><div class="line">     <span class="string">'ying'</span> ] &#125;</div><div class="line">stack.next()</div><div class="line"><span class="string">'ying'</span></div><div class="line">stack.next()</div><div class="line"><span class="string">'tang'</span></div><div class="line">stack.next()</div><div class="line"><span class="string">'Wu'</span></div><div class="line">stack.next()</div><div class="line"><span class="string">'David'</span></div><div class="line">stack.next()</div><div class="line"><span class="number">1</span></div><div class="line">stack</div><div class="line">&#123; <span class="attr">_statck</span>: [] &#125;</div></pre></td></tr></table></figure>
-<p>这里可以用apply稍微改造下该方法。至于apply是什么，可以参考该文章<a href="http://www.cnblogs.com/KeenLeung/archive/2012/11/19/2778229.html" target="_blank" rel="external">Apply方法详解</a>。</p>
-<figure class="highlight javascript"><figcaption><span>Stack.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Stack</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">this</span>._stack = [];</div><div class="line">&#125;</div><div class="line"></div><div class="line">Stack.prototype.next = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._stack.pop();</div><div class="line">&#125;</div><div class="line">Stack.prototype.add = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._stack.push.apply(<span class="keyword">this</span>._stack,<span class="built_in">arguments</span>);</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = Stack;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">var Stack = require(&apos;./Stack&apos;)</div><div class="line">undefined</div><div class="line">stack = new Stack();</div><div class="line">&#123; _stack: [] &#125;</div><div class="line">stack.add(&apos;David&apos;,&apos;Wu&apos;,1988,1114)</div><div class="line">4</div><div class="line">stack.next();</div><div class="line">1114</div><div class="line">stack</div><div class="line">&#123; _stack: [ &apos;David&apos;, &apos;Wu&apos;, 1988 ] &#125;</div><div class="line">stack.next();</div><div class="line">1988</div><div class="line">stack.next();</div><div class="line">&apos;Wu&apos;</div><div class="line">stack</div><div class="line">&#123; _stack: [ &apos;David&apos; ] &#125;</div><div class="line">&gt;</div></pre></td></tr></table></figure>
-<h2 id="2-6-shift和unshift实现队列"><a href="#2-6-shift和unshift实现队列" class="headerlink" title="2.6 shift和unshift实现队列"></a>2.6 shift和unshift实现队列</h2><p>用unshift 和 shift可以很好的模拟FIFO（先进先出）队列。</p>
-<figure class="highlight javascript"><figcaption><span>Queue.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Queue</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">this</span>._queue = [];</div><div class="line">&#125;</div><div class="line"></div><div class="line">Queue.prototype.next = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._queue.shift();</div><div class="line">&#125;</div><div class="line">Queue.prototype.add = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._queue.unshift.apply(<span class="keyword">this</span>._queue,<span class="built_in">arguments</span>);</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = Queue;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var Queue = require(&apos;./Queue&apos;);var queue = new Queue();</div><div class="line">undefined</div><div class="line">queue.add(1,3,5,7);</div><div class="line">4</div><div class="line">queue</div><div class="line">&#123; _queue: [ 1, 3, 5, 7 ] &#125;</div><div class="line">queue.next()</div><div class="line">1</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2158,8 +2087,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">113</span>
-              <span class="site-state-item-name">Artikel</span>
+              <span class="site-state-item-count">114</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
@@ -2167,7 +2096,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">Kategorien</span>
+                <span class="site-state-item-name">categories</span>
               
             </div>
           
@@ -2176,7 +2105,7 @@
             <div class="site-state-item site-state-tags">
               
                 <span class="site-state-item-count">5</span>
-                <span class="site-state-item-name">Tags</span>
+                <span class="site-state-item-name">tags</span>
               
             </div>
           
@@ -2212,7 +2141,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -2220,7 +2149,7 @@
 </div>
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

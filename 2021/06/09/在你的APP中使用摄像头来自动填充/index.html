@@ -1,0 +1,609 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="WWDC21 10276 - 在你的APP中使用摄像头来自动填充引子WWDC21的KeyNote，Live Text算小年中的一个亮点了。演示了直接通过摄像头快速提取、填充信息，甚至可以直接通过图片中的文字索引图片（暂时没试验成功，可能相册还没索引完成）。但实际体验API后还是略微遗憾，他只能从摄像头输入，如果我是一张截屏，或者是一张之前的老照片，又或者是别人传给我的图片信息，都没法用到这个方便的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在你的APP中使用摄像头来自动填充">
+<meta property="og:url" content="http://yoursite.com/2021/06/09/在你的APP中使用摄像头来自动填充/index.html">
+<meta property="og:site_name" content="大胃吴的闲话唠嗑">
+<meta property="og:description" content="WWDC21 10276 - 在你的APP中使用摄像头来自动填充引子WWDC21的KeyNote，Live Text算小年中的一个亮点了。演示了直接通过摄像头快速提取、填充信息，甚至可以直接通过图片中的文字索引图片（暂时没试验成功，可能相册还没索引完成）。但实际体验API后还是略微遗憾，他只能从摄像头输入，如果我是一张截屏，或者是一张之前的老照片，又或者是别人传给我的图片信息，都没法用到这个方便的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://image.runmaf.com/2021-06-09-16231986874790.jpg">
+<meta property="og:image" content="http://image.runmaf.com/2021-06-09-IMG_3123.png">
+<meta property="og:image" content="http://image.runmaf.com/2021-06-09-IMG_3A71965AFDE1-1.jpeg">
+<meta property="og:image" content="http://image.runmaf.com/2021-06-09-IMG_589CBD8D3CBF-1.jpeg">
+<meta property="og:image" content="http://image.runmaf.com/2021-06-09-IMG_3117.png">
+<meta property="og:image" content="http://image.runmaf.com/2021-06-09-16231998163167.jpg">
+<meta property="og:image" content="http://image.runmaf.com/2021-06-09-IMG_3119.png">
+<meta property="og:image" content="http://image.runmaf.com/2021-06-09-16232000724781.jpg">
+<meta property="og:image" content="http://image.runmaf.com/2021-06-09-16232002226793.jpg">
+<meta property="og:image" content="http://image.runmaf.com/2021-06-09-16232002327498.jpg">
+<meta property="og:updated_time" content="2021-06-09T03:59:48.439Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在你的APP中使用摄像头来自动填充">
+<meta name="twitter:description" content="WWDC21 10276 - 在你的APP中使用摄像头来自动填充引子WWDC21的KeyNote，Live Text算小年中的一个亮点了。演示了直接通过摄像头快速提取、填充信息，甚至可以直接通过图片中的文字索引图片（暂时没试验成功，可能相册还没索引完成）。但实际体验API后还是略微遗憾，他只能从摄像头输入，如果我是一张截屏，或者是一张之前的老照片，又或者是别人传给我的图片信息，都没法用到这个方便的">
+<meta name="twitter:image" content="http://image.runmaf.com/2021-06-09-16231986874790.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/06/09/在你的APP中使用摄像头来自动填充/"/>
+
+  <title> 在你的APP中使用摄像头来自动填充 | 大胃吴的闲话唠嗑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大胃吴的闲话唠嗑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">扯扯技术，唠唠闲话 交流email-xiao303178394@gmail.com</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            menu.首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-文章">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            menu.文章
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                在你的APP中使用摄像头来自动填充
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2021-06-09T11:59:20+08:00" content="2021-06-09">
+              2021-06-09
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="WWDC21-10276-在你的APP中使用摄像头来自动填充"><a href="#WWDC21-10276-在你的APP中使用摄像头来自动填充" class="headerlink" title="WWDC21 10276 - 在你的APP中使用摄像头来自动填充"></a>WWDC21 10276 - 在你的APP中使用摄像头来自动填充</h1><h2 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h2><p>WWDC21的KeyNote，Live Text算小年中的一个亮点了。演示了直接通过摄像头快速提取、填充信息，甚至可以直接通过图片中的文字索引图片（暂时没试验成功，可能相册还没索引完成）。<br>但实际体验API后还是略微遗憾，他只能从摄像头输入，如果我是一张截屏，或者是一张之前的老照片，又或者是别人传给我的图片信息，都没法用到这个方便的功能了。</p>
+<p>话不多说，来看正文。</p>
+<h2 id="新特性总述"><a href="#新特性总述" class="headerlink" title="新特性总述"></a>新特性总述</h2><p>这是一项新功能，让您通过使用相机，而不是通过键盘或语音识别来输入文本。想象下我们在做旅行的游记，那旅行中会遇到很多信息，比如酒店信息、餐厅、旅行团信息、交通、发票等，这些都有很多的文字内容。但在iOS15的这个新功能，可以让我们再周围世界中捕捉文本。</p>
+<h3 id="UITextField"><a href="#UITextField" class="headerlink" title="UITextField"></a>UITextField</h3><p>非常幸运，开发者并不用做任何适配，之前用到UITextField的地方，点击输入框两下，我会在编辑菜单中看到一个新选项 「Text From Camera」，用于使用来自相机的文本。</p>
+<p><img src="http://image.runmaf.com/2021-06-09-16231986874790.jpg" alt=""></p>
+<p>一旦启动，相机会立即识别文档上的这组文本。是不是非常方便，而且他的准确度在我体验了一天后，觉得还是非常高的。</p>
+<p><img src="http://image.runmaf.com/2021-06-09-IMG_3123.png" alt="IMG_3123"></p>
+<p>我们可以直接点击插入，就会把聚焦框中的内容自动填充。但如果我们并不需要识别到的所有内容，那么我们可以点右下角的提取按钮，这时候系统会帮我们冻结他们。<br><img src="http://image.runmaf.com/2021-06-09-IMG_3A71965AFDE1-1.jpeg" alt="IMG_3A71965AFDE1-1"></p>
+<p>这时候我们就可以像操作文本一样的操作他们了。选中你需要的内容，点击插入，我们就完成了。是不是很完美，我们一行代码都还没写了，就实现了这么牛逼的功能，苹果爹🐂🍺。</p>
+<p><img src="http://image.runmaf.com/2021-06-09-IMG_589CBD8D3CBF-1.jpeg" alt="IMG_589CBD8D3CBF-1"></p>
+<h3 id="过滤内容"><a href="#过滤内容" class="headerlink" title="过滤内容"></a>过滤内容</h3><p>看完上一节后，你可能会觉得这非常棒，但是仔细想一下，实际使用是不是要经常的去选中相应的文本？<br>这时候就要说过滤内容这个功能了，系统为我们解决了一些可以自动识别的场景。<br>假设我们要提取地址、电话、邮箱，如果用上一节提到的方法，我们会识别到一堆没用的内容。</p>
+<p><img src="http://image.runmaf.com/2021-06-09-IMG_3117.png" alt="IMG_3117"></p>
+<p>然后你不得不提取一堆小小的文字，然后小心翼翼的去选中。<br>过滤是通过使用 TextContentType 和 KeyboardType 属性完成的，几行代码就帮我们解决了这个问题。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">addressTextField.keyboardType = .namePhonePad</div><div class="line">addressTextField.autocorrectionType = .yes</div><div class="line">addressTextField.textContentType = .fullStreetAddress</div></pre></td></tr></table></figure>
+<p>实际上几年前关于Autofill的Session已经提过了根据内容的Autofill了，这里不做展开，有兴趣的可以看<br><a href="https://developer.apple.com/videos/play/wwdc2020/10115" target="_blank" rel="external">AutoFill everywhere</a><br><a href="https://developer.apple.com/videos/play/wwdc2018/204" target="_blank" rel="external">Automatic Strong Passwords and Security Code AutoFill</a><br><a href="https://developer.apple.com/videos/play/wwdc2017/242" target="_blank" rel="external">The Keys to a Better Text Input Experience</a></p>
+<p>可以看到编辑菜单的内容已经变了<br><img src="http://image.runmaf.com/2021-06-09-16231998163167.jpg" alt=""></p>
+<p>点击后<br><img src="http://image.runmaf.com/2021-06-09-IMG_3119.png" alt="IMG_3119"><br>实在是太方便了。</p>
+<p>回到TextContentType，TextContentType可以是这些不同值中的任何一个。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">UITextContentType</span> </span>&#123;   </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> name: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> namePrefix: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> givenName: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> middleName: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> familyName: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> nameSuffix: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> nickname: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> jobTitle: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> organizationName: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> location: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> fullStreetAddress: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> streetAddressLine1: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> streetAddressLine2: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> addressCity: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> addressState: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> addressCityAndState: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> sublocality: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> countryName: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> postalCode: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> telephoneNumber: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> emailAddress: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> <span class="type">URL</span>: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> creditCardNumber: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> username: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> password: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> newPassword: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> oneTimeCode: <span class="type">UITextContentType</span></div><div class="line">    <span class="comment">/// iOS15开始支持</span></div><div class="line">    <span class="comment">/// Parcel tracking numbers such as "FedEx 8602 9191 3550", "1Z50T0536891664106", and "729445720428778"</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> shipmentTrackingNumber: <span class="type">UITextContentType</span></div><div class="line">    <span class="comment">/// Airline flight numbers such as "CZ # 1234", "AA212", and "SW Flight 573"</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> flightNumber: <span class="type">UITextContentType</span></div><div class="line">    <span class="comment">/// Dates, times, or durations such as "7-3-2021" or "This Saturday", "12:30", and "10-11am", respectively</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> dateTime: <span class="type">UITextContentType</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>但是相机不会过滤所有这些类型，它只会过滤这七个。</p>
+<p><img src="http://image.runmaf.com/2021-06-09-16232000724781.jpg" alt=""></p>
+<p>前四个(电话号码、完整街道地址、URL 和电子邮件)，它们都已经存在于今天的iOS中了。在iOS15中，我们新增了三种类型：航班号、货件跟踪号以及日期、时间和持续时间的组合。您可以想象航班号对旅行应用程序有多大用处，或者跟踪号对包裹跟踪应用程序有多么酷。</p>
+<p>PS. Session中说 autocorrectionType要关闭，但我试了设置成true也还是能打开相机的</p>
+<p>现在，当我打开相机时，它巧妙地忽略了除我们想要的地址信息之外的所有其他文本。让我们用电话和邮箱再试试。</p>
+<p><img src="http://image.runmaf.com/2021-06-09-16232002226793.jpg" alt=""><br><img src="http://image.runmaf.com/2021-06-09-16232002327498.jpg" alt=""></p>
+<p>很好，还是可以获取到特定信息。不用去敲击屏幕滑动选中了，系统自动的帮我们过滤了内容。</p>
+<h3 id="如何自己唤起-input-from-camera-呢？"><a href="#如何自己唤起-input-from-camera-呢？" class="headerlink" title="如何自己唤起 input from camera 呢？"></a>如何自己唤起 input from camera 呢？</h3><p>如果您想要自定义一个打开相机输入的按钮，可以使用 UIAction.captureTextFromCamera 。使用 captureTextFromCamera 工厂方法（iOS15中的新方法）创建一个 UIAction。该操作知道如何启动相机，我们可以把他添加到一个菜单，也可以用他来初始化UIButton。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 用来初始化</span></div><div class="line"><span class="keyword">let</span> textFromCamera = <span class="type">UIAction</span>.captureTextFromCamera(responder: contentLabel, identifier: <span class="literal">nil</span>)</div><div class="line">        <span class="keyword">let</span> cameraButton = <span class="type">UIButton</span>(primaryAction: textFromCamera)</div><div class="line">        cameraButton.frame = cameraButtonView.bounds</div><div class="line">        cameraButton.setTitle(<span class="string">""</span>, <span class="keyword">for</span>: .normal)</div><div class="line">        cameraButton.setImage(.<span class="keyword">init</span>(systemName: <span class="string">"camera.fill"</span>), <span class="keyword">for</span>: .normal)</div></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 添加到UIMenu</span></div><div class="line"><span class="keyword">let</span> textFromCamera = <span class="type">UIAction</span>.captureTextFromCamera(responder: <span class="keyword">self</span>.notes, identifier: <span class="literal">nil</span>)</div><div class="line"></div><div class="line"><span class="keyword">let</span> choosePhotoOrVideo = <span class="type">UIAction</span>(…)</div><div class="line"><span class="keyword">let</span> takePhotoOrVideo = <span class="type">UIAction</span>(…)</div><div class="line"><span class="keyword">let</span> scanDocuments = <span class="type">UIAction</span>(…)</div><div class="line"></div><div class="line"><span class="keyword">let</span> cameraMenu = <span class="type">UIMenu</span>(children: [choosePhotoOrVideo, takePhotoOrVideo, scanDocuments, textFromCamera])</div><div class="line"></div><div class="line"><span class="keyword">let</span> menuToolbarItem = <span class="type">UIBarButtonItem</span>(title: <span class="literal">nil</span>, image: <span class="type">UIImage</span>(systemName: <span class="string">"camera.badge.ellipsis"</span>), primaryAction: <span class="literal">nil</span>, menu: cameraMenu)</div></pre></td></tr></table></figure>
+<p>UIAction的响应者必须是一个UIKeyInput的UIResponder实现类（UITextField<br>UITextView）。</p>
+<h3 id="万物（UIResponder）皆可接受"><a href="#万物（UIResponder）皆可接受" class="headerlink" title="万物（UIResponder）皆可接受"></a>万物（UIResponder）皆可接受</h3><p>竟然实现UIAction就能接受相机输入的文本，那我们就可以让其他UIKit控件及自定义控件都接收相机输入的文本了。</p>
+<p>比如，我们要让UILabel实现，那们直接扩展他实现UIKeyInput协议，并实现几个方法即可。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">UILabel</span>: <span class="title">UIKeyInput</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> hasText: <span class="type">Bool</span> &#123;</div><div class="line">        text != <span class="literal">nil</span> &amp;&amp; text!.<span class="built_in">count</span> &gt; <span class="number">0</span></div><div class="line">    &#125;</div><div class="line">    <span class="comment">/// camera input会通过这个钩子方法传递进来，具体怎么用都在这实现了。</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">insertText</span><span class="params">(<span class="number">_</span> text: String)</span></span> &#123;</div><div class="line">        <span class="keyword">self</span>.text = text</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">deleteBackward</span><span class="params">()</span></span> &#123; &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>甚至可以让UIImage都接收这个输入来融合图片和文本。比如秀秀的文字功能是否可以用这种方式输入呢？结合的有点勉强，只是发散下。</p>
+<h2 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h2><ul>
+<li>我没找到UITextField如何关闭这个特性的方法，autocorrectionType为true 一样还是会显示。咨询了苹果工程师，还没回复</li>
+<li>没法从图片读取输入，咨询了苹果工程师，今年不会支持，以后可能会</li>
+<li>不支持正则等自己去过滤信息</li>
+<li>暂没想到更多了</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>UITextField和UITextView不用适配即可拥有该特性</li>
+<li>也可以主动唤起相机输入功能</li>
+<li>可以设置信息类型自动过滤</li>
+<li>可以自定义控件接受相机输入</li>
+</ul>
+<h2 id="相关Session"><a href="#相关Session" class="headerlink" title="相关Session"></a>相关Session</h2><ul>
+<li><a href="https://developer.apple.com/videos/play/wwdc2021/10276" target="_blank" rel="external">Use the camera for keyboard input in your app</a></li>
+<li><a href="https://developer.apple.com/videos/play/wwdc2020/10115" target="_blank" rel="external">AutoFill everywhere</a></li>
+<li><a href="https://developer.apple.com/videos/play/wwdc2018/204" target="_blank" rel="external">Automatic Strong Passwords and Security Code AutoFill</a></li>
+<li><a href="https://developer.apple.com/videos/play/wwdc2017/242" target="_blank" rel="external">The Keys to a Better Text Input Experience</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/17/HelloMetalLollllllllllllll/" rel="next" title="Hello Metal">
+                <i class="fa fa-chevron-left"></i> Hello Metal
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="David Woo" />
+          <p class="site-author-name" itemprop="name">David Woo</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">114</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">195</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#WWDC21-10276-在你的APP中使用摄像头来自动填充"><span class="nav-number">1.</span> <span class="nav-text">WWDC21 10276 - 在你的APP中使用摄像头来自动填充</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#引子"><span class="nav-number">1.1.</span> <span class="nav-text">引子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新特性总述"><span class="nav-number">1.2.</span> <span class="nav-text">新特性总述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UITextField"><span class="nav-number">1.2.1.</span> <span class="nav-text">UITextField</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤内容"><span class="nav-number">1.2.2.</span> <span class="nav-text">过滤内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何自己唤起-input-from-camera-呢？"><span class="nav-number">1.2.3.</span> <span class="nav-text">如何自己唤起 input from camera 呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#万物（UIResponder）皆可接受"><span class="nav-number">1.2.4.</span> <span class="nav-text">万物（UIResponder）皆可接受</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺陷"><span class="nav-number">1.3.</span> <span class="nav-text">缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关Session"><span class="nav-number">1.5.</span> <span class="nav-text">相关Session</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Woo</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -226,6 +226,194 @@
             
               
                 
+                <a class="post-title-link" href="/2014/05/01/2014-05-01-spring-framework-interpretation-of-the-core-source-code-c-resource-position/" itemprop="url">
+                  Spring Framework的核心源码解读（三）-IoC容器初始化及Resource定位
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-05-01T15:32:00+08:00" content="2014-05-01">
+              2014-05-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/resource/" itemprop="url" rel="index">
+                    <span itemprop="name">resource</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/resource/IoC/" itemprop="url" rel="index">
+                    <span itemprop="name">IoC</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/resource/IoC/源码分析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码分析</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/spring/resource/IoC/源码分析/Resource定位/" itemprop="url" rel="index">
+                    <span itemprop="name">Resource定位</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#4 IoC容器的初始化过程<br>本章继续上个章节，以为例子，讲述下IoC容器的初始化。具体来说，这个启动包括BeanDefinition的Resource定位、载入和注册三个基本过程。<br>Spring把这三个过程分开，使用不同的模块来了完成，如使用相应的ResourceLoader、BeanDefinitionReader等模块，通过这样的设计方式，可以让使用者更灵活地对这三个过程进行剪裁或扩展，定义出最适合自己的IoC容器初始化过程。</p>
+<h2 id="4-1-Resource定位"><a href="#4-1-Resource定位" class="headerlink" title="4.1 Resource定位"></a>4.1 Resource定位</h2><p>先回到我们经常使用的ApplicationContext上来，对于不同的实现类，就提供不同的Resource读入功能，比如FileSystemXmlApplicationContext是从文件系统载入Resource，ClassPathXmlApplicationContext是从Class Path载入Resource，而XmlWebApplicationContext则是从Web容器中载入Resource。下UML图表明了context和resource是如何建立关系的。<img src="http://i1.tietuku.com/42fa2ddb2a984f88.jpg" alt=""><br>Context 是把资源的加载、解析和描述工作委托给了 ResourcePatternResolver 类来完成，他相当于一个接头人，他把资源的加载、解析和资源的定义整合在一起便于其他组件使用。<br>不同于FileSystemXmlApplicationContext，XmlWebApplicationContext的refresh不是通过构造函数作为入口的，因为它存在于Web容器中，所以他是从监听器中初始化启动的。<br>首先先看一个时序图，看看Web应用启动的过程。<br> <img src="http://i1.tietuku.com/bac88c46e6d1abd4s.jpg" alt=""><br>对容器的启动来说，refresh是一个很重要的方法，在ContextLoader中通过调用refresh()方法启动整个调用。暂时先跳过之前已经说过的XmlWebApplicationContext加载过程和context初始化过程，直接从refresh()开始分析。这段代码主要包含这样几个步骤：</p>
+<ul>
+<li>构建 BeanFactory，以便于产生所需的“演员”；</li>
+<li>注册可能感兴趣的事件，比如MessageSource、PostProcessor等；</li>
+<li>创建 Bean 实例对象</li>
+<li>触发被监听的事件</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//这里是 refresh 也就是刷新配置</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">refresh</span><span class="params">()</span> <span class="keyword">throws</span> BeansException, IllegalStateException </span>&#123;</div><div class="line">		<span class="keyword">synchronized</span> (<span class="keyword">this</span>.startupShutdownMonitor) &#123;</div><div class="line">			<span class="comment">// 准备需要启动的容器上下文，包括启动时间、当前容器状态等</span></div><div class="line">			prepareRefresh();</div><div class="line">			<span class="comment">// 在子类中创建、启动refreshBeanFactory()的地方</span></div><div class="line">			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();</div><div class="line">			<span class="comment">// 初始化BeanFactory，加载容器所需要的行为</span></div><div class="line">			prepareBeanFactory(beanFactory);</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				<span class="comment">//设置BeanFactoy的后置处理</span></div><div class="line">				postProcessBeanFactory(beanFactory);</div><div class="line">				<span class="comment">//调用BeanFactory的后处理器，这些后处理器是在Bean定义中向容器注册的</span></div><div class="line">invokeBeanFactoryPostProcessors(beanFactory);</div><div class="line"><span class="comment">//注册Bean的后处理器，在Bean创建过程中调用。</span></div><div class="line">				registerBeanPostProcessors(beanFactory);</div><div class="line"><span class="comment">//对上下文中的消息源进行初始化</span></div><div class="line">				initMessageSource();</div><div class="line"><span class="comment">//初始化上下文中的事件机制</span></div><div class="line">				initApplicationEventMulticaster();</div><div class="line"><span class="comment">//初始化其他的特殊Bean</span></div><div class="line">				onRefresh();</div><div class="line">				<span class="comment">//检查监听Bean并且将这些Bean向容器注册</span></div><div class="line">				registerListeners();</div><div class="line">				<span class="comment">//实例化所有的(non-lazy-init)单件</span></div><div class="line">				finishBeanFactoryInitialization(beanFactory);</div><div class="line">				<span class="comment">//发布容器事件，结束Refresh过程</span></div><div class="line">				finishRefresh();</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">catch</span> (BeansException ex) &#123;</div><div class="line">		<span class="comment">//为防止Bean资源占用，在异常处理中，销毁已经在前面过程中生成的单件Bean</span></div><div class="line">				destroyBeans();</div><div class="line">				<span class="comment">// 重置 'active'标志</span></div><div class="line">				cancelRefresh(ex);</div><div class="line">				<span class="keyword">throw</span> ex;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>下列代码为AbstractRefreshableApplicationContext的refreshBeanFactory ()方法。这个方法实现了 AbstractApplicationContext 的抽象方法 refreshBeanFactory，这段代码清楚的说明了 IoC容器 的创建过程。注意容器对象的类型的变化，前面介绍了他有很多子类，在什么情况下使用不同的子类这非常关键。在 refreshBeanFactory 方法中有一行 loadBeanDefinitions(beanFactory)，这个方法将开始加载、解析 Bean 的定义，也就是把用户定义的数据结构转化为 IoC 容器中的特定数据结构。<br><figure class="highlight java"><figcaption><span>AbstractRefreshableApplicationContext.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">refreshBeanFactory</span><span class="params">()</span> <span class="keyword">throws</span> BeansException </span>&#123;</div><div class="line">	    <span class="comment">//这里判断，如果已经建立BeanFactory，则销毁并关闭该BeanFactory</span></div><div class="line">		<span class="keyword">if</span> (hasBeanFactory()) &#123;</div><div class="line">			destroyBeans();</div><div class="line">			closeBeanFactory();</div><div class="line">		&#125;</div><div class="line">		<span class="comment">//这里创建并设置持有的DefaultListableBeanFactory的地方同时调用</span></div><div class="line">		<span class="comment">//loadBeanDefinitions再载入BeanDefinition的信息</span></div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			DefaultListableBeanFactory beanFactory = createBeanFactory();</div><div class="line">			beanFactory.setSerializationId(getId());</div><div class="line">			customizeBeanFactory(beanFactory);</div><div class="line">	<span class="comment">//该方法是钩子方法，直接调用XmlWebApplicationContext中的实现</span></div><div class="line">	**loadBeanDefinitions(beanFactory);**</div><div class="line">			<span class="keyword">synchronized</span> (<span class="keyword">this</span>.beanFactoryMonitor) &#123;</div><div class="line">				<span class="keyword">this</span>.beanFactory = beanFactory;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">catch</span> (IOException ex) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> ApplicationContextException(<span class="string">"I/O error parsing bean definition source for "</span> + getDisplayName(), ex);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"><span class="comment">//这就是在上下文中创建DefaultListableBeanFactory的地方，而getInternalParentBeanFactory的具体实现可以参看AbstractApplicationContext中的实现，会根据容器已有的双亲IoC容器的信息来生成DefaultListableBeanFactory的双亲容器</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> DefaultListableBeanFactory <span class="title">createBeanFactory</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">new</span> DefaultListableBeanFactory(getInternalParentBeanFactory());</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>前面已经说了有不同子类的实现，那么接着就到具体实现类中去看看。这里因为有许多载入方式，所以通过一个抽象函数（钩子方法）把具体的实现委托给各个子类来实现。这里使用的是xml的载入方式。通过XmlBeanDefinitionReader载入Bean的地方。<br><figure class="highlight java"><figcaption><span>XmlWebApplicationContext.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">loadBeanDefinitions</span><span class="params">(DefaultListableBeanFactory beanFactory)</span> <span class="keyword">throws</span> BeansException, IOException </span>&#123;</div><div class="line">		<span class="comment">// 创建一个XmlBeanDefinitionReader并设置beanFactory.</span></div><div class="line">		XmlBeanDefinitionReader beanDefinitionReader = <span class="keyword">new</span> XmlBeanDefinitionReader(beanFactory);</div><div class="line"></div><div class="line">		<span class="comment">// 通过上下文环境配置reader</span></div><div class="line">		beanDefinitionReader.setEnvironment(<span class="keyword">this</span>.getEnvironment());</div><div class="line">		beanDefinitionReader.setResourceLoader(<span class="keyword">this</span>);</div><div class="line">		beanDefinitionReader.setEntityResolver(<span class="keyword">new</span> ResourceEntityResolver(<span class="keyword">this</span>));</div><div class="line"></div><div class="line">		<span class="comment">// 钩子方法，子类不重载就不做任何操作</span></div><div class="line">		initBeanDefinitionReader(beanDefinitionReader);</div><div class="line">		loadBeanDefinitions(beanDefinitionReader);</div><div class="line">	&#125;</div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">loadBeanDefinitions</span><span class="params">(XmlBeanDefinitionReader reader)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line"><span class="comment">//调用基类的获取配置路径方法</span></div><div class="line">		String[] configLocations = getConfigLocations();</div><div class="line">		<span class="keyword">if</span> (configLocations != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">for</span> (String configLocation : configLocations) &#123;</div><div class="line">				reader.loadBeanDefinitions(configLocation);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">	 * 默认的配置文件为 "/WEB-INF/applicationContext.xml"</span></div><div class="line"><span class="comment">	 */</span></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="keyword">protected</span> String[] getDefaultConfigLocations() &#123;</div><div class="line">		<span class="keyword">if</span> (getNamespace() != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">new</span> String[] &#123;DEFAULT_CONFIG_LOCATION_PREFIX + getNamespace() + DEFAULT_CONFIG_LOCATION_SUFFIX&#125;;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">new</span> String[] &#123;DEFAULT_CONFIG_LOCATION&#125;;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><figcaption><span>AbstractRefreshableConfigApplicationContext.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> String[] getConfigLocations() &#123;</div><div class="line"><span class="comment">//基类中又调用钩子方法</span></div><div class="line">		<span class="keyword">return</span> (<span class="keyword">this</span>.configLocations != <span class="keyword">null</span> ? <span class="keyword">this</span>.configLocations : getDefaultConfigLocations());</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>具体资源载入是在XmlBeanDefinitionReader读入BeanDefinition时完成的。<br><figure class="highlight java"><figcaption><span>XmlBeanDefinitionReader.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">loadBeanDefinitions</span><span class="params">(String location, Set&lt;ResourceactualResources)</span> <span class="keyword">throws</span> BeanDefinitionStoreException </span>&#123;</div><div class="line">		ResourceLoader resourceLoader = getResourceLoader();</div><div class="line">		<span class="keyword">if</span> (resourceLoader == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="comment">//……异常，省略</span></div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (resourceLoader <span class="keyword">instanceof</span> ResourcePatternResolver) &#123;</div><div class="line">			<span class="comment">//……这里很少用的，直接跳过</span></div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			<span class="comment">// 通过调用DefaultResourceLoader的getResources完成具体的Resource定位</span></div><div class="line">			Resource resource = resourceLoader.getResource(location);</div><div class="line">			<span class="keyword">int</span> loadCount = loadBeanDefinitions(resource);</div><div class="line">			<span class="keyword">if</span> (actualResources != <span class="keyword">null</span>) &#123;</div><div class="line">				actualResources.add(resource);</div><div class="line">			&#125;</div><div class="line">			<span class="comment">//……省略部分代码</span></div><div class="line">			<span class="keyword">return</span> loadCount;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>对于具体取得resource的过程，我们可以看看DefaultResourceLoader是怎么完成的。<br><figure class="highlight java"><figcaption><span>DefaultResourceLoader.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Resource <span class="title">getResource</span><span class="params">(String location)</span> </span>&#123;</div><div class="line">		Assert.notNull(location, <span class="string">"Location must not be null"</span>);</div><div class="line">		<span class="comment">//先处理带有classpath表示的Resource</span></div><div class="line">		<span class="keyword">if</span> (location.startsWith(CLASSPATH_URL_PREFIX)) &#123;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">new</span> ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				<span class="comment">// 再尝试处理URL表示的Resource</span></div><div class="line">				URL url = <span class="keyword">new</span> URL(location);</div><div class="line">				<span class="keyword">return</span> <span class="keyword">new</span> UrlResource(url);</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">catch</span> (MalformedURLException ex) &#123;</div><div class="line">				<span class="comment">// 如果既不是classpath，又不是URL标示，则把getResource的任务交给getResourceByPath，这个方法有默认实现，但基本用子类实现</span></div><div class="line">				<span class="keyword">return</span> getResourceByPath(location);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>这里使用的是基类AbstractRefreshableWebApplicationContext的实现方式。返回的是ServletContextResource类型的Resource。<br><figure class="highlight java"><figcaption><span>AbstractRefreshableWebApplicationContext.java</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">protected</span> Resource <span class="title">getResourceByPath</span><span class="params">(String path)</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">new</span> ServletContextResource(<span class="keyword">this</span>.servletContext, path);</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>如果是其他的ApplicationContext，那么会对应生成其他种类的Resource，比如ClassPathResource、ServletContextResource等。从下图可以看出Resource接口的设计。在BeanDefinition定位完成的基础上，就可以通过返回的Resource对象来进行BeanDefinition的载入了。现在BeanDefinition所需要的数据还并未读入，这些读入将在下一章节，Resource载入中说明<br><img src="http://i1.tietuku.com/d1d7292220faf75a.jpg" alt=""></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/05/01/2014-05-01-spring-framework-core-source-code-analysis-ii-xmlwebapplicationcontext-introduction/" itemprop="url">
                   Spring Framework的核心源码解读（二）-XmlWebApplicationContext介绍
                 </a>
@@ -239,7 +427,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-05-01T15:29:00+08:00" content="2014-05-01">
               2014-05-01
             </time>
@@ -251,7 +439,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -261,7 +449,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -273,7 +461,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -285,7 +473,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -394,7 +582,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-05-01T15:19:00+08:00" content="2014-05-01">
               2014-05-01
             </time>
@@ -406,7 +594,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -416,7 +604,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -428,7 +616,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -440,7 +628,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -452,7 +640,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -464,7 +652,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -582,7 +770,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-03-28T10:42:00+08:00" content="2014-03-28">
               2014-03-28
             </time>
@@ -594,7 +782,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/java/" itemprop="url" rel="index">
@@ -604,7 +792,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -616,7 +804,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -628,7 +816,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -640,7 +828,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -754,7 +942,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-03-24T14:29:00+08:00" content="2014-03-24">
               2014-03-24
             </time>
@@ -766,7 +954,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/人性/" itemprop="url" rel="index">
@@ -776,7 +964,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -788,7 +976,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -800,7 +988,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -812,7 +1000,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -915,7 +1103,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-03-13T00:02:00+08:00" content="2014-03-13">
               2014-03-13
             </time>
@@ -927,7 +1115,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Linux/" itemprop="url" rel="index">
@@ -937,7 +1125,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -949,7 +1137,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -961,7 +1149,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1072,7 +1260,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-03-12T13:18:00+08:00" content="2014-03-12">
               2014-03-12
             </time>
@@ -1084,7 +1272,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Linux/" itemprop="url" rel="index">
@@ -1094,7 +1282,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1106,7 +1294,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1118,7 +1306,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1226,7 +1414,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-03-11T14:42:00+08:00" content="2014-03-11">
               2014-03-11
             </time>
@@ -1238,7 +1426,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/项目管理/" itemprop="url" rel="index">
@@ -1248,7 +1436,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1364,7 +1552,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-03-11T13:44:00+08:00" content="2014-03-11">
               2014-03-11
             </time>
@@ -1376,7 +1564,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/载记/" itemprop="url" rel="index">
@@ -1386,7 +1574,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1493,7 +1681,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2014-03-10T14:43:00+08:00" content="2014-03-10">
               2014-03-10
             </time>
@@ -1505,7 +1693,7 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
                   <a href="/categories/Linux/" itemprop="url" rel="index">
@@ -1515,7 +1703,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1527,7 +1715,7 @@
 
                 
                 
-                  . 
+                  , 
                 
 
               
@@ -1571,149 +1759,6 @@
 <h2 id="定义本地变量"><a href="#定义本地变量" class="headerlink" title="#  定义本地变量"></a>#  定义本地变量</h2><p>变量名=value 会解析，用于定义连续的比较简单的字符串数字<br>变量名=’value’  所见即所得，单引号里面的是什么就会显示什么，不会进行解析<br>变量名=”value” 会解析，一般字符串定义推荐使用<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ a=192.168.0.248</div><div class="line">[David@localhost ~]$ b=<span class="string">'192.168.0.248'</span></div><div class="line">[David@localhost ~]$ c=<span class="string">"192.168.0.248"</span></div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="string">"a=<span class="variable">$a</span>"</span></div><div class="line">a=192.168.0.248</div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="string">"b=<span class="variable">$b</span>"</span></div><div class="line">b=192.168.0.248</div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="string">"c=<span class="variable">$c</span>"</span></div><div class="line">c=192.168.0.248</div><div class="line">[David@localhost ~]$ a=192.168.1.2-<span class="variable">$a</span></div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$a</span></div><div class="line">192.168.1.2-192.168.0.248</div><div class="line">[David@localhost ~]$ b=<span class="string">'192.168.1.2-$b'</span></div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$b</span></div><div class="line">192.168.1.2-<span class="variable">$b</span></div><div class="line">[David@localhost ~]$ c=<span class="string">"192.168.1.2-<span class="variable">$c</span>"</span></div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$c</span></div><div class="line">192.168.1.2-192.168.0.248</div></pre></td></tr></table></figure></p>
 <h2 id="通过反引号用本地变量引用linux命令"><a href="#通过反引号用本地变量引用linux命令" class="headerlink" title="#  通过反引号用本地变量引用linux命令"></a>#  通过反引号用本地变量引用linux命令</h2><p>用反引号将命令括起来，可以赋给本地变量。显示的时候就会执行该变量。但是记得不能用单引号。推荐使用$(date)方式处理命令，因为反引号不容易发现且会给当成单引号。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ userCommand=`whoami`</div><div class="line">[David@localhost ~]$ echo $userCommand</div><div class="line">David</div><div class="line">[David@localhost ~]$ echo &quot;`date`&quot;</div><div class="line">2014年 03月 10日 星期一 22:07:38 CST</div><div class="line">[David@localhost ~]$ echo `date`</div><div class="line">2014年 03月 10日 星期一 22:07:44 CST</div><div class="line">[David@localhost ~]$ echo &apos;`date`&apos;</div><div class="line">`date`</div></pre></td></tr></table></figure></p>
 <h2 id="规范"><a href="#规范" class="headerlink" title="#  规范"></a>#  规范</h2><p>数字或简单字符串不用引号；<br>没特殊情况一般用双引号；<br>原样输出用双引号；<br>常量尽量用大写，多单词用下划线连接，特别是全局变量；<br>引用最好是${VAR_NAME}；<br>避免使用无意义的名字，比如COUNT；<br>在函数里定义变量，记得用local来声明，例如：local i；<br>使用$(date)方式处理命令，因为反引号不容易发现且会给当成单引号；</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/03/10/2014-03-10-linux-shell-programming-study-notes-b-global-variables/" itemprop="url">
-                  Linux Shell编程学习笔记（二）全局变量
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2014-03-10T12:46:00+08:00" content="2014-03-10">
-              2014-03-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">in</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/bash/" itemprop="url" rel="index">
-                    <span itemprop="name">bash</span>
-                  </a>
-                </span>
-
-                
-                
-                  . 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Linux/bash/Shell/" itemprop="url" rel="index">
-                    <span itemprop="name">Shell</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><h2 id="全局环境变量"><a href="#全局环境变量" class="headerlink" title="全局环境变量"></a>全局环境变量</h2><h2 id="文件"><a href="#文件" class="headerlink" title="#  文件"></a>#  文件</h2><p>/etc/profile 这个文件中预设了系统的环境变量。<br>修改后记得 . /etc/profile(中间有个空格)</p>
-<h2 id="启动执行路径"><a href="#启动执行路径" class="headerlink" title="#  启动执行路径"></a>#  启动执行路径</h2><p>/etc/profile.d 将脚本放到该目录下，登陆用户的时候就会自动执行脚本。</p>
-<h2 id="规范"><a href="#规范" class="headerlink" title="#  规范"></a>#  规范</h2><p>记得，传统上，所有全局环境变量要大写，注意，大小写是有区别的。</p>
-<h2 id="定义"><a href="#定义" class="headerlink" title="#  定义"></a>#  定义</h2><p>export myname=’David’<br>export MYNAME=’David_Wu’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[David@localhost study]$ export MYNAME=&apos;David_Wu&apos;</div><div class="line">[David@localhost study]$ echo $MYNAME</div><div class="line">David_Wu</div><div class="line">[David@localhost study]$ echo $myname</div><div class="line">David</div></pre></td></tr></table></figure></p>
-<h2 id="常用的全局变量"><a href="#常用的全局变量" class="headerlink" title="#  常用的全局变量"></a>#  常用的全局变量</h2><p>HOME目录<br>UID登陆用户ID<br>USER登陆用户<br>OSTYPE操作系统类似<br>HISTSIZE历史操作大小<br>HISTFILESIZE历史文件行数<br>TMOUT 超时退出时间<br>IFS系统分隔符</p>
-<h2 id="取消全局变量"><a href="#取消全局变量" class="headerlink" title="#  取消全局变量"></a>#  取消全局变量</h2><p>unset MYNAME<br><figure class="highlight bash"><figcaption><span>控制台</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[David@localhost ~]$ <span class="built_in">export</span> MYNAME=David</div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$MYNAME</span></div><div class="line">David</div><div class="line">[David@localhost ~]$ <span class="built_in">unset</span> MYNAME</div><div class="line">[David@localhost ~]$ <span class="built_in">echo</span> <span class="variable">$MYNAME</span></div></pre></td></tr></table></figure></p>
-<h2 id="用户环境变量和系统环境变量"><a href="#用户环境变量和系统环境变量" class="headerlink" title="#  用户环境变量和系统环境变量"></a>#  用户环境变量和系统环境变量</h2><p>ll ~ -al命令可以看到家目录下隐藏的用户环境变量<br>etc/profile就是系统环境变量</p>
 
           
         
@@ -1787,8 +1832,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">113</span>
-              <span class="site-state-item-name">Artikel</span>
+              <span class="site-state-item-count">114</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
@@ -1796,7 +1841,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">Kategorien</span>
+                <span class="site-state-item-name">categories</span>
               
             </div>
           
@@ -1805,7 +1850,7 @@
             <div class="site-state-item site-state-tags">
               
                 <span class="site-state-item-count">5</span>
-                <span class="site-state-item-name">Tags</span>
+                <span class="site-state-item-name">tags</span>
               
             </div>
           
@@ -1841,7 +1886,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -1849,7 +1894,7 @@
 </div>
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">

@@ -226,6 +226,151 @@
             
               
                 
+                <a class="post-title-link" href="/2021/06/09/在你的APP中使用摄像头来自动填充/" itemprop="url">
+                  在你的APP中使用摄像头来自动填充
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2021-06-09T11:59:20+08:00" content="2021-06-09">
+              2021-06-09
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="WWDC21-10276-在你的APP中使用摄像头来自动填充"><a href="#WWDC21-10276-在你的APP中使用摄像头来自动填充" class="headerlink" title="WWDC21 10276 - 在你的APP中使用摄像头来自动填充"></a>WWDC21 10276 - 在你的APP中使用摄像头来自动填充</h1><h2 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h2><p>WWDC21的KeyNote，Live Text算小年中的一个亮点了。演示了直接通过摄像头快速提取、填充信息，甚至可以直接通过图片中的文字索引图片（暂时没试验成功，可能相册还没索引完成）。<br>但实际体验API后还是略微遗憾，他只能从摄像头输入，如果我是一张截屏，或者是一张之前的老照片，又或者是别人传给我的图片信息，都没法用到这个方便的功能了。</p>
+<p>话不多说，来看正文。</p>
+<h2 id="新特性总述"><a href="#新特性总述" class="headerlink" title="新特性总述"></a>新特性总述</h2><p>这是一项新功能，让您通过使用相机，而不是通过键盘或语音识别来输入文本。想象下我们在做旅行的游记，那旅行中会遇到很多信息，比如酒店信息、餐厅、旅行团信息、交通、发票等，这些都有很多的文字内容。但在iOS15的这个新功能，可以让我们再周围世界中捕捉文本。</p>
+<h3 id="UITextField"><a href="#UITextField" class="headerlink" title="UITextField"></a>UITextField</h3><p>非常幸运，开发者并不用做任何适配，之前用到UITextField的地方，点击输入框两下，我会在编辑菜单中看到一个新选项 「Text From Camera」，用于使用来自相机的文本。</p>
+<p><img src="http://image.runmaf.com/2021-06-09-16231986874790.jpg" alt=""></p>
+<p>一旦启动，相机会立即识别文档上的这组文本。是不是非常方便，而且他的准确度在我体验了一天后，觉得还是非常高的。</p>
+<p><img src="http://image.runmaf.com/2021-06-09-IMG_3123.png" alt="IMG_3123"></p>
+<p>我们可以直接点击插入，就会把聚焦框中的内容自动填充。但如果我们并不需要识别到的所有内容，那么我们可以点右下角的提取按钮，这时候系统会帮我们冻结他们。<br><img src="http://image.runmaf.com/2021-06-09-IMG_3A71965AFDE1-1.jpeg" alt="IMG_3A71965AFDE1-1"></p>
+<p>这时候我们就可以像操作文本一样的操作他们了。选中你需要的内容，点击插入，我们就完成了。是不是很完美，我们一行代码都还没写了，就实现了这么牛逼的功能，苹果爹🐂🍺。</p>
+<p><img src="http://image.runmaf.com/2021-06-09-IMG_589CBD8D3CBF-1.jpeg" alt="IMG_589CBD8D3CBF-1"></p>
+<h3 id="过滤内容"><a href="#过滤内容" class="headerlink" title="过滤内容"></a>过滤内容</h3><p>看完上一节后，你可能会觉得这非常棒，但是仔细想一下，实际使用是不是要经常的去选中相应的文本？<br>这时候就要说过滤内容这个功能了，系统为我们解决了一些可以自动识别的场景。<br>假设我们要提取地址、电话、邮箱，如果用上一节提到的方法，我们会识别到一堆没用的内容。</p>
+<p><img src="http://image.runmaf.com/2021-06-09-IMG_3117.png" alt="IMG_3117"></p>
+<p>然后你不得不提取一堆小小的文字，然后小心翼翼的去选中。<br>过滤是通过使用 TextContentType 和 KeyboardType 属性完成的，几行代码就帮我们解决了这个问题。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">addressTextField.keyboardType = .namePhonePad</div><div class="line">addressTextField.autocorrectionType = .yes</div><div class="line">addressTextField.textContentType = .fullStreetAddress</div></pre></td></tr></table></figure>
+<p>实际上几年前关于Autofill的Session已经提过了根据内容的Autofill了，这里不做展开，有兴趣的可以看<br><a href="https://developer.apple.com/videos/play/wwdc2020/10115" target="_blank" rel="external">AutoFill everywhere</a><br><a href="https://developer.apple.com/videos/play/wwdc2018/204" target="_blank" rel="external">Automatic Strong Passwords and Security Code AutoFill</a><br><a href="https://developer.apple.com/videos/play/wwdc2017/242" target="_blank" rel="external">The Keys to a Better Text Input Experience</a></p>
+<p>可以看到编辑菜单的内容已经变了<br><img src="http://image.runmaf.com/2021-06-09-16231998163167.jpg" alt=""></p>
+<p>点击后<br><img src="http://image.runmaf.com/2021-06-09-IMG_3119.png" alt="IMG_3119"><br>实在是太方便了。</p>
+<p>回到TextContentType，TextContentType可以是这些不同值中的任何一个。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">UITextContentType</span> </span>&#123;   </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> name: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> namePrefix: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> givenName: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> middleName: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> familyName: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> nameSuffix: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> nickname: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> jobTitle: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> organizationName: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> location: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> fullStreetAddress: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> streetAddressLine1: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> streetAddressLine2: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> addressCity: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> addressState: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> addressCityAndState: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> sublocality: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> countryName: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> postalCode: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> telephoneNumber: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> emailAddress: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> <span class="type">URL</span>: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> creditCardNumber: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> username: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> password: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> newPassword: <span class="type">UITextContentType</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> oneTimeCode: <span class="type">UITextContentType</span></div><div class="line">    <span class="comment">/// iOS15开始支持</span></div><div class="line">    <span class="comment">/// Parcel tracking numbers such as "FedEx 8602 9191 3550", "1Z50T0536891664106", and "729445720428778"</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> shipmentTrackingNumber: <span class="type">UITextContentType</span></div><div class="line">    <span class="comment">/// Airline flight numbers such as "CZ # 1234", "AA212", and "SW Flight 573"</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> flightNumber: <span class="type">UITextContentType</span></div><div class="line">    <span class="comment">/// Dates, times, or durations such as "7-3-2021" or "This Saturday", "12:30", and "10-11am", respectively</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">let</span> dateTime: <span class="type">UITextContentType</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>但是相机不会过滤所有这些类型，它只会过滤这七个。</p>
+<p><img src="http://image.runmaf.com/2021-06-09-16232000724781.jpg" alt=""></p>
+<p>前四个(电话号码、完整街道地址、URL 和电子邮件)，它们都已经存在于今天的iOS中了。在iOS15中，我们新增了三种类型：航班号、货件跟踪号以及日期、时间和持续时间的组合。您可以想象航班号对旅行应用程序有多大用处，或者跟踪号对包裹跟踪应用程序有多么酷。</p>
+<p>PS. Session中说 autocorrectionType要关闭，但我试了设置成true也还是能打开相机的</p>
+<p>现在，当我打开相机时，它巧妙地忽略了除我们想要的地址信息之外的所有其他文本。让我们用电话和邮箱再试试。</p>
+<p><img src="http://image.runmaf.com/2021-06-09-16232002226793.jpg" alt=""><br><img src="http://image.runmaf.com/2021-06-09-16232002327498.jpg" alt=""></p>
+<p>很好，还是可以获取到特定信息。不用去敲击屏幕滑动选中了，系统自动的帮我们过滤了内容。</p>
+<h3 id="如何自己唤起-input-from-camera-呢？"><a href="#如何自己唤起-input-from-camera-呢？" class="headerlink" title="如何自己唤起 input from camera 呢？"></a>如何自己唤起 input from camera 呢？</h3><p>如果您想要自定义一个打开相机输入的按钮，可以使用 UIAction.captureTextFromCamera 。使用 captureTextFromCamera 工厂方法（iOS15中的新方法）创建一个 UIAction。该操作知道如何启动相机，我们可以把他添加到一个菜单，也可以用他来初始化UIButton。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 用来初始化</span></div><div class="line"><span class="keyword">let</span> textFromCamera = <span class="type">UIAction</span>.captureTextFromCamera(responder: contentLabel, identifier: <span class="literal">nil</span>)</div><div class="line">        <span class="keyword">let</span> cameraButton = <span class="type">UIButton</span>(primaryAction: textFromCamera)</div><div class="line">        cameraButton.frame = cameraButtonView.bounds</div><div class="line">        cameraButton.setTitle(<span class="string">""</span>, <span class="keyword">for</span>: .normal)</div><div class="line">        cameraButton.setImage(.<span class="keyword">init</span>(systemName: <span class="string">"camera.fill"</span>), <span class="keyword">for</span>: .normal)</div></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 添加到UIMenu</span></div><div class="line"><span class="keyword">let</span> textFromCamera = <span class="type">UIAction</span>.captureTextFromCamera(responder: <span class="keyword">self</span>.notes, identifier: <span class="literal">nil</span>)</div><div class="line"></div><div class="line"><span class="keyword">let</span> choosePhotoOrVideo = <span class="type">UIAction</span>(…)</div><div class="line"><span class="keyword">let</span> takePhotoOrVideo = <span class="type">UIAction</span>(…)</div><div class="line"><span class="keyword">let</span> scanDocuments = <span class="type">UIAction</span>(…)</div><div class="line"></div><div class="line"><span class="keyword">let</span> cameraMenu = <span class="type">UIMenu</span>(children: [choosePhotoOrVideo, takePhotoOrVideo, scanDocuments, textFromCamera])</div><div class="line"></div><div class="line"><span class="keyword">let</span> menuToolbarItem = <span class="type">UIBarButtonItem</span>(title: <span class="literal">nil</span>, image: <span class="type">UIImage</span>(systemName: <span class="string">"camera.badge.ellipsis"</span>), primaryAction: <span class="literal">nil</span>, menu: cameraMenu)</div></pre></td></tr></table></figure>
+<p>UIAction的响应者必须是一个UIKeyInput的UIResponder实现类（UITextField<br>UITextView）。</p>
+<h3 id="万物（UIResponder）皆可接受"><a href="#万物（UIResponder）皆可接受" class="headerlink" title="万物（UIResponder）皆可接受"></a>万物（UIResponder）皆可接受</h3><p>竟然实现UIAction就能接受相机输入的文本，那我们就可以让其他UIKit控件及自定义控件都接收相机输入的文本了。</p>
+<p>比如，我们要让UILabel实现，那们直接扩展他实现UIKeyInput协议，并实现几个方法即可。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">UILabel</span>: <span class="title">UIKeyInput</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> hasText: <span class="type">Bool</span> &#123;</div><div class="line">        text != <span class="literal">nil</span> &amp;&amp; text!.<span class="built_in">count</span> &gt; <span class="number">0</span></div><div class="line">    &#125;</div><div class="line">    <span class="comment">/// camera input会通过这个钩子方法传递进来，具体怎么用都在这实现了。</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">insertText</span><span class="params">(<span class="number">_</span> text: String)</span></span> &#123;</div><div class="line">        <span class="keyword">self</span>.text = text</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">deleteBackward</span><span class="params">()</span></span> &#123; &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>甚至可以让UIImage都接收这个输入来融合图片和文本。比如秀秀的文字功能是否可以用这种方式输入呢？结合的有点勉强，只是发散下。</p>
+<h2 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h2><ul>
+<li>我没找到UITextField如何关闭这个特性的方法，autocorrectionType为true 一样还是会显示。咨询了苹果工程师，还没回复</li>
+<li>没法从图片读取输入，咨询了苹果工程师，今年不会支持，以后可能会</li>
+<li>不支持正则等自己去过滤信息</li>
+<li>暂没想到更多了</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>UITextField和UITextView不用适配即可拥有该特性</li>
+<li>也可以主动唤起相机输入功能</li>
+<li>可以设置信息类型自动过滤</li>
+<li>可以自定义控件接受相机输入</li>
+</ul>
+<h2 id="相关Session"><a href="#相关Session" class="headerlink" title="相关Session"></a>相关Session</h2><ul>
+<li><a href="https://developer.apple.com/videos/play/wwdc2021/10276" target="_blank" rel="external">Use the camera for keyboard input in your app</a></li>
+<li><a href="https://developer.apple.com/videos/play/wwdc2020/10115" target="_blank" rel="external">AutoFill everywhere</a></li>
+<li><a href="https://developer.apple.com/videos/play/wwdc2018/204" target="_blank" rel="external">Automatic Strong Passwords and Security Code AutoFill</a></li>
+<li><a href="https://developer.apple.com/videos/play/wwdc2017/242" target="_blank" rel="external">The Keys to a Better Text Input Experience</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2020/06/17/HelloMetalLollllllllllllll/" itemprop="url">
                   Hello Metal
                 </a>
@@ -239,7 +384,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2020-06-17T08:23:12+08:00" content="2020-06-17">
               2020-06-17
             </time>
@@ -363,7 +508,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2020-06-17T06:46:47+08:00" content="2020-06-17">
               2020-06-17
             </time>
@@ -480,7 +625,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2020-06-10T00:23:55+08:00" content="2020-06-10">
               2020-06-10
             </time>
@@ -599,7 +744,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2020-06-02T18:29:20+08:00" content="2020-06-02">
               2020-06-02
             </time>
@@ -717,7 +862,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2020-05-28T19:02:36+08:00" content="2020-05-28">
               2020-05-28
             </time>
@@ -823,7 +968,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2020-05-28T01:09:31+08:00" content="2020-05-28">
               2020-05-28
             </time>
@@ -939,7 +1084,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2020-05-27T20:49:19+08:00" content="2020-05-27">
               2020-05-27
             </time>
@@ -1056,7 +1201,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2020-05-17T22:24:39+08:00" content="2020-05-17">
               2020-05-17
             </time>
@@ -1172,7 +1317,7 @@
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <span class="post-meta-item-text">Posted on</span>
             <time itemprop="dateCreated" datetime="2020-05-11T17:25:30+08:00" content="2020-05-11">
               2020-05-11
             </time>
@@ -1250,167 +1395,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2020/05/09/stupid-man-s-dfs-bfs/" itemprop="url">
-                  学渣的拓扑排序
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Veröffentlicht am</span>
-            <time itemprop="dateCreated" datetime="2020-05-09T19:53:43+08:00" content="2020-05-09">
-              2020-05-09
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="学渣的拓扑排序"><a href="#学渣的拓扑排序" class="headerlink" title="学渣的拓扑排序"></a>学渣的拓扑排序</h1><p>看了好久的 DFS和BFS题目，还是想不到怎么简单解释清楚拓扑排序。</p>
-<p>比较标准的解释就是<br>给定一个包含 n 个节点的有向图 G，我们给出它的节点编号的一种排列，如果满足</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">对于图 G 中的任意一条有向边 (u, v)，u 在排列中都出现在 V 的前面。</div></pre></td></tr></table></figure>
-<p>那么称该排列是图 G 的「拓扑排序」。</p>
-<p>如果实在理解不了，就记住是一个有向图，但他可以有一些节点独立，他不能存在环。</p>
-<h2 id="DFS-深度优先搜索"><a href="#DFS-深度优先搜索" class="headerlink" title="DFS 深度优先搜索"></a>DFS 深度优先搜索</h2><p>如果对二叉树比较熟，那么先序遍历就类似于深度优先搜索。</p>
-<p>比如</p>
-<table>
-<thead>
-<tr>
-<th>a</th>
-<th>→</th>
-<th>→</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>↓</td>
-<td>↓</td>
-<td>↓</td>
-</tr>
-<tr>
-<td>b</td>
-<td>c</td>
-<td>d</td>
-</tr>
-<tr>
-<td>↓</td>
-<td></td>
-<td>↓</td>
-</tr>
-<tr>
-<td>e</td>
-<td></td>
-<td>f</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>↓</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>g</td>
-</tr>
-</tbody>
-</table>
-<p>那么 a 先放进备忘录memo，备忘录中的元素有3种状态</p>
-<ul>
-<li>未遍历,记住nil或者0</li>
-<li>遍历中,记住1</li>
-<li>遍历结束,记住2</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">a 0 b 1 c 2 d 3 e 4 f 5 g 6</div><div class="line">// 先序条件</div><div class="line">edges: [d: [f], b: [e], a: [b, c, d], f: [g]]</div><div class="line"></div><div class="line">// 那么备忘录中的状态变化就是</div><div class="line">遍历a [a: 1] </div><div class="line">找到a的后续节点 b, c, d</div><div class="line">遍历b [b: 1, a: 1]</div><div class="line">找到b的后续节点 e</div><div class="line">遍历e [b: 1, e: 1, a: 1]</div><div class="line">e没有后续节点了，结束标记为2，</div><div class="line">退回到b，b也没有后续节点了，结束标记为2，</div><div class="line">退回到a，遍历a的第二个后续节点c</div><div class="line">遍历c [b: 2, e: 2, a: 1, c: 1]</div><div class="line">c没有后续节点了，结束标记为2，退回到a，继续遍历a的下一个后续节点d</div><div class="line">遍历d [b: 2, e: 2, d: 1, a: 1, c: 2]</div><div class="line">找到d的后续节点 f</div><div class="line">遍历f [b: 2, e: 2, d: 1, 5: 1, a: 1, c: 2]</div><div class="line">找到f的后续节点 g</div><div class="line">遍历g [g: 1, f: 1, e: 2, d: 1, a: 1, b: 2, c: 2]</div><div class="line">g没有后续节点了，结束标记为2，退回到f</div><div class="line">f没有后续节点了，结束标记为2，退回到d</div><div class="line">d没有后续节点了，结束标记为2，退回到a</div><div class="line">a没有后续节点了，结束标记为2，结束</div></pre></td></tr></table></figure>
-<p>如果要记录遍历顺序，标记为2的时候，就可以放入results了。<br>由于是深度优先，所以results要reverse下。</p>
-<p>如果存在环，那么就会出现要遍历他的时候，他已经是遍历中的状态了，那么这时候就可以直接返回，并标识这不是一个拓扑结构。</p>
-<h3 id="例题-课程表"><a href="#例题-课程表" class="headerlink" title="例题-课程表"></a>例题-课程表</h3><p>现在你总共有 n 门课需要选，记为 0 到 n-1。</p>
-<p>在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们: [0,1]</p>
-<p>给定课程总量以及它们的先决条件，返回你为了学完所有课程所安排的学习顺序。</p>
-<p>可能会有多个正确的顺序，你只要返回一种就可以了。如果不可能完成所有课程，返回一个空数组。</p>
-<p><a href="https://leetcode-cn.com/problems/course-schedule-ii" target="_blank" rel="external">直达链接</a></p>
-<h4 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h4><p>前面分析很多了，直接上源码吧</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">findOrder</span><span class="params">(<span class="number">_</span> numCourses: Int, <span class="number">_</span> prerequisites: [[Int]])</span></span> -&gt; [<span class="type">Int</span>] &#123;</div><div class="line">        <span class="keyword">var</span> edges: [<span class="type">Int</span>: [<span class="type">Int</span>]] = [:]</div><div class="line"></div><div class="line">        <span class="keyword">for</span> prerequisite <span class="keyword">in</span> prerequisites &#123;</div><div class="line">            edges[prerequisite[<span class="number">1</span>], <span class="keyword">default</span>: []].append(prerequisite[<span class="number">0</span>])</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> memo: [<span class="type">Int</span>: <span class="type">Int</span>] = [:]</div><div class="line">        <span class="keyword">var</span> isInvalid = <span class="literal">false</span></div><div class="line">        <span class="keyword">var</span> result: [<span class="type">Int</span>] = []</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">func</span> <span class="title">dfs</span><span class="params">(<span class="number">_</span> i: Int)</span></span> &#123;</div><div class="line">            memo[i] = <span class="number">1</span></div><div class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> edges[i] ?? [] &#123;</div><div class="line">                <span class="keyword">if</span> memo[j] == <span class="literal">nil</span> &#123;</div><div class="line">                    dfs(j)</div><div class="line">                    <span class="keyword">if</span> isInvalid &#123; <span class="keyword">return</span> &#125;</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> memo[j] == <span class="number">1</span> &#123;</div><div class="line">                    isInvalid = <span class="literal">true</span></div><div class="line">                    <span class="keyword">return</span></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            memo[i] = <span class="number">2</span></div><div class="line">            result.append(i)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span> ..&lt; numCourses <span class="keyword">where</span> !isInvalid &amp;&amp; memo[i] == <span class="literal">nil</span> &#123;</div><div class="line">            dfs(i)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> isInvalid &#123; <span class="keyword">return</span> [] &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> result.reversed()</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="BFS-广度优先搜索"><a href="#BFS-广度优先搜索" class="headerlink" title="BFS 广度优先搜索"></a>BFS 广度优先搜索</h2><p>广度优先遍历，就类似中序遍历，一层一层的往下。</p>
-<p>广度优先需要一个先进先出的队列，队列初始是没有先序的节点，遍历这些节点并塞入他们的后续节点（有多个先序，还需要判断是否先序全部都完成了，所以还需要一个counter记录其先序节点的数量），并且查找该节点的后续节点。</p>
-<h3 id="题目-课程表"><a href="#题目-课程表" class="headerlink" title="题目-课程表"></a>题目-课程表</h3><p>题目一样</p>
-<h4 id="解题-1"><a href="#解题-1" class="headerlink" title="解题"></a>解题</h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">findOrder</span><span class="params">(<span class="number">_</span> numCourses: Int, <span class="number">_</span> prerequisites: [[Int]])</span></span> -&gt; [<span class="type">Int</span>] &#123;</div><div class="line">        <span class="keyword">var</span> edges: [<span class="type">Int</span>: [<span class="type">Int</span>]] = [:]</div><div class="line">        <span class="keyword">var</span> counter: [<span class="type">Int</span>: <span class="type">Int</span>] = [:]</div><div class="line"></div><div class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> prerequisites &#123;</div><div class="line">            edges[p[<span class="number">1</span>], <span class="keyword">default</span>: []].append(p[<span class="number">0</span>])</div><div class="line">            counter[p[<span class="number">0</span>], <span class="keyword">default</span>: <span class="number">0</span>] += <span class="number">1</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">var</span> queue: [<span class="type">Int</span>] = []</div><div class="line"></div><div class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span> ..&lt; numCourses &#123;</div><div class="line">            <span class="keyword">if</span> counter[i] == <span class="literal">nil</span> &#123;</div><div class="line">                queue.append(i)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">var</span> result: [<span class="type">Int</span>] = []</div><div class="line"></div><div class="line">        <span class="keyword">while</span> !queue.isEmpty &#123;</div><div class="line">            <span class="keyword">let</span> num = queue.removeFirst()</div><div class="line">            result.append(num)</div><div class="line"></div><div class="line">            <span class="keyword">for</span> e <span class="keyword">in</span> edges[num] ?? [] &#123;</div><div class="line">                <span class="keyword">if</span> <span class="keyword">let</span> <span class="built_in">count</span> = counter[e] &#123;</div><div class="line">                    <span class="keyword">if</span> <span class="built_in">count</span> == <span class="number">1</span> &#123;</div><div class="line">                        queue.append(e)</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        counter[e] = <span class="built_in">count</span> - <span class="number">1</span></div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> result.<span class="built_in">count</span> != numCourses &#123;</div><div class="line">            <span class="keyword">return</span> []</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> result</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1456,8 +1440,8 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">113</span>
-              <span class="site-state-item-name">Artikel</span>
+              <span class="site-state-item-count">114</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
@@ -1465,7 +1449,7 @@
             <div class="site-state-item site-state-categories">
               
                 <span class="site-state-item-count">195</span>
-                <span class="site-state-item-name">Kategorien</span>
+                <span class="site-state-item-name">categories</span>
               
             </div>
           
@@ -1474,7 +1458,7 @@
             <div class="site-state-item site-state-tags">
               
                 <span class="site-state-item-count">5</span>
-                <span class="site-state-item-name">Tags</span>
+                <span class="site-state-item-name">tags</span>
               
             </div>
           
@@ -1510,7 +1494,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -1518,7 +1502,7 @@
 </div>
 
 <div class="powered-by">
-  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
